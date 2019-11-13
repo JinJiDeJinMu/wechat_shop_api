@@ -1,0 +1,54 @@
+spring:
+  redis:
+    #集群配置
+    #    cluster:
+    #      max-redirects: 3
+    #      nodes:
+    #      - 192.168.131.139:6379
+    #      - 192.168.131.140:6379
+    #      - 192.168.131.141:6379
+    #      - 192.168.131.142:6379
+    #      - 192.168.131.143:6379
+    #      - 192.168.131.144:6379
+    lettuce:
+      pool:
+        max-idle: 100
+        min-idle: 10
+        max-active: 300
+        max-wait: 3000ms
+    database: 5
+    host: 192.168.0.17
+    port: 6379
+    password: 123456
+    timeout: 100ms
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/final?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: tm_hikaricp_pool
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+  offsetAsPageNum: true
+
+debug: false
+happyMall:
+  sms:
+    accessKeyId: 1
+    accessKeySecret: 1
+    regTemplate: 1
+    sign: 1
+
+

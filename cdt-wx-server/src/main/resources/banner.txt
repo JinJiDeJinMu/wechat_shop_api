@@ -1,0 +1,11 @@
+
+         __  __
+        /\ \/\ \__
+  ___   \_\ \ \ ,_\          __  __  __  __  _
+ /'___\ /'_` \ \ \/  _______/\ \/\ \/\ \/\ \/'\
+/\ \__//\ \L\ \ \ \_/\______\ \ \_/ \_/ \/>  </
+\ \____\ \___,_\ \__\/______/\ \___x___/'/\_/\_\
+ \/____/\/__,_ /\/__/         \/__//__/  \//\/_/
+${application.version}
+${application.formatted-version}
+springboot的版本号${spring-boot.version}--${spring-boot.formatted-version}
