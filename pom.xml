@@ -32,7 +32,7 @@
         <module>cdt-admin/platform-framework</module>
         <module>cdt-admin/platform-admin</module>
         <module>cdt-admin/platform-shop</module>
-        <module>cdt-wx-server</module>
+        <!--<module>cdt-wx-server</module>-->
         <module>cdt-infrastructure/cdt-base-common</module>
     </modules>
 
