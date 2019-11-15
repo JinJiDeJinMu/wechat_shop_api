@@ -18,6 +18,8 @@ public class AdVo implements Serializable {
     private Integer ad_position_id;
     //形式
     private Integer media_type;
+    //类型
+    private String type;
     //广告名称
     private String name;
     //链接
@@ -49,6 +51,14 @@ public class AdVo implements Serializable {
 
     public Integer getMedia_type() {
         return media_type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setMedia_type(Integer media_type) {

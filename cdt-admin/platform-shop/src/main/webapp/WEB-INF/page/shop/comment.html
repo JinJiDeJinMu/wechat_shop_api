@@ -15,7 +15,7 @@
                 <i-col span="4">
                     <i-input v-model="q.valueName" @on-enter="query" placeholder="商品名称"/>
                 </i-col>
-                <Checkbox-group v-model="q.picUrl" @on-change="query" class="inline">
+                <Checkbox-group v-model="q.commentPictureEntityList" @on-change="query" class="inline">
                     <Checkbox label="true"><span>有图评论</span></Checkbox>
                 </Checkbox-group>
                 <i-button @click="query">查询</i-button>

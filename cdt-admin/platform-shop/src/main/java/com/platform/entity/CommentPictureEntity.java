@@ -14,9 +14,8 @@ import java.util.Date;
  */
 public class CommentPictureEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-
     //主键
-    private Integer id;
+    private Integer pictureId;
     //评价Id
     private Integer commentId;
     //评价图片
@@ -28,14 +27,14 @@ public class CommentPictureEntity implements Serializable {
      * 设置：主键
      */
     public void setId(Integer id) {
-        this.id = id;
+        this.pictureId = id;
     }
 
     /**
      * 获取：主键
      */
     public Integer getId() {
-        return id;
+        return pictureId;
     }
     /**
      * 设置：评价Id
