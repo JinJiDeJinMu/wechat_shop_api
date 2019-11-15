@@ -128,6 +128,7 @@ public class ApiCommentController extends ApiBaseAction {
         return toResponsSuccess(resultObj);
     }
 
+
     /**
      * @param typeId
      * @param valueId
