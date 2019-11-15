@@ -71,6 +71,14 @@ public interface CommentPictureService {
     int deleteBatch(Integer[] ids);
 
     /**
+     * 批量删除的同时删除评论的图片和视频
+     * @param id
+     * @return
+     */
+
+    int deleteByCommentIds(Object[] id);
+
+    /**
      * 根据commentId删除
      *
      * @param commentId

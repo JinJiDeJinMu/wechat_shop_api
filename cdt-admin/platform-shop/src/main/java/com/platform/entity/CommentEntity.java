@@ -1,6 +1,7 @@
 package com.platform.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -30,6 +31,13 @@ public class CommentEntity implements Serializable {
     private Integer userId;
     //商户ID
     private Integer merchant_id;
+
+
+    /**
+     * 图片或者视频url
+     */
+    private List<CommentPictureEntity> commentPictureEntityList;
+
 
     /**
      * 翻译用字段
@@ -160,4 +168,12 @@ public class CommentEntity implements Serializable {
 	public void setMerchant_id(Integer merchant_id) {
 		this.merchant_id = merchant_id;
 	}
+
+    public List<CommentPictureEntity> getCommentPictureEntityList() {
+        return commentPictureEntityList;
+    }
+
+    public void setCommentPictureEntityList(List<CommentPictureEntity> commentPictureEntityList) {
+        this.commentPictureEntityList = commentPictureEntityList;
+    }
 }

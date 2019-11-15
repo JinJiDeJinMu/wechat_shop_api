@@ -1,6 +1,7 @@
 package com.platform.controller;
 
 import com.platform.entity.CommentEntity;
+import com.platform.service.CommentPictureService;
 import com.platform.service.CommentService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
@@ -26,6 +27,9 @@ import java.util.Map;
 public class CommentController {
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private CommentPictureService commentPictureService;
 
     /**
      * 查看列表
@@ -74,7 +78,6 @@ public class CommentController {
     @RequiresPermissions("comment:update")
     public R update(@RequestBody CommentEntity comment) {
         commentService.update(comment);
-
         return R.ok();
     }
 
@@ -85,7 +88,7 @@ public class CommentController {
     @RequiresPermissions("comment:delete")
     public R delete(@RequestBody Integer[] ids) {
         commentService.deleteBatch(ids);
-
+        commentPictureService.deleteByCommentIds(ids);
         return R.ok();
     }
 

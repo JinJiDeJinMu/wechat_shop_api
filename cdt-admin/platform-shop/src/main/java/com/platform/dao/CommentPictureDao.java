@@ -17,4 +17,6 @@ public interface CommentPictureDao extends BaseDao<CommentPictureEntity> {
      * @return
      */
     int deleteByCommentId(Integer commentId);
+
+    int deleteByCommentIds(Object[] id);
 }

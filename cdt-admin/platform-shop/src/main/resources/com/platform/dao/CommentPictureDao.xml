@@ -4,7 +4,7 @@
 <mapper namespace="com.platform.dao.CommentPictureDao">
 
     <resultMap type="com.platform.entity.CommentPictureEntity" id="commentPictureMap">
-        <result property="id" column="id"/>
+        <result property="pictureId" column="id"/>
         <result property="commentId" column="comment_id"/>
         <result property="picUrl" column="pic_url"/>
         <result property="sortOrder" column="sort_order"/>
@@ -86,5 +86,12 @@
 
     <delete id="deleteByCommentId">
         delete from nideshop_comment_picture where comment_id = #{commentId}
+    </delete>
+
+    <delete id="deleteByCommentIds">
+        delete from nideshop_comment_picture where comment_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </delete>
 </mapper>

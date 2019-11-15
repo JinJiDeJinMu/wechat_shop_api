@@ -4,7 +4,7 @@ $(function () {
     if (status) {
         url += '?status=' + status;
     }
-    debugger
+    // debugger
     $("#jqGrid").Grid({
         url: url,
         colModel: [
@@ -12,6 +12,17 @@ $(function () {
             {label: '类型', name: 'typeId', index: 'type_id', width: 80},
             {label: '商品', name: 'valueName', index: 'value_id', width: 80},
             {label: '评价', name: 'content', index: 'content', width: 80},
+            {
+                label: '图片', name: 'commentPictureEntityList', index: 'commentPictureEntityList', width: 200, formatter: function (value) {
+                    // return transImg(value);
+                    // alert(value.length);
+                    let pic="";
+                    for (var i = 0; i < value.length; i++) {
+                        pic=pic+transImg(value[i].picUrl)+"  ";
+                    }
+                    return pic;
+                }
+            },
             {
                 label: '评论时间', name: 'addTime', index: 'add_time', width: 80, formatter: function (value) {
                     return transDate(value);
@@ -38,7 +49,7 @@ var vm = new Vue({
         q: {
             userName: '',
             valueName: '',
-            picUrl: ''
+            commentPictureEntityList: ''
         }
     },
     methods: {
@@ -107,7 +118,7 @@ var vm = new Vue({
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
-                postData: {'userName': vm.q.userName, 'valueName': vm.q.valueName, 'picUrl': vm.q.picUrl},
+                postData: {'userName': vm.q.userName, 'valueName': vm.q.valueName, 'commentPictureEntityList': vm.q.commentPictureEntityList},
                 page: page
             }).trigger("reloadGrid");
             vm.handleReset('formValidate');

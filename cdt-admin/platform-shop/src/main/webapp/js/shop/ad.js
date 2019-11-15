@@ -5,6 +5,7 @@ $(function () {
             {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
             {label: '广告位置', name: 'adPositionName', index: 'ad_Position_id', width: 80},
             {label: '形式', name: 'mediaType', index: 'media_type', width: 80},
+            {label: '类型', name: 'type', index: 'type', width: 80},
             {label: '广告名称', name: 'name', index: 'name', width: 80},
             {label: '链接', name: 'link', index: 'link', width: 80},
             {

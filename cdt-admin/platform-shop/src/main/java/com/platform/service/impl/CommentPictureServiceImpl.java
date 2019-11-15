@@ -57,6 +57,11 @@ public class CommentPictureServiceImpl implements CommentPictureService {
     }
 
     @Override
+    public int deleteByCommentIds(Object[] id) {
+        return commentPictureDao.deleteByCommentIds(id);
+    }
+
+    @Override
     public int deleteByCommentId(Integer commentId) {
         return commentPictureDao.deleteByCommentId(commentId);
     }
