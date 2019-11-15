@@ -13,7 +13,8 @@ public interface MlsUserMapper extends EntityDao<MlsUserEntity2,Long>{
 	public MlsUserEntity2 findByDeviceId(String  deviceId) ;
 	public MlsUserEntity2 findByUserTel(String  userTel) ;
 	public MlsUserEntity2 findByUserId(Long  userId) ;
-	public MlsUserEntity2 findByMerchantId(Integer  mid) ;
+
+	public MlsUserEntity2 findByMerchantId(Long mid);
 	public Map<String,Object> getSysUser(Long  userid) ;
 	public Map<String,Object> getSysUserByMid(Long  mid) ;
 	public void updateMoney(MlsUserEntity2  mlsUserVo) ;

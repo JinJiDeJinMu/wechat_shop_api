@@ -509,7 +509,7 @@ public class ApiPayController extends ApiBaseAction {
     @ApiOperation(value = "微信订单回调接口")
     @RequestMapping(value = "/fx", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @IgnoreAuth
-    public void fx(Long userId, BigDecimal fx_money, BigDecimal orderPrice, int orderId, Integer merchantId) {
+    public void fx(Long userId, BigDecimal fx_money, BigDecimal orderPrice, int orderId, Long merchantId) {
     	if(userId == null || userId==0L || fx_money.compareTo(BigDecimal.ZERO)==0) {
     		System.out.println("*****分润参数错误userId="+userId+",fx_money="+fx_money);
     		return;

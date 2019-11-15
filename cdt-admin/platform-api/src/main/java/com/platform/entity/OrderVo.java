@@ -113,7 +113,7 @@ public class OrderVo implements Serializable {
     //fx状态 默认为0是没有分润金额，已分润状态变成1
     private Integer fx_status;
     //商户id
-    private Integer merchant_id;
+    private Long merchant_id;
     //团购ID
     private String group_buying_id;
 
@@ -599,11 +599,11 @@ public class OrderVo implements Serializable {
 		this.fx_status = fx_status;
 	}
 
-	public Integer getMerchant_id() {
+    public Long getMerchant_id() {
 		return merchant_id;
 	}
 
-	public void setMerchant_id(Integer merchant_id) {
+    public void setMerchant_id(Long merchant_id) {
 		this.merchant_id = merchant_id;
 	}
 

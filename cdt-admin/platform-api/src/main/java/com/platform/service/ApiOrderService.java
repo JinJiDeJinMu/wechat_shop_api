@@ -254,7 +254,7 @@ public class ApiOrderService {
 				// 计算佣金
 				orderInfo.setBrokerage(brokerage_price);
 				// 供应商ID
-				orderInfo.setMerchant_id(merchant_id.intValue());
+				orderInfo.setMerchant_id(merchant_id);
 				// 保存订单信息
 				apiOrderMapper.save(orderInfo);
 				
@@ -395,7 +395,7 @@ public class ApiOrderService {
 				// 计算佣金
 				orderInfo.setBrokerage(brokerage_price);
 				// 供应商ID
-				orderInfo.setMerchant_id(goods.getMerchantId().intValue());
+				orderInfo.setMerchant_id(goods.getMerchantId());
 				// 保存订单信息
 				apiOrderMapper.save(orderInfo);
 				
@@ -548,7 +548,7 @@ public class ApiOrderService {
 				// 计算佣金
 				//orderInfo.setBrokerage(brokerage_price);
 				// 供应商ID
-				orderInfo.setMerchant_id(goods.getMerchantId().intValue());
+				orderInfo.setMerchant_id(goods.getMerchantId());
 				if(StringUtils.isBlank(groupBuyingId)) {
 					groupBuyingId = UUID.randomUUID().toString().replaceAll("-", "");
 				}
