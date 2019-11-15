@@ -10,7 +10,7 @@ spring:
   application:
     name: cdt-wx-app
   profiles:
-    active: test
+    active: dev
   http:
     encoding:
       force: true

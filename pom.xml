@@ -34,6 +34,9 @@
         <module>cdt-admin/platform-shop</module>
         <!--<module>cdt-wx-server</module>-->
         <module>cdt-infrastructure/cdt-base-common</module>
+        <module>cdt-domain/cdt-base-domain</module>
+        <module>cdt-interfaces/cdt-base-facade</module>
+        <module>cdt-application/cdt-application-services</module>
     </modules>
 
     <properties>
