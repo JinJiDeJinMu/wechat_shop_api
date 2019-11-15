@@ -1,24 +1,22 @@
-package ${package}.entity;
+package ${package}import java.io.Serializable;
 
-import java.io.Serializable;
-import java.util.Date;
-
+        .entity;
 #if(${hasBigDecimal})
-import java.math.BigDecimal;
 #end
 /**
  * ${comments}实体
  * 表名 ${tableName}
  *
  * @author ${author}
- * @email ${email}
  * @date ${datetime}
  */
 public class ${className}Entity implements Serializable {
     private static final long serialVersionUID = 1L;
 
 #foreach ($column in $columns)
-    //$column.comments
+    /**
+     * $column.comments
+     */
     private $column.attrType $column.attrname;
 #end
 

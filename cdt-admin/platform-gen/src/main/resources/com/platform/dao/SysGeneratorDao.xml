@@ -8,7 +8,14 @@
 		<if test="tableName != null and tableName.trim() != ''">
 			and table_name like concat('%', #{tableName}, '%') 
 		</if>
-		order by create_time desc
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by create_time desc
+            </otherwise>
+        </choose>
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
 		</if>

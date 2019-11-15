@@ -33,7 +33,6 @@
             </div>
         </Row>
 	    <table id="jqGrid"></table>
-	    <div id="jqGridPager"></div>
     </div>
 
     <Card v-show="!showList">
@@ -55,6 +54,6 @@
 	</Card>
 </div>
 
-<script src="${rc.contextPath}/js/shop/${pathName}.js?_${date.systemTime}"></script>
+<script src="${rc.contextPath}/js/sys/${pathName}.js?_${date.systemTime}"></script>
 </body>
 </html>

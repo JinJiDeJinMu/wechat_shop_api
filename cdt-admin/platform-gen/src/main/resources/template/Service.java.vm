@@ -1,15 +1,14 @@
-package ${package}.service;
-
-import ${package}.entity.${className}Entity;
-
-import java.util.List;
+package ${package}import java.util.List;
 import java.util.Map;
+
+.service;
+    ${package}
+        .entity.${className}Entity;
 
 /**
  * ${comments}Service接口
  *
  * @author ${author}
- * @email ${email}
  * @date ${datetime}
  */
 public interface ${className}Service {

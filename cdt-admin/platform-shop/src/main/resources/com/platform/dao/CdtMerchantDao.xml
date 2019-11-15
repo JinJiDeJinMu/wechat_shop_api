@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.CdtMerchantDao">
+
+    <resultMap type="com.platform.entity.CdtMerchantEntity" id="cdtMerchantMap">
+        <result property="id" column="id"/>
+        <result property="shopName" column="shop_name"/>
+        <result property="userId" column="user_id"/>
+        <result property="shopType" column="shop_type"/>
+        <result property="intro" column="intro"/>
+        <result property="shopNotice" column="shop_notice"/>
+        <result property="shopIndustry" column="shop_industry"/>
+        <result property="shopOwner" column="shop_owner"/>
+        <result property="mobile" column="mobile"/>
+        <result property="tel" column="tel"/>
+        <result property="shopLat" column="shop_lat"/>
+        <result property="shopLng" column="shop_lng"/>
+        <result property="shopAddress" column="shop_address"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="area" column="area"/>
+        <result property="pcaCode" column="pca_code"/>
+        <result property="shopLogo" column="shop_logo"/>
+        <result property="shopPhotos" column="shop_photos"/>
+        <result property="openTime" column="open_time"/>
+        <result property="shopStatus" column="shop_status"/>
+        <result property="transportType" column="transport_type"/>
+        <result property="fixedFreight" column="fixed_freight"/>
+        <result property="fullFreeShipping" column="full_free_shipping"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDistribution" column="is_distribution"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.platform.entity.CdtMerchantEntity">
+		select
+			`id`,
+			`shop_name`,
+			`user_id`,
+			`shop_type`,
+			`intro`,
+			`shop_notice`,
+			`shop_industry`,
+			`shop_owner`,
+			`mobile`,
+			`tel`,
+			`shop_lat`,
+			`shop_lng`,
+			`shop_address`,
+			`province`,
+			`city`,
+			`area`,
+			`pca_code`,
+			`shop_logo`,
+			`shop_photos`,
+			`open_time`,
+			`shop_status`,
+			`transport_type`,
+			`fixed_freight`,
+			`full_free_shipping`,
+			`create_time`,
+			`update_time`,
+			`is_distribution`
+		from cdt_merchant
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultType="com.platform.entity.CdtMerchantEntity">
+        select
+        `id`,
+        `shop_name`,
+        `user_id`,
+        `shop_type`,
+        `intro`,
+        `shop_notice`,
+        `shop_industry`,
+        `shop_owner`,
+        `mobile`,
+        `tel`,
+        `shop_lat`,
+        `shop_lng`,
+        `shop_address`,
+        `province`,
+        `city`,
+        `area`,
+        `pca_code`,
+        `shop_logo`,
+        `shop_photos`,
+        `open_time`,
+        `shop_status`,
+        `transport_type`,
+        `fixed_freight`,
+        `full_free_shipping`,
+        `create_time`,
+        `update_time`,
+        `is_distribution`
+        from cdt_merchant
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from cdt_merchant
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.CdtMerchantEntity">
+		insert into cdt_merchant(
+			`id`,
+			`shop_name`,
+			`user_id`,
+			`shop_type`,
+			`intro`,
+			`shop_notice`,
+			`shop_industry`,
+			`shop_owner`,
+			`mobile`,
+			`tel`,
+			`shop_lat`,
+			`shop_lng`,
+			`shop_address`,
+			`province`,
+			`city`,
+			`area`,
+			`pca_code`,
+			`shop_logo`,
+			`shop_photos`,
+			`open_time`,
+			`shop_status`,
+			`transport_type`,
+			`fixed_freight`,
+			`full_free_shipping`,
+			`create_time`,
+			`update_time`,
+			`is_distribution`)
+		values(
+			#{id},
+			#{shopName},
+			#{userId},
+			#{shopType},
+			#{intro},
+			#{shopNotice},
+			#{shopIndustry},
+			#{shopOwner},
+			#{mobile},
+			#{tel},
+			#{shopLat},
+			#{shopLng},
+			#{shopAddress},
+			#{province},
+			#{city},
+			#{area},
+			#{pcaCode},
+			#{shopLogo},
+			#{shopPhotos},
+			#{openTime},
+			#{shopStatus},
+			#{transportType},
+			#{fixedFreight},
+			#{fullFreeShipping},
+			#{createTime},
+			#{updateTime},
+			#{isDistribution})
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.CdtMerchantEntity">
+        update cdt_merchant
+        <set>
+            <if test="shopName != null">`shop_name` = #{shopName},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="shopType != null">`shop_type` = #{shopType},</if>
+            <if test="intro != null">`intro` = #{intro},</if>
+            <if test="shopNotice != null">`shop_notice` = #{shopNotice},</if>
+            <if test="shopIndustry != null">`shop_industry` = #{shopIndustry},</if>
+            <if test="shopOwner != null">`shop_owner` = #{shopOwner},</if>
+            <if test="mobile != null">`mobile` = #{mobile},</if>
+            <if test="tel != null">`tel` = #{tel},</if>
+            <if test="shopLat != null">`shop_lat` = #{shopLat},</if>
+            <if test="shopLng != null">`shop_lng` = #{shopLng},</if>
+            <if test="shopAddress != null">`shop_address` = #{shopAddress},</if>
+            <if test="province != null">`province` = #{province},</if>
+            <if test="city != null">`city` = #{city},</if>
+            <if test="area != null">`area` = #{area},</if>
+            <if test="pcaCode != null">`pca_code` = #{pcaCode},</if>
+            <if test="shopLogo != null">`shop_logo` = #{shopLogo},</if>
+            <if test="shopPhotos != null">`shop_photos` = #{shopPhotos},</if>
+            <if test="openTime != null">`open_time` = #{openTime},</if>
+            <if test="shopStatus != null">`shop_status` = #{shopStatus},</if>
+            <if test="transportType != null">`transport_type` = #{transportType},</if>
+            <if test="fixedFreight != null">`fixed_freight` = #{fixedFreight},</if>
+            <if test="fullFreeShipping != null">`full_free_shipping` = #{fullFreeShipping},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="isDistribution != null">`is_distribution` = #{isDistribution}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from cdt_merchant where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from cdt_merchant where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -7,8 +7,7 @@ import java.util.Map;
  * 代码生成器
  *
  * @author lipengjun
- * @email 939961241@qq.com
- * @date 2016年12月19日 下午3:32:04
+ * @date 2017年11月20日 下午19:29:40
  */
 public interface SysGeneratorDao {
 

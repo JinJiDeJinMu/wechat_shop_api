@@ -3,7 +3,10 @@ package com.platform.api;
 import com.chundengtai.base.result.Result;
 import com.github.pagehelper.PageHelper;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.entity.*;
+import com.platform.entity.AdVo;
+import com.platform.entity.CartVo;
+import com.platform.entity.CategoryVo;
+import com.platform.entity.GoodsVo;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import io.swagger.annotations.Api;
@@ -18,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 窝边生活<br>
@@ -127,13 +129,16 @@ public class IndexV2Controller extends ApiBaseAction {
     }
 
     private List<AdVo> getCollectByHotType(List<AdVo> banner) {
-        return banner.stream().filter(b->
-            b.getType()=="爆品展示"
-        ).collect(Collectors.toList());
+        return null;
+//        return banner.stream().filter(b->
+//            b.getType()=="爆品展示"
+//        ).collect(Collectors.toList());
     }
+
     private List<AdVo> getCollectByActiveType(List<AdVo> banner) {
-        return banner.stream().filter(b->
-                b.getType()=="活动展示"
-        ).collect(Collectors.toList());
+        return null;
+//        return banner.stream().filter(b->
+//                b.getType()=="活动展示"
+//        ).collect(Collectors.toList());
     }
 }

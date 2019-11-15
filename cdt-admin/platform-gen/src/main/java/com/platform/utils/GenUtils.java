@@ -23,17 +23,15 @@ import java.util.zip.ZipOutputStream;
  * 代码生成器   工具类
  *
  * @author lipengjun
- * @email 939961241@qq.com
- * @date 2017年1月3日 下午6:35:28
+ * @date 2017年11月20日 下午19:29:40
  */
 public class GenUtils {
 
     public static List<String> getTemplates() {
         List<String> templates = new ArrayList<String>();
         templates.add("template/Entity.java.vm");
-        templates.add("template/Example.java.vm");
-        templates.add("template/Mapper.java.vm");
-        templates.add("template/Mapper.xml.vm");
+        templates.add("template/Dao.java.vm");
+        templates.add("template/Dao.xml.vm");
         templates.add("template/Service.java.vm");
         templates.add("template/ServiceImpl.java.vm");
         templates.add("template/Controller.java.vm");
@@ -127,7 +125,6 @@ public class GenUtils {
         map.put("columns", tableEntity.getColumns());
         map.put("package", config.getString("package"));
         map.put("author", config.getString("author"));
-        map.put("email", config.getString("email"));
         map.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN));
         VelocityContext context = new VelocityContext(map);
 
@@ -193,16 +190,12 @@ public class GenUtils {
             return packagePath + "entity" + File.separator + className + "Entity.java";
         }
 
-        if (template.contains("Example.java.vm")) {
-            return packagePath + "entity" + File.separator + "example" + File.separator + className + "Example.java";
+        if (template.contains("Dao.java.vm")) {
+            return packagePath + "dao" + File.separator + className + "Dao.java";
         }
 
-        if (template.contains("Mapper.java.vm")) {
-            return packagePath + "dao" + File.separator + className + "Mapper.java";
-        }
-
-        if (template.contains("Mapper.xml.vm")) {
-            return packagePath + "dao" + File.separator + className + "Mapper.xml";
+        if (template.contains("Dao.xml.vm")) {
+            return packagePath + "dao" + File.separator + className + "Dao.xml";
         }
 
         if (template.contains("Service.java.vm")) {
@@ -219,11 +212,11 @@ public class GenUtils {
 
         if (template.contains("list.html.vm")) {
             return "main" + File.separator + "webapp" + File.separator + "WEB-INF" + File.separator + "page"
-                    + File.separator + "shop" + File.separator + className.toLowerCase() + ".html";
+                    + File.separator + "sys" + File.separator + className.toLowerCase() + ".html";
         }
 
         if (template.contains("list.js.vm")) {
-            return "main" + File.separator + "webapp" + File.separator + "js" + File.separator + "shop" + File.separator + className.toLowerCase() + ".js";
+            return "main" + File.separator + "webapp" + File.separator + "js" + File.separator + "sys" + File.separator + className.toLowerCase() + ".js";
         }
 
         if (template.contains("menu.sql.vm")) {

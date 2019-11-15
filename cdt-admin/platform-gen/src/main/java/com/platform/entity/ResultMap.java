@@ -5,8 +5,7 @@ package com.platform.entity;
  * 描述：查询表信息返回的BaseResultMap<br>
  *
  * @author lipengjun
- * @email 939961241@qq.com
- * @date 2017-09-17 20:20
+ * @date 2017年11月20日 下午19:29:40
  */
 public class ResultMap {
     /**
