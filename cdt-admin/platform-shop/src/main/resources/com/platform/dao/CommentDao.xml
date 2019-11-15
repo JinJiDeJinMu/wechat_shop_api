@@ -15,7 +15,7 @@
         <result property="userName" column="user_name"/>
         <collection property="commentPictureEntityList" ofType="com.platform.entity.CommentPictureEntity" javaType="ArrayList">
             <id property="pictureId" column="picture_id"/>
-            <result property="url" column="url"/>
+            <result property="picUrl" column="pic_url"/>
         </collection>
     </resultMap>
 
@@ -43,7 +43,7 @@
         nideshop_comment.user_id,
         nideshop_user.username user_name,
         nideshop_goods.name value_name,
-        nideshop_comment_picture.url url
+        nideshop_comment_picture.pic_url
         from nideshop_comment LEFT JOIN nideshop_user ON nideshop_comment.user_id = nideshop_user.id
         LEFT JOIN nideshop_goods ON nideshop_comment.value_id = nideshop_goods.id
         LEFT JOIN nideshop_comment_picture ON nideshop_comment.id = nideshop_comment_picture.comment_id
@@ -57,7 +57,7 @@
             AND nideshop_comment.status = #{status}
         </if>
         <if test="commentPictureEntityList == 'true'">
-            AND EXISTS(SELECT 1 FROM nideshop_comment_picture WHERE nideshop_comment.id =
+            WHERE EXISTS(SELECT 1 FROM nideshop_comment_picture WHERE nideshop_comment.id =
             nideshop_comment_picture.comment_id)
         </if>
         <choose>
