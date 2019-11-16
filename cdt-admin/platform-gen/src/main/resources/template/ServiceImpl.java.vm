@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-.service.impl;
+.com.platform.service.impl;
     ${package}
         .dao.${className}Dao;
     ${package}
