@@ -64,6 +64,8 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("order", "desc");
         PageHelper.startPage(0, 5, false);
         List<CategoryVo> categoryList = categoryService.queryList(param);
+        resultObj.put("categoryList", categoryList);
+
         List<Map<String, Object>> newCategoryList = new ArrayList<>();
 
         for (CategoryVo categoryItem : categoryList) {
@@ -83,10 +85,19 @@ public class IndexV2Controller extends ApiBaseAction {
             newCategory.put("goodsList", categoryGoods);
             newCategoryList.add(newCategory);
         }
-        resultObj.put("categoryList", newCategoryList);
+        resultObj.put("productList", newCategoryList);
+        return Result.success(resultObj);
+    }
 
+    /**
+     * app首页
+     */
+    @ApiOperation(value = "首页")
+    @IgnoreAuth
+    @GetMapping(value = "indexNewGoods")
+    public Object indexGoods() {
         //最新商品
-        param = new HashMap<String, Object>();
+        HashMap param = new HashMap<String, Object>();
         param.put("is_new", 1);
         param.put("is_delete", 0);
         param.put("is_on_sale", 1);
@@ -95,9 +106,7 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("fields", "id, name, list_pic_url, retail_price");
         PageHelper.startPage(0, 10, false);
         List<GoodsVo> newGoods = goodsService.queryList(param);
-        resultObj.put("newGoodsList", newGoods);
-
-        return Result.success(resultObj);
+        return Result.success(newGoods);
     }
 
     private List<AdVo> getCollectByType(List<AdVo> banner, Integer type) {
