@@ -35,7 +35,10 @@ public class AdEntity implements Serializable {
     private Integer enabled;
 
     //类型
-    private String type;
+    private Integer type;
+
+    //商品id
+    private Integer goodsId;
     /**
      * 翻译字段用
      */
@@ -53,6 +56,20 @@ public class AdEntity implements Serializable {
      */
     public Integer getId() {
         return id;
+    }
+
+    /**
+     * 获取：商品id
+     */
+    public Integer getGoodsId() {
+        return goodsId;
+    }
+
+    /**
+     * 设置：商品id
+     */
+    public void setGoodsId(Integer goodsId) {
+        this.goodsId = goodsId;
     }
 
     /**
@@ -84,11 +101,11 @@ public class AdEntity implements Serializable {
     }
 
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 

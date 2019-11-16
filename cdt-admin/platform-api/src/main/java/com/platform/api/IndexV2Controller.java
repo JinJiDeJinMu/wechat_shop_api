@@ -4,11 +4,11 @@ import com.chundengtai.base.result.Result;
 import com.github.pagehelper.PageHelper;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.AdVo;
-import com.platform.entity.CartVo;
 import com.platform.entity.CategoryVo;
 import com.platform.entity.GoodsVo;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
+import com.platform.util.BannerType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 窝边生活<br>
@@ -58,46 +59,13 @@ public class IndexV2Controller extends ApiBaseAction {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("ad_position_id", 1);
         List<AdVo> banner = adService.queryList(param);
-        List<AdVo> hotProduct = getCollectByHotType(banner);
-        List<AdVo> activity = getCollectByActiveType(banner);
+        List<AdVo> hotProduct = getCollectByType(banner, BannerType.HOT.getCode());
+        List<AdVo> activity = getCollectByType(banner, BannerType.ACTIVITY.getCode());
 
         resultObj.put("hotProduct", hotProduct);
         resultObj.put("activity", activity);
 
-        param = new HashMap<String, Object>();
-        param.put("is_new", 1);
-        param.put("is_delete", 0);
-        param.put("is_on_sale", 1);
-        param.put("fields", "id, name, list_pic_url, retail_price");
-        PageHelper.startPage(0, 4, false);
-        List<GoodsVo> newGoods = goodsService.queryList(param);
-        resultObj.put("newGoodsList", newGoods);
-
-        param = new HashMap<String, Object>();
-        param.put("is_hot", "1");
-        param.put("is_on_sale", 1);
-        param.put("is_delete", 0);
-        PageHelper.startPage(0, 3, false);
-        List<GoodsVo> hotGoods = goodsService.queryHotGoodsList(param);
-        resultObj.put("hotGoodsList", hotGoods);
-        // 当前购物车中
-        List<CartVo> cartList = new ArrayList<CartVo>();
-        if (null != getUserId()) {
-            //查询列表数据
-            Map<String, Object> cartParam = new HashMap<String, Object>();
-            cartParam.put("user_id", getUserId());
-            cartList = cartService.queryList(cartParam);
-        }
-        if (null != cartList && cartList.size() > 0 && null != hotGoods && hotGoods.size() > 0) {
-            for (GoodsVo goodsVo : hotGoods) {
-                for (CartVo cartVo : cartList) {
-                    if (goodsVo.getId().equals(cartVo.getGoods_id())) {
-                        goodsVo.setCart_num(cartVo.getNumber());
-                    }
-                }
-            }
-        }
-
+        //分类及其下面的商品
         param = new HashMap<String, Object>();
         param.put("parent_id", 0);
         param.put("sidx", "sort_order");
@@ -107,7 +75,6 @@ public class IndexV2Controller extends ApiBaseAction {
         List<Map<String, Object>> newCategoryList = new ArrayList<>();
 
         for (CategoryVo categoryItem : categoryList) {
-
             List<GoodsVo> categoryGoods = new ArrayList<>();
             param = null;
             param = new HashMap<String, Object>();
@@ -123,20 +90,25 @@ public class IndexV2Controller extends ApiBaseAction {
             newCategoryList.add(newCategory);
         }
         resultObj.put("categoryList", newCategoryList);
+
+        //最新商品
+        param = new HashMap<String, Object>();
+        param.put("is_new", 1);
+        param.put("is_delete", 0);
+        param.put("is_on_sale", 1);
+        param.put("sidx", "sort_order");
+        param.put("order", "desc");
+        param.put("fields", "id, name, list_pic_url, retail_price");
+        PageHelper.startPage(0, 4, false);
+        List<GoodsVo> newGoods = goodsService.queryList(param);
+        resultObj.put("newGoodsList", newGoods);
+
         return Result.success(resultObj);
     }
 
-    private List<AdVo> getCollectByHotType(List<AdVo> banner) {
-        return null;
-//        return banner.stream().filter(b->
-//            b.getType()=="爆品展示"
-//        ).collect(Collectors.toList());
-    }
-
-    private List<AdVo> getCollectByActiveType(List<AdVo> banner) {
-        return null;
-//        return banner.stream().filter(b->
-//                b.getType()=="活动展示"
-//        ).collect(Collectors.toList());
+    private List<AdVo> getCollectByType(List<AdVo> banner, Integer type) {
+        return banner.stream().filter(b ->
+                b.getType().equals(type)
+        ).collect(Collectors.toList());
     }
 }

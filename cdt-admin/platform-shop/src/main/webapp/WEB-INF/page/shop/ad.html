@@ -54,8 +54,21 @@
                     </Radio>
                 </Radio-group>
             </Form-item>
+            <Form-item label="类型" prop="type">
+                <Radio-group v-model="ad.type">
+                    <Radio label="0">
+                        <span>活动宣传</span>
+                    </Radio>
+                    <Radio label="1">
+                        <span>爆品展示</span>
+                    </Radio>
+                </Radio-group>
+            </Form-item>
             <Form-item label="广告名称" prop="name">
                 <i-input v-model="ad.name" placeholder="广告名称"/>
+            </Form-item>
+            <Form-item label="商品Id" prop="goods_id">
+                <i-input v-model="ad.goods_id" placeholder="商品Id"/>
             </Form-item>
             <Form-item label="链接" prop="link">
                 <i-input v-model="ad.link" placeholder="链接"/>

@@ -2,7 +2,7 @@ $(function () {
     $("#jqGrid").Grid({
         url: '../goods/list',
         colModel: [
-            {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
+            {label: 'id', name: 'id', index: 'id', key: true, hidden: false},
             {label: '商品类型', name: 'categoryName', index: 'category_id', width: 80},
             {label: '名称', name: 'name', index: 'name', width: 160},
             {label: '品牌', name: 'brandName', index: 'brand_id', width: 120},

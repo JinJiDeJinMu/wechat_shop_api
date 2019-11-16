@@ -3,9 +3,18 @@ $(function () {
         url: '../ad/list',
         colModel: [
             {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
+            {label: '商品id', name: 'goodsId', index: 'goods_id'},
             {label: '广告位置', name: 'adPositionName', index: 'ad_Position_id', width: 80},
             {label: '形式', name: 'mediaType', index: 'media_type', width: 80},
-            {label: '类型', name: 'type', index: 'type', width: 80},
+            {
+                label: '类型', name: 'type', index: 'type', width: 80, formatter: function (value) {
+                    if (value === 0) {
+                        return "活动宣传";
+                    } else {
+                        return "爆品展示";
+                    }
+                }
+            },
             {label: '广告名称', name: 'name', index: 'name', width: 80},
             {label: '链接', name: 'link', index: 'link', width: 80},
             {

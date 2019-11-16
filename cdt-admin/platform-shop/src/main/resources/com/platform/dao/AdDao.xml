@@ -8,6 +8,7 @@
         <result property="adPositionId" column="ad_position_id"/>
         <result property="mediaType" column="media_type"/>
         <result property="type" column="type"/>
+        <result property="goodsId" column="goods_id"/>
         <result property="name" column="name"/>
         <result property="link" column="link"/>
         <result property="imageUrl" column="image_url"/>
@@ -22,6 +23,7 @@
 			ad_position_id,
 			media_type,
 			type,
+			goods_id,
 			name,
 			link,
 			image_url,
@@ -38,6 +40,7 @@
         nideshop_ad.ad_position_id,
         nideshop_ad.media_type,
         nideshop_ad.type,
+        nideshop_ad.goods_id,
         nideshop_ad.name,
         nideshop_ad.link,
         nideshop_ad.image_url,
@@ -76,6 +79,7 @@
 			`ad_position_id`,
 			`media_type`,
 			`type`,
+			`goods_id`,
 			`name`,
 			`link`,
 			`image_url`,
@@ -86,6 +90,7 @@
 			#{adPositionId},
 			#{mediaType},
 			#{type},
+			#{goods_id},
 			#{name},
 			#{link},
 			#{imageUrl},
@@ -100,6 +105,7 @@
             <if test="adPositionId != null">`ad_position_id` = #{adPositionId},</if>
             <if test="mediaType != null">`media_type` = #{mediaType},</if>
             <if test="type != null">`type` = #{type},</if>
+            <if test="goodsId != null">`goods_id` = #{goodsId},</if>
             <if test="name != null">`name` = #{name},</if>
             <if test="link != null">`link` = #{link},</if>
             <if test="imageUrl != null">`image_url` = #{imageUrl},</if>
