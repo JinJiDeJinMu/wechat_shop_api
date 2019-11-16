@@ -6,7 +6,9 @@ import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.AdVo;
 import com.platform.entity.CategoryVo;
 import com.platform.entity.GoodsVo;
-import com.platform.service.*;
+import com.platform.service.ApiAdService;
+import com.platform.service.ApiCategoryService;
+import com.platform.service.ApiGoodsService;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.BannerType;
 import io.swagger.annotations.Api;
@@ -34,19 +36,9 @@ public class IndexV2Controller extends ApiBaseAction {
     @Autowired
     private ApiAdService adService;
     @Autowired
-    private ApiChannelService channelService;
-    @Autowired
     private ApiGoodsService goodsService;
     @Autowired
-    private ApiBrandService brandService;
-    @Autowired
-    private ApiTopicService topicService;
-    @Autowired
     private ApiCategoryService categoryService;
-    @Autowired
-    private ApiCartService cartService;
-    @Autowired
-    private LifeServiceSer lifeServiceSer;
 
     /**
      * app首页
@@ -79,8 +71,10 @@ public class IndexV2Controller extends ApiBaseAction {
             param = null;
             param = new HashMap<String, Object>();
             param.put("category_id", categoryItem.getId());
+            param.put("sidx", "add_time");
+            param.put("order", "desc");
             param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price");
-            PageHelper.startPage(0, 7, false);
+            PageHelper.startPage(0, 5, false);
             categoryGoods = goodsService.queryList(param);
 
             Map<String, Object> newCategory = new HashMap<String, Object>();
@@ -96,10 +90,10 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("is_new", 1);
         param.put("is_delete", 0);
         param.put("is_on_sale", 1);
-        param.put("sidx", "sort_order");
+        param.put("sidx", "add_time");
         param.put("order", "desc");
         param.put("fields", "id, name, list_pic_url, retail_price");
-        PageHelper.startPage(0, 4, false);
+        PageHelper.startPage(0, 10, false);
         List<GoodsVo> newGoods = goodsService.queryList(param);
         resultObj.put("newGoodsList", newGoods);
 
