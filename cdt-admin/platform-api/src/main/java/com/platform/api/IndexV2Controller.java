@@ -43,7 +43,7 @@ public class IndexV2Controller extends ApiBaseAction {
     /**
      * app首页
      */
-    @ApiOperation(value = "首页")
+    @ApiOperation(value = "首页分类包含banner图")
     @IgnoreAuth
     @GetMapping(value = "index")
     public Object index() {
@@ -92,7 +92,7 @@ public class IndexV2Controller extends ApiBaseAction {
     /**
      * app首页
      */
-    @ApiOperation(value = "首页")
+    @ApiOperation(value = "首页新品")
     @IgnoreAuth
     @GetMapping(value = "indexNewGoods")
     public Object indexGoods() {
