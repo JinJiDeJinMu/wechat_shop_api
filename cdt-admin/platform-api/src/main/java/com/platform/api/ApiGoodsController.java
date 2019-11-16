@@ -184,13 +184,17 @@ public class ApiGoodsController extends ApiBaseAction {
             @ApiImplicitParam(name = "referrer", value = "商品referrer", paramType = "path", required = false)})
     @GetMapping(value = "detail")
     public Object detail(Integer id, Long referrer) {
-//    	System.out.println("1111111111111111111111111111111");
+
         Map<String, Object> resultObj = new HashMap();
-        //
+
         Long userId = getUserId();
-        //MlsUserEntity2 loginUser = mlsUserSer.getEntityMapper().findByUserId(userId);
         GoodsVo info = goodsService.queryObject(id);
-        //info.setDiscount(info.getRetail_price().multiply(new BigDecimal("10")).divide(info.getMarket_price(), 1, BigDecimal.ROUND_HALF_UP).toString());
+        //请求一次浏览量加一
+        if (info.getBrowse() == null) {
+            info.setBrowse(0);
+        }
+        info.setBrowse(info.getBrowse() + 1);
+        goodsService.updateBrowse(info);
         Long mid = info.getMerchantId();
         Map<String, Object> sysuser = this.mlsUserSer.getEntityMapper().getSysUserByMid(mid);
         info.setUser_brokerage_price(info.getRetail_price().multiply(new BigDecimal(sysuser.get("FX").toString())).multiply(new BigDecimal(info.getBrokerage_percent()).divide(new BigDecimal("10000"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
@@ -356,8 +360,7 @@ public class ApiGoodsController extends ApiBaseAction {
             @ApiImplicitParam(name = "referrer", value = "商品referrer", paramType = "path", required = false)})
     @GetMapping(value = "detail2")
     public Object detail2(@APPLoginUser MlsUserEntity2 loginUser, Integer id, Long referrer) {
-    	
-//    	System.out.println("2222222222222222222222222222222222");
+
     	
         Map<String, Object> resultObj = new HashMap();
         //
@@ -726,18 +729,27 @@ public class ApiGoodsController extends ApiBaseAction {
     }
 
     /**
-     * 　　人气推荐
+     * 　　为您推荐
      */
-    @ApiOperation(value = "人气推荐")
+    @ApiOperation(value = "为您推荐")
+    @ApiImplicitParams({@ApiImplicitParam(name = "categoryId", value = "分类id", paramType = "path", required = true)})
     @IgnoreAuth
     @GetMapping(value = "hot")
-    public Object hot() {
+    public Object hot(Integer categoryId) {
         Map<String, Object> resultObj = new HashMap();
-        Map bannerInfo = new HashMap();
-        bannerInfo.put("url", "");
-        bannerInfo.put("name", "大家都在买的严选好物");
-        bannerInfo.put("img_url", "https://platform-wxmall.oss-cn-beijing.aliyuncs.com/upload/20180727/1504208321fef4.png");
-        resultObj.put("bannerInfo", bannerInfo);
+        List<Map<String, Object>> newCategoryList = new ArrayList<>();
+        List<GoodsVo> categoryGoods = new ArrayList<>();
+        Map param = new HashMap<String, Object>();
+        param.put("category_id", categoryId);
+        param.put("sidx", "add_time");
+        param.put("order", "desc");
+        param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price");
+        PageHelper.startPage(0, 5, false);
+        categoryGoods = goodsService.queryList(param);
+
+        Map<String, Object> newCategory = new HashMap<String, Object>();
+        newCategory.put("goodsList", categoryGoods);
+        resultObj.put("newCategory", newCategory);
         return toResponsSuccess(resultObj);
     }
 
@@ -866,11 +878,10 @@ public class ApiGoodsController extends ApiBaseAction {
         goodsData.setGoodsList(goodsData.getData());
         return toResponsSuccess(goodsData);
     }
-    
 
-    
-    /**
-     * 商品二维码图片请求
+
+    /**商品二维码图片请求
+     *
      */
     @ApiOperation(value = "商品二维码图片请求")
     @GetMapping("getGoodCode")

@@ -8,6 +8,7 @@
         <result property="categoryId" column="category_id"/>
         <result property="goodsSn" column="goods_sn"/>
         <result property="name" column="name"/>
+        <result property="browse" column="browse"/>
         <result property="brandId" column="brand_id"/>
         <result property="goodsNumber" column="goods_number"/>
         <result property="keywords" column="keywords"/>
@@ -59,6 +60,7 @@
         nideshop_goods.category_id,
         nideshop_goods.goods_sn,
         nideshop_goods.name,
+        nideshop_goods.browse,
         nideshop_goods.brand_id,
         nideshop_goods.goods_number,
         nideshop_goods.keywords,
@@ -149,6 +151,7 @@
         `category_id`,
         `goods_sn`,
         `name`,
+        `browse`,
         `brand_id`,
         `goods_number`,
         `keywords`,
@@ -195,6 +198,7 @@
         #{categoryId},
         #{goodsSn},
         #{name},
+        #{browse},
         #{brandId},
         #{goodsNumber},
         #{keywords},
@@ -243,6 +247,7 @@
             <if test="categoryId != null">`category_id` = #{categoryId},</if>
             <if test="goodsSn != null">`goods_sn` = #{goodsSn},</if>
             <if test="name != null">`name` = #{name},</if>
+            <if test="browse != null">`browse` = #{browse},</if>
             <if test="brandId != null">`brand_id` = #{brandId},</if>
             <if test="goodsNumber != null">`goods_number` = #{goodsNumber},</if>
             <if test="keywords != null">`keywords` = #{keywords},</if>

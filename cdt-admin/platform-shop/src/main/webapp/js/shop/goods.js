@@ -5,6 +5,7 @@ $(function () {
             {label: 'id', name: 'id', index: 'id', key: true, hidden: false},
             {label: '商品类型', name: 'categoryName', index: 'category_id', width: 80},
             {label: '名称', name: 'name', index: 'name', width: 160},
+            {label: '浏览量', name: 'browse', index: 'browse', width: 160},
             {label: '品牌', name: 'brandName', index: 'brand_id', width: 120},
             {
                 label: '上架', name: 'isOnSale', index: 'is_on_sale', width: 50,

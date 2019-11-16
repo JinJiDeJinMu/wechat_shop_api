@@ -22,6 +22,8 @@ public class GoodsVo implements Serializable {
     private String goods_sn;
     //名称
     private String name;
+    //浏览量
+    private Integer browse;
     //品牌Id
     private Integer brand_id;
     //商品序列号
@@ -134,6 +136,14 @@ public class GoodsVo implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getBrowse() {
+        return browse;
+    }
+
+    public void setBrowse(Integer browse) {
+        this.browse = browse;
     }
 
     public Integer getBrand_id() {

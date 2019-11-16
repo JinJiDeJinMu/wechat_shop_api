@@ -23,6 +23,8 @@ public class GoodsEntity implements Serializable {
     private String goodsSn;
     //名称
     private String name;
+    //浏览量
+    private Integer browse;
     //品牌Id
     private Integer brandId;
     //商品序列号
@@ -116,7 +118,15 @@ public class GoodsEntity implements Serializable {
     private Integer successPeople;//成团时间 单位分钟
     private BigDecimal groupPrice;//团购价格(元)
 
-	public Date getEndTime() {
+    public Integer getBrowse() {
+        return browse;
+    }
+
+    public void setBrowse(Integer browse) {
+        this.browse = browse;
+    }
+
+    public Date getEndTime() {
 		return endTime;
 	}
 	public void setEndTime(Date endTime) {

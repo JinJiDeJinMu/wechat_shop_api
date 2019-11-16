@@ -306,7 +306,7 @@ public class ApiIndexController extends ApiBaseAction {
         Map<String, Object> param = new HashMap<String, Object>();
         param = new HashMap<String, Object>();
         param.put("parent_id", 0);
-        param.put("notName", "推荐");//<>
+        param.put("notName", "推荐");
         List<CategoryVo> categoryList = categoryService.queryList(param);
         List<Map<String, Object>> newCategoryList = new ArrayList<>();
 

@@ -26,7 +26,7 @@ public class ApiGoodsService {
     public List<GoodsVo> queryList(Map<String, Object> map) {
         return goodsDao.queryList(map);
     }
-    
+
     public List<GoodsVo> queryKillList() {
         return goodsDao.queryKillList();
     }
@@ -46,6 +46,10 @@ public class ApiGoodsService {
         goodsDao.update(goods);
     }
 
+    public void updateBrowse(GoodsVo goods) {
+        goodsDao.updateBrowse(goods);
+    }
+
 
     public void delete(Integer id) {
         goodsDao.delete(id);
@@ -63,18 +67,18 @@ public class ApiGoodsService {
     public List<GoodsVo> queryCatalogProductList(Map<String, Object> map) {
         return goodsDao.queryCatalogProductList(map);
     }
-    
+
     public Integer queryMaxId() {
-    	return goodsDao.queryMaxId();
+        return goodsDao.queryMaxId();
     }
-    
-    public List<GoodsVo> queryTop4(MlsUserEntity2 loginUser, Integer brand_id){
-    	List<GoodsVo> goodsList = goodsDao.queryTop4(brand_id);
-    	for(GoodsVo vo : goodsList) {
-	    	vo.setDiscount(vo.getRetail_price().multiply(new BigDecimal("10")).divide(vo.getMarket_price(), 1, BigDecimal.ROUND_HALF_UP).toString());
-	    	vo.setUser_brokerage_price(vo.getRetail_price().multiply(new BigDecimal(vo.getBrokerage_percent())).multiply(new BigDecimal(loginUser.getFx()).divide(new BigDecimal("10000"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+
+    public List<GoodsVo> queryTop4(MlsUserEntity2 loginUser, Integer brand_id) {
+        List<GoodsVo> goodsList = goodsDao.queryTop4(brand_id);
+        for (GoodsVo vo : goodsList) {
+            vo.setDiscount(vo.getRetail_price().multiply(new BigDecimal("10")).divide(vo.getMarket_price(), 1, BigDecimal.ROUND_HALF_UP).toString());
+            vo.setUser_brokerage_price(vo.getRetail_price().multiply(new BigDecimal(vo.getBrokerage_percent())).multiply(new BigDecimal(loginUser.getFx()).divide(new BigDecimal("10000"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
         }
-    	return goodsList;
+        return goodsList;
     }
 
     public List<GoodsVo> queryFxList(Map<String, Object> map) {

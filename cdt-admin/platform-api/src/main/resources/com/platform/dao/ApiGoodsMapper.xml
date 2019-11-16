@@ -9,6 +9,7 @@
         <result property="category_id" column="category_id"/>
         <result property="goods_sn" column="goods_sn"/>
         <result property="name" column="name"/>
+        <result property="browse" column="browse"/>
         <result property="brand_id" column="brand_id"/>
         <result property="goods_number" column="goods_number"/>
         <result property="keywords" column="keywords"/>
@@ -264,6 +265,7 @@
         (
 	        `id`,
 	        `name`,
+	        `browse`,
 	        `primary_pic_url`,
 	        `list_pic_url`
         )
@@ -271,6 +273,7 @@
         (
 	        #{id},
 	        #{name},
+	        #{browse},
 	        #{primary_pic_url},
 	        #{list_pic_url}
         )
@@ -375,4 +378,12 @@
     <select id="queryGroupTotal" resultType="int">
         SELECT count(1) FROM nideshop_goods  WHERE is_secKill=#{is_secKill} and is_delete = 0 and is_on_sale = 1
     </select>
+
+    <update id="updateBrowse" parameterType="com.platform.entity.GoodsVo">
+        update nideshop_goods
+        <set>
+            <if test="browse != null">`browse` = #{browse},</if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>
