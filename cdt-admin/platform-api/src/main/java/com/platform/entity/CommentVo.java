@@ -2,6 +2,8 @@ package com.platform.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.platform.utils.JsonDateSerializer;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,26 +14,39 @@ import java.util.List;
  * @email 939961241@qq.com
  * @date 2017-08-15 08:03:40
  */
+@ApiModel(value = "评论实体")
 public class CommentVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "评论主键id")
     //主键
     private Integer id;
+    @ApiModelProperty(value = "评论类型id")
     //用户评论的类型;0评论的是商品,1评论的是文章
     private Integer type_id;
+    @ApiModelProperty(value = "产品Id")
     //产品Id
     private Integer value_id;
+    @ApiModelProperty(value = "评论内容")
     //储存为base64编码
     private String content;
+    @ApiModelProperty(value = "评论时间")
     //记录时间
     private Long add_time;
+
+    @ApiModelProperty(value = "评论状态")
     //状态 是否被管理员批准显示;1是;0未批准显示
     private Integer status;
+    @ApiModelProperty(value = "评论用户id")
     //会员Id
     private Long user_id;
 
+    @ApiModelProperty(value = "评论用户信息")
     //会员Id
     private UserVo user_info;
+
+    @ApiModelProperty(value = "评论图片列表")
+    //@IgnoreSwaggerParameter
     private List<CommentPictureVo> pic_list;
 
     public Integer getId() {

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 订单核销功能<br>
  */
-@Api(tags = "订单核销功能")
+@Api(value = "订单核销", tags = "订单核销功能")
 @RestController
 @RequestMapping("/api/v2/writeoff")
 @Slf4j

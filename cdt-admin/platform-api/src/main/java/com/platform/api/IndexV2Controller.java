@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 /**
  * 窝边生活<br>
  */
-@Api(tags = "窝边生活首页")
+@Api(value = "窝边生活版本", tags = "窝边生活首页")
 @RestController
 @RequestMapping("/api/v2/index")
 @Slf4j

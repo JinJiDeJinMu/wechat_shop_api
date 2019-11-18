@@ -1,5 +1,8 @@
 package com.platform.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -11,26 +14,35 @@ import java.util.Date;
  * @email 939961241@qq.com
  * @date 2017-08-15 08:03:40
  */
+@ApiModel(value = "产品实体")
 public class GoodsVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    //主键
+    @ApiModelProperty(value = "评论主键id")
     private Integer id;
-    //商品类型Id
+
+    @ApiModelProperty(value = "商品类型Id")
     private Integer category_id;
-    //商品序列号
+
+    @ApiModelProperty(value = "商品序列号")
     private String goods_sn;
-    //名称
+
+    @ApiModelProperty(value = "名称")
     private String name;
-    //浏览量
+
+    @ApiModelProperty(value = "浏览量")
     private Integer browse;
-    //品牌Id
+
+    @ApiModelProperty(value = "品牌Id")
     private Integer brand_id;
-    //商品序列号
+
+    @ApiModelProperty(value = "商品序列号")
     private Integer goods_number;
-    //关键字
+
+    @ApiModelProperty(value = "关键字")
     private String keywords;
-    //简明介绍
+
+    @ApiModelProperty(value = "简明介绍")
     private String goods_brief;
     //商品描述
     private String goods_desc;

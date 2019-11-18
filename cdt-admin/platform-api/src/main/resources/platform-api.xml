@@ -25,6 +25,10 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
+    <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
+    <mvc:resources mapping="doc.html" location="classpath:/META-INF/resources/"/>
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+
     <bean id="apiUserService" class="com.platform.service.ApiUserService"/>
 
     <bean id="authorizationInterceptor" class="com.platform.interceptor.AuthorizationInterceptor"/>

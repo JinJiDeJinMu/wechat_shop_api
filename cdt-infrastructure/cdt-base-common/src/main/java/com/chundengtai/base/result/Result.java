@@ -1,22 +1,28 @@
 package com.chundengtai.base.result;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
+@ApiModel(value = "通用返回结果格式")
 public class Result<T> {
     /**
      * 业务错误码
      */
+    @ApiModelProperty(value = "业务错误码")
     private Integer code;
     /**
      * 信息描述
      */
+    @ApiModelProperty(value = "信息描述")
     private String message;
     /**
      * 返回参数
      */
+    @ApiModelProperty(value = "返回数据实体T")
     private T data;
 
     private Result(ResultStatus resultStatus, T data) {
