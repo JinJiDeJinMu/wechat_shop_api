@@ -23,11 +23,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Api(value = "窝边生活版本", tags = "窝边生活首页")
+@Api(value = "窝边生活商品评论", tags = "窝边生活商品评论")
 @RestController
 @RequestMapping("/api/v2/comment")
 @Slf4j
 public class CommentV2Controller extends ApiBaseAction {
+
     @Autowired
     private ApiCommentService commentService;
     @Autowired
@@ -60,6 +61,7 @@ public class CommentV2Controller extends ApiBaseAction {
 
     ) {
 
+        log.info("");
         Map resultModel = new HashMap();
         resultModel.put("comment_id", 0);
         return Result.success(resultModel);
