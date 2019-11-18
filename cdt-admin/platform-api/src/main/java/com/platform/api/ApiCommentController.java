@@ -46,7 +46,7 @@ public class ApiCommentController extends ApiBaseAction {
     @PostMapping("post")
     public Object post(@LoginUser UserVo loginUser) {
         Map resultObj = new HashMap();
-        //
+
         JSONObject jsonParam = getJsonRequest();
         Integer typeId = jsonParam.getInteger("typeId");
         Integer valueId = jsonParam.getInteger("valueId");

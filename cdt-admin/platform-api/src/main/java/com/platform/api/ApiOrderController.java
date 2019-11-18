@@ -56,16 +56,52 @@ public class ApiOrderController extends ApiBaseAction {
     }
 
     /**
-     * 获取订单列表
+     * 获取订单列表(要验证)
+     */
+//    @ApiOperation(value = "获取订单列表")
+//    @RequestMapping("list")
+//    public Object list(@LoginUser UserVo loginUser, Integer order_status,
+//                       @RequestParam(value = "page", defaultValue = "1") Integer page,
+//                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
+//
+//        Map params = new HashMap();
+//        params.put("user_id", loginUser.getUserId());
+//        params.put("page", page);
+//        params.put("limit", size);
+//        params.put("sidx", "id");
+//        params.put("order", "desc");
+//        params.put("order_status", order_status);
+//        //查询列表数据
+//        Query query = new Query(params);
+//        List<OrderVo> orderEntityList = orderService.queryList(query);
+//        int total = orderService.queryTotal(query);
+//        ApiPageUtils pageUtil = new ApiPageUtils(orderEntityList, total, query.getLimit(), query.getPage());
+//        //
+//        for (OrderVo item : orderEntityList) {
+//            Map orderGoodsParam = new HashMap();
+//            orderGoodsParam.put("order_id", item.getId());
+//            //订单的商品
+//            List<OrderGoodsVo> goodsList = orderGoodsService.queryList(orderGoodsParam);
+//            Integer goodsCount = 0;
+//            for (OrderGoodsVo orderGoodsEntity : goodsList) {
+//                goodsCount += orderGoodsEntity.getNumber();
+//                item.setGoodsCount(goodsCount);
+//            }
+//        }
+//        return toResponsSuccess(pageUtil);
+//    }
+
+    /**
+     * 获取订单列表（开发）
      */
     @ApiOperation(value = "获取订单列表")
+    @IgnoreAuth
     @RequestMapping("list")
-    public Object list(@LoginUser UserVo loginUser, Integer order_status,
+    public Object list(Integer userId, Integer order_status,
                        @RequestParam(value = "page", defaultValue = "1") Integer page,
                        @RequestParam(value = "size", defaultValue = "10") Integer size) {
-        //
         Map params = new HashMap();
-        params.put("user_id", loginUser.getUserId());
+        params.put("user_id", userId);
         params.put("page", page);
         params.put("limit", size);
         params.put("sidx", "id");
@@ -95,6 +131,7 @@ public class ApiOrderController extends ApiBaseAction {
      * 获取订单详情
      */
     @ApiOperation(value = "获取订单详情")
+    @IgnoreAuth
     @GetMapping("detail")
     public Object detail(Integer orderId) {
         Map resultObj = new HashMap();
@@ -128,6 +165,12 @@ public class ApiOrderController extends ApiBaseAction {
         return toResponsSuccess(resultObj);
     }
 
+    /**
+     * 修改订单
+     *
+     * @param orderId
+     * @return
+     */
     @ApiOperation(value = "修改订单")
     @PostMapping("updateSuccess")
     public Object updateSuccess(Integer orderId) {
@@ -152,7 +195,7 @@ public class ApiOrderController extends ApiBaseAction {
     }
 
     /**
-     * 获取订单列表
+     * 订单提交
      */
     @ApiOperation(value = "订单提交")
     @PostMapping("submit")

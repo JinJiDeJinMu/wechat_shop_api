@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiCommentV2Mapper">
+
+    <resultMap type="com.platform.common.CommentReq" id="CommentV2Map">
+        <result property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="goodId" column="good_id"/>
+        <result property="content" column="content"/>
+        <result property="commentTime" column="add_time"/>
+        <result property="starLevel" column="star_level"/>
+        <result property="userId" column="user_id"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.platform.common.CommentReq">
+		select
+			`id`,
+    			`order_no`,
+    			`good_id`,
+    			`content`,
+    			`add_time`,
+    			`star_level`,
+    			`user_id`
+		from nideshop_comment_v2
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultType="com.platform.entity.CommentReq">
+        select
+        `id`,
+        `order_no`,
+        `good_id`,
+        `content`,
+        `add_time`,
+        `star_level`,
+        `user_id`
+        from nideshop_comment_v2
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from nideshop_comment_v2
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.CommentReq" useGeneratedKeys="true" keyProperty="id">
+		insert into nideshop_comment_v2(
+                    			`order_no`,
+                    			`good_id`,
+                    			`content`,
+                    			`add_time`,
+                    			`star_level`,
+                    			`user_id`            )
+		values(
+                    			#{orderNo},
+                    			#{goodId},
+                    			#{content},
+                    			#{addTime},
+                    			#{starLevel},
+                    			#{userId}            )
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.CommentReq">
+        update nideshop_comment_v2
+        <set>
+            <if test="orderNo != null">`order_no` = #{orderNo
+                        },
+            </if>
+            <if test="goodId != null">`good_id` = #{goodId
+                        },
+            </if>
+            <if test="content != null">`content` = #{content
+                        },
+            </if>
+            <if test="addTime != null">`add_time` = #{addTime
+                        },
+            </if>
+            <if test="starLevel != null">`star_level` = #{starLevel
+                        },
+            </if>
+            <if test="userId != null">`user_id` = #{userId
+                        }
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from nideshop_comment_v2 where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from nideshop_comment_v2 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

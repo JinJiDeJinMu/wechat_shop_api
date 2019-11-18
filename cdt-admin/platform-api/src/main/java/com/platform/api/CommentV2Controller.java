@@ -3,14 +3,19 @@ package com.platform.api;
 import com.chundengtai.base.result.Result;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
+import com.platform.common.CommentReq;
+import com.platform.controller.SysOssController;
 import com.platform.entity.CommentPictureVo;
 import com.platform.entity.CommentVo;
+import com.platform.entity.RepCommentVo;
 import com.platform.entity.UserVo;
+import com.platform.oss.OSSFactory;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiPageUtils;
 import com.platform.utils.Base64;
 import com.platform.utils.Query;
+import com.platform.utils.RRException;
 import com.platform.utils.StringUtils;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +37,12 @@ public class CommentV2Controller extends ApiBaseAction {
     @Autowired
     private ApiCommentService commentService;
     @Autowired
+    private SysOssService sysOssService;
+    @Autowired
+    private ApiRepCommentService apiRepCommentService;
+    @Autowired
+    private ApiCommentV2Service apiCommentV2Service;
+    @Autowired
     private ApiUserService userService;
     @Autowired
     private ApiCommentPictureService commentPictureService;
@@ -41,9 +52,9 @@ public class CommentV2Controller extends ApiBaseAction {
     private ApiUserCouponService apiUserCouponService;
 
     /**
-     * 发表评论
+     * 获取评价列表（在商品详情里面）
      */
-    @ApiOperation(value = "获取评论列表")
+    @ApiOperation(value = "获取评价列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "goodId", value = "用户id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "pageIndex", value = "页码", dataType = "int", paramType = "query"),
@@ -58,13 +69,30 @@ public class CommentV2Controller extends ApiBaseAction {
     public Result<Object> List(@RequestParam Integer goodId,
                                @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
                                @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize
-
     ) {
 
-        log.info("");
-        Map resultModel = new HashMap();
-        resultModel.put("comment_id", 0);
-        return Result.success(resultModel);
+        Map<String, Object> resultObj = new HashMap();
+        List<CommentReq> commentList = new ArrayList();
+        Map param = new HashMap();
+        param.put("page", pageIndex);
+        param.put("limit", pagesize);
+        param.put("goodId", goodId);
+        //查询列表数据
+        Query query = new Query(param);
+        commentList = apiCommentV2Service.queryList(query);
+        int total = apiCommentV2Service.queryTotal(query);
+        ApiPageUtils pageUtil = new ApiPageUtils(commentList, total, query.getLimit(), query.getPage());
+        //
+        for (CommentReq commentItem : commentList) {
+            commentItem.setContent(Base64.decode(commentItem.getContent()));
+            commentItem.setUserInfo(userService.queryObject(commentItem.getUserId()));
+
+            Map paramPicture = new HashMap();
+            paramPicture.put("comment_id", commentItem.getId());
+            List<CommentPictureVo> commentPictureEntities = commentPictureService.queryList(paramPicture);
+            commentItem.setCommentPictureList(commentPictureEntities);
+        }
+        return Result.success(pageUtil);
     }
 
     @ApiOperation(value = "回复评论")
@@ -84,16 +112,20 @@ public class CommentV2Controller extends ApiBaseAction {
                                 Integer replyId,
                                 @RequestParam Integer commentId,
                                 @RequestParam String content
-
     ) {
-
-
+        RepCommentVo repCommentVo = new RepCommentVo();
+        repCommentVo.setCommentId(commentId);
+        repCommentVo.setUserId(loginUser.getUserId());
+        repCommentVo.setUserName(loginUser.getUsername());
+        repCommentVo.setContent(Base64.encode(content));
+        repCommentVo.setAddTime(Long.valueOf(System.currentTimeMillis() / 1000));
+        apiRepCommentService.save(repCommentVo);
         Map resultModel = new HashMap();
-        resultModel.put("comment_id", 0);
+        resultModel.put("meg", "成功");
         return Result.success(resultModel);
     }
 
-    @ApiOperation(value = "发表评论")
+    @ApiOperation(value = "发表评价")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "orderNo", value = "用户名", dataType = "string", paramType = "query", example = "2223333"),
             @ApiImplicitParam(name = "goodId", value = "用户id", dataType = "long", paramType = "query"),
@@ -113,10 +145,58 @@ public class CommentV2Controller extends ApiBaseAction {
                                @RequestParam Integer starLevel,
                                MultipartFile[] imageList
     ) {
-
-
+        CommentReq commentReq = new CommentReq();
+        commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
+        commentReq.setUserId(loginUser.getUserId());
+        commentReq.setOrderNo(orderNo);
+        commentReq.setGoodId(goodId);
+        commentReq.setContent(Base64.encode(content));
+        commentReq.setStarLevel(starLevel);
+        Integer insertId = apiCommentV2Service.save(commentReq);
+        if (insertId > 0 && imageList.length > 0) {
+            int i = 0;
+            for (MultipartFile imgLink : imageList) {
+                i++;
+                SysOssController sysOssController = new SysOssController();
+                if (imgLink.isEmpty()) {
+                    throw new RRException("上传文件不能为空");
+                }
+                //上传文件
+                String url = null;
+                try {
+                    url = OSSFactory.build().upload(imgLink);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                CommentPictureVo pictureVo = new CommentPictureVo();
+                pictureVo.setComment_id(insertId);
+                pictureVo.setPic_url(url);
+                pictureVo.setSort_order(i);
+                commentPictureService.save(pictureVo);
+            }
+        }
         Map resultModel = new HashMap();
         resultModel.put("comment_id", 0);
+        resultModel.put("mag", "发表成功");
+        return Result.success(resultModel);
+    }
+
+
+    @ApiOperation(value = "查询评论")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "commentId", value = "评论id", dataType = "Integer", paramType = "query", example = "2223333")})
+    @ApiResponses({@ApiResponse(code = 200, message = "If successful, this method return JwtAccessTokenVO."),
+            @ApiResponse(code = 400, message = "If bad request.")
+    })
+    @PostMapping("comment")
+    public Result<Object> post(@LoginUser UserVo loginUser,
+                               @RequestParam Integer commentId
+    ) {
+        Map resultModel = new HashMap();
+        Map<String, Object> query = new HashMap<>();
+        query.put("commentId", commentId);
+        List<RepCommentVo> repCommentVos = apiRepCommentService.queryList(query);
+        resultModel.put("repCommentList", repCommentVos);
         return Result.success(resultModel);
     }
 
