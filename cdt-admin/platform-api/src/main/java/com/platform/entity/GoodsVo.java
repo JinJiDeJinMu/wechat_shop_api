@@ -14,17 +14,17 @@ import java.util.Date;
  * @email 939961241@qq.com
  * @date 2017-08-15 08:03:40
  */
-@ApiModel(value = "产品实体")
+@ApiModel(value = "产品实体", description = "产品实体类")
 public class GoodsVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "评论主键id")
+    @ApiModelProperty(name = "id", value = "评论主键id", dataType = "int")
     private Integer id;
 
     @ApiModelProperty(value = "商品类型Id")
     private Integer category_id;
 
-    @ApiModelProperty(value = "商品序列号")
+    @ApiModelProperty(value = "商品序列号", dataType = "String")
     private String goods_sn;
 
     @ApiModelProperty(value = "名称")

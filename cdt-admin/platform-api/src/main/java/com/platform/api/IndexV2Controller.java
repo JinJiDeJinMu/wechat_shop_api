@@ -46,7 +46,7 @@ public class IndexV2Controller extends ApiBaseAction {
     @ApiOperation(value = "首页分类包含banner图")
     @IgnoreAuth
     @GetMapping(value = "index")
-    public Object index() {
+    public Result<Map<String, Object>> index() {
         Map<String, Object> resultObj = new HashMap<String, Object>();
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("ad_position_id", 1);
@@ -95,7 +95,7 @@ public class IndexV2Controller extends ApiBaseAction {
     @ApiOperation(value = "首页新品")
     @IgnoreAuth
     @GetMapping(value = "indexNewGoods")
-    public Object indexGoods() {
+    public Result<List<GoodsVo>> indexGoods() {
         //最新商品
         HashMap param = new HashMap<String, Object>();
         param.put("is_new", 1);
