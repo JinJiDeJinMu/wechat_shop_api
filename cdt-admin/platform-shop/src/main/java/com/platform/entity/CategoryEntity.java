@@ -40,6 +40,8 @@ public class CategoryEntity extends Tree<CategoryEntity> {
     private Integer type;
     //
     private String frontName;
+    //首页展示位置
+    private Integer showPosition;
 
     //翻译用字段
     private String show;
@@ -50,6 +52,14 @@ public class CategoryEntity extends Tree<CategoryEntity> {
 
     public void setShow(String show) {
         this.show = show;
+    }
+
+    public Integer getShowPosition() {
+        return showPosition;
+    }
+
+    public void setShowPosition(Integer showPosition) {
+        this.showPosition = showPosition;
     }
 
     /**

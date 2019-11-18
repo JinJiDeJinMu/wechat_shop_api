@@ -57,18 +57,28 @@ public class IndexV2Controller extends ApiBaseAction {
         resultObj.put("hotProduct", hotProduct);
         resultObj.put("activity", activity);
 
-        //分类及其下面的商品
+        //分类
         param = new HashMap<String, Object>();
         param.put("parent_id", 0);
         param.put("sidx", "sort_order");
         param.put("order", "desc");
+        param.put("showPosition", 0);
         PageHelper.startPage(0, 5, false);
         List<CategoryVo> categoryList = categoryService.queryList(param);
         resultObj.put("categoryList", categoryList);
 
-        List<Map<String, Object>> newCategoryList = new ArrayList<>();
 
-        for (CategoryVo categoryItem : categoryList) {
+        //分类下面模块的商品
+        param = new HashMap<String, Object>();
+        param.put("parent_id", 0);
+        param.put("sidx", "sort_order");
+        param.put("order", "desc");
+        param.put("showPosition", 1);
+        PageHelper.startPage(0, 5, false);
+        List<CategoryVo> categoryGoodsList = categoryService.queryList(param);
+        //差找下面的商品
+        List<Map<String, Object>> newCategoryList = new ArrayList<>();
+        for (CategoryVo categoryItem : categoryGoodsList) {
             List<GoodsVo> categoryGoods = new ArrayList<>();
             param = null;
             param = new HashMap<String, Object>();
@@ -81,7 +91,7 @@ public class IndexV2Controller extends ApiBaseAction {
 
             Map<String, Object> newCategory = new HashMap<String, Object>();
             newCategory.put("id", categoryItem.getId());
-            newCategory.put("name", categoryItem.getName());
+            newCategory.put("name", categoryItem.getFront_name());
             newCategory.put("goodsList", categoryGoods);
             newCategoryList.add(newCategory);
         }

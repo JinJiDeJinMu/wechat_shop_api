@@ -36,6 +36,8 @@ public class OrderVo implements Serializable {
     private Integer shipping_status;
     //付款状态 支付状态;0未付款;1付款中;2已付款;4退款
     private Integer pay_status;
+    //评价状态
+    private Integer evaluateStatus;
     //收货人
     private String consignee;
     //国家
@@ -170,6 +172,14 @@ public class OrderVo implements Serializable {
 
     public Long getUser_id() {
         return user_id;
+    }
+
+    public Integer getEvaluateStatus() {
+        return evaluateStatus;
+    }
+
+    public void setEvaluateStatus(Integer evaluateStatus) {
+        this.evaluateStatus = evaluateStatus;
     }
 
     public void setUser_id(Long user_id) {

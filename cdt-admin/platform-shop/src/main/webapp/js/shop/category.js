@@ -39,6 +39,20 @@ TreeGrid.initColumn = function () {
         {title: '描述', field: 'frontDesc', align: 'center', valign: 'middle', width: '150px'},
         {title: '首页展示', field: 'showIndex', align: 'center', valign: 'middle', width: '50px'},
         {
+            title: '首页展示位置', field: 'showPosition', align: 'center', valign: 'middle', width: '50px'
+            // formatter:function (showPosition) {
+            //     if (showPosition.valueOf() === 0){
+            //         return "顶部"
+            //     }
+            //     else if(showPosition.valueOf() === 1){
+            //         return "中部"
+            //     }
+            //     else {
+            //         return "不显示"
+            //     }
+            // }
+        },
+        {
             title: '显示',
             field: 'isShow',
             align: 'center',

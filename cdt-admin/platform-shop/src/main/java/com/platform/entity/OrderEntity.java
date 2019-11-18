@@ -30,6 +30,8 @@ public class OrderEntity implements Serializable {
     private Integer shippingStatus;
     //付款状态 支付状态;0未付款;1付款中;2已付款
     private Integer payStatus;
+    //评价状态
+    private Integer evaluateStatus;
     //收货人
     private String consignee;
     //国家
@@ -107,7 +109,15 @@ public class OrderEntity implements Serializable {
 		this.goodsSpecifitionNameValue = goodsSpecifitionNameValue;
 	}
 
-	public String getGoodsNames() {
+    public Integer getEvaluateStatus() {
+        return evaluateStatus;
+    }
+
+    public void setEvaluateStatus(Integer evaluateStatus) {
+        this.evaluateStatus = evaluateStatus;
+    }
+
+    public String getGoodsNames() {
 		return goodsNames;
 	}
 

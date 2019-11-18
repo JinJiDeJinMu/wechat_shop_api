@@ -24,6 +24,7 @@ public class CommentVo implements Serializable {
     @ApiModelProperty(value = "评论类型id")
     //用户评论的类型;0评论的是商品,1评论的是文章
     private Integer type_id;
+
     @ApiModelProperty(value = "产品Id")
     //产品Id
     private Integer value_id;

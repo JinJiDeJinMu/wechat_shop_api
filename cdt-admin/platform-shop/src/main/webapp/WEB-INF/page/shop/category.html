@@ -64,6 +64,19 @@
                 <Input-number :min="0" :step="1" v-model="category.showIndex" placeholder="首页展示排序"
                               style="width: 188px;"/>
             </Form-item>
+            <Form-item label="首页显示位置" prop="showPosition">
+                <Radio-group v-model="category.showPosition">
+                    <Radio label="0">
+                        <span>顶部</span>
+                    </Radio>
+                    <Radio label="1">
+                        <span>中部</span>
+                    </Radio>
+                    <Radio label="2">
+                        <span>不显示</span>
+                    </Radio>
+                </Radio-group>
+            </Form-item>
             <Form-item label="显示" prop="isShow">
                 <Radio-group v-model="category.isShow">
                     <Radio label="1">

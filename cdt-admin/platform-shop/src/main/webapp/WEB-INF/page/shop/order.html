@@ -152,6 +152,16 @@
                     </Radio>
                 </Radio-group>
             </Form-item>
+            <Form-item label="评价状态" prop="evaluateStatus">
+                <Radio-group v-model="order.evaluateStatus">
+                    <Radio label="0" disabled>
+                        <span>待评价</span>
+                    </Radio>
+                    <Radio label="1" disabled>
+                        <span>已评价</span>
+                    </Radio>
+                </Radio-group>
+            </Form-item>
             <Form-item label="收货人" prop="consignee">
                 <i-input v-model="order.consignee" readonly/>
             </Form-item>

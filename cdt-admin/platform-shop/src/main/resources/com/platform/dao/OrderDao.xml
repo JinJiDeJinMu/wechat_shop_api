@@ -11,6 +11,7 @@
         <result property="orderStatus" column="order_status"/>
         <result property="shippingStatus" column="shipping_status"/>
         <result property="payStatus" column="pay_status"/>
+        <result property="evaluateStatus" column="evaluate_status"/>
         <result property="consignee" column="consignee"/>
         <result property="country" column="country"/>
         <result property="province" column="province"/>
@@ -40,8 +41,8 @@
         <result property="callbackStatus" column="callback_status"/>
         <result property="orderType" column="order_type"/>
         <result property="userName" column="username"/>
-        <result property="goods_name" column="goods_name"/>
-        <result property="list_pic_url" column="list_pic_url"/>
+        <!--<result property="goods_name" column="goods_name"/>-->
+        <!--<result property="list_pic_url" column="list_pic_url"/>-->
         <result property="gid" column="gid"/>
         <result property="realName" column="real_name"/>
         <result property="merchantId" column="merchantId"/>
@@ -55,8 +56,9 @@
 	</select>
 
     <select id="queryList" resultType="com.platform.entity.OrderEntity">
-        SELECT 
-        o.id AS id,o.order_sn as orderSn,u.username AS username,u.real_name as realName,o.order_type as orderType, 
+        SELECT
+        o.id AS id,o.order_sn as orderSn,o.evaluate_status as evaluateStatus,u.username AS username,u.real_name as
+        realName,o.order_type as orderType,
         o.order_status as orderStatus, o.shipping_status as shippingStatus,
         o.pay_status as payStatus,o.shipping_name as shippingName, o.merchant_id as merchantId,
         o.shipping_no as shippingNo,o.actual_price as actualPrice,  
@@ -96,9 +98,9 @@
             limit #{offset}, #{limit}
         </if>
     </select>
-    
-    
-      <select id="queryGroupList" resultType="com.platform.entity.GroupBuyingVo">
+
+
+    <select id="queryGroupList" resultType="com.platform.entity.GroupBuyingEntity">
       	SELECT `id`, `goods_id`, `goods_name`, `group_num`, `success_num`, `types`, `merchant_id` FROM  `group_buying`   WHERE 1=1
         <if test="goodsName != null and goodsName.trim() != ''">
             AND goods_name LIKE concat('%',#{goodsName},'%')
@@ -166,8 +168,9 @@
 			`user_id`, 
 			`order_status`, 
 			`shipping_status`, 
-			`pay_status`, 
-			`consignee`, 
+			`pay_status`,
+			`evaluate_status`,
+			`consignee`,
 			`country`, 
 			`province`, 
 			`city`, 
@@ -203,7 +206,8 @@
 			#{orderStatus}, 
 			#{shippingStatus}, 
 			#{payStatus}, 
-			#{consignee}, 
+			#{evaluateStatus},
+			#{consignee},
 			#{country}, 
 			#{province}, 
 			#{city}, 
@@ -242,6 +246,7 @@
             <if test="orderStatus != null">`order_status` = #{orderStatus},</if>
             <if test="shippingStatus != null">`shipping_status` = #{shippingStatus},</if>
             <if test="payStatus != null">`pay_status` = #{payStatus},</if>
+            <if test="evaluateStatus != null">`evaluate_status` = #{evaluateStatus},</if>
             <if test="consignee != null">`consignee` = #{consignee},</if>
             <if test="country != null">`country` = #{country},</if>
             <if test="province != null">`province` = #{province},</if>

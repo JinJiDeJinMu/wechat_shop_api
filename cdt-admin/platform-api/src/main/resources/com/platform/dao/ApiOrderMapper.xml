@@ -11,6 +11,7 @@
         <result property="order_status" column="order_status"/>
         <result property="shipping_status" column="shipping_status"/>
         <result property="pay_status" column="pay_status"/>
+        <result property="evaluateStatus" column="evaluate_status"/>
         <result property="consignee" column="consignee"/>
         <result property="country" column="country"/>
         <result property="province" column="province"/>
@@ -163,6 +164,7 @@
 			`order_status`,
 			`shipping_status`,
 			`pay_status`,
+			`evaluate_status`,
 			`consignee`,
 			`country`,
 			`province`,
@@ -206,6 +208,7 @@
 			#{order_status},
 			#{shipping_status},
 			#{pay_status},
+			#{evaluateStatus},
 			#{consignee},
 			#{country},
 			#{province},
@@ -252,6 +255,7 @@
             <if test="order_status != null">`order_status` = #{order_status},</if>
             <if test="shipping_status != null">`shipping_status` = #{shipping_status},</if>
             <if test="pay_status != null">`pay_status` = #{pay_status},</if>
+            <if test="evaluateStatus != null">`evaluate_status` = #{evaluateStatus},</if>
             <if test="consignee != null">`consignee` = #{consignee},</if>
             <if test="country != null">`country` = #{country},</if>
             <if test="province != null">`province` = #{province},</if>
@@ -292,6 +296,7 @@
             <if test="pay_status != null">`pay_status` = #{pay_status},</if>
             <if test="order_status != null">`order_status` = #{order_status},</if>
             <if test="shipping_status != null">`shipping_status` = #{shipping_status},</if>
+            <if test="evaluateStatus != null">`evaluate_status` = #{evaluateStatus},</if>
             <if test="pay_time != null">`pay_time` = #{pay_time},</if>
             <if test="pay_id != null">`pay_id` = #{pay_id},</if>
         </set>

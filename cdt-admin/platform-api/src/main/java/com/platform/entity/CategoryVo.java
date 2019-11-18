@@ -18,6 +18,8 @@ public class CategoryVo implements Serializable {
     private String name;
     //关键字
     private String keywords;
+    //展示位置
+    private Integer showPosition;
     //描述
     private String front_desc;
     //父节点
@@ -47,6 +49,13 @@ public class CategoryVo implements Serializable {
 
     private List<CategoryVo> subCategoryList;
 
+    public Integer getShowPosition() {
+        return showPosition;
+    }
+
+    public void setShowPosition(Integer showPosition) {
+        this.showPosition = showPosition;
+    }
 
     public Integer getId() {
         return id;

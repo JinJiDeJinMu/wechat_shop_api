@@ -93,6 +93,17 @@ $(function () {
                     return value;
                 }
             },
+            {
+                label: '评价状态', name: 'evaluateStatus', index: 'evaluateStatus', width: 80,
+                formatter: function (value) {
+                    if (value == 0) {
+                        return '未评价';
+                    } else if (value == 1) {
+                        return '已评价';
+                    }
+                    return value;
+                }
+            },
             {label: '快递公司', name: 'shippingName', index: 'shipping_name', width: 80},
             {label: '快递单号', name: 'shippingNo', index: 'shipping_No', width: 80},
             {label: '实际支付金额', name: 'actualPrice', index: 'actual_price', width: 80},
