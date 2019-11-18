@@ -89,4 +89,13 @@ pagehelper:
   params: count=countSql
   offsetAsPageNum: true
 
+
+wx:
+  miniapp:
+    appid: 111
+    secret: 111
+    token: 111
+    aesKey: 111
+    msgDataFormat: JSON
+
 debug: true
