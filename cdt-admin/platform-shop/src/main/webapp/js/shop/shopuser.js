@@ -79,6 +79,7 @@ var vm = new Vue({
 
             this.getUserLevels();
         },
+
         download:function(){
             var id = getSelectedRow("#jqGrid");
             console.log('---------id--'+id);
@@ -203,6 +204,18 @@ var vm = new Vue({
             }
             openWindow({
                 title: '推广人变更',
+                type: 2,
+                content: '../shop/promoterUpdate.html?promoterId=' + id
+            })
+        },
+        //绑定商铺
+        binding: function () {
+            var id = getSelectedRow("#jqGrid");
+            if (id == null) {
+                return;
+            }
+            openWindow({
+                title: '绑定店铺',
                 type: 2,
                 content: '../shop/promoterUpdate.html?promoterId=' + id
             })

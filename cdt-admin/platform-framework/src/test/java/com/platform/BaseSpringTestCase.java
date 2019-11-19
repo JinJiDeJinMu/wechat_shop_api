@@ -12,7 +12,8 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
  * @email 939961241@qq.com
  * @date 2018-07-09 10:06:23
  */
-@ContextConfiguration(locations = {"classpath:applicationContext-test.xml"})
+@ContextConfiguration(locations = {
+        "classpath:spring-jdbc.xml"})
 public class BaseSpringTestCase extends AbstractJUnit4SpringContextTests {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
