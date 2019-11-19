@@ -53,7 +53,6 @@ public class IndexV2Controller extends ApiBaseAction {
         List<AdVo> banner = adService.queryList(param);
         List<AdVo> hotProduct = getCollectByType(banner, BannerType.HOT.getCode());
         List<AdVo> activity = getCollectByType(banner, BannerType.ACTIVITY.getCode());
-
         resultObj.put("hotProduct", hotProduct);
         resultObj.put("activity", activity);
 
@@ -67,18 +66,9 @@ public class IndexV2Controller extends ApiBaseAction {
         List<CategoryVo> categoryList = categoryService.queryList(param);
         resultObj.put("categoryList", categoryList);
 
-
-        //分类下面模块的商品
-        param = new HashMap<String, Object>();
-        param.put("parent_id", 0);
-        param.put("sidx", "sort_order");
-        param.put("order", "desc");
-        param.put("showPosition", 1);
-        PageHelper.startPage(0, 5, false);
-        List<CategoryVo> categoryGoodsList = categoryService.queryList(param);
         //差找下面的商品
         List<Map<String, Object>> newCategoryList = new ArrayList<>();
-        for (CategoryVo categoryItem : categoryGoodsList) {
+        for (CategoryVo categoryItem : categoryList) {
             List<GoodsVo> categoryGoods = new ArrayList<>();
             param = null;
             param = new HashMap<String, Object>();
@@ -86,12 +76,12 @@ public class IndexV2Controller extends ApiBaseAction {
             param.put("sidx", "add_time");
             param.put("order", "desc");
             param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price");
-            PageHelper.startPage(0, 5, false);
+            PageHelper.startPage(0, 6, false);
             categoryGoods = goodsService.queryList(param);
 
             Map<String, Object> newCategory = new HashMap<String, Object>();
             newCategory.put("id", categoryItem.getId());
-            newCategory.put("name", categoryItem.getFront_name());
+            newCategory.put("name", categoryItem.getName());
             newCategory.put("goodsList", categoryGoods);
             newCategoryList.add(newCategory);
         }
