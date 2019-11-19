@@ -8,7 +8,7 @@
         <result property="orderNo" column="order_no"/>
         <result property="goodId" column="good_id"/>
         <result property="content" column="content"/>
-        <result property="commentTime" column="add_time"/>
+        <result property="commentTime" column="comment_time"/>
         <result property="starLevel" column="star_level"/>
         <result property="userId" column="user_id"/>
     </resultMap>
@@ -19,26 +19,28 @@
     			`order_no`,
     			`good_id`,
     			`content`,
-    			`add_time`,
+    			`comment_time`,
     			`star_level`,
     			`user_id`
 		from nideshop_comment_v2
 		where id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.CommentReq">
-        select
-        `id`,
-        `order_no`,
-        `good_id`,
-        `content`,
-        `add_time`,
-        `star_level`,
-        `user_id`
+    <select id="queryList" resultType="com.platform.common.CommentReq">
+        select *
         from nideshop_comment_v2
         WHERE 1=1
-        <if test="name != null and name.trim() != ''">
-            AND name LIKE concat('%',#{name},'%')
+        <if test="goodId != null">
+            AND good_id = #{goodId}
+        </if>
+        <if test="orderNo != null">
+            AND order_no = #{orderNo}
+        </if>
+        <if test="starLevel != null">
+            AND star_level = #{starLevel}
+        </if>
+        <if test="userId != null">
+            AND user_id = #{userId}
         </if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -61,24 +63,24 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.CommentReq" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.platform.common.CommentReq" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_comment_v2(
                     			`order_no`,
                     			`good_id`,
                     			`content`,
-                    			`add_time`,
+                    			`comment_time`,
                     			`star_level`,
                     			`user_id`            )
 		values(
                     			#{orderNo},
                     			#{goodId},
                     			#{content},
-                    			#{addTime},
+                    			#{commentTime},
                     			#{starLevel},
                     			#{userId}            )
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.CommentReq">
+    <update id="update" parameterType="com.platform.common.CommentReq">
         update nideshop_comment_v2
         <set>
             <if test="orderNo != null">`order_no` = #{orderNo
@@ -90,7 +92,7 @@
             <if test="content != null">`content` = #{content
                         },
             </if>
-            <if test="addTime != null">`add_time` = #{addTime
+            <if test="commentTime != null">`comment_time` = #{commentTime
                         },
             </if>
             <if test="starLevel != null">`star_level` = #{starLevel

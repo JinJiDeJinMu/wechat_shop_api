@@ -18,7 +18,7 @@ import java.util.List;
 public class CommentReq implements Serializable {
 
     @ApiModelProperty(value = "订单id")
-    private String id;
+    private Long id;
 
     @ApiModelProperty(value = "订单编号")
     private String orderNo;
@@ -43,6 +43,22 @@ public class CommentReq implements Serializable {
 
     @ApiModelProperty(value = "评论图片列表")
     private List<CommentPictureVo> commentPictureList;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UserVo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserVo userInfo) {
+        this.userInfo = userInfo;
+    }
 
     public String getOrderNo() {
         return orderNo;

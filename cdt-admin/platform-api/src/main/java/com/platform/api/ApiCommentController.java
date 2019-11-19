@@ -68,7 +68,7 @@ public class ApiCommentController extends ApiBaseAction {
             for (Object imgLink : imagesList) {
                 i++;
                 CommentPictureVo pictureVo = new CommentPictureVo();
-                pictureVo.setComment_id(insertId);
+                pictureVo.setComment_id(insertId.longValue());
                 pictureVo.setPic_url(imgLink.toString());
                 pictureVo.setSort_order(i);
                 commentPictureService.save(pictureVo);

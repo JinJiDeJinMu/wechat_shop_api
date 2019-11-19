@@ -2,13 +2,11 @@ package com.platform.api;
 
 import com.chundengtai.base.result.Result;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.annotation.LoginUser;
 import com.platform.common.CommentReq;
 import com.platform.controller.SysOssController;
 import com.platform.entity.CommentPictureVo;
 import com.platform.entity.CommentVo;
 import com.platform.entity.RepCommentVo;
-import com.platform.entity.UserVo;
 import com.platform.oss.OSSFactory;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
@@ -66,6 +64,7 @@ public class CommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
     @PostMapping("list")
+    @IgnoreAuth
     public Result<Object> List(@RequestParam Integer goodId,
                                @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
                                @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize
@@ -77,6 +76,8 @@ public class CommentV2Controller extends ApiBaseAction {
         param.put("page", pageIndex);
         param.put("limit", pagesize);
         param.put("goodId", goodId);
+        param.put("order", "desc");
+        param.put("sidx", "id");
         //查询列表数据
         Query query = new Query(param);
         commentList = apiCommentV2Service.queryList(query);
@@ -95,35 +96,6 @@ public class CommentV2Controller extends ApiBaseAction {
         return Result.success(pageUtil);
     }
 
-    @ApiOperation(value = "回复评论")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "replyUserId", value = "被回复的用户id", dataType = "long", paramType = "query"),
-            @ApiImplicitParam(name = "replyId", value = "回复的评论id", dataType = "long", paramType = "query"),
-            @ApiImplicitParam(name = "commentId", value = "评价id", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "content", value = "评论内容", dataType = "long", paramType = "query")})
-    @ApiResponses({@ApiResponse(code = 200, message = "If successful, this method return JwtAccessTokenVO."),
-            @ApiResponse(code = 400, message = "If bad request."),
-            @ApiResponse(code = 500, message = "If internal server error."),
-            @ApiResponse(code = 503, message = "If service unavailable.")
-    })
-    @PostMapping("reply")
-    public Result<Object> reply(@LoginUser UserVo loginUser,
-                                Integer replyUserId,
-                                Integer replyId,
-                                @RequestParam Integer commentId,
-                                @RequestParam String content
-    ) {
-        RepCommentVo repCommentVo = new RepCommentVo();
-        repCommentVo.setCommentId(commentId);
-        repCommentVo.setUserId(loginUser.getUserId());
-        repCommentVo.setUserName(loginUser.getUsername());
-        repCommentVo.setContent(Base64.encode(content));
-        repCommentVo.setAddTime(Long.valueOf(System.currentTimeMillis() / 1000));
-        apiRepCommentService.save(repCommentVo);
-        Map resultModel = new HashMap();
-        resultModel.put("meg", "成功");
-        return Result.success(resultModel);
-    }
 
     @ApiOperation(value = "发表评价")
     @ApiImplicitParams({
@@ -137,8 +109,11 @@ public class CommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 500, message = "If internal server error."),
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
+    @IgnoreAuth
     @PostMapping("post")
-    public Result<Object> post(@LoginUser UserVo loginUser,
+    public Result<Object> post(
+//                               @LoginUser UserVo loginUser,
+            Long userId,
                                @RequestParam String orderNo,
                                @RequestParam Integer goodId,
                                @RequestParam String content,
@@ -147,13 +122,14 @@ public class CommentV2Controller extends ApiBaseAction {
     ) {
         CommentReq commentReq = new CommentReq();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
-        commentReq.setUserId(loginUser.getUserId());
+        commentReq.setUserId(userId);
         commentReq.setOrderNo(orderNo);
         commentReq.setGoodId(goodId);
         commentReq.setContent(Base64.encode(content));
         commentReq.setStarLevel(starLevel);
-        Integer insertId = apiCommentV2Service.save(commentReq);
-        if (insertId > 0 && imageList.length > 0) {
+        apiCommentV2Service.save(commentReq);
+        Long insertId = commentReq.getId();
+        if (insertId > 0 && imageList != null) {
             int i = 0;
             for (MultipartFile imgLink : imageList) {
                 i++;
@@ -169,6 +145,7 @@ public class CommentV2Controller extends ApiBaseAction {
                     e.printStackTrace();
                 }
                 CommentPictureVo pictureVo = new CommentPictureVo();
+                pictureVo.setType(0);
                 pictureVo.setComment_id(insertId);
                 pictureVo.setPic_url(url);
                 pictureVo.setSort_order(i);
@@ -182,6 +159,43 @@ public class CommentV2Controller extends ApiBaseAction {
     }
 
 
+    @ApiOperation(value = "回复评论")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "replyUserId", value = "被回复的用户id", dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "replyId", value = "回复的评论id", dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "commentId", value = "评价id", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "content", value = "评论内容", dataType = "long", paramType = "query")})
+    @ApiResponses({@ApiResponse(code = 200, message = "If successful, this method return JwtAccessTokenVO."),
+            @ApiResponse(code = 400, message = "If bad request."),
+            @ApiResponse(code = 500, message = "If internal server error."),
+            @ApiResponse(code = 503, message = "If service unavailable.")
+    })
+    @PostMapping("reply")
+    @IgnoreAuth
+    public Result<Object> reply(
+//                                @LoginUser UserVo loginUser,
+            Long userId,
+            String userName,
+            Integer replyUserId,
+            Integer replyId,
+            @RequestParam Integer commentId,
+            @RequestParam String content
+    ) {
+        RepCommentVo repCommentVo = new RepCommentVo();
+        repCommentVo.setCommentId(commentId);
+        repCommentVo.setUserId(userId);
+        repCommentVo.setUserName(Base64.encode(userName));
+        repCommentVo.setContent(Base64.encode(content));
+        repCommentVo.setAddTime(Long.valueOf(System.currentTimeMillis() / 1000));
+        apiRepCommentService.save(repCommentVo);
+        Map resultModel = new HashMap();
+        resultModel.put("meg", "成功");
+        return Result.success(resultModel);
+    }
+
+
+
+
     @ApiOperation(value = "查询评论")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "commentId", value = "评论id", dataType = "Integer", paramType = "query", example = "2223333")})
@@ -189,13 +203,20 @@ public class CommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 400, message = "If bad request.")
     })
     @PostMapping("comment")
-    public Result<Object> post(@LoginUser UserVo loginUser,
+    @IgnoreAuth
+    public Result<Object> post(
+//                             @LoginUser UserVo loginUser,
+            Long userId,
                                @RequestParam Integer commentId
     ) {
         Map resultModel = new HashMap();
         Map<String, Object> query = new HashMap<>();
         query.put("commentId", commentId);
         List<RepCommentVo> repCommentVos = apiRepCommentService.queryList(query);
+        for (RepCommentVo commentItem : repCommentVos) {
+            commentItem.setContent(Base64.decode(commentItem.getContent()));
+            commentItem.setUserName(Base64.decode(commentItem.getUserName()));
+        }
         resultModel.put("repCommentList", repCommentVos);
         return Result.success(resultModel);
     }
@@ -204,6 +225,7 @@ public class CommentV2Controller extends ApiBaseAction {
      */
     @ApiOperation(value = "评论数量")
     @GetMapping("count")
+    @IgnoreAuth
     public Result<Object> count(Integer typeId, Integer valueId) {
         Map<String, Object> resultObj = new HashMap();
         Map param = new HashMap();
