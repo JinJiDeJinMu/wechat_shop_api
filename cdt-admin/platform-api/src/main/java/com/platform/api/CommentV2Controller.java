@@ -3,7 +3,6 @@ package com.platform.api;
 import com.chundengtai.base.result.Result;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.common.CommentReq;
-import com.platform.controller.SysOssController;
 import com.platform.entity.CommentPictureVo;
 import com.platform.entity.CommentVo;
 import com.platform.entity.RepCommentVo;
@@ -34,8 +33,8 @@ public class CommentV2Controller extends ApiBaseAction {
 
     @Autowired
     private ApiCommentService commentService;
-    @Autowired
-    private SysOssService sysOssService;
+    //    @Autowired
+//    private SysOssService sysOssService;
     @Autowired
     private ApiRepCommentService apiRepCommentService;
     @Autowired
@@ -133,7 +132,7 @@ public class CommentV2Controller extends ApiBaseAction {
             int i = 0;
             for (MultipartFile imgLink : imageList) {
                 i++;
-                SysOssController sysOssController = new SysOssController();
+                //SysOssController sysOssController = new SysOssController();
                 if (imgLink.isEmpty()) {
                     throw new RRException("上传文件不能为空");
                 }
