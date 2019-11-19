@@ -36,13 +36,13 @@ public class GoodsController {
         SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
         //查询列表数据
         Query query = new Query(params);
-        query.put("merchantId",sysUserEntity.getMerchantId());
+        if (sysUserEntity.getCreateUserId().intValue() != 1) {
+            query.put("merchantId", sysUserEntity.getMerchantId());
+        }
         query.put("isDelete", 0);
         List<GoodsEntity> goodsList = goodsService.queryList(query);
         int total = goodsService.queryTotal(query);
-
         PageUtils pageUtil = new PageUtils(goodsList, total, query.getLimit(), query.getPage());
-
         return R.ok().put("page", pageUtil);
     }
 
