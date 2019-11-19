@@ -5,11 +5,7 @@ import com.platform.dao.GoodsAttributeDao;
 import com.platform.dao.GoodsDao;
 import com.platform.dao.GoodsGalleryDao;
 import com.platform.dao.ProductDao;
-import com.platform.entity.GoodsGalleryEntity;
-import com.platform.entity.GoodsAttributeEntity;
-import com.platform.entity.GoodsEntity;
-import com.platform.entity.ProductEntity;
-import com.platform.entity.SysUserEntity;
+import com.platform.entity.*;
 import com.platform.service.GoodsService;
 import com.platform.utils.RRException;
 import com.platform.utils.ShiroUtils;
@@ -78,7 +74,10 @@ public class GoodsServiceImpl implements GoodsService {
         productEntity.setRetailPrice(goods.getRetailPrice());
         productEntity.setMarketPrice(goods.getMarketPrice());
         productEntity.setGoodsSpecificationIds("");
-        productEntity.setMerchant_id(goods.getMerchantId().intValue());
+
+        if (goods.getMerchantId() != null) {
+            productEntity.setMerchant_id(goods.getMerchantId().intValue());
+        }
         productEntity.setGroupPrice(goods.getGroupPrice());
         productDao.save(productEntity);
 
