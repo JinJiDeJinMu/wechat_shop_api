@@ -1,5 +1,6 @@
 package com.platform.controller;
 
+import com.platform.common.ShopShow;
 import com.platform.entity.GoodsEntity;
 import com.platform.entity.SysUserEntity;
 import com.platform.service.GoodsService;
@@ -36,7 +37,7 @@ public class GoodsController {
         SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
         //查询列表数据
         Query query = new Query(params);
-        if (sysUserEntity.getCreateUserId().intValue() != 1) {
+        if (sysUserEntity.getCreateUserId().intValue() != ShopShow.ADMINISTRATOR.getCode()) {
             query.put("merchantId", sysUserEntity.getMerchantId());
         }
         query.put("isDelete", 0);
@@ -64,9 +65,10 @@ public class GoodsController {
     @RequiresPermissions("goods:save")
     public R save(@RequestBody GoodsEntity goods) {
         SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
-        goods.setMerchantId(sysUserEntity.getMerchantId());
+        if (sysUserEntity.getCreateUserId().intValue() != ShopShow.ADMINISTRATOR.getCode()) {
+            goods.setMerchantId(sysUserEntity.getMerchantId());
+        }
         goodsService.save(goods);
-
         return R.ok();
     }
 
@@ -77,7 +79,6 @@ public class GoodsController {
     @RequiresPermissions("goods:update")
     public R update(@RequestBody GoodsEntity goods) {
         goodsService.update(goods);
-
         return R.ok();
     }
 
@@ -88,7 +89,6 @@ public class GoodsController {
     @RequiresPermissions("goods:delete")
     public R delete(@RequestBody Integer[] ids) {
         goodsService.deleteBatch(ids);
-
         return R.ok();
     }
 
@@ -97,11 +97,11 @@ public class GoodsController {
      */
     @RequestMapping("/queryAll")
     public R queryAll(@RequestParam Map<String, Object> params) {
-
         params.put("isDelete", 0);
-        params.put("merchantId", ShiroUtils.getUserEntity().getMerchantId());
+        if (ShiroUtils.getUserEntity().getMerchantId().intValue() != ShopShow.ADMINISTRATOR.getCode()) {
+            params.put("merchantId", ShiroUtils.getUserEntity().getMerchantId());
+        }
         List<GoodsEntity> list = goodsService.queryList(params);
-
         return R.ok().put("list", list);
     }
 
@@ -117,7 +117,10 @@ public class GoodsController {
         //查询列表数据
         SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
         Query query = new Query(params);
-        query.put("merchantId",sysUserEntity.getMerchantId());
+
+        if (ShiroUtils.getUserEntity().getMerchantId().intValue() != ShopShow.ADMINISTRATOR.getCode()) {
+            query.put("merchantId", sysUserEntity.getMerchantId());
+        }
         query.put("isDelete", 1);
         List<GoodsEntity> goodsList = goodsService.queryList(query);
 
