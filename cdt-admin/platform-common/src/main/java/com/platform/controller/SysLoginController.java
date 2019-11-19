@@ -56,7 +56,6 @@ public class SysLoginController {
     @ResponseBody
     @RequestMapping(value = "/sys/login", method = RequestMethod.POST)
     public R login(String username, String password, String captcha) throws IOException {
-      //  String kaptcha="1111";
         String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
         if(null == kaptcha){
             return R.error("验证码已失效");
