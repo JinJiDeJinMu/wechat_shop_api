@@ -21,6 +21,8 @@ public class AttributeCategoryEntity implements Serializable {
     //
     private Integer enabled;
 
+    private Integer showStyle;
+
     /**
      * 设置：
      */
@@ -33,6 +35,15 @@ public class AttributeCategoryEntity implements Serializable {
      */
     public Integer getId() {
         return id;
+    }
+
+
+    public Integer getShowStyle() {
+        return showStyle;
+    }
+
+    public void setShowStyle(Integer showStyle) {
+        this.showStyle = showStyle;
     }
 
     /**
