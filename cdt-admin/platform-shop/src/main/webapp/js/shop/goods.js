@@ -47,7 +47,16 @@ $(function () {
 });
 
 var ztree;
-
+const defaultListQuery = {
+    keyword: null,
+    pageNum: 1,
+    pageSize: 5,
+    publishStatus: null,
+    verifyStatus: null,
+    productSn: null,
+    productCategoryId: null,
+    brandId: null
+};
 var setting = {
     data: {
         simpleData: {
@@ -98,9 +107,95 @@ var vm = new Vue({
         },
         brands: [],//品牌
         macros: [],//商品单位
-        attributeCategories: []//属性类别
+        attributeCategories: [],//属性类别
+
+
+        editSkuInfo: {
+            dialogVisible: false,
+            productId: null,
+            productSn: '',
+            productAttributeCategoryId: null,
+            stockList: [],
+            productAttr: [],
+            keyword: null
+        },
+        operates: [
+            {
+                label: "商品上架",
+                value: "publishOn"
+            },
+            {
+                label: "商品下架",
+                value: "publishOff"
+            },
+            {
+                label: "设为推荐",
+                value: "recommendOn"
+            },
+            {
+                label: "取消推荐",
+                value: "recommendOff"
+            },
+            {
+                label: "设为新品",
+                value: "newOn"
+            },
+            {
+                label: "取消新品",
+                value: "newOff"
+            },
+            {
+                label: "转移到分类",
+                value: "transferCategory"
+            },
+            {
+                label: "移入回收站",
+                value: "recycle"
+            }
+        ],
+        operateType: null,
+        listQuery: Object.assign({}, defaultListQuery),
+        list: null,
+        total: null,
+        listLoading: true,
+        selectProductCateValue: null,
+        multipleSelection: [],
+        productCateOptions: [],
+        brandOptions: [],
+        publishStatusOptions: [{
+            value: 1,
+            label: '上架'
+        }, {
+            value: 0,
+            label: '下架'
+        }],
+        verifyStatusOptions: [{
+            value: 1,
+            label: '审核通过'
+        }, {
+            value: 0,
+            label: '未审核'
+        }]
+    },
+    created: function () {
+        this.getList();
     },
     methods: {
+        getList: function () {
+            this.listLoading = true;
+            Ajax.request({
+                url: "../goods/list?_search=false&nd=1574065527517&limit=10&page=1&sidx=&order=asc",
+                async: true,
+                successCallback: function (r) {
+                    this.listLoading = false;
+                    this.list = r.list;
+                    this.total = r.total;
+                }
+            });
+        },
+        handleSelectionChange: function (val) {
+            vm.multipleSelection = val;
+        },
         query: function () {
             vm.reload();
         },
