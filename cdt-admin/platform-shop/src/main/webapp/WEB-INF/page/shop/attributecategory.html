@@ -36,6 +36,9 @@
             <Form-item label="名称" prop="name">
                 <i-input v-model="attributeCategory.name" placeholder="名称"/>
             </Form-item>
+            <Form-item label="呈现类型" prop="showStyle">
+                <i-input v-model="attributeCategory.showStyle" placeholder="呈现类型"/>
+            </Form-item>
             <Form-item label="是否可用" prop="enabled">
                 <i-switch v-model="status" size="large" @on-change="changeEnable">
                     <span slot="open">启用</span>

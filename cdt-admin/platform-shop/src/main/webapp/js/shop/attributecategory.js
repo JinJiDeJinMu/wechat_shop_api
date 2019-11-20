@@ -4,6 +4,7 @@ $(function () {
         colModel: [
             {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
             {label: '名称', name: 'name', index: 'name', width: 80},
+            {label: '呈现类型', name: 'showStyle', index: 'showStyle', width: 80},
             {
                 label: '是否可用', name: 'enabled', index: 'enabled', width: 80, formatter: function (value, options, row) {
                     return value === 0 ?
