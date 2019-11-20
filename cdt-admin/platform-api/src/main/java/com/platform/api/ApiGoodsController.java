@@ -244,7 +244,7 @@ public class ApiGoodsController extends ApiBaseAction {
                 }
             }
         }
-        //
+
         List<ProductVo> productEntityList = productService.queryList(param);
         List<GoodsGalleryVo> gallery = goodsGalleryService.queryList(param);
         Map ngaParam = new HashMap();
@@ -256,9 +256,9 @@ public class ApiGoodsController extends ApiBaseAction {
         Map issueParam = new HashMap();
 //        issueParam.put("goods_id", id);
         List<GoodsIssueVo> issue = goodsIssueService.queryList(issueParam);
-        //
+
+
         BrandVo brand = brandService.queryObject(info.getBrand_id());
-        //
         param.put("value_id", id);
         param.put("type_id", 0);
         Integer commentCount = commentService.queryTotal(param);
@@ -302,7 +302,6 @@ public class ApiGoodsController extends ApiBaseAction {
             footprintEntity.setReferrer(0L);
         }
         footprintService.save(footprintEntity);
-        //
         resultObj.put("info", info);
         resultObj.put("gallery", gallery);
         resultObj.put("attribute", attribute);
@@ -348,7 +347,6 @@ public class ApiGoodsController extends ApiBaseAction {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return toResponsSuccess(resultObj);
     }
     
