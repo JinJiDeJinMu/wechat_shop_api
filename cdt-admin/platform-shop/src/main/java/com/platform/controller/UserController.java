@@ -2,6 +2,7 @@ package com.platform.controller;
 
 import com.platform.entity.UserEntity;
 import com.platform.service.UserService;
+import com.platform.utils.Base64;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
@@ -9,7 +10,6 @@ import com.platform.utils.excel.ExcelExport;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.platform.utils.Base64;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -108,7 +108,19 @@ public class UserController {
     @RequestMapping("/update")
     @RequiresPermissions("user:update")
     public R update(@RequestBody UserEntity user) {
-    	user.setUsername(Base64.encode(user.getUsername()));
+        user.setUsername(Base64.encode(user.getUsername()));
+        userService.update(user);
+
+        return R.ok();
+    }
+
+    /**
+     * 绑定店铺
+     */
+    @RequestMapping("/binding")
+    @RequiresPermissions("user:update")
+    public R binding(@RequestBody UserEntity user) {
+        System.out.println(user);
         userService.update(user);
 
         return R.ok();

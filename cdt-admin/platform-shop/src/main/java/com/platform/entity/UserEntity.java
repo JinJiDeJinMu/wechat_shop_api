@@ -1,5 +1,6 @@
 package com.platform.entity;
 
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Date;
  * @email 939961241@qq.com
  * @date 2017-08-16 15:02:28
  */
+
 public class UserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -57,6 +59,9 @@ public class UserEntity implements Serializable {
     private BigDecimal  firstBuyMoney;
     //用户真实姓名
     private String realName;
+    //店铺id
+    private Integer merchantId;
+
 
     /**
      * 翻译用的字段
@@ -260,6 +265,14 @@ public class UserEntity implements Serializable {
      */
     public String getWeixinOpenid() {
         return weixinOpenid;
+    }
+
+    public Integer getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Integer merchantId) {
+        this.merchantId = merchantId;
     }
 
     public String getLevelName() {

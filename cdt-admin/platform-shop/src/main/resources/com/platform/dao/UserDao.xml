@@ -26,6 +26,9 @@
         <result property="firstBuyMoney" column="firstBuyMoney"/>
         <result property="qrCode" column="qrCode"/>
         <result property="realName" column="realName"/>
+        <result property="promoterId" column="promoter_id"/>
+        <result property="merchantId" column="merchant_id"/>
+
 
     </resultMap>
 
@@ -40,11 +43,13 @@
 			last_login_time,
 			last_login_ip,
 			user_level_id,
+			promoter_id,
 			nickname,
 			mobile,
 			register_ip,
 			avatar,
 			weixin_openid,
+			merchant_id,
             id_card as  idCard,
             promoter_id  as promoterId,
             promoter_name as promoterName,
@@ -61,6 +66,7 @@
         select
         nideshop_user.id,
         nideshop_user.username,
+        nideshop_user.promoter_id,
         nideshop_user.password,
         nideshop_user.gender,
         nideshop_user.birthday,
@@ -73,6 +79,7 @@
         nideshop_user.register_ip,
         nideshop_user.avatar,
         nideshop_user.weixin_openid,
+        nideshop_user.merchant_id,
         nideshop_user.promoter_id as promoterId,
         nideshop_user.promoter_name as promoterName,
         nideshop_user.first_buy_money as firstBuyMoney,
@@ -130,7 +137,9 @@
 			`mobile`,
 			`register_ip`,
 			`avatar`,
-			`weixin_openid`)
+			`promoter_id`,
+			`weixin_openid`,)
+			`merchant_id`)
 		values(
 			#{username},
 			#{password},
@@ -144,7 +153,9 @@
 			#{mobile},
 			#{registerIp},
 			#{avatar},
-			#{weixinOpenid})
+			#{promoterId},
+			#{weixinOpenid},)
+			#{merchantId})
 	</insert>
 
     <update id="update" parameterType="com.platform.entity.UserEntity">
@@ -169,6 +180,8 @@
             <if test="isReal != null">`is_real` = #{isReal},</if>
             <if test="is_return_cash != null">`is_return_cash` = #{is_return_cash},</if>
             <if test="firstBuyMoney != null">`first_buy_money` = #{firstBuyMoney},</if>
+            <if test="promoterId != null">`promoter_id` = #{promoterId},</if>
+            <if test="merchantId != null">`merchant_id` = #{merchantId},</if>
         </set>
         where id = #{id}
     </update>

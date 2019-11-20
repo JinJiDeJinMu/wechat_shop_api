@@ -5,6 +5,7 @@ import com.platform.service.CdtMerchantService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -96,6 +97,7 @@ public class CdtMerchantController {
      */
     @RequestMapping("/queryAll")
     @ResponseBody
+    @Ignore
     public R queryAll(@RequestParam Map<String, Object> params) {
 
         List<CdtMerchantEntity> list = cdtMerchantService.queryList(params);

@@ -4,31 +4,71 @@ $(function () {
         colModel: [
             {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
             {label: '名称(数字、中文，英文(可混合，不可有特殊字符)，可修改)、不唯一', name: 'shopName', index: 'shop_name', width: 80},
-            {label: '用户id', name: 'userId', index: 'user_id', width: 80},
+            // {label: '用户id', name: 'userId', index: 'user_id', width: 80},
             {label: '类型', name: 'shopType', index: 'shop_type', width: 80},
-            {label: '简介(可修改)', name: 'intro', index: 'intro', width: 80},
-            {label: '公告(可修改)', name: 'shopNotice', index: 'shop_notice', width: 80},
-            {label: '店铺行业(餐饮、生鲜果蔬、鲜花等)', name: 'shopIndustry', index: 'shop_industry', width: 80},
+            // {label: '简介(可修改)', name: 'intro', index: 'intro', width: 80},
+            // {label: '公告(可修改)', name: 'shopNotice', index: 'shop_notice', width: 80},
+            // {label: '店铺行业(餐饮、生鲜果蔬、鲜花等)', name: 'shopIndustry', index: 'shop_industry', width: 80},
             {label: '店长', name: 'shopOwner', index: 'shop_owner', width: 80},
             {label: '店铺绑定的手机(登录账号：唯一)', name: 'mobile', index: 'mobile', width: 80},
             {label: '店铺联系电话', name: 'tel', index: 'tel', width: 80},
-            {label: '店铺所在纬度(可修改)', name: 'shopLat', index: 'shop_lat', width: 80},
-            {label: '店铺所在经度(可修改)', name: 'shopLng', index: 'shop_lng', width: 80},
+            // {label: '店铺所在纬度(可修改)', name: 'shopLat', index: 'shop_lat', width: 80},
+            // {label: '店铺所在经度(可修改)', name: 'shopLng', index: 'shop_lng', width: 80},
             {label: '店铺详细地址', name: 'shopAddress', index: 'shop_address', width: 80},
-            {label: '店铺所在省份（描述）', name: 'province', index: 'province', width: 80},
-            {label: '店铺所在城市（描述）', name: 'city', index: 'city', width: 80},
-            {label: '店铺所在区域（描述）', name: 'area', index: 'area', width: 80},
-            {label: '店铺省市区代码，用于回显', name: 'pcaCode', index: 'pca_code', width: 80},
-            {label: '店铺logo(可修改)', name: 'shopLogo', index: 'shop_logo', width: 80},
-            {label: '店铺相册', name: 'shopPhotos', index: 'shop_photos', width: 80},
+            // {label: '店铺所在省份（描述）', name: 'province', index: 'province', width: 80},
+            // {label: '店铺所在城市（描述）', name: 'city', index: 'city', width: 80},
+            // {label: '店铺所在区域（描述）', name: 'area', index: 'area', width: 80},
+            // {label: '店铺省市区代码，用于回显', name: 'pcaCode', index: 'pca_code', width: 80},
+            {
+                label: '店铺logo(可修改)', name: 'shopLogo', index: 'shop_logo', width: 80, formatter: function (value) {
+                    return transImg(value);
+                }
+            },
+            {
+                label: '店铺相册', name: 'shopPhotos', index: 'shop_photos', width: 80, formatter: function (value) {
+                    return transImg(value);
+                }
+            },
             {label: '每天营业时间段(可修改)', name: 'openTime', index: 'open_time', width: 80},
-            {label: '店铺状态(-1:未开通 0: 停业中 1:营业中)，可修改', name: 'shopStatus', index: 'shop_status', width: 80},
-            {label: '0:商家承担运费; 1:买家承担运费', name: 'transportType', index: 'transport_type', width: 80},
+            {
+                label: '店铺状态(-1:未开通 0: 停业中 1:营业中)，可修改',
+                name: 'shopStatus',
+                index: 'shop_status',
+                width: 80,
+                formatter: function (value) {
+                    if (value === -1) {
+                        return "未开通";
+                    } else if (value === 0) {
+                        return "停业中";
+                    } else {
+                        return "营业中";
+                    }
+                }
+            },
+            {
+                label: '运费', name: 'transportType', index: 'transport_type', width: 80,
+                formatter: function (value) {
+                    if (value === 0) {
+                        return "商家承担运费";
+                    } else {
+                        return "买家承担运费";
+                    }
+                }
+            },
             {label: '固定运费', name: 'fixedFreight', index: 'fixed_freight', width: 80},
             {label: '满X包邮', name: 'fullFreeShipping', index: 'full_free_shipping', width: 80},
-            {label: '创建时间', name: 'createTime', index: 'create_time', width: 80},
-            {label: '更新时间', name: 'updateTime', index: 'update_time', width: 80},
-            {label: '分销开关(0:开启 1:关闭)', name: 'isDistribution', index: 'is_distribution', width: 80}]
+            // {label: '创建时间', name: 'createTime', index: 'create_time', width: 80},
+            // {label: '更新时间', name: 'updateTime', index: 'update_time', width: 80},
+            {
+                label: '分销开关', name: 'isDistribution', index: 'is_distribution', width: 80,
+                formatter: function (value) {
+                    if (value === 0) {
+                        return "开启";
+                    } else {
+                        return "关闭";
+                    }
+                }
+            }]
     });
 });
 
@@ -37,7 +77,10 @@ let vm = new Vue({
     data: {
         showList: true,
         title: null,
-        cdtMerchant: {},
+        cdtMerchant: {
+            shopLogo: '',
+            shopPhotos: ''
+        },
         ruleValidate: {
             name: [
                 {required: true, message: '名称不能为空', trigger: 'blur'}
@@ -131,6 +174,35 @@ let vm = new Vue({
         },
         handleReset: function (name) {
             handleResetForm(this, name);
+        },
+        handleFormatError: function (file) {
+            this.$Notice.warning({
+                title: '文件格式不正确',
+                desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
+            });
+        },
+        handleMaxSize: function (file) {
+            this.$Notice.warning({
+                title: '超出文件大小限制',
+                desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
+            });
+        },
+        handleSuccessPicUrl: function (res, file) {
+            vm.cdtMerchant.shopLogo = file.response.url;
+        },
+        handleSuccessListPicUrl: function (res, file) {
+            vm.cdtMerchant.shopPhotos = file.response.url;
+        },
+        eyeImagePicUrl: function () {
+            var url = vm.cdtMerchant.shopLogo;
+            eyeImage(url);
+        },
+        eyeImageListPicUrl: function () {
+            var url = vm.cdtMerchant.shopPhotos;
+            eyeImage(url);
+        },
+        eyeImage: function (e) {
+            eyeImage($(e.target).attr('src'));
         }
     }
 });

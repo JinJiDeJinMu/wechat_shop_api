@@ -1,5 +1,5 @@
 $(function () {
-   var  promoterId = getQueryString("promoterId");
+    // var  promoterId = getQueryString("promoterId");
 
 });
 
@@ -10,33 +10,35 @@ var vm = new Vue({
         showList: true,
         q: {
             uname: ''
-          //  telNumber: ''
+            //  telNumber: ''
         },
         user: {
-            mobile:'',
-            id:0
+            merchantId: '',
+            id: 0
         },
-
+        merchants: [],
         title: null,
         ruleValidate: {
             mobile: [
-                {required: true, message: '电话号码不能为空', trigger: 'blur'}
+                {required: true, message: '请选择店铺', trigger: 'blur'}
             ]
-        },
+        }
     },
-    created:function() {
+    created: function () {
         console.log('---------eeee--');
-        var promoterId = getQueryString("promoterId");
-        console.log('--------'+promoterId);
-        this.user.id=promoterId;
-        console.log('--------'+this.user.id);
+        var Id = getQueryString("userId");
+        console.log('--------' + Id);
+        this.user.id = Id;
+        console.log('--------' + this.user.id);
+        // alert("111222");
+        this.getMerchant();
     },
     methods: {
         query: function () {
             vm.reload();
         },
         reload: function (event) {
-            var  promoterId = getQueryString("promoterId");
+            var Id = getQueryString("userId");
             vm.showList = true;
 
         },
@@ -49,10 +51,10 @@ var vm = new Vue({
             handleResetForm(this, name);
         },
         updatePromoter: function (event) {
-            confirm('确定要替换推广人？', function () {
+            confirm('确定要更换店铺？', function () {
                 Ajax.request({
                     type: "POST",
-                    url: "../user/updatePromoter",
+                    url: "../user/binding",
                     contentType: "application/json",
                     params: JSON.stringify(vm.user),
                     successCallback: function () {
@@ -61,6 +63,16 @@ var vm = new Vue({
                         });
                     }
                 });
+            });
+        },
+        getMerchant: function () {
+            // alert("111");
+            Ajax.request({
+                url: "../cdtmerchant/queryAll",
+                async: true,
+                successCallback: function (r) {
+                    vm.merchants = r.list;
+                }
             });
         }
     }

@@ -209,7 +209,7 @@ var vm = new Vue({
             })
         },
         //绑定商铺
-        binding: function () {
+        bindingShop: function () {
             var id = getSelectedRow("#jqGrid");
             if (id == null) {
                 return;
@@ -217,7 +217,7 @@ var vm = new Vue({
             openWindow({
                 title: '绑定店铺',
                 type: 2,
-                content: '../shop/promoterUpdate.html?promoterId=' + id
+                content: '../shop/bindingShop.html?userId=' + id
             })
         },
         shopCart: function () {

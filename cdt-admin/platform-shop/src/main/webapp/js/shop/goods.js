@@ -466,6 +466,8 @@ var vm = new Vue({
             const fileList = this.uploadList;
             this.uploadList.splice(fileList.indexOf(file), 1);
         },
+
+
         handleSuccess(res, file) {
             // 因为上传过程为实例，这里模拟添加 url
             file.imgUrl = res.url;

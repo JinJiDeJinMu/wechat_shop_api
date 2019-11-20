@@ -37,9 +37,9 @@
             <Form-item label="名称(数字、中文，英文(可混合，不可有特殊字符)，可修改)、不唯一" prop="shopName">
                 <i-input v-model="cdtMerchant.shopName" placeholder="名称(数字、中文，英文(可混合，不可有特殊字符)，可修改)、不唯一"/>
             </Form-item>
-            <Form-item label="用户id" prop="userId">
-                <i-input v-model="cdtMerchant.userId" placeholder="用户id"/>
-            </Form-item>
+            <!--<Form-item label="用户id" prop="userId">-->
+            <!--<i-input v-model="cdtMerchant.userId" placeholder="用户id"/>-->
+            <!--</Form-item>-->
             <Form-item label="类型" prop="shopType">
                 <i-input v-model="cdtMerchant.shopType" placeholder="类型"/>
             </Form-item>
@@ -49,9 +49,9 @@
             <Form-item label="公告(可修改)" prop="shopNotice">
                 <i-input v-model="cdtMerchant.shopNotice" placeholder="公告(可修改)"/>
             </Form-item>
-            <Form-item label="店铺行业(餐饮、生鲜果蔬、鲜花等)" prop="shopIndustry">
-                <i-input v-model="cdtMerchant.shopIndustry" placeholder="店铺行业(餐饮、生鲜果蔬、鲜花等)"/>
-            </Form-item>
+            <!--<Form-item label="店铺行业(餐饮、生鲜果蔬、鲜花等)" prop="shopIndustry">-->
+            <!--<i-input v-model="cdtMerchant.shopIndustry" placeholder="店铺行业(餐饮、生鲜果蔬、鲜花等)"/>-->
+            <!--</Form-item>-->
             <Form-item label="店长" prop="shopOwner">
                 <i-input v-model="cdtMerchant.shopOwner" placeholder="店长"/>
             </Form-item>
@@ -82,20 +82,89 @@
             <Form-item label="店铺省市区代码，用于回显" prop="pcaCode">
                 <i-input v-model="cdtMerchant.pcaCode" placeholder="店铺省市区代码，用于回显"/>
             </Form-item>
-            <Form-item label="店铺logo(可修改)" prop="shopLogo">
-                <i-input v-model="cdtMerchant.shopLogo" placeholder="店铺logo(可修改)"/>
-            </Form-item>
-            <Form-item label="店铺相册" prop="shopPhotos">
-                <i-input v-model="cdtMerchant.shopPhotos" placeholder="店铺相册"/>
-            </Form-item>
+            <!--<Form-item label="店铺logo(可修改)" prop="shopLogo">-->
+            <!--<i-input v-model="cdtMerchant.shopLogo" placeholder="店铺logo(可修改)"/>-->
+            <!--</Form-item>-->
+            <Row>
+                <i-col span="16">
+                    <Form-item label="店铺logo(可修改)" prop="shopLogo">
+                        <i-input v-model="cdtMerchant.shopLogo" placeholder="店铺logo(可修改)" readonly/>
+                    </Form-item>
+                </i-col>
+                <i-col span="3">
+                    <Form-item :label-width="1">
+                        <Upload style="width: 300px;" action="../sys/oss/upload" :format="['jpg','jpeg','png']"
+                                max-size="2048"
+                                :on-success="handleSuccessPicUrl" :on-format-error="handleFormatError"
+                                :show-upload-list="false"
+                                :on-exceeded-size="handleMaxSize">
+                            <i-button icon="ios-cloud-upload-outline">上传图片</i-button>
+                        </Upload>
+                    </Form-item>
+                </i-col>
+                <i-col span="3">
+                    <Form-item :label-width="1">
+                        <i-button icon="eye" @click="eyeImagePicUrl">预览图片</i-button>
+                    </Form-item>
+                </i-col>
+            </Row>
+            <!--<Form-item label="店铺相册" prop="shopPhotos">-->
+            <!--<i-input v-model="cdtMerchant.shopPhotos" placeholder="店铺相册"/>-->
+            <!--</Form-item>-->
+            <Row>
+                <i-col span="16">
+                    <Form-item label="店铺相册" prop="shopPhotos">
+                        <i-input v-model="cdtMerchant.shopPhotos" placeholder="店铺相册" readonly/>
+                    </Form-item>
+                </i-col>
+                <i-col span="3">
+                    <Form-item :label-width="1">
+                        <Upload style="width: 300px;" action="../sys/oss/upload" :format="['jpg','jpeg','png']"
+                                max-size="2048"
+                                :on-success="handleSuccessListPicUrl" :on-format-error="handleFormatError"
+                                :show-upload-list="false"
+                                :on-exceeded-size="handleMaxSize">
+                            <i-button icon="ios-cloud-upload-outline">上传图片</i-button>
+                        </Upload>
+                    </Form-item>
+                </i-col>
+                <i-col span="3">
+                    <Form-item :label-width="1">
+                        <i-button icon="eye" @click="eyeImageListPicUrl">预览图片</i-button>
+                    </Form-item>
+                </i-col>
+            </Row>
             <Form-item label="每天营业时间段(可修改)" prop="openTime">
                 <i-input v-model="cdtMerchant.openTime" placeholder="每天营业时间段(可修改)"/>
             </Form-item>
-            <Form-item label="店铺状态(-1:未开通 0: 停业中 1:营业中)，可修改" prop="shopStatus">
-                <i-input v-model="cdtMerchant.shopStatus" placeholder="店铺状态(-1:未开通 0: 停业中 1:营业中)，可修改"/>
+            <!--<Form-item label="店铺状态(-1:未开通 0: 停业中 1:营业中)，可修改" prop="shopStatus">-->
+            <!--<i-input v-model="cdtMerchant.shopStatus" placeholder="店铺状态(-1:未开通 0: 停业中 1:营业中)，可修改"/>-->
+            <!--</Form-item>-->
+            <Form-item label="店铺状态，可修改" prop="shopStatus">
+                <Radio-group v-model="cdtMerchant.shopStatus">
+                    <Radio label="-1">
+                        <span>未开通</span>
+                    </Radio>
+                    <Radio label="0">
+                        <span>停业中</span>
+                    </Radio>
+                    <Radio label="1">
+                        <span>营业中</span>
+                    </Radio>
+                </Radio-group>
             </Form-item>
-            <Form-item label="0:商家承担运费; 1:买家承担运费" prop="transportType">
-                <i-input v-model="cdtMerchant.transportType" placeholder="0:商家承担运费; 1:买家承担运费"/>
+            <!--<Form-item label="0:商家承担运费; 1:买家承担运费" prop="transportType">-->
+            <!--<i-input v-model="cdtMerchant.transportType" placeholder="0:商家承担运费; 1:买家承担运费"/>-->
+            <!--</Form-item>-->
+            <Form-item label="运费" prop="transportType">
+                <Radio-group v-model="cdtMerchant.transportType">
+                    <Radio label="0">
+                        <span>商家承担运费</span>
+                    </Radio>
+                    <Radio label="1">
+                        <span>买家承担运费</span>
+                    </Radio>
+                </Radio-group>
             </Form-item>
             <Form-item label="固定运费" prop="fixedFreight">
                 <i-input v-model="cdtMerchant.fixedFreight" placeholder="固定运费"/>
@@ -103,14 +172,30 @@
             <Form-item label="满X包邮" prop="fullFreeShipping">
                 <i-input v-model="cdtMerchant.fullFreeShipping" placeholder="满X包邮"/>
             </Form-item>
+            <!--<Form-item label="创建时间" prop="createTime">-->
+            <!--<i-input v-model="cdtMerchant.createTime" placeholder="创建时间"/>-->
+            <!--</Form-item>-->
             <Form-item label="创建时间" prop="createTime">
-                <i-input v-model="cdtMerchant.createTime" placeholder="创建时间"/>
+                <Date-picker v-model="cdtMerchant.createTime" placeholder="创建时间"></Date-picker>
             </Form-item>
+            <!--<Form-item label="更新时间" prop="updateTime">-->
+            <!--<i-input v-model="cdtMerchant.updateTime" placeholder="更新时间"/>-->
+            <!--</Form-item>-->
             <Form-item label="更新时间" prop="updateTime">
-                <i-input v-model="cdtMerchant.updateTime" placeholder="更新时间"/>
+                <Date-picker v-model="cdtMerchant.updateTime" placeholder="更新时间"></Date-picker>
             </Form-item>
-            <Form-item label="分销开关(0:开启 1:关闭)" prop="isDistribution">
-                <i-input v-model="cdtMerchant.isDistribution" placeholder="分销开关(0:开启 1:关闭)"/>
+            <!--<Form-item label="分销开关(0:开启 1:关闭)" prop="isDistribution">-->
+            <!--<i-input v-model="cdtMerchant.isDistribution" placeholder="分销开关(0:开启 1:关闭)"/>-->
+            <!--</Form-item>-->
+            <Form-item label="分销开关" prop="isDistribution">
+                <Radio-group v-model="cdtMerchant.isDistribution">
+                    <Radio label="0">
+                        <span>开启</span>
+                    </Radio>
+                    <Radio label="1">
+                        <span>关闭</span>
+                    </Radio>
+                </Radio-group>
             </Form-item>
             <Form-item>
                 <i-button type="primary" @click="handleSubmit('formValidate')">提交</i-button>
