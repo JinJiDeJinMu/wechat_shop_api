@@ -3,8 +3,9 @@ package com.platform.api;
 import com.chundengtai.base.result.Result;
 import com.github.pagehelper.PageHelper;
 import com.platform.annotation.IgnoreAuth;
+import com.platform.dao.ApiAttributeCategoryMapper;
 import com.platform.entity.AdVo;
-import com.platform.entity.CategoryVo;
+import com.platform.entity.AttributeCategoryVo;
 import com.platform.entity.GoodsVo;
 import com.platform.service.ApiAdService;
 import com.platform.service.ApiCategoryService;
@@ -35,10 +36,15 @@ import java.util.stream.Collectors;
 public class IndexV2Controller extends ApiBaseAction {
     @Autowired
     private ApiAdService adService;
+
     @Autowired
     private ApiGoodsService goodsService;
+
     @Autowired
     private ApiCategoryService categoryService;
+
+    @Autowired
+    private ApiAttributeCategoryMapper attributeCategoryMapper;
 
     /**
      * app首页
@@ -63,12 +69,12 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("order", "desc");
         param.put("showPosition", 0);
         PageHelper.startPage(0, 5, false);
-        List<CategoryVo> categoryList = categoryService.queryList(param);
+        List<AttributeCategoryVo> categoryList = attributeCategoryMapper.queryList(param);
         resultObj.put("categoryList", categoryList);
 
         //差找下面的商品
         List<Map<String, Object>> newCategoryList = new ArrayList<>();
-        for (CategoryVo categoryItem : categoryList) {
+        for (AttributeCategoryVo categoryItem : categoryList) {
             List<GoodsVo> categoryGoods = new ArrayList<>();
             param = null;
             param = new HashMap<String, Object>();
