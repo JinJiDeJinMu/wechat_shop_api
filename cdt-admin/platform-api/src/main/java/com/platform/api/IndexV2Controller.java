@@ -43,7 +43,7 @@ public class IndexV2Controller extends ApiBaseAction {
     /**
      * app首页
      */
-    @ApiOperation(value = "首页分类包含banner图")
+    @ApiOperation(value = "首页包含轮播图、分类、分类下的商品、最新商品")
     @IgnoreAuth
     @GetMapping(value = "index")
     public Result<Map<String, Object>> index() {
