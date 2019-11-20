@@ -21,5 +21,6 @@ public class AttributeCategoryVo implements Serializable {
     private String name;
     private Integer enabled;
     private String bannerUrl;
+    private Integer showStyle;
 
 }
