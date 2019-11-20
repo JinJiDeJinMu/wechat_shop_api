@@ -20,6 +20,7 @@
 		where id = #{id}
 	</select>
 
+
     <select id="queryList" resultType="com.platform.entity.AttributeCategoryEntity">
         select
         id,
