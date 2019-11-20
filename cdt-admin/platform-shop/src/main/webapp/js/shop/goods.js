@@ -108,7 +108,7 @@ var vm = new Vue({
         brands: [],//品牌
         macros: [],//商品单位
         attributeCategories: [],//属性类别
-
+        categories: [],
 
         editSkuInfo: {
             dialogVisible: false,
@@ -232,6 +232,7 @@ var vm = new Vue({
             vm.getBrands();
             vm.getMacro();
             vm.getAttributeCategories();
+            vm.getCategories();
             // vm.getAttributes('');
         },
         update: function (event) {
@@ -246,6 +247,7 @@ var vm = new Vue({
             vm.getBrands();
             vm.getMacro();
             vm.getAttributeCategories();
+            vm.getCategories();
             vm.getGoodsGallery(id);
         },
         /**
@@ -287,6 +289,15 @@ var vm = new Vue({
                 async: true,
                 successCallback: function (r) {
                     vm.attributeCategories = r.list;
+                }
+            });
+        },
+        getCategories: function () {
+            Ajax.request({
+                url: "../category/getCategorySelect",
+                async: true,
+                successCallback: function (r) {
+                    vm.categories = r.list;
                 }
             });
         },

@@ -231,10 +231,17 @@
                     </Form-item>
 
 
-                    <Form-item label="类别" prop="attributeCategory" style="width: 268px;">
+                    <Form-item label="属性类别" prop="attributeCategory" style="width: 268px;">
                         <i-select v-model="goods.attributeCategory" filterable label-in-value>
                             <i-option v-for="attributeCategory in attributeCategories" :value="attributeCategory.id"
                                       :key="attributeCategory.id">{{attributeCategory.name}}
+                            </i-option>
+                        </i-select>
+                    </Form-item>
+                    <Form-item label="商品类别" prop="category" style="width: 268px;">
+                        <i-select v-model="goods.category" filterable label-in-value>
+                            <i-option v-for="category in categories" :value="category.id"
+                                      :key="category.id">{{category.name}}
                             </i-option>
                         </i-select>
                     </Form-item>
