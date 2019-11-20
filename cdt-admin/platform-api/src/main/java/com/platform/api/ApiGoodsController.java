@@ -30,8 +30,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.math.BigDecimal;
 import java.text.AttributedString;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * 作者: @author Harmon <br>
@@ -196,11 +196,15 @@ public class ApiGoodsController extends ApiBaseAction {
         info.setBrowse(info.getBrowse() + 1);
         goodsService.updateBrowse(info);
         Long mid = info.getMerchantId();
+
         Map<String, Object> sysuser = this.mlsUserSer.getEntityMapper().getSysUserByMid(mid);
-        info.setUser_brokerage_price(info.getRetail_price().multiply(new BigDecimal(sysuser.get("FX").toString())).multiply(new BigDecimal(info.getBrokerage_percent()).divide(new BigDecimal("10000"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+        if (sysuser != null) {
+            info.setUser_brokerage_price(info.getRetail_price().multiply(new BigDecimal(sysuser.get("FX").toString())).multiply(new BigDecimal(info.getBrokerage_percent()).divide(new BigDecimal("10000"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+        }
+
         Map param = new HashMap();
         param.put("goods_id", id);
-        //
+
         Map specificationParam = new HashMap();
         specificationParam.put("fields", "gs.*, s.name");
         specificationParam.put("goods_id", id);
@@ -221,7 +225,6 @@ public class ApiGoodsController extends ApiBaseAction {
                     break;
                 }
             }
-            //
             if (null == tempList) {
                 Map temp = new HashMap();
                 temp.put("specification_id", specItem.getSpecification_id());
@@ -241,9 +244,8 @@ public class ApiGoodsController extends ApiBaseAction {
                 }
             }
         }
-        //
+
         List<ProductVo> productEntityList = productService.queryList(param);
-        //
         List<GoodsGalleryVo> gallery = goodsGalleryService.queryList(param);
         Map ngaParam = new HashMap();
         ngaParam.put("fields", "nga.value, na.name");
@@ -251,13 +253,12 @@ public class ApiGoodsController extends ApiBaseAction {
         ngaParam.put("order", "asc");
         ngaParam.put("goods_id", id);
         List<AttributeVo> attribute = attributeService.queryList(ngaParam);
-        //
         Map issueParam = new HashMap();
 //        issueParam.put("goods_id", id);
         List<GoodsIssueVo> issue = goodsIssueService.queryList(issueParam);
-        //
+
+
         BrandVo brand = brandService.queryObject(info.getBrand_id());
-        //
         param.put("value_id", id);
         param.put("type_id", 0);
         Integer commentCount = commentService.queryTotal(param);
@@ -301,7 +302,6 @@ public class ApiGoodsController extends ApiBaseAction {
             footprintEntity.setReferrer(0L);
         }
         footprintService.save(footprintEntity);
-        //
         resultObj.put("info", info);
         resultObj.put("gallery", gallery);
         resultObj.put("attribute", attribute);
@@ -347,7 +347,6 @@ public class ApiGoodsController extends ApiBaseAction {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return toResponsSuccess(resultObj);
     }
     
