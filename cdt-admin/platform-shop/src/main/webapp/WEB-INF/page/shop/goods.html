@@ -186,10 +186,10 @@
         <Tabs value="name1">
             <Tab-Pane label="通用信息" name="name1">
                 <i-form ref="formValidate" :model="goods" :rules="ruleValidate" :label-width="100">
-                    <Form-item label="商品类型" prop="categoryId">
-                        <i-input v-model="goods.categoryName" @on-click="categoryTree" icon="eye" readonly="readonly"
-                                 placeholder="商品类型"/>
-                    </Form-item>
+                    <!--<Form-item label="商品类型" prop="categoryId">-->
+                        <!--<i-input v-model="goods.categoryName" @on-click="categoryTree" icon="eye" readonly="readonly"-->
+                                 <!--placeholder="商品类型"/>-->
+                    <!--</Form-item>-->
                     <Form-item label="商品序列号" prop="goodsSn">
                         <i-input v-model="goods.goodsSn" placeholder="商品序列号"/>
                     </Form-item>
@@ -238,13 +238,13 @@
                             </i-option>
                         </i-select>
                     </Form-item>
-                    <Form-item label="商品类别" prop="category" style="width: 268px;">
-                        <i-select v-model="goods.category" filterable label-in-value>
-                            <i-option v-for="category in categories" :value="category.id"
-                                      :key="category.id">{{category.name}}
-                            </i-option>
-                        </i-select>
-                    </Form-item>
+                    <!--<Form-item label="商品类别" prop="category" style="width: 268px;">-->
+                        <!--<i-select v-model="goods.category" filterable label-in-value>-->
+                            <!--<i-option v-for="category in categories" :value="category.id"-->
+                                      <!--:key="category.id">{{category.name}}-->
+                            <!--</i-option>-->
+                        <!--</i-select>-->
+                    <!--</Form-item>-->
                     <Form-item label="商品库存" prop="goodsNumber">
                         <Input-number :min="0" :step="1" v-model="goods.goodsNumber" placeholder="商品库存"
                                       style="width: 188px;"/>
