@@ -37,7 +37,18 @@
                 <i-input v-model="attributeCategory.name" placeholder="名称"/>
             </Form-item>
             <Form-item label="呈现类型" prop="showStyle">
-                <i-input v-model="attributeCategory.showStyle" placeholder="呈现类型"/>
+                <Radio-group v-model="attributeCategory.showStyle">
+                    <Radio label="0">
+                        <span>宽图</span>
+                    </Radio>
+                    <Radio label="1">
+                        <span>小图</span>
+                    </Radio>
+                </Radio-group>
+            </Form-item>
+            <Form-item label="排序" prop="sortOrder">
+                <Input-number :min="0" :step="1" v-model="attributeCategory.sortOrder" placeholder="排序"
+                              style="width: 188px;"/>
             </Form-item>
             <Row>
                 <i-col span="16">

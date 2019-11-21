@@ -4,16 +4,26 @@ $(function () {
         colModel: [
             {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
             {label: '名称', name: 'name', index: 'name', width: 80},
-            {label: '呈现类型', name: 'showStyle', index: 'showStyle', width: 80},
+            {
+                label: '呈现类型', name: 'showStyle', index: 'showStyle', width: 80, formatter: function (value) {
+                    if (value === 0) {
+                        return "宽图";
+                    } else if (value === 1) {
+                        return "小图";
+                    }
+                }
+            },
+
+            {label: '排序', name: 'sortOrder', index: 'sortOrder', width: 80},
             {
                 label: '展示位置', name: 'showPosition', index: 'showPosition', width: 80, formatter: function (value) {
-                     if(value===0){
+                    if (value === 0) {
                         return "头部";
-                    }else if(value===1){
-                         return "中部";
-                     }else {
-                         return "不展示";
-                     }
+                    } else if (value === 1) {
+                        return "中部";
+                    } else {
+                        return "不展示";
+                    }
                 }
             },
             {
@@ -45,7 +55,8 @@ var vm = new Vue({
             bannerUrl: '',
             name: '',
             showStyle: '',
-            showPosition: ''
+            showPosition: '',
+            sortOrder: ''
         },
         ruleValidate: {
             name: [
