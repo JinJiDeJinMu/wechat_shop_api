@@ -3,7 +3,9 @@ package com.platform.api;
 import com.chundengtai.base.result.Result;
 import com.github.pagehelper.PageHelper;
 import com.platform.annotation.IgnoreAuth;
+import com.platform.dao.ApiAttributeCategoryMapper;
 import com.platform.entity.AdVo;
+import com.platform.entity.AttributeCategoryVo;
 import com.platform.entity.CategoryVo;
 import com.platform.entity.GoodsVo;
 import com.platform.service.ApiAdService;
@@ -39,6 +41,8 @@ public class IndexV2Controller extends ApiBaseAction {
     private ApiGoodsService goodsService;
     @Autowired
     private ApiCategoryService categoryService;
+    @Autowired
+    private ApiAttributeCategoryMapper attributeCategoryMapper;
 
     /**
      * app首页
@@ -64,7 +68,8 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("order", "desc");
         param.put("showPosition", 0);
         PageHelper.startPage(0, 5, false);
-        List<CategoryVo> categoryList = categoryService.queryList(param);
+//        List<CategoryVo> categoryList = categoryService.queryList(param);
+        List<AttributeCategoryVo> categoryList = attributeCategoryMapper.queryList(param);
         resultObj.put("categoryList", categoryList);
 
 
@@ -76,10 +81,12 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("showPosition", 1);
         PageHelper.startPage(0, 3, false);
         List<CategoryVo> categoryGoodsList = categoryService.queryList(param);
+
         //查找其他分类下面的商品
 
         List<Map<String, Object>> newCategoryList = new ArrayList<>();
-        for (CategoryVo categoryItem : categoryGoodsList) {
+//        for (CategoryVo categoryItem : categoryGoodsList) {
+        for (AttributeCategoryVo categoryItem : categoryList) {
             List<GoodsVo> categoryGoods = new ArrayList<>();
             param = null;
             param = new HashMap<String, Object>();
@@ -92,7 +99,7 @@ public class IndexV2Controller extends ApiBaseAction {
 
             Map<String, Object> newCategory = new HashMap<String, Object>();
             newCategory.put("id", categoryItem.getId());
-            newCategory.put("name", categoryItem.getFront_name());
+            newCategory.put("name", categoryItem.getName());
             newCategory.put("goodsList", categoryGoods);
             newCategoryList.add(newCategory);
         }

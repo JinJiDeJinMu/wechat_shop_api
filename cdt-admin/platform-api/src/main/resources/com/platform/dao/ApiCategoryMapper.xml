@@ -38,13 +38,13 @@
         from nideshop_category
         where is_show = 1
         <if test="parent_id != null and parent_id != null">
-            and parent_id = #{parent_id}
+            and 'parent_id' = #{parent_id}
         </if>
         <if test="notName != null and notName != null">
             and 'name' != #{notName}
         </if>
         <if test="showPosition != null">
-            and show_position = #{showPosition}
+            and 'show_position' = #{showPosition}
         </if>
         <if test="ids != null">
             and id in
