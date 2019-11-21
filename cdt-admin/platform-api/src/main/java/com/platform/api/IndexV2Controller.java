@@ -78,7 +78,7 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("sidx", "sort_order");
         param.put("order", "desc");
         param.put("showPosition", 1);
-        PageHelper.startPage(0, 3, false);
+        PageHelper.startPage(0, 5, false);
         List<AttributeCategoryVo> categoryGoodsList = attributeCategoryMapper.queryList(param);
 
         //查找其他分类下面的商品
