@@ -66,7 +66,7 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("sidx", "sort_order");
         param.put("order", "desc");
         param.put("showPosition", 0);
-        PageHelper.startPage(0, 5, false);
+        PageHelper.startPage(0, 10, false);
 //        List<CategoryVo> categoryList = categoryService.queryList(param);
         List<AttributeCategoryVo> categoryList = attributeCategoryMapper.queryList(param);
         resultObj.put("categoryList", categoryList);
@@ -87,7 +87,7 @@ public class IndexV2Controller extends ApiBaseAction {
             List<GoodsVo> categoryGoods = new ArrayList<>();
             param = null;
             param = new HashMap<String, Object>();
-            param.put("category_id", categoryItem.getId());
+            param.put("attribute_category", categoryItem.getId());
             param.put("sidx", "add_time");
             param.put("order", "desc");
             param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price,market_price as market_price");

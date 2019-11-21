@@ -390,6 +390,16 @@
                             </Radio>
                         </Radio-group>
                     </Form-item>
+                    <Form-item label="购买类型" prop="purchaseType">
+                        <Radio-group v-model="goods.purchaseType">
+                            <Radio label="0">
+                                <span>核销</span>
+                            </Radio>
+                            <Radio label="1">
+                                <span>邮寄</span>
+                            </Radio>
+                        </Radio-group>
+                    </Form-item>
                     <Form-item label="热销" prop="isHot">
                         <Radio-group v-model="goods.isHot">
                             <Radio label="1">

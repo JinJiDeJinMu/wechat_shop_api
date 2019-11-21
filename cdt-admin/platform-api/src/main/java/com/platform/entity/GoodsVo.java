@@ -74,6 +74,8 @@ public class GoodsVo implements Serializable {
     //零售价格(现价)
     @ApiModelProperty(value = "零售价格")
     private BigDecimal retail_price;
+    @ApiModelProperty(value = "购买类型")
+    private Integer purchaseType;
     //销售量
     private Integer sell_volume;
     //主sku　product_id
@@ -138,6 +140,14 @@ public class GoodsVo implements Serializable {
 
     public String getGoods_sn() {
         return goods_sn;
+    }
+
+    public Integer getPurchase_type() {
+        return purchaseType;
+    }
+
+    public void setPurchase_type(Integer purchase_type) {
+        this.purchaseType = purchase_type;
     }
 
     public void setGoods_sn(String goods_sn) {

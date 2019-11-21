@@ -84,6 +84,8 @@ public class GoodsEntity implements Serializable {
 	private Integer isSecKill;//商品类型,1:普通商品,2:秒杀,3:团购,4:砍价
 	//开始时间
 	private Date startTime;
+	//购买类型
+    private Integer purchaseType;
     /**
      * 用户ID
      */
@@ -117,6 +119,14 @@ public class GoodsEntity implements Serializable {
     private Integer successTime;//成团时间 单位分钟
     private Integer successPeople;//成团时间 单位分钟
     private BigDecimal groupPrice;//团购价格(元)
+
+    public Integer getPurchaseType() {
+        return purchaseType;
+    }
+
+    public void setPurchaseType(Integer purchaseType) {
+        this.purchaseType = purchaseType;
+    }
 
     public Integer getBrowse() {
         return browse;

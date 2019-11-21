@@ -48,6 +48,7 @@
         <result property="successTime" column="success_time"/>
          <result property="successPeople" column="success_people"/>
         <result property="groupPrice" column="group_price"/>
+        <result property="purchaseType" column="purchase_type"/>
     </resultMap>
 
     <select id="queryObject" resultMap="goodsMap">
@@ -75,6 +76,7 @@
         nideshop_goods.counter_price,
         nideshop_goods.extra_price,
         nideshop_goods.is_new,
+        nideshop_goods.purchase_type,
         nideshop_goods.goods_unit,
         nideshop_goods.primary_pic_url,
         nideshop_goods.list_pic_url,
@@ -190,7 +192,8 @@
         `end_time`,
         `success_time`,
         `success_people`,
-        `group_price`
+        `group_price`,
+        `purchase_type`
         )
         values
         (
@@ -237,7 +240,8 @@
         #{endTime},
         #{successTime},
         #{successPeople},
-        #{groupPrice}
+        #{groupPrice},
+        #{purchaseType}
         )
     </insert>
 
@@ -286,6 +290,7 @@
             <if test="successTime != null">`success_time` = #{successTime},</if>
             <if test="successPeople != null">`success_people` = #{successPeople},</if>
             <if test="groupPrice != null">`group_price` = #{groupPrice},</if>
+            <if test="purchaseType != null">`purchase_type` = #{purchaseType},</if>
         </set>
         where id = #{id}
     </update>
