@@ -39,6 +39,42 @@
             <Form-item label="呈现类型" prop="showStyle">
                 <i-input v-model="attributeCategory.showStyle" placeholder="呈现类型"/>
             </Form-item>
+            <Row>
+                <i-col span="16">
+                    <Form-item label="图片" prop="bannerUrl">
+                        <i-input v-model="attributeCategory.bannerUrl" placeholder="图片" readonly/>
+                    </Form-item>
+                </i-col>
+                <i-col span="3">
+                    <Form-item :label-width="1">
+                        <Upload style="width: 300px;" action="../sys/oss/upload" :format="['jpg','jpeg','png']"
+                                max-size="2048"
+                                :on-success="handleSuccess" :on-format-error="handleFormatError"
+                                :show-upload-list="false"
+                                :on-exceeded-size="handleMaxSize">
+                            <i-button icon="ios-cloud-upload-outline">上传图片</i-button>
+                        </Upload>
+                    </Form-item>
+                </i-col>
+                <i-col span="3">
+                    <Form-item :label-width="1">
+                        <i-button icon="eye" @click="eyeImage">预览图片</i-button>
+                    </Form-item>
+                </i-col>
+            </Row>
+            <Form-item label="展现位置" prop="showPosition">
+                <Radio-group v-model="attributeCategory.showPosition">
+                    <Radio label="0">
+                        <span>头部</span>
+                    </Radio>
+                    <Radio label="1">
+                        <span>中部</span>
+                    </Radio>
+                    <Radio label="2">
+                        <span>不展示</span>
+                    </Radio>
+                </Radio-group>
+            </Form-item>
             <Form-item label="是否可用" prop="enabled">
                 <i-switch v-model="status" size="large" @on-change="changeEnable">
                     <span slot="open">启用</span>

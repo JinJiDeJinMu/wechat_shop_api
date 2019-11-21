@@ -80,13 +80,13 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("order", "desc");
         param.put("showPosition", 1);
         PageHelper.startPage(0, 3, false);
-        List<CategoryVo> categoryGoodsList = categoryService.queryList(param);
+        List<AttributeCategoryVo> categoryGoodsList = attributeCategoryMapper.queryList(param);
 
         //查找其他分类下面的商品
 
         List<Map<String, Object>> newCategoryList = new ArrayList<>();
-//        for (CategoryVo categoryItem : categoryGoodsList) {
-        for (AttributeCategoryVo categoryItem : categoryList) {
+        for (AttributeCategoryVo categoryItem : categoryGoodsList) {
+//        for (AttributeCategoryVo categoryItem : categoryList) {
             List<GoodsVo> categoryGoods = new ArrayList<>();
             param = null;
             param = new HashMap<String, Object>();

@@ -6,6 +6,26 @@ $(function () {
             {label: '名称', name: 'name', index: 'name', width: 80},
             {label: '呈现类型', name: 'showStyle', index: 'showStyle', width: 80},
             {
+                label: '展示位置', name: 'showPosition', index: 'showPosition', width: 80, formatter: function (value) {
+                     if(value===0){
+                        return "头部";
+                    }else if(value===1){
+                         return "中部";
+                     }else {
+                         return "不展示";
+                     }
+                }
+            },
+            {
+                label: '图片',
+                name: 'bannerUrl',
+                index: 'bannerUrl',
+                width: 80,
+                formatter: function (value) {
+                    return transImg(value);
+                }
+            },
+            {
                 label: '是否可用', name: 'enabled', index: 'enabled', width: 80, formatter: function (value, options, row) {
                     return value === 0 ?
                         '<span class="label label-danger">禁用</span>' :
@@ -21,7 +41,11 @@ var vm = new Vue({
         showList: true,
         title: null,
         attributeCategory: {
-            enabled: '1'
+            enabled: '1',
+            bannerUrl: '',
+            name: '',
+            showStyle: '',
+            showPosition: ''
         },
         ruleValidate: {
             name: [
@@ -122,10 +146,29 @@ var vm = new Vue({
                 vm.attributeCategory.enabled = 0;
             }
         },
+        handleSuccess: function (res, file) {
+            vm.attributeCategory.bannerUrl = file.response.url;
+        },
+        handleFormatError: function (file) {
+            this.$Notice.warning({
+                title: '文件格式不正确',
+                desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
+            });
+        },
+        handleMaxSize: function (file) {
+            this.$Notice.warning({
+                title: '超出文件大小限制',
+                desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
+            });
+        },
         handleSubmit: function (name) {
             handleSubmitValidate(this, name, function () {
                 vm.saveOrUpdate()
             });
+        },
+        eyeImage: function () {
+            var url = vm.attributeCategory.bannerUrl;
+            eyeImage(url);
         },
         handleReset: function (name) {
             handleResetForm(this, name);

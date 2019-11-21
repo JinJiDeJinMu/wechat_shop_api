@@ -188,6 +188,7 @@ public class ApiGoodsController extends ApiBaseAction {
         Map<String, Object> resultObj = new HashMap();
 
         Long userId = getUserId();
+        //查找商品信息
         GoodsVo info = goodsService.queryObject(id);
         //请求一次浏览量加一
         if (info.getBrowse() == null) {
@@ -201,6 +202,8 @@ public class ApiGoodsController extends ApiBaseAction {
         if (sysuser != null) {
             info.setUser_brokerage_price(info.getRetail_price().multiply(new BigDecimal(sysuser.get("FX").toString())).multiply(new BigDecimal(info.getBrokerage_percent()).divide(new BigDecimal("10000"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
         }
+        resultObj.put("info", info);
+
 
         Map param = new HashMap();
         param.put("goods_id", id);
@@ -302,7 +305,7 @@ public class ApiGoodsController extends ApiBaseAction {
             footprintEntity.setReferrer(0L);
         }
         footprintService.save(footprintEntity);
-        resultObj.put("info", info);
+
         resultObj.put("gallery", gallery);
         resultObj.put("attribute", attribute);
         resultObj.put("userHasCollect", userHasCollect);

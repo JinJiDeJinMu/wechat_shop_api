@@ -22,6 +22,9 @@ public class AttributeCategoryEntity implements Serializable {
     private Integer enabled;
 
     private Integer showStyle;
+    private String bannerUrl;
+    private Integer sortOrder;
+    private Integer showPosition;
 
     /**
      * 设置：
@@ -37,6 +40,29 @@ public class AttributeCategoryEntity implements Serializable {
         return id;
     }
 
+    public String getBannerUrl() {
+        return bannerUrl;
+    }
+
+    public void setBannerUrl(String bannerUrl) {
+        this.bannerUrl = bannerUrl;
+    }
+
+    public Integer getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(Integer sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    public Integer getShowPosition() {
+        return showPosition;
+    }
+
+    public void setShowPosition(Integer showPosition) {
+        this.showPosition = showPosition;
+    }
 
     public Integer getShowStyle() {
         return showStyle;
