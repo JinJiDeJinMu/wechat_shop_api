@@ -69,8 +69,10 @@ public class GoodsVo implements Serializable {
     //商品列表图
     private String list_pic_url;
     //市场价
+    @ApiModelProperty(value = "市场价格")
     private BigDecimal market_price;
     //零售价格(现价)
+    @ApiModelProperty(value = "零售价格")
     private BigDecimal retail_price;
     //销售量
     private Integer sell_volume;

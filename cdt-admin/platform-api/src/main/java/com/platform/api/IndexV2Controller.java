@@ -93,7 +93,7 @@ public class IndexV2Controller extends ApiBaseAction {
             param.put("category_id", categoryItem.getId());
             param.put("sidx", "add_time");
             param.put("order", "desc");
-            param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price");
+            param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price,market_price as market_price");
             PageHelper.startPage(0, 4, false);
             categoryGoods = goodsService.queryList(param);
 
