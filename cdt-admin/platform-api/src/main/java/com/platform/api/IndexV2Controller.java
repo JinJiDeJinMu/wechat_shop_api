@@ -6,7 +6,6 @@ import com.platform.annotation.IgnoreAuth;
 import com.platform.dao.ApiAttributeCategoryMapper;
 import com.platform.entity.AdVo;
 import com.platform.entity.AttributeCategoryVo;
-import com.platform.entity.CategoryVo;
 import com.platform.entity.GoodsVo;
 import com.platform.service.ApiAdService;
 import com.platform.service.ApiCategoryService;
@@ -83,10 +82,8 @@ public class IndexV2Controller extends ApiBaseAction {
         List<AttributeCategoryVo> categoryGoodsList = attributeCategoryMapper.queryList(param);
 
         //查找其他分类下面的商品
-
         List<Map<String, Object>> newCategoryList = new ArrayList<>();
         for (AttributeCategoryVo categoryItem : categoryGoodsList) {
-//        for (AttributeCategoryVo categoryItem : categoryList) {
             List<GoodsVo> categoryGoods = new ArrayList<>();
             param = null;
             param = new HashMap<String, Object>();
@@ -100,6 +97,7 @@ public class IndexV2Controller extends ApiBaseAction {
             Map<String, Object> newCategory = new HashMap<String, Object>();
             newCategory.put("id", categoryItem.getId());
             newCategory.put("name", categoryItem.getName());
+            newCategory.put("showStyle", categoryItem.getShowStyle());
             newCategory.put("goodsList", categoryGoods);
             newCategoryList.add(newCategory);
         }
