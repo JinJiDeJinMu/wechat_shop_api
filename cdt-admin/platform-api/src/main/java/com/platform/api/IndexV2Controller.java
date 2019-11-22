@@ -13,11 +13,14 @@ import com.platform.service.ApiGoodsService;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.BannerType;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -130,4 +133,33 @@ public class IndexV2Controller extends ApiBaseAction {
                 b.getType().equals(type)
         ).collect(Collectors.toList());
     }
+
+    /**
+     * app首页查看更多
+     */
+    @ApiOperation(value = "首页查看更多")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "attribute_category", value = "商品类型id", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageIndex", value = "页码", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pagesize", value = "每页显示数量 ", dataType = "int", paramType = "query")
+    })
+    @IgnoreAuth
+    @GetMapping(value = "more")
+    public Result<Map<String, Object>> indexMore(Integer attribute_category,
+                                                 @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
+                                                 @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize) {
+        //最新商品
+        Map<String, Object> resultObj = new HashMap<String, Object>();
+        HashMap param = new HashMap<String, Object>();
+        param.put("attribute_category", attribute_category);
+        param.put("sidx", "add_time");
+        param.put("order", "desc");
+        param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price,market_price as market_price");
+        PageHelper.startPage(pageIndex, pagesize, false);
+        List<GoodsVo> goodsVoList = goodsService.queryList(param);
+        Map<String, Object> newCategory = new HashMap<String, Object>();
+        newCategory.put("goodsList", goodsVoList);
+        return Result.success(newCategory);
+    }
+
 }
