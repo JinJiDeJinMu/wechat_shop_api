@@ -4,6 +4,7 @@ $(function () {
         colModel: [
             {label: 'id', name: 'id', index: 'id', key: true, hidden: false},
             {label: '商品类型', name: 'categoryName', index: 'category_id', width: 80},
+            {label: '商家名称', name: 'merchantName', index: 'merchantName', width: 80},
             {label: '名称', name: 'name', index: 'name', width: 160},
             {label: '浏览量', name: 'browse', index: 'browse', width: 160},
             {label: '品牌', name: 'brandName', index: 'brand_id', width: 120},
@@ -82,6 +83,7 @@ var setting = {
 var vm = new Vue({
     el: '#rrapp',
     data: {
+        merchants: [],
         showList: true,
         title: null,
         uploadList: [],
@@ -105,7 +107,8 @@ var vm = new Vue({
             successTime: 0,
             groupPrice: 1,
             categoryName: '',
-            purchaseType:''
+            purchaseType:'',
+            merchantId:''
         },
         ruleValidate: {
             name: [
@@ -189,6 +192,7 @@ var vm = new Vue({
     },
     created: function () {
         this.getList();
+        this.getMerchant();
     },
     methods: {
         getList: function () {
@@ -531,6 +535,16 @@ var vm = new Vue({
         },
         eyeImage: function (e) {
             eyeImage($(e.target).attr('src'));
+        },
+        getMerchant: function () {
+            // alert("111");
+            Ajax.request({
+                url: "../cdtmerchant/queryAll",
+                async: true,
+                successCallback: function (r) {
+                    vm.merchants = r.list;
+                }
+            });
         }
     },
     mounted() {

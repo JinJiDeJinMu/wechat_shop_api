@@ -104,12 +104,13 @@
         nideshop_category.name category_name,
         nideshop_attribute_category.name attribute_category_name,
         nideshop_brand.name brand_name,
-        nideshop_goods.merchant_id merchantId
+        nideshop_goods.merchant_id merchantId,
+        cdt_merchant.shop_name merchantName
         from nideshop_goods
-        LEFT JOIN nideshop_category
-        ON nideshop_goods.category_id = nideshop_category.id
+        LEFT JOIN nideshop_category ON nideshop_goods.category_id = nideshop_category.id
         LEFT JOIN nideshop_attribute_category ON nideshop_goods.attribute_category = nideshop_attribute_category.id
         LEFT JOIN nideshop_brand ON nideshop_brand.id = nideshop_goods.brand_id
+        LEFT JOIN cdt_merchant ON cdt_merchant.id = nideshop_goods.merchant_id
         WHERE 1=1
         <!--  数据过滤  -->
         ${filterSql}
@@ -291,6 +292,7 @@
             <if test="successPeople != null">`success_people` = #{successPeople},</if>
             <if test="groupPrice != null">`group_price` = #{groupPrice},</if>
             <if test="purchaseType != null">`purchase_type` = #{purchaseType},</if>
+            <if test="merchantId != null">`merchant_id` = #{merchantId},</if>
         </set>
         where id = #{id}
     </update>

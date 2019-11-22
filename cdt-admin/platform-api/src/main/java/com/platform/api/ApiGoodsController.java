@@ -253,6 +253,7 @@ public class ApiGoodsController extends ApiBaseAction {
             }
         }
 
+        //商品详细信息
         List<ProductVo> productEntityList = productService.queryList(param);
         List<GoodsGalleryVo> gallery = goodsGalleryService.queryList(param);
         Map ngaParam = new HashMap();
@@ -264,7 +265,7 @@ public class ApiGoodsController extends ApiBaseAction {
         Map issueParam = new HashMap();
 //        issueParam.put("goods_id", id);
         List<GoodsIssueVo> issue = goodsIssueService.queryList(issueParam);
-
+        resultObj.put("issue", issue);
 
         BrandVo brand = brandService.queryObject(info.getBrand_id());
         param.put("value_id", id);
@@ -314,7 +315,6 @@ public class ApiGoodsController extends ApiBaseAction {
         resultObj.put("gallery", gallery);
         resultObj.put("attribute", attribute);
         resultObj.put("userHasCollect", userHasCollect);
-        resultObj.put("issue", issue);
         resultObj.put("comment", comment);
         resultObj.put("brand", brand);
         resultObj.put("specificationList", specificationList);

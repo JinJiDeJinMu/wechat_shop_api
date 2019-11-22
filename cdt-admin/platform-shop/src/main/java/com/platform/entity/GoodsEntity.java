@@ -86,6 +86,13 @@ public class GoodsEntity implements Serializable {
 	private Date startTime;
 	//购买类型
     private Integer purchaseType;
+
+    /**
+     * 翻译字段
+     */
+    //商家名称
+    private String merchantName;
+
     /**
      * 用户ID
      */
@@ -694,5 +701,13 @@ public class GoodsEntity implements Serializable {
 
     public void setMerchantId(Long merchantId) {
         this.merchantId = merchantId;
+    }
+
+    public String getMerchantName() {
+        return merchantName;
+    }
+
+    public void setMerchantName(String merchantName) {
+        this.merchantName = merchantName;
     }
 }

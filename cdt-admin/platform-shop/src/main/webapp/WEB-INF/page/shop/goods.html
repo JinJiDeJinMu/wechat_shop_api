@@ -238,6 +238,13 @@
                             </i-option>
                         </i-select>
                     </Form-item>
+                    <Form-item label="店铺" prop="merchantId" style="width: 268px;">
+                        <i-select v-model="goods.merchantId" filterable label-in-value>
+                            <i-option v-for="merchant in merchants" :value="merchant.id" :key="merchant.id">{{merchant.shopName}}
+                            </i-option>
+                        </i-select>
+                        <!--</Form-item>-->
+                    </Form-item>
                     <!--<Form-item label="商品类别" prop="category" style="width: 268px;">-->
                         <!--<i-select v-model="goods.category" filterable label-in-value>-->
                             <!--<i-option v-for="category in categories" :value="category.id"-->
