@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,11 +33,12 @@ public class StorageAddressController {
     /**
      * 查看列表
      */
-    @RequestMapping(value = "/list")
+
 //    @RequiresPermissions("storageaddress:list")
+    @RequestMapping(value = "/list")
     @IgnoreAuth
     @ResponseBody
-    public R list(@RequestParam Map<String, Object> params) {
+    public R list(Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
 
@@ -52,17 +54,18 @@ public class StorageAddressController {
      * 查看信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("storageaddress:info")
+//    @RequiresPermissions("storageaddress:info")
     @IgnoreAuth
     @ResponseBody
     public R info(@PathVariable("id") Integer id) {
         StorageAddressEntity storageAddress = storageAddressService.queryObject(id);
-
         return R.ok().put("storageAddress", storageAddress);
     }
 
     /**
+     *
      * 保存
+     *
      */
     @RequestMapping(value = "/save")
 //    @RequiresPermissions("storageaddress:save")
