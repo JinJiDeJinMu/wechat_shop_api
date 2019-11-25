@@ -256,21 +256,21 @@ public class ApiPayController extends ApiBaseAction {
             String orderType = order.getOrder_type();
             //只有购物车、普通购买有分润。
             if(orderType == null || "1".equals(orderType) || "2".equals(orderType)) {
-            	Map<String, Object> map = new HashMap<String, Object>();
-                map.put("all_order_id", order.getAll_order_id());	
-                List<OrderVo> lists = orderService.queryList(map);
-                OrderVo vo = null;
-                for(OrderVo v : lists) {
-                	vo = v;
-                	try {
-                    	//调用分销接口(现在支付成功就分润，后期要改造变成收货后，或者变成不可以体现的分润)
-                    	fx(new Long(vo.getPromoter_id()), vo.getBrokerage(), vo.getOrder_price(), vo.getId(), vo.getMerchant_id());
-                    }catch(Exception e) {
-                    	System.out.println("================分销错误开始================");
-                    	e.printStackTrace();
-                    	System.out.println("================分销错误结束================");
-                    }
-                }
+//            	Map<String, Object> map = new HashMap<String, Object>();
+//                map.put("all_order_id", order.getAll_order_id());
+//                List<OrderVo> lists = orderService.queryList(map);
+//                OrderVo vo = null;
+//                for(OrderVo v : lists) {
+//                	vo = v;
+//                	try {
+//                    	//调用分销接口(现在支付成功就分润，后期要改造变成收货后，或者变成不可以体现的分润)
+//                    	fx(new Long(vo.getPromoter_id()), vo.getBrokerage(), vo.getOrder_price(), vo.getId(), vo.getMerchant_id());
+//                    }catch(Exception e) {
+//                    	System.out.println("================分销错误开始================");
+//                    	e.printStackTrace();
+//                    	System.out.println("================分销错误结束================");
+//                    }
+//                }
             }
             //如果是团购在付款成功后要去增加团购记录表
             else if("4".equals(orderType)){
@@ -411,11 +411,11 @@ public class ApiPayController extends ApiBaseAction {
                 orderInfo.setShipping_status(0);
                 orderInfo.setPay_time(new Date());
                 orderService.updateStatus(orderInfo);
-                
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("all_order_id", result.getOut_trade_no());	
-                List<OrderVo> lists = orderService.queryList(map);
-                OrderVo vo = null;
+
+//                Map<String, Object> map = new HashMap<String, Object>();
+//                map.put("all_order_id", result.getOut_trade_no());
+//                List<OrderVo> lists = orderService.queryList(map);
+//                OrderVo vo = null;
 //                for(OrderVo v : lists) {
 //                	vo = v;
 //                	try {
