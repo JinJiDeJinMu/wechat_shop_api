@@ -45,7 +45,7 @@ mybatis-plus:
   #xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
   mapper-locations: classpath*:/mapper/*.xml
   #MyBaits 别名包扫描路径，通过该属性可以给包中的类注册别名
-  type-aliases-package: com.chundengtai.base.server.entity,com.platform.entity
+  type-aliases-package: com.platform.entity
   #如果配置了该属性，则仅仅会扫描路径下以该类作为父类的域对象
   type-aliases-super-type: java.lang.Object
   #枚举类 扫描路径，如果配置了该属性，会将路径下的枚举类进行注入，让实体类字段能够简单快捷的使用枚举属性
@@ -89,13 +89,31 @@ pagehelper:
   params: count=countSql
   offsetAsPageNum: true
 
-
+  #小程序ID
+  wx.appId=wxa637df01806a720c
+  #小程序密钥
+  wx.secret=4f19e83e8f687889eb1c9c7cedd7930c
+  #商户号
+  wx.mchId=1544679991
+  #支付签名
+  wx.paySignKey=CHUNDENGTAI88fangxingou88fangxin
+  #交易类型
+  wx.tradeType=JSAPI
+  #证书名称，对应不同的商户号
+  wx.certName=/cert/apiclient_cert.p12
 wx:
   miniapp:
-    appid: 111
-    secret: 111
-    token: 111
-    aesKey: 111
+    appid: wxa637df01806a720c
+    secret: 4f19e83e8f687889eb1c9c7cedd7930c
+    token: #微信小程序消息服务器配置的token
+    aesKey: #微信小程序消息服务器配置的EncodingAESKey
     msgDataFormat: JSON
-
+  pay:
+    appId: wxa637df01806a720c
+    mchId: 1544679991
+    mchKey: CHUNDENGTAI88fangxingou88fangxin
+    subAppId:
+    subMchId:
+    keyPath: classpath:cert/apiclient_cert.p12
+    notifyUrl: https://school.chundengtai.com/api/pay/notify
 debug: true

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.chundengtai.base.server.dao.ApiBrandMapper">
+<mapper namespace="com.platform.dao.ApiBrandMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.chundengtai.base.server.entity.BrandVo" id="brandMap">
+    <resultMap type="com.platform.entity.BrandVo" id="brandMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="list_pic_url" column="list_pic_url"/>
@@ -60,7 +60,7 @@
         </if>
 	</select>
 
-    <insert id="save" parameterType="com.chundengtai.base.server.entity.BrandVo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.platform.entity.BrandVo" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_brand
 		(
 			`name`, 
@@ -91,7 +91,7 @@
 		)
 	</insert>
 
-    <update id="update" parameterType="com.chundengtai.base.server.entity.BrandVo">
+    <update id="update" parameterType="com.platform.entity.BrandVo">
         update nideshop_brand
         <set>
             <if test="name != null">`name` = #{name},</if>

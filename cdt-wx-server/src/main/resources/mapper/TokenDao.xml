@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.chundengtai.base.server.dao.TokenDao">
+<mapper namespace="com.platform.dao.TokenDao">
 
-	<select id="queryByUserId" resultType="com.chundengtai.base.server.entity.TokenEntity">
+    <select id="queryByUserId" resultType="com.platform.entity.TokenEntity">
 		select * from tb_token where user_id = #{value}
 	</select>
 
-	<select id="queryByToken" resultType="com.chundengtai.base.server.entity.TokenEntity">
+    <select id="queryByToken" resultType="com.platform.entity.TokenEntity">
 		select * from tb_token where token = #{value}
 	</select>
-	 
-	<insert id="save" parameterType="com.chundengtai.base.server.entity.TokenEntity">
+
+    <insert id="save" parameterType="com.platform.entity.TokenEntity">
 		insert into tb_token
 		(
 			`user_id`, 
@@ -27,8 +27,8 @@
 			#{updateTime}
 		)
 	</insert>
-	 
-	<update id="update" parameterType="com.chundengtai.base.server.entity.TokenEntity">
+
+    <update id="update" parameterType="com.platform.entity.TokenEntity">
 		update tb_token 
 		<set>
 			<if test="token != null">`token` = #{token}, </if>

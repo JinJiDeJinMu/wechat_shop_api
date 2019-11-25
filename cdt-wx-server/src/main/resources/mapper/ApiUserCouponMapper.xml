@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.chundengtai.base.server.dao.ApiUserCouponMapper">
+<mapper namespace="com.platform.dao.ApiUserCouponMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.chundengtai.base.server.entity.UserCouponVo" id="userCouponMap">
+    <resultMap type="com.platform.entity.UserCouponVo" id="userCouponMap">
         <result property="id" column="id"/>
         <result property="coupon_id" column="coupon_id"/>
         <result property="coupon_number" column="coupon_number"/>
@@ -72,7 +72,7 @@
 		select count(*) from nideshop_user_coupon
 	</select>
 
-    <insert id="save" parameterType="com.chundengtai.base.server.entity.UserCouponVo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.platform.entity.UserCouponVo" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_user_coupon
 		(
 			`coupon_id`, 
@@ -102,7 +102,7 @@
 		)
 	</insert>
 
-    <update id="update" parameterType="com.chundengtai.base.server.entity.UserCouponVo">
+    <update id="update" parameterType="com.platform.entity.UserCouponVo">
         update nideshop_user_coupon
         <set>
             <if test="coupon_id != null">`coupon_id` = #{coupon_id},</if>
@@ -116,8 +116,8 @@
         </set>
         where id = #{id}
     </update>
-    
-    <update id="updateCouponStatus" parameterType="com.chundengtai.base.server.entity.UserCouponVo">
+
+    <update id="updateCouponStatus" parameterType="com.platform.entity.UserCouponVo">
         update nideshop_user_coupon
         <set>
         	<if test="used_time != null">`used_time` = #{used_time},</if>

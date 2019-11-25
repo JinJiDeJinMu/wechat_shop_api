@@ -256,15 +256,15 @@ public class ApiOrderController extends ApiBaseAction {
         			uc.setCoupon_status(1);
         			uc.setUsed_time(null);
         			userCouponService.updateCouponStatus(uc);
-                    
-                    //去掉订单成功成立分润退还
-                    try {
-                    	orderService.cancelFx(orderVo.getId(), orderVo.getPay_time(), orderVo.getAll_price().multiply(new BigDecimal("100")).intValue());
-                    }catch(Exception e) {
-                    	System.out.println("================取消订单返还分润开始================");
-                    	e.printStackTrace();
-                    	System.out.println("================取消订单返还分润开始================");
-                    }
+
+//                    //去掉订单成功成立分润退还
+//                    try {
+//                    	orderService.cancelFx(orderVo.getId(), orderVo.getPay_time(), orderVo.getAll_price().multiply(new BigDecimal("100")).intValue());
+//                    }catch(Exception e) {
+//                    	System.out.println("================取消订单返还分润开始================");
+//                    	e.printStackTrace();
+//                    	System.out.println("================取消订单返还分润开始================");
+//                    }
                     return toResponsSuccess("取消成功");
                 } else {
                     return toResponsObject(400, "取消成失败", "取消成失败");

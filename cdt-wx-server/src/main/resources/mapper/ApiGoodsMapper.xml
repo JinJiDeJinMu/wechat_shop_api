@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.chundengtai.base.server.dao.ApiGoodsMapper">
+<mapper namespace="com.platform.dao.ApiGoodsMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.chundengtai.base.server.entity.GoodsVo" id="goodsMap">
+    <resultMap type="com.platform.entity.GoodsVo" id="goodsMap">
         <result property="id" column="id"/>
         <result property="category_id" column="category_id"/>
         <result property="goods_sn" column="goods_sn"/>
         <result property="name" column="name"/>
+        <result property="browse" column="browse"/>
         <result property="brand_id" column="brand_id"/>
         <result property="goods_number" column="goods_number"/>
         <result property="keywords" column="keywords"/>
@@ -47,10 +48,17 @@
         <result property="success_time" column="success_time"/>
         <result property="success_people" column="success_people"/>
         <result property="group_price" column="group_price"/>
+        <result property="purchaseType" column="purchase_type"/>
     </resultMap>
 
     <select id="queryObject" resultMap="goodsMap">
 		select * from nideshop_goods where id = #{value}
+	</select>
+
+    <select id="checkBuy" resultType="java.lang.Integer">
+		select count(*) from nideshop_goods where id = #{value}
+		and  is_delete = 1
+        and  is_on_sale =0
 	</select>
 
     <select id="queryList" resultMap="goodsMap">
@@ -77,8 +85,8 @@
         <if test="name != null and name != ''">
             and 'name' like concat('%',#{keyword},'%')
         </if>
-        <if test="category_id != null and category_id != ''">
-            and category_id = #{category_id}
+        <if test="attribute_category != null and attribute_category != ''">
+            and attribute_category = #{attribute_category}
         </if>
         <if test="keyword != null">
             and keywords like concat('%',#{keyword},'%')
@@ -258,12 +266,13 @@
     <select id="queryMaxId" resultType="java.lang.Integer" parameterType="map">
         SELECT MAX(id) FROM nideshop_goods
     </select>
-    
-    <insert id="save" parameterType="com.chundengtai.base.server.entity.GoodsVo">
+
+    <insert id="save" parameterType="com.platform.entity.GoodsVo">
         insert into nideshop_goods
         (
 	        `id`,
 	        `name`,
+	        `browse`,
 	        `primary_pic_url`,
 	        `list_pic_url`
         )
@@ -271,6 +280,7 @@
         (
 	        #{id},
 	        #{name},
+	        #{browse},
 	        #{primary_pic_url},
 	        #{list_pic_url}
         )
@@ -375,4 +385,12 @@
     <select id="queryGroupTotal" resultType="int">
         SELECT count(1) FROM nideshop_goods  WHERE is_secKill=#{is_secKill} and is_delete = 0 and is_on_sale = 1
     </select>
+
+    <update id="updateBrowse" parameterType="com.platform.entity.GoodsVo">
+        update nideshop_goods
+        <set>
+            <if test="browse != null">`browse` = #{browse},</if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

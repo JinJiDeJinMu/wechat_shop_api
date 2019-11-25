@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.chundengtai.base.server.dao.MlsUserMapper">
+<mapper namespace="com.platform.dao.MlsUserMapper">
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="columns">
@@ -178,11 +178,11 @@
         INSERT INTO `nideshop_user_goods` ( `user_id`, `goods_id`, `name`, `goods_brief`, `retail_price`, `market_price`, `primary_pic_url`)
 		VALUES (#{userId} ,#{goodsId} , #{name} , #{goodsBrief} , #{retailPrice} , #{marketPrice} , #{primaryPicUrl}  )
 	</insert>
-	<select id="getUserGoods" resultType="com.chundengtai.base.server.entity.UserGoods">
+    <select id="getUserGoods" resultType="com.platform.entity.UserGoods">
 			SELECT  `user_goods_id` as userGoodsId,  `user_id` as userId,  `goods_id` as goodsId,  `name`, `goods_brief` as goodsBrief,  `retail_price` as retailPrice,  `market_price` as marketPrice,  `primary_pic_url` as primaryPicUrl FROM  `nideshop_user_goods` WHERE user_id= #{value} 
 	</select>
 
-	<select id="findUserGoods" resultType="com.chundengtai.base.server.entity.UserGoods">
+    <select id="findUserGoods" resultType="com.platform.entity.UserGoods">
 		SELECT  `user_goods_id` as userGoodsId,  `user_id` as userId,  `goods_id` as goodsId,  `name`, `goods_brief` as goodsBrief,  `retail_price` as retailPrice,  `market_price` as marketPrice,  `primary_pic_url` as primaryPicUrl FROM  `nideshop_user_goods` WHERE user_id= #{userId}  and  goods_id=#{goodsId}
 	</select>
 	<!-- 根据key，查询value -->

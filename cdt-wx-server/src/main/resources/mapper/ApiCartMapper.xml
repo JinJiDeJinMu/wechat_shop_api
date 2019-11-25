@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.chundengtai.base.server.dao.ApiCartMapper">
+<mapper namespace="com.platform.dao.ApiCartMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.chundengtai.base.server.entity.CartVo" id="cartMap">
+    <resultMap type="com.platform.entity.CartVo" id="cartMap">
         <result property="id" column="id"/>
         <result property="user_id" column="user_id"/>
         <result property="session_id" column="session_id"/>
@@ -84,7 +84,7 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.chundengtai.base.server.entity.CartVo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.platform.entity.CartVo" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_cart
 		(
 			`user_id`, 
@@ -122,7 +122,7 @@
 		)
 	</insert>
 
-    <update id="update" parameterType="com.chundengtai.base.server.entity.CartVo">
+    <update id="update" parameterType="com.platform.entity.CartVo">
         update nideshop_cart
         <set>
             <if test="user_id != null">`user_id` = #{user_id},</if>
@@ -184,7 +184,7 @@
         delete from nideshop_cart
         where  user_id = #{user_id} and  session_id = #{session_id} and  checked = #{checked}
     </delete>
-    <select id="queryMerCartList" parameterType="java.lang.Long" resultType="com.chundengtai.base.server.entity.MerCartVo">
+    <select id="queryMerCartList" parameterType="java.lang.Long" resultType="com.platform.entity.MerCartVo">
             SELECT
             cart.merchant_id as merchantId,
             sys.merchant_name as merchantName,

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.chundengtai.base.server.dao.ApiAdMapper">
+<mapper namespace="com.platform.dao.ApiAdMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.chundengtai.base.server.entity.AdVo" id="adMap">
+    <resultMap type="com.platform.entity.AdVo" id="adMap">
         <result property="id" column="id"/>
         <result property="ad_position_id" column="ad_position_id"/>
         <result property="media_type" column="media_type"/>
@@ -44,7 +44,7 @@
 		select count(*) from nideshop_ad 
 	</select>
 
-    <insert id="save" parameterType="com.chundengtai.base.server.entity.AdVo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.platform.entity.AdVo" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_ad
 		(
 			`ad_position_id`, 
@@ -69,7 +69,7 @@
 		)
 	</insert>
 
-    <update id="update" parameterType="com.chundengtai.base.server.entity.AdVo">
+    <update id="update" parameterType="com.platform.entity.AdVo">
         update nideshop_ad
         <set>
             <if test="ad_position_id != null">`ad_position_id` = #{adPositionId},</if>

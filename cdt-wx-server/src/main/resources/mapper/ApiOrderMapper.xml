@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.chundengtai.base.server.dao.ApiOrderMapper">
+<mapper namespace="com.platform.dao.ApiOrderMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.chundengtai.base.server.entity.OrderVo" id="orderMap">
+    <resultMap type="com.platform.entity.OrderVo" id="orderMap">
         <result property="id" column="id"/>
         <result property="order_sn" column="order_sn"/>
         <result property="user_id" column="user_id"/>
         <result property="order_status" column="order_status"/>
         <result property="shipping_status" column="shipping_status"/>
         <result property="pay_status" column="pay_status"/>
+        <result property="evaluateStatus" column="evaluate_status"/>
         <result property="consignee" column="consignee"/>
         <result property="country" column="country"/>
         <result property="province" column="province"/>
@@ -152,10 +153,9 @@
             </if>
         </where>
 	</select>
-	
 
 
-    <insert id="save" parameterType="com.chundengtai.base.server.entity.OrderVo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.platform.entity.OrderVo" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_order
 		(
 			`order_sn`,
@@ -163,6 +163,7 @@
 			`order_status`,
 			`shipping_status`,
 			`pay_status`,
+			`evaluate_status`,
 			`consignee`,
 			`country`,
 			`province`,
@@ -206,6 +207,7 @@
 			#{order_status},
 			#{shipping_status},
 			#{pay_status},
+			#{evaluateStatus},
 			#{consignee},
 			#{country},
 			#{province},
@@ -244,7 +246,7 @@
 		)
 	</insert>
 
-    <update id="update" parameterType="com.chundengtai.base.server.entity.OrderVo">
+    <update id="update" parameterType="com.platform.entity.OrderVo">
         update nideshop_order
         <set>
             <if test="order_sn != null">`order_sn` = #{order_sn},</if>
@@ -252,6 +254,7 @@
             <if test="order_status != null">`order_status` = #{order_status},</if>
             <if test="shipping_status != null">`shipping_status` = #{shipping_status},</if>
             <if test="pay_status != null">`pay_status` = #{pay_status},</if>
+            <if test="evaluateStatus != null">`evaluate_status` = #{evaluateStatus},</if>
             <if test="consignee != null">`consignee` = #{consignee},</if>
             <if test="country != null">`country` = #{country},</if>
             <if test="province != null">`province` = #{province},</if>
@@ -285,13 +288,14 @@
         </set>
         where id = #{id}
     </update>
-    
-    <update id="updateStatus" parameterType="com.chundengtai.base.server.entity.OrderVo">
+
+    <update id="updateStatus" parameterType="com.platform.entity.OrderVo">
         update nideshop_order
         <set>
             <if test="pay_status != null">`pay_status` = #{pay_status},</if>
             <if test="order_status != null">`order_status` = #{order_status},</if>
             <if test="shipping_status != null">`shipping_status` = #{shipping_status},</if>
+            <if test="evaluateStatus != null">`evaluate_status` = #{evaluateStatus},</if>
             <if test="pay_time != null">`pay_time` = #{pay_time},</if>
             <if test="pay_id != null">`pay_id` = #{pay_id},</if>
         </set>
