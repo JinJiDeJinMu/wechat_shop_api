@@ -9,10 +9,7 @@ import com.platform.utils.R;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +23,7 @@ import java.util.Map;
  */
 @Api(value = "未名严选详情购买用户", tags = "购买人群列表")
 @Controller
-@RequestMapping("purchasePeople")
+@RequestMapping("/api/v2/purchasePeople")
 public class ApiPurchasePeopleController {
     @Autowired
     private ApiPurchasePeopleService PurchasePeopleService;
@@ -43,7 +40,7 @@ public class ApiPurchasePeopleController {
             @ApiResponse(code = 500, message = "If internal server error."),
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
-    @RequestMapping("/list")
+    @GetMapping("/list")
     @IgnoreAuth
     public Result<Map<String, Object>> list(@RequestParam Integer goodsId) {
         //查询列表数据
@@ -60,7 +57,7 @@ public class ApiPurchasePeopleController {
     /**
      * 查看信息
      */
-    @RequestMapping("/info/{id}")
+    @GetMapping("/info/{id}")
     public R info(@PathVariable("id") Integer id) {
         PurchasePeopleEntity nideshopPurchasePeople = PurchasePeopleService.queryObject(id);
 
@@ -70,7 +67,7 @@ public class ApiPurchasePeopleController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    //@RequestMapping("/save")
     @IgnoreAuth
     public R save(PurchasePeopleEntity PurchasePeople) {
         PurchasePeopleService.save(PurchasePeople);
@@ -81,7 +78,7 @@ public class ApiPurchasePeopleController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    //@RequestMapping("/update")
     public R update(@RequestBody PurchasePeopleEntity nideshopPurchasePeople) {
         PurchasePeopleService.update(nideshopPurchasePeople);
 
