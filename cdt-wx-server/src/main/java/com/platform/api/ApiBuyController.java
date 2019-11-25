@@ -3,7 +3,6 @@ package com.platform.api;
 import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
-import com.platform.cache.J2CacheUtils;
 import com.platform.entity.*;
 import com.platform.service.ApiGoodsService;
 import com.platform.service.ApiProductService;
@@ -14,6 +13,7 @@ import com.platform.utils.Base64;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,10 +61,13 @@ public class ApiBuyController extends ApiBaseAction {
         goodsVo.setProductId(productId);
         goodsVo.setNumber(number);
 
-        J2CacheUtils.put(J2CacheUtils.SHOP_CACHE_NAME, "goods" + loginUser.getUserId() + "", goodsVo);
+        //J2CacheUtils.put(J2CacheUtils.SHOP_CACHE_NAME, "goods" + loginUser.getUserId() + "", goodsVo);
+        redisTemplate.opsForValue().set("shopCache:goods" + loginUser.getUserId() + "", goodsVo);
         return toResponsMsgSuccess("添加成功");
     }
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
     /**
      * 获取用户拼团列表
      *

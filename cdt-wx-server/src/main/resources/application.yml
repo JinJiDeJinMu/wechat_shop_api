@@ -10,7 +10,7 @@ spring:
   application:
     name: cdt-wx-app
   profiles:
-    active: dev
+    active: prod
   http:
     encoding:
       force: true
@@ -89,18 +89,6 @@ pagehelper:
   params: count=countSql
   offsetAsPageNum: true
 
-  #小程序ID
-  wx.appId=wxa637df01806a720c
-  #小程序密钥
-  wx.secret=4f19e83e8f687889eb1c9c7cedd7930c
-  #商户号
-  wx.mchId=1544679991
-  #支付签名
-  wx.paySignKey=CHUNDENGTAI88fangxingou88fangxin
-  #交易类型
-  wx.tradeType=JSAPI
-  #证书名称，对应不同的商户号
-  wx.certName=/cert/apiclient_cert.p12
 wx:
   miniapp:
     appid: wxa637df01806a720c

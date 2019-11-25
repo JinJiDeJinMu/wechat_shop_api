@@ -2,7 +2,6 @@ package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.LoginUser;
-import com.platform.cache.J2CacheUtils;
 import com.platform.dao.ApiCouponMapper;
 import com.platform.entity.*;
 import com.platform.service.*;
@@ -11,6 +10,7 @@ import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -400,6 +400,9 @@ public class ApiCartController extends ApiBaseAction {
         return toResponsSuccess(resultObj);
     }
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     /**
      * 订单提交前的检验和填写相关订单信息
      * activityType 1 直接购买  2 团购购买
@@ -449,7 +452,8 @@ public class ApiCartController extends ApiBaseAction {
             }
             //goodsTotalPrice = (BigDecimal) ((HashMap) cartData.get("cartTotal")).get("checkedGoodsAmount");
         } else { // 是直接购买的
-            BuyGoodsVo goodsVO = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "goods" + loginUser.getUserId() + "");
+            //BuyGoodsVo goodsVO = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "goods" + loginUser.getUserId() + "");
+            BuyGoodsVo goodsVO = (BuyGoodsVo) redisTemplate.opsForValue().get("shopCache:goods" + loginUser.getUserId() + "");
             ProductVo productInfo = productService.queryObject(goodsVO.getProductId());
             GoodsVo goods = goodsService.queryObject(goodsVO.getGoodsId());
             //计算订单的费用

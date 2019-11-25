@@ -18,7 +18,7 @@
 		select * from nideshop_attribute_category where id = #{value}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.AttributeCategoryVo">
+    <select id="queryList" resultMap="attributeCategoryMap">
         select * from nideshop_attribute_category
         where 1 = 1
         <if test="showPosition != null">

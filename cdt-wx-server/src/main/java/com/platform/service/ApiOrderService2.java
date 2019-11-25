@@ -8,6 +8,7 @@ import com.platform.util.CommonUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -33,7 +34,8 @@ public class ApiOrderService2 {
     private ApiGoodsService goodsService;
     @Autowired
     UserRecordSer userRecordSer;
-
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
     public OrderVo queryObject(Integer id) {
         return orderDao.queryObject(id);
     }
@@ -254,8 +256,10 @@ public class ApiOrderService2 {
             BigDecimal freightPrice = BigDecimal.ZERO;
             BigDecimal couponPrice = new BigDecimal(0.00);
 
-            BuyGoodsVo goodsVo = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME,
-                    "goods" + loginUser.getUserId());
+//            BuyGoodsVo goodsVo = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME,
+//                    "goods" + loginUser.getUserId());
+
+            BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(J2CacheUtils.SHOP_CACHE_NAME + ":goods" + loginUser.getUserId() + "");
             ProductVo productInfo = productService.queryObject(goodsVo.getProductId());
             // 计算订单的费用
             // 商品总价

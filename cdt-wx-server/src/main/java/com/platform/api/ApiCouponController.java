@@ -12,6 +12,7 @@ import com.platform.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -79,6 +80,8 @@ public class ApiCouponController extends ApiBaseAction {
         return toResponsSuccess(couponVos);
     }
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
     /**
      * 根据商品获取可用优惠券列表
      */
@@ -97,7 +100,8 @@ public class ApiCouponController extends ApiBaseAction {
                 }
             }
         } else { // 是直接购买的
-            BuyGoodsVo goodsVo = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "goods" + loginUser.getUserId() + "");
+            BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(J2CacheUtils.SHOP_CACHE_NAME + ":goods" + loginUser.getUserId() + "");
+            //BuyGoodsVo goodsVo = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "goods" + loginUser.getUserId() + "");
             ProductVo productInfo = apiProductService.queryObject(goodsVo.getProductId());
             //商品总价
             goodsTotalPrice = productInfo.getRetail_price().multiply(new BigDecimal(goodsVo.getNumber()));

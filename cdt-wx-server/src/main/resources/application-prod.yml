@@ -17,15 +17,15 @@ spring:
         max-active: 300
         max-wait: 3000ms
     database: 5
-    host: 192.168.0.17
+    host: 127.0.0.1
     port: 6379
     password: 123456
     timeout: 100ms
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/final?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://121.196.219.8 :3306/final?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: 123456
+    password: Hadoop3!
     hikari:
       minimum-idle: 5
       maximum-pool-size: 20

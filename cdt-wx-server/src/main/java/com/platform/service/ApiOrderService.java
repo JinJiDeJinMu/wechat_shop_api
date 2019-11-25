@@ -8,6 +8,7 @@ import com.platform.util.CommonUtil;
 import com.platform.utils.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +41,9 @@ public class ApiOrderService {
     private MlsUserSer mlsUserSer;
     @Autowired
     private ApiGoodsSpecificationService goodsSpecificationService;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     public OrderVo queryObject(Integer id) {
         return orderDao.queryObject(id);
@@ -303,8 +307,10 @@ public class ApiOrderService {
                 Integer couponId = null;
                 BigDecimal couponPrice = BigDecimal.ZERO;//优惠券金额
 
-                BuyGoodsVo goodsVo = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME,
-                        "goods" + loginUser.getUserId());
+//                BuyGoodsVo goodsVo = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME,
+//                        "goods" + loginUser.getUserId());
+
+                BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(J2CacheUtils.SHOP_CACHE_NAME + ":goods" + loginUser.getUserId() + "");
                 if (null == goodsVo) {
                     resultObj.put("errno", 400);
                     resultObj.put("errmsg", "请选择商品");
@@ -456,8 +462,10 @@ public class ApiOrderService {
                 Integer couponId = null;
                 BigDecimal couponPrice = BigDecimal.ZERO;//优惠券金额
 
-                BuyGoodsVo goodsVo = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME,
-                        "goods" + loginUser.getUserId());
+//                BuyGoodsVo goodsVo = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME,
+//                        "goods" + loginUser.getUserId());
+
+                BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(J2CacheUtils.SHOP_CACHE_NAME + ":goods" + loginUser.getUserId() + "");
                 if (null == goodsVo) {
                     resultObj.put("errno", 400);
                     resultObj.put("errmsg", "请选择商品");
