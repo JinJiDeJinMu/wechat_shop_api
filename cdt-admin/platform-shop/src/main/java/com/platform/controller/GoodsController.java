@@ -1,6 +1,6 @@
 package com.platform.controller;
 
-import com.platform.common.ShopShow;
+import com.platform.constance.ShopShow;
 import com.platform.entity.GoodsEntity;
 import com.platform.entity.SysUserEntity;
 import com.platform.service.GoodsService;
@@ -37,7 +37,7 @@ public class GoodsController {
         SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
         //查询列表数据
         Query query = new Query(params);
-        if (sysUserEntity.getCreateUserId().intValue() != ShopShow.ADMINISTRATOR.getCode()) {
+        if (sysUserEntity.getCreateUserId() != ShopShow.ADMINISTRATOR.getCode()) {
             query.put("merchantId", sysUserEntity.getMerchantId());
         }
         query.put("isDelete", 0);

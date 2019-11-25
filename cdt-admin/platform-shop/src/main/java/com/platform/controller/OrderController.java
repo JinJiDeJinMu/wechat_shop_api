@@ -1,17 +1,6 @@
 package com.platform.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.platform.constance.ShopShow;
 import com.platform.entity.GroupBuyingEntity;
 import com.platform.entity.OrderEntity;
 import com.platform.entity.OrderGoodsEntity;
@@ -19,11 +8,14 @@ import com.platform.entity.SysUserEntity;
 import com.platform.service.OrderGoodsService;
 import com.platform.service.OrderService;
 import com.platform.service.ShippingService;
-import com.platform.utils.Base64;
-import com.platform.utils.PageUtils;
-import com.platform.utils.Query;
-import com.platform.utils.R;
-import com.platform.utils.ShiroUtils;
+import com.platform.utils.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -50,7 +42,9 @@ public class OrderController {
         SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
         // 查询列表数据
         Query query = new Query(params);
-        query.put("merchantId",sysUserEntity.getMerchantId());
+        if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
+            query.put("merchantId", sysUserEntity.getMerchantId());
+        }
         List<OrderEntity> orderList = orderService.queryList(query);
         int total = orderService.queryTotal(query);
         for(OrderEntity user : orderList) {
@@ -70,7 +64,9 @@ public class OrderController {
         SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
         // 查询列表数据
         Query query = new Query(params);
-        query.put("merchantId",sysUserEntity.getMerchantId());
+        if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
+            query.put("merchantId", sysUserEntity.getMerchantId());
+        }
         List<GroupBuyingEntity> list = orderService.queryGroupList(query);
         int total = orderService.queryGroupTotal(query);
         PageUtils pageUtil = new PageUtils(list, total, query.getLimit(), query.getPage());

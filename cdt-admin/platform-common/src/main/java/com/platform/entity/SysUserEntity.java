@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -286,6 +285,7 @@ public class SysUserEntity implements Serializable {
     }
 
     public Long getMerchantId() {
+
         return merchantId;
     }
 

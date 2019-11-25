@@ -1,5 +1,6 @@
 package com.platform.controller;
 
+import com.platform.constance.ShopShow;
 import com.platform.dao.SpecificationDao;
 import com.platform.entity.SpecificationEntity;
 import com.platform.service.SpecificationService;
@@ -39,7 +40,9 @@ public class SpecificationController {
     public R list(@RequestParam Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
-        query.put("merchant_id", ShiroUtils.getUserEntity().getMerchantId());
+        if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
+            query.put("merchant_id", ShiroUtils.getUserEntity().getMerchantId());
+        }
         List<SpecificationEntity> specificationList = specificationService.queryList(query);
         int total = specificationService.queryTotal(query);
 
@@ -99,7 +102,9 @@ public class SpecificationController {
      */
     @RequestMapping("/queryAll")
     public R queryAll(@RequestParam Map<String, Object> params) {
-    	params.put("merchant_id", ShiroUtils.getUserEntity().getMerchantId());
+        if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
+            params.put("merchant_id", ShiroUtils.getUserEntity().getMerchantId());
+        }
         List<SpecificationEntity> list = specificationService.queryList(params);
 
         return R.ok().put("list", list);
