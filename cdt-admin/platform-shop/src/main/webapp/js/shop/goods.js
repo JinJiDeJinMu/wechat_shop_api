@@ -196,7 +196,7 @@ var vm = new Vue({
     },
     methods: {
         getList: function () {
-            this.listLoading = true;
+            this.listLoading = false;
             Ajax.request({
                 url: "../goods/list?_search=false&nd=1574065527517&limit=10&page=1&sidx=&order=asc",
                 async: true,

@@ -33,11 +33,11 @@
         <!--<artifactId>platform-schedule</artifactId>-->
         <!--<version>1.0.0</version>-->
         <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>com.platform</groupId>-->
-        <!--<artifactId>platform-api</artifactId>-->
-        <!--<version>1.0.0</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.platform</groupId>
+            <artifactId>platform-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <dependency>
             <groupId>com.platform</groupId>
             <artifactId>platform-admin</artifactId>
@@ -78,10 +78,10 @@
                             <groupId>com.platform</groupId>
                             <artifactId>platform-admin</artifactId>
                         </overlay>
-                        <!--<overlay>-->
-                        <!--<groupId>com.platform</groupId>-->
-                        <!--<artifactId>platform-shop</artifactId>-->
-                        <!--</overlay>-->
+                        <overlay>
+                            <groupId>com.platform</groupId>
+                            <artifactId>platform-shop</artifactId>
+                        </overlay>
 
                         <!-- 待添加其他要合并的 web 模块 -->
                     </overlays>
