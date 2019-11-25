@@ -34,6 +34,7 @@ public class StorageAddressController {
      * 查看列表
      */
 
+
 //    @RequiresPermissions("storageaddress:list")
     @RequestMapping(value = "/list")
     @IgnoreAuth
