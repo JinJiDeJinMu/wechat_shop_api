@@ -56,7 +56,7 @@ public class CommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 500, message = "If internal server error."),
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
-    @PostMapping("list")
+    @RequestMapping("list")
     @IgnoreAuth
     public Result<Object> List(@RequestParam Integer goodId,
                                @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
@@ -103,7 +103,7 @@ public class CommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
     @IgnoreAuth
-    @PostMapping("post")
+    @RequestMapping("post")
     public Result<Object> post(
 //                               @LoginUser UserVo loginUser,
             Long userId,
@@ -162,7 +162,7 @@ public class CommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 500, message = "If internal server error."),
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
-    @PostMapping("reply")
+    @RequestMapping("reply")
     @IgnoreAuth
     public Result<Object> reply(
 //                                @LoginUser UserVo loginUser,
@@ -194,7 +194,7 @@ public class CommentV2Controller extends ApiBaseAction {
     @ApiResponses({@ApiResponse(code = 200, message = "If successful, this method return JwtAccessTokenVO."),
             @ApiResponse(code = 400, message = "If bad request.")
     })
-    @PostMapping("comment")
+    @RequestMapping("comment")
     @IgnoreAuth
     public Result<Object> post(
 //                             @LoginUser UserVo loginUser,
@@ -216,7 +216,7 @@ public class CommentV2Controller extends ApiBaseAction {
     /**
      */
     @ApiOperation(value = "评论数量")
-    @GetMapping("count")
+    @RequestMapping("count")
     @IgnoreAuth
     public Result<Object> count(Integer typeId, Integer valueId) {
         Map<String, Object> resultObj = new HashMap();
@@ -241,7 +241,7 @@ public class CommentV2Controller extends ApiBaseAction {
      */
     @ApiOperation(value = "选择评论类型")
     @IgnoreAuth
-    @GetMapping("list1")
+    @RequestMapping("list1")
     public Object list1(Integer typeId, Integer valueId, Integer showType,
                         @RequestParam(value = "page", defaultValue = "1") Integer page,
                         @RequestParam(value = "size", defaultValue = "10") Integer size,
