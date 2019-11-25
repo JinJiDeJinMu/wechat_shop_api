@@ -78,7 +78,8 @@ public class CommentV2Controller extends ApiBaseAction {
         ApiPageUtils pageUtil = new ApiPageUtils(commentList, total, query.getLimit(), query.getPage());
         //
         for (CommentReq commentItem : commentList) {
-            commentItem.setContent(Base64.decode(commentItem.getContent()));
+//            commentItem.setContent(Base64.decode(commentItem.getContent()));
+            commentItem.setContent(commentItem.getContent());
             commentItem.setUserInfo(userService.queryObject(commentItem.getUserId()));
 
             Map paramPicture = new HashMap();
@@ -118,7 +119,7 @@ public class CommentV2Controller extends ApiBaseAction {
         commentReq.setUserId(userId);
         commentReq.setOrderNo(orderNo);
         commentReq.setGoodId(goodId);
-        commentReq.setContent(Base64.encode(content));
+        commentReq.setContent(content);
         commentReq.setStarLevel(starLevel);
         apiCommentV2Service.save(commentReq);
         Long insertId = commentReq.getId();
@@ -176,8 +177,8 @@ public class CommentV2Controller extends ApiBaseAction {
         RepCommentVo repCommentVo = new RepCommentVo();
         repCommentVo.setCommentId(commentId);
         repCommentVo.setUserId(userId);
-        repCommentVo.setUserName(Base64.encode(userName));
-        repCommentVo.setContent(Base64.encode(content));
+        repCommentVo.setUserName(userName);
+        repCommentVo.setContent(content);
         repCommentVo.setAddTime(Long.valueOf(System.currentTimeMillis() / 1000));
         apiRepCommentService.save(repCommentVo);
         Map resultModel = new HashMap();
@@ -206,8 +207,8 @@ public class CommentV2Controller extends ApiBaseAction {
         query.put("commentId", commentId);
         List<RepCommentVo> repCommentVos = apiRepCommentService.queryList(query);
         for (RepCommentVo commentItem : repCommentVos) {
-            commentItem.setContent(Base64.decode(commentItem.getContent()));
-            commentItem.setUserName(Base64.decode(commentItem.getUserName()));
+            commentItem.setContent(commentItem.getContent());
+            commentItem.setUserName(commentItem.getUserName());
         }
         resultModel.put("repCommentList", repCommentVos);
         return Result.success(resultModel);
@@ -273,7 +274,7 @@ public class CommentV2Controller extends ApiBaseAction {
         ApiPageUtils pageUtil = new ApiPageUtils(commentList, total, query.getLimit(), query.getPage());
         //
         for (CommentVo commentItem : commentList) {
-            commentItem.setContent(Base64.decode(commentItem.getContent()));
+            commentItem.setContent(commentItem.getContent());
             commentItem.setUser_info(userService.queryObject(commentItem.getUser_id()));
 
             Map paramPicture = new HashMap();
