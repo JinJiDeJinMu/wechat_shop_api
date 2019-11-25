@@ -110,7 +110,7 @@ public class CommentV2Controller extends ApiBaseAction {
     @PostMapping("post")
     public Result<Object> post(
 //                               @LoginUser UserVo loginUser,
-            Long userId,
+                                Long userId,
                                @RequestParam String orderNo,
                                @RequestParam Integer goodId,
                                @RequestParam String content,
