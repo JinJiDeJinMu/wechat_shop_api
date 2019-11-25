@@ -35,7 +35,10 @@
         from nideshop_goods_specification
         LEFT JOIN nideshop_goods ON nideshop_goods.id = nideshop_goods_specification.goods_id
         LEFT JOIN nideshop_specification ON nideshop_specification.id = nideshop_goods_specification.specification_id
-        WHERE nideshop_goods_specification.merchant_id=#{merchantId}
+        WHERE 1=1
+        <if test="merchantId != null and merchantId.trim() != ''">
+            and nideshop_goods_specification.merchant_id=#{merchantId}
+        </if>
         <if test="goodsName != null and goodsName.trim() != ''">
             AND nideshop_goods.name LIKE concat('%',#{goodsName},'%')
         </if>

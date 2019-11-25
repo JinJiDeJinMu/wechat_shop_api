@@ -41,7 +41,10 @@
         nideshop_goods.name goods_name
         from nideshop_product
         LEFT JOIN nideshop_goods ON nideshop_product.goods_id = nideshop_goods.id
-        WHERE 1=1 and nideshop_product.merchant_id = ${merchant_id} 
+        WHERE 1=1
+        <if test="merchant_id != null and merchant_id.trim() != ''">
+            and nideshop_product.merchant_id = ${merchant_id}
+        </if>
         <if test="goodsId != null and goodsId.trim() != ''">
             AND nideshop_product.goods_id = #{goodsId}
         </if>
@@ -64,7 +67,10 @@
     <select id="queryTotal" resultType="int">
         select count(*) from nideshop_product
         LEFT JOIN nideshop_goods ON nideshop_product.goods_id = nideshop_goods.id
-        WHERE 1=1 and nideshop_product.merchant_id = ${merchant_id} 
+        WHERE 1=1
+        <if test="merchant_id != null and merchant_id.trim() != ''">
+            and nideshop_product.merchant_id = ${merchant_id}
+        </if>
         <if test="goodsId != null and goodsId.trim() != ''">
             AND nideshop_product.goods_id = #{goodsId}
         </if>
