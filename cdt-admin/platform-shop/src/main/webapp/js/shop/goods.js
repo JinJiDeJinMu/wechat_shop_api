@@ -33,8 +33,10 @@ $(function () {
                 label: '购买类型', name: 'purchaseType', index: 'purchaseType', width: 80, formatter: function (value) {
                     if (value === 0) {
                         return "核销";
-                    } else {
+                    } else if(value === 1){
                         return "邮寄";
+                    } else{
+                        return "无";
                     }
                 }
             }]
@@ -107,7 +109,7 @@ var vm = new Vue({
             successTime: 0,
             groupPrice: 1,
             categoryName: '',
-            purchaseType:'',
+            purchaseType:1,
             merchantId:''
         },
         ruleValidate: {
@@ -235,7 +237,8 @@ var vm = new Vue({
                 successPeople: 0,
                 successTime: 0,
                 groupPrice: 1,
-                categoryName: ''
+                categoryName: '',
+                purchaseType:1
             };
             $('#goodsDesc').editable('setHTML', '');
             vm.getCategory();

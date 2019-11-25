@@ -1,0 +1,13 @@
+package com.platform.dao;
+
+import com.platform.entity.CdtCustomerServiceEntity;
+
+/**
+ * 客服管理表Dao
+ *
+ * @author lipengjun
+ * @date 2019-11-25 19:27:34
+ */
+public interface CdtCustomerServiceDao extends BaseDao<CdtCustomerServiceEntity> {
+
+}
