@@ -199,10 +199,11 @@ public class ApiGoodsController extends ApiBaseAction {
         info.setBrowse(info.getBrowse() + 1);
         goodsService.updateBrowse(info);
         Long mid = info.getMerchantId();
-
-        Map<String, Object> sysuser = this.mlsUserSer.getEntityMapper().getSysUserByMid(mid);
-        if (sysuser != null) {
-            info.setUser_brokerage_price(info.getRetail_price().multiply(new BigDecimal(sysuser.get("FX").toString())).multiply(new BigDecimal(info.getBrokerage_percent()).divide(new BigDecimal("10000"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+        if(mid>0){
+            Map<String, Object> sysuser = this.mlsUserSer.getEntityMapper().getSysUserByMid(mid);
+            if (sysuser != null) {
+                info.setUser_brokerage_price(info.getRetail_price().multiply(new BigDecimal(sysuser.get("FX").toString())).multiply(new BigDecimal(info.getBrokerage_percent()).divide(new BigDecimal("10000"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+            }
         }
         resultObj.put("info", info);
         //添加商家信息
