@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("specification")
-public class SpecificationController {
+public class SpecificationController extends BaseController {
     @Autowired
     private SpecificationService specificationService;
     @Autowired
@@ -42,7 +42,10 @@ public class SpecificationController {
         Query query = new Query(params);
         if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
             query.put("merchant_id", ShiroUtils.getUserEntity().getMerchantId());
+        } else {
+
         }
+        query.put("sidx", "id");
         List<SpecificationEntity> specificationList = specificationService.queryList(query);
         int total = specificationService.queryTotal(query);
 
