@@ -6,6 +6,7 @@ import com.platform.common.CommentReq;
 import com.platform.entity.CommentPictureVo;
 import com.platform.entity.CommentVo;
 import com.platform.entity.RepCommentVo;
+import com.platform.entity.UserVo;
 import com.platform.oss.OSSFactory;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
@@ -56,7 +57,7 @@ public class CommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 500, message = "If internal server error."),
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
-    @PostMapping("list")
+    @GetMapping("list")
     @IgnoreAuth
     public Result<Object> List(@RequestParam Integer goodId,
                                @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
@@ -80,7 +81,9 @@ public class CommentV2Controller extends ApiBaseAction {
         for (CommentReq commentItem : commentList) {
 //            commentItem.setContent(Base64.decode(commentItem.getContent()));
             commentItem.setContent(commentItem.getContent());
-            commentItem.setUserInfo(userService.queryObject(commentItem.getUserId()));
+            UserVo userVo =userService.queryObject(commentItem.getUserId());
+            userVo.setNickname(Base64.decode(userVo.getNickname()));
+            commentItem.setUserInfo(userVo);
 
             Map paramPicture = new HashMap();
             paramPicture.put("comment_id", commentItem.getId());
@@ -104,7 +107,7 @@ public class CommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
     @IgnoreAuth
-    @RequestMapping("post")
+    @PostMapping("post")
     public Result<Object> post(
 //                               @LoginUser UserVo loginUser,
             Long userId,
@@ -163,7 +166,7 @@ public class CommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 500, message = "If internal server error."),
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
-    @RequestMapping("reply")
+    @PostMapping("reply")
     @IgnoreAuth
     public Result<Object> reply(
 //                                @LoginUser UserVo loginUser,
