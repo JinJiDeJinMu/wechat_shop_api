@@ -56,7 +56,7 @@ public class CommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 500, message = "If internal server error."),
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
-    @GetMapping("list")
+    @PostMapping("list")
     @IgnoreAuth
     public Result<Object> List(@RequestParam Integer goodId,
                                @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
