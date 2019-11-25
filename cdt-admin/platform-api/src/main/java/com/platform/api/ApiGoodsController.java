@@ -204,7 +204,7 @@ public class ApiGoodsController extends ApiBaseAction {
         if (sysuser != null) {
             info.setUser_brokerage_price(info.getRetail_price().multiply(new BigDecimal(sysuser.get("FX").toString())).multiply(new BigDecimal(info.getBrokerage_percent()).divide(new BigDecimal("10000"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
         }
-        resultObj.put("goodsInfo", info);
+        resultObj.put("info", info);
         //添加商家信息
         CdtMerchantEntity cdtMerchant = cdtMerchantService.queryObject(info.getMerchantId());
         resultObj.put("merchantInfo", cdtMerchant);
