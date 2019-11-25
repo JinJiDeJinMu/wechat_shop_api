@@ -66,8 +66,9 @@ public class ApiPurchasePeopleController {
     @RequestMapping("/save")
 //    @RequiresPermissions("nideshoppurchasepeople:save")
     @ResponseBody
-    public R save(@RequestBody PurchasePeopleEntity nideshopPurchasePeople) {
-        PurchasePeopleService.save(nideshopPurchasePeople);
+    @IgnoreAuth
+    public R save(PurchasePeopleEntity PurchasePeople) {
+        PurchasePeopleService.save(PurchasePeople);
 
         return R.ok();
     }

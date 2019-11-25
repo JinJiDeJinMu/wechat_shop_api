@@ -161,5 +161,4 @@ public class IndexV2Controller extends ApiBaseAction {
         newCategory.put("goodsList", goodsVoList);
         return Result.success(newCategory);
     }
-
 }
