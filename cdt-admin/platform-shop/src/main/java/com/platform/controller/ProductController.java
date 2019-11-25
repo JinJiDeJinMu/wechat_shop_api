@@ -1,12 +1,12 @@
 package com.platform.controller;
 
+import com.platform.constance.ShopShow;
 import com.platform.entity.ProductEntity;
 import com.platform.service.ProductService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
 import com.platform.utils.ShiroUtils;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("product")
-public class ProductController {
+public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
 
@@ -36,7 +36,9 @@ public class ProductController {
     public R list(@RequestParam Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
-        query.put("merchant_id", ShiroUtils.getUserEntity().getMerchantId());
+        if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
+            query.put("merchant_id", ShiroUtils.getUserEntity().getMerchantId());
+        }
         List<ProductEntity> productList = productService.queryList(query);
         int total = productService.queryTotal(query);
         PageUtils pageUtil = new PageUtils(productList, total, query.getLimit(), query.getPage());

@@ -1,5 +1,6 @@
 package com.platform.controller;
 
+import com.platform.constance.ShopShow;
 import com.platform.entity.SysUserEntity;
 import com.platform.entity.UserCouponEntity;
 import com.platform.service.UserCouponService;
@@ -33,7 +34,9 @@ public class UserCouponController {
         //查询列表数据
         SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
         Query query = new Query(params);
-        query.put("merchantId",sysUserEntity.getMerchantId());
+        if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
+            query.put("merchantId", sysUserEntity.getMerchantId());
+        }
         List<UserCouponEntity> userCouponList = userCouponService.queryList(query);
         int total = userCouponService.queryTotal(query);
         for(UserCouponEntity user : userCouponList) {

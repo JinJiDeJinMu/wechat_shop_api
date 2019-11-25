@@ -34,11 +34,10 @@ public class GoodsController {
     @RequestMapping("/list")
     @RequiresPermissions("goods:list")
     public R list(@RequestParam Map<String, Object> params) {
-        SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
         //查询列表数据
         Query query = new Query(params);
-        if (sysUserEntity.getCreateUserId() != ShopShow.ADMINISTRATOR.getCode()) {
-            query.put("merchantId", sysUserEntity.getMerchantId());
+        if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
+            query.put("merchantId", ShiroUtils.getUserEntity().getMerchantId());
         }
         query.put("isDelete", 0);
         List<GoodsEntity> goodsList = goodsService.queryList(query);
@@ -98,7 +97,7 @@ public class GoodsController {
     @RequestMapping("/queryAll")
     public R queryAll(@RequestParam Map<String, Object> params) {
         params.put("isDelete", 0);
-        if (ShiroUtils.getUserEntity().getMerchantId().intValue() != ShopShow.ADMINISTRATOR.getCode()) {
+        if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
             params.put("merchantId", ShiroUtils.getUserEntity().getMerchantId());
         }
         List<GoodsEntity> list = goodsService.queryList(params);

@@ -1,7 +1,6 @@
 package com.platform.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 
 /**
@@ -26,7 +25,7 @@ public class GoodsSpecificationEntity implements Serializable {
     //规范图片
     private String picUrl;
     //商户ID
-    private Integer merchantId;
+    private Long merchantId;
 
     /**
      * 翻译用字段
@@ -122,11 +121,11 @@ public class GoodsSpecificationEntity implements Serializable {
         return picUrl;
     }
 
-	public Integer getMerchantId() {
+    public Long getMerchantId() {
 		return merchantId;
 	}
 
-	public void setMerchantId(Integer merchantId) {
+    public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
 	}
     

@@ -7,7 +7,6 @@ import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
 import com.platform.utils.ShiroUtils;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("brand")
-public class BrandController {
+public class BrandController extends BaseController {
     @Autowired
     private BrandService brandService;
 
@@ -35,9 +34,7 @@ public class BrandController {
     @RequiresPermissions("brand:list")
     public R list(@RequestParam Map<String, Object> params) {
         //查询列表数据
-        Query query = new Query(params);
-        SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
-        query.put("merchantId",sysUserEntity.getMerchantId());
+        Query query = getqCurrentQuery(params);
         List<BrandEntity> brandList = brandService.queryList(query);
         int total = brandService.queryTotal(query);
 

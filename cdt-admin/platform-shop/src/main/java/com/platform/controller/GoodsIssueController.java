@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("goodsissue")
-public class GoodsIssueController {
+public class GoodsIssueController extends BaseController {
     @Autowired
     private GoodsIssueService goodsIssueService;
 
@@ -33,8 +33,7 @@ public class GoodsIssueController {
     @RequiresPermissions("goodsissue:list")
     public R list(@RequestParam Map<String, Object> params) {
         //查询列表数据
-        Query query = new Query(params);
-        query.put("merchant_id", ShiroUtils.getUserEntity().getMerchantId());
+        Query query = getqCurrentQuery(params);
         List<GoodsIssueEntity> goodsIssueList = goodsIssueService.queryList(query);
         int total = goodsIssueService.queryTotal(query);
 
@@ -60,7 +59,7 @@ public class GoodsIssueController {
     @RequestMapping("/save")
     @RequiresPermissions("goodsissue:save")
     public R save(@RequestBody GoodsIssueEntity goodsIssue) {
-    	goodsIssue.setMerchant_id(ShiroUtils.getUserEntity().getMerchantId().intValue());
+        goodsIssue.setMerchant_id(ShiroUtils.getUserEntity().getMerchantId().intValue());
         goodsIssueService.save(goodsIssue);
 
         return R.ok();

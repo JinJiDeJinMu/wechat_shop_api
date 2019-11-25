@@ -1,7 +1,7 @@
 package com.platform.constance;
 
 public enum ShopShow {
-    ADMINISTRATOR("活动的", 1), SHOPBOSS("店家", 0);
+    ADMINISTRATOR("活动的", -1), SHOPBOSS("店家", 0);
     // 成员变量
     private String name;
 

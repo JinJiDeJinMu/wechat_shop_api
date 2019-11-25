@@ -33,8 +33,10 @@ public class GoodsSpecificationController {
     @RequestMapping("/list")
     @RequiresPermissions("goodsspecification:list")
     public R list(@RequestParam Map<String, Object> params) {
-        //查询列表数据
-    	params.put("merchantId", ShiroUtils.getUserEntity().getMerchantId());
+        if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
+            //查询列表数据
+            params.put("merchantId", ShiroUtils.getUserEntity().getMerchantId());
+        }
         Query query = new Query(params);
 
         List<GoodsSpecificationEntity> goodsSpecificationList = goodsSpecificationService.queryList(query);
@@ -62,7 +64,7 @@ public class GoodsSpecificationController {
     @RequestMapping("/save")
     @RequiresPermissions("goodsspecification:save")
     public R save(@RequestBody GoodsSpecificationEntity goodsSpecification) {
-    	goodsSpecification.setMerchantId(ShiroUtils.getUserEntity().getMerchantId().intValue());
+        goodsSpecification.setMerchantId(ShiroUtils.getUserEntity().getMerchantId());
         goodsSpecificationService.save(goodsSpecification);
 
         return R.ok();

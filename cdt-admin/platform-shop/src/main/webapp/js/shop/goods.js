@@ -170,7 +170,7 @@ var vm = new Vue({
         listQuery: Object.assign({}, defaultListQuery),
         list: null,
         total: null,
-        listLoading: true,
+        listLoading: false,
         selectProductCateValue: null,
         multipleSelection: [],
         productCateOptions: [],

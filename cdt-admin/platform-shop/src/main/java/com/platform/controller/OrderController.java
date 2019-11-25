@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("order")
-public class OrderController {
+public class OrderController extends BaseController {
     @Autowired
     private OrderService orderService;
 	@Autowired
