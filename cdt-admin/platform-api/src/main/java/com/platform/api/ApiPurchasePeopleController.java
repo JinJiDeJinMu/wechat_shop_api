@@ -22,7 +22,7 @@ import java.util.Map;
  * @date 2019-11-25 09:39:01
  */
 @Api(value = "未名严选详情购买用户", tags = "购买人群列表")
-@Controller
+@RestController
 @RequestMapping("/api/v2/purchasePeople")
 public class ApiPurchasePeopleController {
     @Autowired
