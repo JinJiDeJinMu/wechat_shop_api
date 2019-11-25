@@ -22,6 +22,14 @@ public class ApiGoodsService {
         return goodsDao.queryObject(id);
     }
 
+    public boolean checkBuy(Integer id) {
+        Integer buy = goodsDao.checkBuy(id);
+        if (buy == null) {
+            return false;
+        }
+
+        return buy > 0;
+    }
 
     public List<GoodsVo> queryList(Map<String, Object> map) {
         return goodsDao.queryList(map);

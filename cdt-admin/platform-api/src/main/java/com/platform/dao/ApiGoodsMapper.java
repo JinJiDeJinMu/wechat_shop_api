@@ -13,6 +13,7 @@ import java.util.Map;
  */
 public interface ApiGoodsMapper extends BaseDao<GoodsVo> {
 
+    Integer checkBuy(Object id);
     List<GoodsVo> queryHotGoodsList(Map<String, Object> params);
 
     List<GoodsVo> queryCatalogProductList(Map<String, Object> params);

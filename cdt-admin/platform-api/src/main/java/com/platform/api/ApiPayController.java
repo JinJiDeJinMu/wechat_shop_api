@@ -416,17 +416,17 @@ public class ApiPayController extends ApiBaseAction {
                 map.put("all_order_id", result.getOut_trade_no());	
                 List<OrderVo> lists = orderService.queryList(map);
                 OrderVo vo = null;
-                for(OrderVo v : lists) {
-                	vo = v;
-                	try {
-                    	//调用分销接口(现在支付成功就分润，后期要改造变成收货后，或者变成不可以体现的分润)
-                    	fx(new Long(vo.getPromoter_id()), vo.getBrokerage(), vo.getOrder_price(), vo.getId(), vo.getMerchant_id());
-                    }catch(Exception e) {
-                    	System.out.println("================分销错误开始================");
-                    	e.printStackTrace();
-                    	System.out.println("================分销错误结束================");
-                    }
-                }
+//                for(OrderVo v : lists) {
+//                	vo = v;
+//                	try {
+//                    	//调用分销接口(现在支付成功就分润，后期要改造变成收货后，或者变成不可以体现的分润)
+//                    	fx(new Long(vo.getPromoter_id()), vo.getBrokerage(), vo.getOrder_price(), vo.getId(), vo.getMerchant_id());
+//                    }catch(Exception e) {
+//                    	System.out.println("================分销错误开始================");
+//                    	e.printStackTrace();
+//                    	System.out.println("================分销错误结束================");
+//                    }
+//                }
                 
                 
                 response.getWriter().write(setXml("SUCCESS", "OK"));

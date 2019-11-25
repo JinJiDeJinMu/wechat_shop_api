@@ -55,6 +55,12 @@
 		select * from nideshop_goods where id = #{value}
 	</select>
 
+    <select id="checkBuy" resultType="java.lang.Integer">
+		select count(*) from nideshop_goods where id = #{value}
+		and  is_delete = 1
+        and  is_on_sale =0
+	</select>
+
     <select id="queryList" resultMap="goodsMap">
         select
         <if test="fields != null and fields != ''">

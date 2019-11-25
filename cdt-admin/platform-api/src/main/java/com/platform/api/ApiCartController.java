@@ -67,54 +67,54 @@ public class ApiCartController extends ApiBaseAction {
                 checkedGoodsAmount = checkedGoodsAmount.add(cartItem.getRetail_price().multiply(new BigDecimal(cartItem.getNumber())));
             }
         }
+
         // 获取优惠信息提示
-        Map couponParam = new HashMap();
-        couponParam.put("enabled", true);
-        Integer[] send_types = new Integer[]{0, 7};
-        couponParam.put("send_types", send_types);
+//        Map couponParam = new HashMap();
+//        couponParam.put("enabled", true);
+//        Integer[] send_types = new Integer[]{0, 7};
+//        couponParam.put("send_types", send_types);
         List<CouponInfoVo> couponInfoList = new ArrayList();
-        List<CouponVo> couponVos = apiCouponService.queryList(couponParam);
-        if (null != couponVos && couponVos.size() > 0) {
-            CouponInfoVo fullCutVo = new CouponInfoVo();
-            BigDecimal fullCutDec = new BigDecimal(0);
-            BigDecimal minAmount = new BigDecimal(100000);
-            for (CouponVo couponVo : couponVos) {
-                BigDecimal difDec = couponVo.getMin_goods_amount().subtract(checkedGoodsAmount).setScale(2, BigDecimal.ROUND_HALF_UP);
-                if (couponVo.getSend_type() == 0 && difDec.doubleValue() > 0.0
-                        && minAmount.compareTo(couponVo.getMin_goods_amount()) > 0) {
-                    fullCutDec = couponVo.getType_money();
-                    minAmount = couponVo.getMin_goods_amount();
-                    fullCutVo.setType(1);
-                    fullCutVo.setMsg(couponVo.getName() + "，还差" + difDec + "元");
-                } else if (couponVo.getSend_type() == 0 && difDec.doubleValue() < 0.0 && fullCutDec.compareTo(couponVo.getType_money()) < 0) {
-                    fullCutDec = couponVo.getType_money();
-                    fullCutVo.setType(0);
-                    fullCutVo.setMsg("可使用满减券" + couponVo.getName());
-                }
-                if (couponVo.getSend_type() == 7 && difDec.doubleValue() > 0.0) {
-                    CouponInfoVo cpVo = new CouponInfoVo();
-                    cpVo.setMsg("满￥" + couponVo.getMin_amount() + "元免配送费，还差" + difDec + "元");
-                    cpVo.setType(1);
-                    couponInfoList.add(cpVo);
-                } else if (couponVo.getSend_type() == 7) {
-                    CouponInfoVo cpVo = new CouponInfoVo();
-                    cpVo.setMsg("满￥" + couponVo.getMin_amount() + "元免配送费");
-                    couponInfoList.add(cpVo);
-                }
-            }
-            if (!StringUtils.isNullOrEmpty(fullCutVo.getMsg())) {
-                couponInfoList.add(fullCutVo);
-            }
-        }
+//        List<CouponVo> couponVos = apiCouponService.queryList(couponParam);
+//        if (null != couponVos && couponVos.size() > 0) {
+//            CouponInfoVo fullCutVo = new CouponInfoVo();
+//            BigDecimal fullCutDec = new BigDecimal(0);
+//            BigDecimal minAmount = new BigDecimal(100000);
+//            for (CouponVo couponVo : couponVos) {
+//                BigDecimal difDec = couponVo.getMin_goods_amount().subtract(checkedGoodsAmount).setScale(2, BigDecimal.ROUND_HALF_UP);
+//                if (couponVo.getSend_type() == 0 && difDec.doubleValue() > 0.0
+//                        && minAmount.compareTo(couponVo.getMin_goods_amount()) > 0) {
+//                    fullCutDec = couponVo.getType_money();
+//                    minAmount = couponVo.getMin_goods_amount();
+//                    fullCutVo.setType(1);
+//                    fullCutVo.setMsg(couponVo.getName() + "，还差" + difDec + "元");
+//                } else if (couponVo.getSend_type() == 0 && difDec.doubleValue() < 0.0 && fullCutDec.compareTo(couponVo.getType_money()) < 0) {
+//                    fullCutDec = couponVo.getType_money();
+//                    fullCutVo.setType(0);
+//                    fullCutVo.setMsg("可使用满减券" + couponVo.getName());
+//                }
+//                if (couponVo.getSend_type() == 7 && difDec.doubleValue() > 0.0) {
+//                    CouponInfoVo cpVo = new CouponInfoVo();
+//                    cpVo.setMsg("满￥" + couponVo.getMin_amount() + "元免配送费，还差" + difDec + "元");
+//                    cpVo.setType(1);
+//                    couponInfoList.add(cpVo);
+//                } else if (couponVo.getSend_type() == 7) {
+//                    CouponInfoVo cpVo = new CouponInfoVo();
+//                    cpVo.setMsg("满￥" + couponVo.getMin_amount() + "元免配送费");
+//                    couponInfoList.add(cpVo);
+//                }
+//            }
+//            if (!StringUtils.isNullOrEmpty(fullCutVo.getMsg())) {
+//                couponInfoList.add(fullCutVo);
+//            }
+//        }
+
         resultObj.put("couponInfoList", couponInfoList);
         resultObj.put("cartList", cartList);
-        //
         Map<String, Object> cartTotal = new HashMap();
         cartTotal.put("goodsCount", goodsCount);
         cartTotal.put("goodsAmount", goodsAmount);
         cartTotal.put("checkedGoodsCount", checkedGoodsCount);
         cartTotal.put("checkedGoodsAmount", checkedGoodsAmount);
-        //
         resultObj.put("cartTotal", cartTotal);
         return resultObj;
     }
@@ -149,11 +149,19 @@ public class ApiCartController extends ApiBaseAction {
         Integer goodsId = jsonParam.getInteger("goodsId");
         Integer productId = jsonParam.getInteger("productId");
         Integer number = jsonParam.getInteger("number");
+
+
         //判断商品是否可以购买
         GoodsVo goodsInfo = goodsService.queryObject(goodsId);
         if (null == goodsInfo || goodsInfo.getIs_delete() == 1 || goodsInfo.getIs_on_sale() != 1) {
             return this.toResponsObject(400, "商品已下架", "");
         }
+
+//        boolean checkOnSale=goodsService.checkBuy(goodsId);
+//        if(checkOnSale){
+//            return this.toResponsObject(400, "商品已下架", "");
+//        }
+
         //取得规格的信息,判断规格库存
         ProductVo productInfo = productService.queryObject(productId);
         if (null == productInfo || productInfo.getGoods_number() < number) {
