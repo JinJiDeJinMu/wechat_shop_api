@@ -5,13 +5,14 @@ import com.chundengtai.base.result.Result;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.PurchasePeopleEntity;
 import com.platform.service.ApiPurchasePeopleService;
-import com.platform.utils.PageUtils;
-import com.platform.utils.Query;
 import com.platform.utils.R;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.Map;
  * @author lipengjun
  * @date 2019-11-25 09:39:01
  */
+@Api(value = "未名严选详情购买用户", tags = "购买人群列表")
 @Controller
 @RequestMapping("purchasePeople")
 public class ApiPurchasePeopleController {
@@ -32,11 +34,18 @@ public class ApiPurchasePeopleController {
     /**
      * 查看列表
      */
+    @ApiOperation(value = "获取商品购买用户列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "goodsId", value = "产品id", dataType = "int", paramType = "query")
+    })
+    @ApiResponses({@ApiResponse(code = 200, message = "If successful, this method return JwtAccessTokenVO."),
+            @ApiResponse(code = 400, message = "If bad request."),
+            @ApiResponse(code = 500, message = "If internal server error."),
+            @ApiResponse(code = 503, message = "If service unavailable.")
+    })
     @RequestMapping("/list")
-//    @RequiresPermissions("nideshoppurchasepeople:list")
-    @ResponseBody
     @IgnoreAuth
-    public Result<Map<String, Object>> list(Integer goodsId) {
+    public Result<Map<String, Object>> list(@RequestParam Integer goodsId) {
         //查询列表数据
         Map<String, Object> params= new HashMap<>();
         params.put("goodsId", goodsId);
@@ -52,8 +61,6 @@ public class ApiPurchasePeopleController {
      * 查看信息
      */
     @RequestMapping("/info/{id}")
-//    @RequiresPermissions("nideshoppurchasepeople:info")
-    @ResponseBody
     public R info(@PathVariable("id") Integer id) {
         PurchasePeopleEntity nideshopPurchasePeople = PurchasePeopleService.queryObject(id);
 
@@ -64,8 +71,6 @@ public class ApiPurchasePeopleController {
      * 保存
      */
     @RequestMapping("/save")
-//    @RequiresPermissions("nideshoppurchasepeople:save")
-    @ResponseBody
     @IgnoreAuth
     public R save(PurchasePeopleEntity PurchasePeople) {
         PurchasePeopleService.save(PurchasePeople);
@@ -77,8 +82,6 @@ public class ApiPurchasePeopleController {
      * 修改
      */
     @RequestMapping("/update")
-//    @RequiresPermissions("nideshoppurchasepeople:update")
-    @ResponseBody
     public R update(@RequestBody PurchasePeopleEntity nideshopPurchasePeople) {
         PurchasePeopleService.update(nideshopPurchasePeople);
 
@@ -89,8 +92,6 @@ public class ApiPurchasePeopleController {
      * 删除
      */
     @RequestMapping("/delete")
-//    @RequiresPermissions("nideshoppurchasepeople:delete")
-    @ResponseBody
     public R delete(@RequestBody Integer[] ids) {
         PurchasePeopleService.deleteBatch(ids);
 
@@ -101,7 +102,6 @@ public class ApiPurchasePeopleController {
      * 查看所有列表
      */
     @RequestMapping("/queryAll")
-    @ResponseBody
     public R queryAll(@RequestParam Map<String, Object> params) {
 
         List<PurchasePeopleEntity> list = PurchasePeopleService.queryList(params);
