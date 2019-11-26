@@ -39,7 +39,7 @@ import java.util.Map;
 @RequestMapping("/api/order")
 public class ApiOrderController extends ApiBaseAction {
     @Autowired
-    private WxPayService wxService;
+    private WxPayService wxPayService;
 
     @Autowired
     private ApiOrderService orderService;
@@ -259,7 +259,7 @@ public class ApiOrderController extends ApiBaseAction {
                 request.setOutRefundNo(String.valueOf(id));
                 request.setOpUserId(orderVo.getUser_id().toString());
 
-                WxPayRefundResult wxResult = wxService.refund(request);
+                WxPayRefundResult wxResult = wxPayService.refund(request);
                 WechatRefundApiResult result = WechatUtil.wxRefund(orderVo.getAll_order_id().toString(),
                 		allPrice.doubleValue(), orderVo.getAll_price().doubleValue());
 
