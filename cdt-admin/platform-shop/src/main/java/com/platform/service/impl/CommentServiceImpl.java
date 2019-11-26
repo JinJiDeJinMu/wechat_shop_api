@@ -60,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public int delete(Integer id) {
-        //删除评论同时删除评论的图片
+        //删除评论同时删除评论的图片11
         commentPictureDao.deleteByCommentId(id);
         return commentDao.delete(id);
     }

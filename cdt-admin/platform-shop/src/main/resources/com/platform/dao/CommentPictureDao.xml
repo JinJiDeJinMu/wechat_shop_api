@@ -28,7 +28,7 @@
         `sort_order`
         from nideshop_comment_picture
         WHERE 1=1
-        <if test="commentId != null and commentId.trim() != ''">
+        <if test="commentId != null">
             AND comment_id = #{commentId}
         </if>
         <choose>
