@@ -1,9 +1,9 @@
 package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chundengtai.base.constant.CacheConstant;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
-import com.platform.cache.J2CacheUtils;
 import com.platform.entity.*;
 import com.platform.service.ApiGoodsService;
 import com.platform.service.ApiProductService;
@@ -14,6 +14,7 @@ import com.platform.utils.Base64;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,14 +27,21 @@ import java.util.Map;
 @RequestMapping("/api/buy")
 public class ApiBuyController extends ApiBaseAction {
 
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final ApiGoodsService goodsService;
+    private final ApiProductService productService;
+    private final GroupBuyingService groupBuyingService;
+    private final GroupBuyingDetailedService groupBuyingDetailedService;
+
     @Autowired
-    private ApiGoodsService goodsService;
-    @Autowired
-    private ApiProductService productService;
-    @Autowired
-    private GroupBuyingService groupBuyingService;
-    @Autowired
-    private GroupBuyingDetailedService groupBuyingDetailedService;
+    public ApiBuyController(RedisTemplate<String, Object> redisTemplate, ApiGoodsService goodsService, ApiProductService productService, GroupBuyingService groupBuyingService, GroupBuyingDetailedService groupBuyingDetailedService) {
+        this.redisTemplate = redisTemplate;
+        this.goodsService = goodsService;
+        this.productService = productService;
+        this.groupBuyingService = groupBuyingService;
+        this.groupBuyingDetailedService = groupBuyingDetailedService;
+    }
+
     @ApiOperation(value = "商品添加")
     @PostMapping("/add")
     public Object addBuy(@LoginUser UserVo loginUser) {
@@ -58,8 +66,9 @@ public class ApiBuyController extends ApiBaseAction {
         goodsVo.setGoodsId(goodsId);
         goodsVo.setProductId(productId);
         goodsVo.setNumber(number);
-        
-        J2CacheUtils.put(J2CacheUtils.SHOP_CACHE_NAME, "goods" + loginUser.getUserId() + "", goodsVo);
+
+        redisTemplate.opsForValue().set(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId(), goodsVo);
+        //BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId());
         return toResponsMsgSuccess("添加成功");
     }
 

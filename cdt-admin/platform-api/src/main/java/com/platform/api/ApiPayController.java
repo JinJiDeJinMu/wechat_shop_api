@@ -1,8 +1,8 @@
 package com.platform.api;
 
+import com.chundengtai.base.constant.CacheConstant;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
-import com.platform.cache.J2CacheUtils;
 import com.platform.entity.*;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,10 @@ import java.util.*;
 @RequestMapping("/api/pay")
 public class ApiPayController extends ApiBaseAction {
     private Logger logger = Logger.getLogger(getClass());
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     @Autowired
     private ApiOrderService orderService;
     @Autowired
@@ -322,13 +327,17 @@ public class ApiPayController extends ApiBaseAction {
             //mlsUserSer.upUserProfit(order);
             return toResponsMsgSuccess("支付成功");
         } else if ("USERPAYING".equals(trade_state)) {
+
+            Integer num = (Integer) redisTemplate.opsForValue().get(CacheConstant.SHOP_CACHE_NAME + "queryRepeatNum" + order.getAll_order_id());
             // 重新查询 正在支付中
-            Integer num = (Integer) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + order.getAll_order_id() + "");
+            //Integer num = (Integer) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + order.getAll_order_id() + "");
             if (num == null) {
-                J2CacheUtils.put(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId + "", 1);
+                //J2CacheUtils.put(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId + "", 1);
+                redisTemplate.opsForValue().set(CacheConstant.SHOP_CACHE_NAME + "queryRepeatNum" + orderId, 1);
                 this.orderQuery(loginUser, orderId);
             } else if (num <= 3) {
-                J2CacheUtils.remove(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId);
+                redisTemplate.delete(CacheConstant.SHOP_CACHE_NAME + "queryRepeatNum" + orderId);
+                //J2CacheUtils.remove(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId);
                 this.orderQuery(loginUser, orderId);
             } else {
                 return toResponsFail("查询失败,error=" + trade_state);

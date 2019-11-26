@@ -1,8 +1,8 @@
 package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chundengtai.base.constant.CacheConstant;
 import com.platform.annotation.LoginUser;
-import com.platform.cache.J2CacheUtils;
 import com.platform.dao.ApiCouponMapper;
 import com.platform.entity.*;
 import com.platform.service.*;
@@ -11,6 +11,7 @@ import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -190,8 +191,8 @@ public class ApiCartController extends ApiBaseAction {
                     goodsSepcifitionValue[i] = specificationEntities.get(i).getValue();
                 }
             }
-            
-            
+
+
             cartInfo = new CartVo();
             cartInfo.setGoods_id(goodsId);
             cartInfo.setProduct_id(productId);
@@ -400,63 +401,66 @@ public class ApiCartController extends ApiBaseAction {
         return toResponsSuccess(resultObj);
     }
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     /**
      * 订单提交前的检验和填写相关订单信息
      * activityType 1 直接购买  2 团购购买
      */
     @ApiOperation(value = "订单提交前的检验和填写相关订单信息")
     @GetMapping("checkout")
-    public Object checkout(@LoginUser UserVo loginUser, Integer couponId, @RequestParam(defaultValue = "cart") String type,Integer  addressId,String activityType) {
+    public Object checkout(@LoginUser UserVo loginUser, Integer couponId, @RequestParam(defaultValue = "cart") String type, Integer addressId, String activityType) {
         //activityType="2";
         Map<String, Object> resultObj = new HashMap();
         //根据收货地址计算运费
         BigDecimal freightPrice = new BigDecimal(0.00);
         //订单总金额
-        BigDecimal goodsTotalPrice=new BigDecimal(0.00);
+        BigDecimal goodsTotalPrice = new BigDecimal(0.00);
         //默认收货地址
-        AddressVo checkedAddress=null;
-        if(com.platform.utils.StringUtils.isNullOrEmpty(addressId) || addressId==0){
+        AddressVo checkedAddress = null;
+        if (com.platform.utils.StringUtils.isNullOrEmpty(addressId) || addressId == 0) {
             checkedAddress = addressService.queryDefaultAddress(loginUser.getUserId());//设置默认地址
-        }
-        else{
-            checkedAddress=addressService.queryObject(addressId);
+        } else {
+            checkedAddress = addressService.queryObject(addressId);
         }
         resultObj.put("checkedAddress", checkedAddress);
         // * 获取要购买的商品和总价
         ArrayList checkedGoodsList = new ArrayList();
 
-       List<MerCartVo> merCartVoList=new ArrayList<>();
+        List<MerCartVo> merCartVoList = new ArrayList<>();
         if (type.equals("cart")) {
             Map<String, Object> cartData = (Map<String, Object>) this.getCart(loginUser);
-            List<CartVo> cartVoList=new ArrayList<>();
+            List<CartVo> cartVoList = new ArrayList<>();
 
             //查询用户购物车信息
-            List<MerCartVo> merCartVos=cartService.queryMerCartList(loginUser.getUserId());
-            for(MerCartVo merCartVo:merCartVos){
-                freightPrice=freightPrice.add(merCartVo.getFreightPrice());
-                goodsTotalPrice=goodsTotalPrice.add(merCartVo.getOrderTotalPrice());
+            List<MerCartVo> merCartVos = cartService.queryMerCartList(loginUser.getUserId());
+            for (MerCartVo merCartVo : merCartVos) {
+                freightPrice = freightPrice.add(merCartVo.getFreightPrice());
+                goodsTotalPrice = goodsTotalPrice.add(merCartVo.getOrderTotalPrice());
                 merCartVo.setActualPrice(merCartVo.getFreightPrice().add(merCartVo.getOrderTotalPrice()));
-                Map map=new HashMap();
-                map.put("user_id",loginUser.getUserId());
-                map.put("merchantId",merCartVo.getMerchantId());
-                map.put("goodsTotalPrice",merCartVo.getOrderTotalPrice());
-                cartVoList=cartService.queryCheckedByUserIdAndMerId(map);
+                Map map = new HashMap();
+                map.put("user_id", loginUser.getUserId());
+                map.put("merchantId", merCartVo.getMerchantId());
+                map.put("goodsTotalPrice", merCartVo.getOrderTotalPrice());
+                cartVoList = cartService.queryCheckedByUserIdAndMerId(map);
                 merCartVo.setCartVoList(cartVoList);
                 //获取用户可用优惠券列表
                 List<CouponVo> couponVos = apiCouponService.queryUserCoupons(map);
-                List<CouponVo> validCouponVos= apiCouponService.getValidUserCoupons(map);
+                List<CouponVo> validCouponVos = apiCouponService.getValidUserCoupons(map);
                 merCartVo.setUserCouponList(validCouponVos);
                 merCartVoList.add(merCartVo);
             }
             //goodsTotalPrice = (BigDecimal) ((HashMap) cartData.get("cartTotal")).get("checkedGoodsAmount");
         } else { // 是直接购买的
-            BuyGoodsVo goodsVO = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "goods" + loginUser.getUserId() + "");
+            //BuyGoodsVo goodsVO1 = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "goods" + loginUser.getUserId() + "");
+            BuyGoodsVo goodsVO = (BuyGoodsVo) redisTemplate.opsForValue().get(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId());
             ProductVo productInfo = productService.queryObject(goodsVO.getProductId());
             GoodsVo goods = goodsService.queryObject(goodsVO.getGoodsId());
             //计算订单的费用
             //商品总价
-            if(goods.getIs_secKill()==3){
-                if("2".equals(activityType)){//团购购买
+            if (goods.getIs_secKill() == 3) {
+                if ("2".equals(activityType)) {//团购购买
                     productInfo.setRetail_price(productInfo.getGroup_price());
 
                 }
@@ -472,24 +476,24 @@ public class ApiCartController extends ApiBaseAction {
 
             //计算运费
 
-            if(goods.getExtra_price() != null) {
-            	freightPrice = freightPrice.add(goods.getExtra_price().multiply(new BigDecimal(cartVo.getNumber())));
+            if (goods.getExtra_price() != null) {
+                freightPrice = freightPrice.add(goods.getExtra_price().multiply(new BigDecimal(cartVo.getNumber())));
             }
-            MerCartVo merCartVo=new MerCartVo();
+            MerCartVo merCartVo = new MerCartVo();
             merCartVo.setMerchantId(productInfo.getMerchant_id());
-            String merchantName  = cartService.queryMerchantName(merCartVo.getMerchantId());
+            String merchantName = cartService.queryMerchantName(merCartVo.getMerchantId());
             merCartVo.setMerchantName(merchantName);
             merCartVo.setCartVoList(checkedGoodsList);
             merCartVo.setOrderTotalPrice(goodsTotalPrice);
             merCartVo.setFreightPrice(freightPrice);
             merCartVo.setActualPrice(goodsTotalPrice.add(freightPrice));
             //获取优惠券
-            Map map=new HashMap();
-            map.put("user_id",loginUser.getUserId());
-            map.put("merchantId",merCartVo.getMerchantId());
-            map.put("goodsTotalPrice",merCartVo.getOrderTotalPrice());
+            Map map = new HashMap();
+            map.put("user_id", loginUser.getUserId());
+            map.put("merchantId", merCartVo.getMerchantId());
+            map.put("goodsTotalPrice", merCartVo.getOrderTotalPrice());
             List<CouponVo> couponVos = apiCouponService.queryUserCoupons(map);
-            List<CouponVo> validCouponVos= apiCouponService.getValidUserCoupons(map);
+            List<CouponVo> validCouponVos = apiCouponService.getValidUserCoupons(map);
             merCartVo.setUserCouponList(validCouponVos);
             merCartVoList.add(merCartVo);
 

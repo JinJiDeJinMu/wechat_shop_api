@@ -1,17 +1,14 @@
 package com.platform.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.aliyun.oss.common.utils.DateUtil;
-import com.platform.cache.J2CacheUtils;
+import com.chundengtai.base.constant.CacheConstant;
 import com.platform.dao.*;
 import com.platform.entity.*;
 import com.platform.util.CommonUtil;
-import com.platform.utils.DateUtils;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -37,6 +34,9 @@ public class ApiOrderService2 {
 	private ApiGoodsService goodsService;
 	@Autowired
 	UserRecordSer userRecordSer;
+
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
 
 	public OrderVo queryObject(Integer id) {
 		return orderDao.queryObject(id);
@@ -257,9 +257,11 @@ public class ApiOrderService2 {
 			double brokerage_percent = 0.0;
 			BigDecimal freightPrice = BigDecimal.ZERO;
 			BigDecimal couponPrice = new BigDecimal(0.00);
-			
-			BuyGoodsVo goodsVo = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME,
-					"goods" + loginUser.getUserId());
+
+//			BuyGoodsVo goodsVo = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME,
+//					"goods" + loginUser.getUserId());
+
+			BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId());
 			ProductVo productInfo = productService.queryObject(goodsVo.getProductId());
 			// 计算订单的费用
 			// 商品总价
