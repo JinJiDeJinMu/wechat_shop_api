@@ -1,5 +1,8 @@
 package com.platform.api;
 
+import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
+import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
+import com.github.binarywang.wxpay.service.WxPayService;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.OrderGoodsVo;
@@ -11,6 +14,7 @@ import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiPageUtils;
 import com.platform.util.wechat.WechatRefundApiResult;
 import com.platform.util.wechat.WechatUtil;
+import com.platform.utils.CharUtil;
 import com.platform.utils.Query;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,16 +39,25 @@ import java.util.Map;
 @RequestMapping("/api/order")
 public class ApiOrderController extends ApiBaseAction {
     @Autowired
+    private WxPayService wxService;
+
+    @Autowired
     private ApiOrderService orderService;
+
     @Autowired
     private ApiOrderGoodsService orderGoodsService;
+
     @Autowired
     private UserRecordSer userRecordSer;
+
     @Autowired
     private MlsUserSer mlsUserSer;
+
     @Autowired
     private ApiUserCouponService userCouponService;
 
+    @Autowired
+    private KeygenService kengenService;
     /**
      */
     @ApiOperation(value = "订单首页")
@@ -235,9 +248,21 @@ public class ApiOrderController extends ApiBaseAction {
             }
             // 需要退款
             if (orderVo.getPay_status() == 2) {
-            	
+
+                WxPayRefundRequest request = new WxPayRefundRequest();
+                request.setNonceStr(CharUtil.getRandomString(16));
+                request.setOutTradeNo(orderVo.getOrder_sn());
+                request.setRefundFee(orderVo.getActual_price().multiply(new BigDecimal(100)).intValue());
+                request.setTotalFee(orderVo.getActual_price().multiply(new BigDecimal(100)).intValue());
+
+                long id = kengenService.genNumber().longValue();
+                request.setOutRefundNo(String.valueOf(id));
+                request.setOpUserId(orderVo.getUser_id().toString());
+
+                WxPayRefundResult wxResult = wxService.refund(request);
                 WechatRefundApiResult result = WechatUtil.wxRefund(orderVo.getAll_order_id().toString(),
                 		allPrice.doubleValue(), orderVo.getAll_price().doubleValue());
+
                 //测试修改金额
 //                WechatRefundApiResult result = WechatUtil.wxRefund(orderVo.getId().toString(), 0.01d, 0.01d);
                 if (result.getResult_code().equals("SUCCESS")) {
