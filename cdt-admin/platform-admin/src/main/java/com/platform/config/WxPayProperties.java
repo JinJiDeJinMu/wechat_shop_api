@@ -39,8 +39,11 @@ public class WxPayProperties {
     /**
      * 微信支付商户密钥
      */
-    @Value("${wx.secret}")
+    @Value("${wx.paySignKey}")
     private String mchKey;
+
+    @Value("${wx.paySignKey}")
+    private String notifyUrl;
 
     /**
      * 服务商模式下的子商户公众账号ID，普通模式请不要配置，请在配置文件中将对应项删除
