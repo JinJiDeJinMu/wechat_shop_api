@@ -30,7 +30,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v2/comment")
 @Slf4j
-public class CommentV2Controller extends ApiBaseAction {
+public class ApiCommentV2Controller extends ApiBaseAction {
 
     @Autowired
     private ApiCommentService commentService;
@@ -70,6 +70,7 @@ public class CommentV2Controller extends ApiBaseAction {
         param.put("page", pageIndex);
         param.put("limit", pagesize);
         param.put("goodId", goodId);
+        param.put("status", 0);
         param.put("order", "desc");
         param.put("sidx", "id");
         //查询列表数据
