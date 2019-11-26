@@ -123,6 +123,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         commentReq.setUserId(userId);
         commentReq.setOrderNo(orderNo);
         commentReq.setGoodId(goodId);
+        commentReq.setStatus(1);
         commentReq.setContent(content);
         commentReq.setStarLevel(starLevel);
         apiCommentV2Service.save(commentReq);
