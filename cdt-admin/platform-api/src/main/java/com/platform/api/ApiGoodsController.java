@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.chundengtai.base.result.Result;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.platform.annotation.APPLoginUser;
@@ -192,6 +193,7 @@ public class ApiGoodsController extends ApiBaseAction {
         Long userId = getUserId();
         //查找商品信息
         GoodsVo info = goodsService.queryObject(id);
+        if (info == null) return Result.failure("数据不存在!");
         //请求一次浏览量加一
         if (info.getBrowse() == null) {
             info.setBrowse(0);

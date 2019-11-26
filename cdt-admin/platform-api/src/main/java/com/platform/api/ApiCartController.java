@@ -436,7 +436,10 @@ public class ApiCartController extends ApiBaseAction {
             //查询用户购物车信息
             List<MerCartVo> merCartVos = cartService.queryMerCartList(loginUser.getUserId());
             for (MerCartVo merCartVo : merCartVos) {
-                freightPrice = freightPrice.add(merCartVo.getFreightPrice());
+                if (merCartVo.getFreightPrice() != null) {
+                    freightPrice = freightPrice.add(merCartVo.getFreightPrice());
+                }
+
                 goodsTotalPrice = goodsTotalPrice.add(merCartVo.getOrderTotalPrice());
                 merCartVo.setActualPrice(merCartVo.getFreightPrice().add(merCartVo.getOrderTotalPrice()));
                 Map map = new HashMap();

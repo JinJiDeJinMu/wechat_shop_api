@@ -58,6 +58,14 @@ public class Result<T> {
     /**
      * 业务异常返回业务代码和描述信息
      */
+    public static <T> Result<String> failure(String msg) {
+        return new Result<String>(ResultStatus.INTERNAL_SERVER_ERROR, msg);
+    }
+
+
+    /**
+     * 业务异常返回业务代码和描述信息
+     */
     public static <T> Result<T> failure() {
         return new Result<T>(ResultStatus.INTERNAL_SERVER_ERROR, null);
     }

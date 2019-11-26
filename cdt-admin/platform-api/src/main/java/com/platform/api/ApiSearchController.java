@@ -110,7 +110,6 @@ public class ApiSearchController extends ApiBaseAction {
                 i++;
             }
         }
-        //
         return toResponsSuccess(keys);
     }
 
@@ -120,7 +119,6 @@ public class ApiSearchController extends ApiBaseAction {
     @PostMapping("clearhistory")
     public Object clearhistory(@LoginUser UserVo loginUser) {
         searchHistoryService.deleteByUserId(loginUser.getUserId());
-        //
         return toResponsSuccess("");
     }
 }
