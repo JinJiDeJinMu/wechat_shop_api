@@ -742,19 +742,19 @@ public class ApiGoodsController extends ApiBaseAction {
      * 　　为您推荐
      */
     @ApiOperation(value = "为您推荐")
-    @ApiImplicitParams({@ApiImplicitParam(name = "categoryId", value = "分类id", paramType = "path", required = true)})
+    @ApiImplicitParams({@ApiImplicitParam(name = "attribute_category", value = "分类id", paramType = "path", required = true)})
     @IgnoreAuth
     @GetMapping(value = "hot")
-    public Object hot(Integer categoryId) {
+    public Object hot(Integer attribute_category) {
         Map<String, Object> resultObj = new HashMap();
         List<Map<String, Object>> newCategoryList = new ArrayList<>();
         List<GoodsVo> categoryGoods = new ArrayList<>();
         Map param = new HashMap<String, Object>();
-        param.put("category_id", categoryId);
+        param.put("attribute_category", attribute_category);
         param.put("sidx", "add_time");
         param.put("order", "desc");
         param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price");
-        PageHelper.startPage(0, 5, false);
+        PageHelper.startPage(0, 6, false);
         categoryGoods = goodsService.queryList(param);
 
         Map<String, Object> newCategory = new HashMap<String, Object>();
