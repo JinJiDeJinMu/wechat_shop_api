@@ -29,6 +29,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/cart")
 public class ApiCartController extends ApiBaseAction {
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     @Autowired
     private ApiCartService cartService;
     @Autowired
@@ -401,8 +405,6 @@ public class ApiCartController extends ApiBaseAction {
         return toResponsSuccess(resultObj);
     }
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 订单提交前的检验和填写相关订单信息
@@ -432,7 +434,6 @@ public class ApiCartController extends ApiBaseAction {
         if (type.equals("cart")) {
             Map<String, Object> cartData = (Map<String, Object>) this.getCart(loginUser);
             List<CartVo> cartVoList = new ArrayList<>();
-
             //查询用户购物车信息
             List<MerCartVo> merCartVos = cartService.queryMerCartList(loginUser.getUserId());
             for (MerCartVo merCartVo : merCartVos) {
@@ -441,7 +442,12 @@ public class ApiCartController extends ApiBaseAction {
                 }
 
                 goodsTotalPrice = goodsTotalPrice.add(merCartVo.getOrderTotalPrice());
-                merCartVo.setActualPrice(merCartVo.getFreightPrice().add(merCartVo.getOrderTotalPrice()));
+                if (merCartVo.getFreightPrice() != null) {
+                    merCartVo.setActualPrice(merCartVo.getFreightPrice().add(merCartVo.getOrderTotalPrice()));
+                } else {
+                    merCartVo.setFreightPrice(new BigDecimal(0));
+                    merCartVo.setActualPrice(merCartVo.getOrderTotalPrice());
+                }
                 Map map = new HashMap();
                 map.put("user_id", loginUser.getUserId());
                 map.put("merchantId", merCartVo.getMerchantId());
@@ -465,7 +471,6 @@ public class ApiCartController extends ApiBaseAction {
             if (goods.getIs_secKill() == 3) {
                 if ("2".equals(activityType)) {//团购购买
                     productInfo.setRetail_price(productInfo.getGroup_price());
-
                 }
             }
             goodsTotalPrice = productInfo.getRetail_price().multiply(new BigDecimal(goodsVO.getNumber()));
@@ -499,11 +504,7 @@ public class ApiCartController extends ApiBaseAction {
             List<CouponVo> validCouponVos = apiCouponService.getValidUserCoupons(map);
             merCartVo.setUserCouponList(validCouponVos);
             merCartVoList.add(merCartVo);
-
-
         }
-
-
         //获取可用的优惠券信息
         BigDecimal couponPrice = new BigDecimal(0.00);
         /*if (couponId != null && couponId != 0) {
@@ -515,12 +516,8 @@ public class ApiCartController extends ApiBaseAction {
 
         //订单的总价
         BigDecimal orderTotalPrice = goodsTotalPrice.add(freightPrice);
-
-        //
         BigDecimal actualPrice = orderTotalPrice.subtract(couponPrice);  //减去其它支付的金额后，要实际支付的金额
-
         resultObj.put("freightPrice", freightPrice);
-
         resultObj.put("couponPrice", couponPrice);
         resultObj.put("checkedGoodsList", merCartVoList);
         //resultObj.put("checkedGoodsList", checkedGoodsList);
