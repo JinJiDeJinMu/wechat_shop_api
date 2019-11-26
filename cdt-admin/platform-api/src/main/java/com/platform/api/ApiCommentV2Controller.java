@@ -2,7 +2,7 @@ package com.platform.api;
 
 import com.chundengtai.base.result.Result;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.common.CommentReq;
+import com.platform.entity.CommentReq;
 import com.platform.entity.CommentPictureVo;
 import com.platform.entity.CommentVo;
 import com.platform.entity.RepCommentVo;
@@ -82,7 +82,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         for (CommentReq commentItem : commentList) {
 //            commentItem.setContent(Base64.decode(commentItem.getContent()));
             commentItem.setContent(commentItem.getContent());
-            UserVo userVo =userService.queryObject(commentItem.getUserId());
+            UserVo userVo = userService.queryObject(commentItem.getUserId());
             userVo.setNickname(Base64.decode(userVo.getNickname()));
             commentItem.setUserInfo(userVo);
 
@@ -108,15 +108,15 @@ public class ApiCommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
     @IgnoreAuth
-    @PostMapping("post")
+    @GetMapping("post")
     public Result<Object> post(
 //                               @LoginUser UserVo loginUser,
-                                Long userId,
-                               @RequestParam String orderNo,
-                               @RequestParam Integer goodId,
-                               @RequestParam String content,
-                               @RequestParam Integer starLevel,
-                               MultipartFile[] imageList
+            @RequestParam Long userId,
+            @RequestParam String orderNo,
+            @RequestParam Integer goodId,
+            @RequestParam String content,
+            @RequestParam Integer starLevel,
+            MultipartFile[] imageList
     ) {
         CommentReq commentReq = new CommentReq();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
@@ -191,8 +191,6 @@ public class ApiCommentV2Controller extends ApiBaseAction {
     }
 
 
-
-
     @ApiOperation(value = "查询评论")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "commentId", value = "评论id", dataType = "Integer", paramType = "query", example = "2223333")})
@@ -204,7 +202,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
     public Result<Object> post(
 //                             @LoginUser UserVo loginUser,
             Long userId,
-                               @RequestParam Integer commentId
+            @RequestParam Integer commentId
     ) {
         Map resultModel = new HashMap();
         Map<String, Object> query = new HashMap<>();

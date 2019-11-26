@@ -3,7 +3,7 @@
 
 <mapper namespace="com.platform.dao.ApiCommentV2Mapper">
 
-    <resultMap type="com.platform.common.CommentReq" id="CommentV2Map">
+    <resultMap type="com.platform.entity.CommentReq" id="CommentV2Map">
         <result property="id" column="id"/>
         <result property="orderNo" column="order_no"/>
         <result property="goodId" column="good_id"/>
@@ -14,7 +14,7 @@
         <result property="status" column="status"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.common.CommentReq">
+    <select id="queryObject" resultType="com.platform.entity.CommentReq">
 		select
 			`id`,
     			`order_no`,
@@ -28,7 +28,7 @@
 		where id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.common.CommentReq">
+    <select id="queryList" resultType="com.platform.entity.CommentReq">
         select *
         from nideshop_comment_v2
         WHERE 1=1
@@ -71,7 +71,7 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.common.CommentReq" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.platform.entity.CommentReq" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_comment_v2(
                     			`order_no`,
                     			`good_id`,
@@ -92,7 +92,7 @@
                     			            )
 	</insert>
 
-    <update id="update" parameterType="com.platform.common.CommentReq">
+    <update id="update" parameterType="com.platform.entity.CommentReq">
         update nideshop_comment_v2
         <set>
             <if test="orderNo != null">`order_no` = #{orderNo

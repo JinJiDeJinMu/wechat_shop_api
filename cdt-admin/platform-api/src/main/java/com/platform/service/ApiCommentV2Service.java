@@ -1,6 +1,6 @@
 package com.platform.service;
 
-import com.platform.common.CommentReq;
+import com.platform.entity.CommentReq;
 import com.platform.dao.ApiCommentV2Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
