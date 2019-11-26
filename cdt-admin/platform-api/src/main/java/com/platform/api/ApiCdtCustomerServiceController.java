@@ -53,7 +53,6 @@ public class ApiCdtCustomerServiceController {
     @ResponseBody
     public R info(@PathVariable("id") Integer id) {
         CdtCustomerServiceVo cdtCustomerService = cdtCustomerServiceService.queryObject(id);
-
         return R.ok().put("cdtCustomerService", cdtCustomerService);
     }
 
@@ -66,7 +65,6 @@ public class ApiCdtCustomerServiceController {
     @ResponseBody
     public R save(@RequestBody CdtCustomerServiceVo cdtCustomerService) {
         cdtCustomerServiceService.save(cdtCustomerService);
-
         return R.ok();
     }
 
