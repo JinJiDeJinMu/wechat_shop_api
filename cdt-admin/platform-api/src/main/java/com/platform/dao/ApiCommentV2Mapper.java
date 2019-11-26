@@ -1,6 +1,6 @@
 package com.platform.dao;
 
-import com.platform.common.CommentReq;
+import com.platform.entity.CommentReq;
 
 /**
  * 评价表Dao

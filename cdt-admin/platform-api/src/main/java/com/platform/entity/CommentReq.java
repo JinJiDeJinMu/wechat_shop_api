@@ -1,4 +1,4 @@
-package com.platform.common;
+package com.platform.entity;
 
 import com.platform.entity.CommentPictureVo;
 import com.platform.entity.UserVo;

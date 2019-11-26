@@ -2,7 +2,7 @@ package com.platform.api;
 
 import com.chundengtai.base.result.Result;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.common.CommentReq;
+import com.platform.entity.CommentReq;
 import com.platform.entity.CommentPictureVo;
 import com.platform.entity.CommentVo;
 import com.platform.entity.RepCommentVo;
