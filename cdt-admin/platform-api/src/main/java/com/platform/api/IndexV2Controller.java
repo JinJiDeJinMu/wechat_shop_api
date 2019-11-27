@@ -69,6 +69,7 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("sidx", "sort_order");
         param.put("order", "desc");
         param.put("showPosition", 0);
+        param.put("enabled", 1);
         PageHelper.startPage(0, 10, false);
 //        List<CategoryVo> categoryList = categoryService.queryList(param);
         List<AttributeCategoryVo> categoryList = attributeCategoryMapper.queryList(param);
