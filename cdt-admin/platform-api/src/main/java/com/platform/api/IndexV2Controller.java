@@ -1,9 +1,11 @@
 package com.platform.api;
 
 import com.chundengtai.base.result.Result;
+import com.chundengtai.base.transfer.JsonTransfer;
 import com.github.pagehelper.PageHelper;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.dao.ApiAttributeCategoryMapper;
+import com.platform.dto.GoodsDTO;
 import com.platform.entity.AdVo;
 import com.platform.entity.AttributeCategoryVo;
 import com.platform.entity.GoodsVo;
@@ -98,11 +100,12 @@ public class IndexV2Controller extends ApiBaseAction {
             PageHelper.startPage(0, 4, false);
             categoryGoods = goodsService.queryList(param);
 
+            List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(categoryGoods, GoodsDTO.class);
             Map<String, Object> newCategory = new HashMap<String, Object>();
             newCategory.put("id", categoryItem.getId());
             newCategory.put("name", categoryItem.getName());
             newCategory.put("showStyle", categoryItem.getShowStyle());
-            newCategory.put("goodsList", categoryGoods);
+            newCategory.put("goodsList", goodsDTOS);
             newCategoryList.add(newCategory);
         }
         resultObj.put("productList", newCategoryList);
@@ -115,7 +118,7 @@ public class IndexV2Controller extends ApiBaseAction {
     @ApiOperation(value = "首页新品")
     @IgnoreAuth
     @GetMapping(value = "indexNewGoods")
-    public Result<List<GoodsVo>> indexGoods() {
+    public Result<List<GoodsDTO>> indexGoods() {
         //最新商品
         HashMap param = new HashMap<String, Object>();
         param.put("is_new", 1);
@@ -126,7 +129,8 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("fields", "id, name, list_pic_url, retail_price");
         PageHelper.startPage(0, 10, false);
         List<GoodsVo> newGoods = goodsService.queryList(param);
-        return Result.success(newGoods);
+        List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(newGoods, GoodsDTO.class);
+        return Result.success(goodsDTOS);
     }
 
     private List<AdVo> getCollectByType(List<AdVo> banner, Integer type) {
