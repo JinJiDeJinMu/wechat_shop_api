@@ -24,6 +24,9 @@
         <if test="showPosition != null">
             AND show_position = #{showPosition}
         </if>
+        <if test="enabled != null">
+            AND enabled = #{enabled}
+        </if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
