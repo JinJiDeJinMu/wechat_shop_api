@@ -14,7 +14,9 @@ import com.platform.service.ApiAdService;
 import com.platform.service.ApiCategoryService;
 import com.platform.service.ApiGoodsService;
 import com.platform.util.ApiBaseAction;
+import com.platform.util.ApiPageUtils;
 import com.platform.util.BannerType;
+import com.platform.utils.Query;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -126,7 +128,7 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("is_on_sale", 1);
         param.put("sidx", "add_time");
         param.put("order", "desc");
-        param.put("fields", "id, name, list_pic_url, retail_price");
+        param.put("fields", "id, name, list_pic_url, retail_price,market_price");
         PageHelper.startPage(0, 10, false);
         List<GoodsVo> newGoods = goodsService.queryList(param);
         List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(newGoods, GoodsDTO.class);
@@ -138,6 +140,34 @@ public class IndexV2Controller extends ApiBaseAction {
                 b.getType().equals(type)
         ).collect(Collectors.toList());
     }
+
+
+    /**
+     * app首页新品查看更多
+     */
+    @ApiOperation(value = "首页新品更多")
+    @IgnoreAuth
+    @GetMapping(value = "NewGoodsMore")
+    public Result<Object> NewGoodsMore(@RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
+                                              @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize) {
+        //最新商品
+        HashMap param = new HashMap<String, Object>();
+        param.put("page", pageIndex);
+        param.put("limit", pagesize);
+        param.put("is_new", 1);
+        param.put("is_delete", 0);
+        param.put("is_on_sale", 1);
+        param.put("sidx", "add_time");
+        param.put("order", "desc");
+        param.put("fields", "id, name, list_pic_url, retail_price,market_price");
+        Query query = new Query(param);
+//        PageHelper.startPage(pageIndex, pagesize, false);
+        List<GoodsVo> newGoods = goodsService.queryList(query);
+        int total = goodsService.queryTotal(query);
+        ApiPageUtils pageUtil = new ApiPageUtils(newGoods, total, query.getLimit(), query.getPage());
+        return Result.success(pageUtil);
+    }
+
 
     /**
      * app首页查看更多
