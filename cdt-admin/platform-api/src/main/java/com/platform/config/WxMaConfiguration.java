@@ -10,6 +10,7 @@ import cn.binarywang.wx.miniapp.message.WxMaMessageHandler;
 import cn.binarywang.wx.miniapp.message.WxMaMessageRouter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.platform.utils.StringUtils;
 import me.chanjar.weixin.common.bean.result.WxMediaUploadResult;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,24 +18,18 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author <a href="https://github.com/binarywang">Binary Wang</a>
  */
 @Configuration
 public class WxMaConfiguration {
+    @Autowired
     private WxMaProperties properties;
 
     private static Map<String, WxMaMessageRouter> routers = Maps.newHashMap();
     private static Map<String, WxMaService> maServices = Maps.newHashMap();
-
-    @Autowired
-    public WxMaConfiguration(WxMaProperties properties) {
-        this.properties = properties;
-    }
 
     public static WxMaService getMaService(String appid) {
         WxMaService wxService = maServices.get(appid);
@@ -51,26 +46,26 @@ public class WxMaConfiguration {
 
     @PostConstruct
     public void init() {
-        List<WxMaProperties.Config> configs = this.properties.getConfigs();
-        if (configs == null) {
+        if (!StringUtils.isNotEmpty(properties.getAppid())) {
             //return;
             throw new RuntimeException("大哥，拜托先看下项目首页的说明（readme文件），添加下相关配置，注意别配错了！");
         }
 
-        maServices = configs.stream()
-                .map(a -> {
-                    WxMaDefaultConfigImpl config = new WxMaDefaultConfigImpl();
-                    config.setAppid(a.getAppid());
-                    config.setSecret(a.getSecret());
-                    config.setToken(a.getToken());
-                    config.setAesKey(a.getAesKey());
-                    config.setMsgDataFormat(a.getMsgDataFormat());
+        maServices.put(this.properties.getAppid(), getWxMaService(this.properties));
+    }
 
-                    WxMaService service = new WxMaServiceImpl();
-                    service.setWxMaConfig(config);
-                    routers.put(a.getAppid(), this.newRouter(service));
-                    return service;
-                }).collect(Collectors.toMap(s -> s.getWxMaConfig().getAppid(), a -> a));
+    private WxMaService getWxMaService(WxMaProperties a) {
+        WxMaDefaultConfigImpl config = new WxMaDefaultConfigImpl();
+        config.setAppid(a.getAppid());
+        config.setSecret(a.getSecret());
+        config.setToken(a.getToken());
+        config.setAesKey(a.getAesKey());
+        config.setMsgDataFormat(a.getMsgDataFormat());
+
+        WxMaService service = new WxMaServiceImpl();
+        service.setWxMaConfig(config);
+        routers.put(a.getAppid(), this.newRouter(service));
+        return service;
     }
 
     private WxMaMessageRouter newRouter(WxMaService service) {
