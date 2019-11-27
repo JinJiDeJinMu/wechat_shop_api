@@ -77,6 +77,7 @@ public class WxMaUserController {
      * 获取用户绑定手机号信息
      * </pre>
      */
+    @IgnoreAuth
     @GetMapping("/phone")
     public String phone(@PathVariable String appid, String sessionKey, String signature,
                         String rawData, String encryptedData, String iv) {

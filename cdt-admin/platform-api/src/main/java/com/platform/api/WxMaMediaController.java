@@ -4,6 +4,7 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.constant.WxMaConstants;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
+import com.platform.annotation.IgnoreAuth;
 import com.platform.config.WxMaConfiguration;
 import me.chanjar.weixin.common.bean.result.WxMediaUploadResult;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -38,6 +39,7 @@ public class WxMaMediaController {
      *
      * @return 素材的media_id列表，实际上如果有的话，只会有一个
      */
+    @IgnoreAuth
     @PostMapping("/upload")
     public List<String> uploadMedia(@PathVariable String appid, HttpServletRequest request) throws WxErrorException {
         final WxMaService wxService = WxMaConfiguration.getMaService(appid);
@@ -71,6 +73,7 @@ public class WxMaMediaController {
     /**
      * 下载临时素材
      */
+    @IgnoreAuth
     @GetMapping("/download/{mediaId}")
     public File getMedia(@PathVariable String appid, @PathVariable String mediaId) throws WxErrorException {
         final WxMaService wxService = WxMaConfiguration.getMaService(appid);

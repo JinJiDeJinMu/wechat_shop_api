@@ -3,6 +3,7 @@ package com.platform.api;
 import cn.binarywang.wx.miniapp.api.WxMaQrcodeService;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.api.impl.WxMaQrcodeServiceImpl;
+import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.UserVo;
 import com.platform.util.ApiBaseAction;
@@ -22,7 +23,7 @@ import java.io.IOException;
  * **************************************************************
  * 公司名称    :
  * 系统名称    :
- * 类 名 称    :会员登录
+ * 类 名 称    :二维码获取
  * 功能描述    :会员登录
  * 业务描述    :会员登录
  * 作 者 名    :@Author Royal
@@ -48,6 +49,22 @@ public class QRCodeController extends ApiBaseAction {
     ) throws WxErrorException, IOException {
         Long shopUserId = loginUser.getUserId();
         params = shopUserId + "_" + params;
+        WxMaQrcodeService service1 = new WxMaQrcodeServiceImpl(wxMaService);
+        File image = service1.createWxaCodeUnlimit(params, page, 100, true, null, false);
+        String resource = "/data/wwwroot/school.chundengtai.com/qrcode";
+//        String qrImag = "public/jpg/";
+        // 将源文件拷贝到目标目录中，如果目标目录不存在，则创建
+        FileUtils.copyFileToDirectory(image, new File(resource));
+        return toResponsSuccess(image.getName());
+    }
+
+    @IgnoreAuth
+    @RequestMapping("/getQRCodeTest")
+    public Object getQRCodeTest(HttpServletRequest request,
+                                @RequestParam(value = "params", required = false) String params,
+                                @RequestParam(value = "page", required = false) String page
+    ) throws WxErrorException, IOException {
+        params = params;
         WxMaQrcodeService service1 = new WxMaQrcodeServiceImpl(wxMaService);
         File image = service1.createWxaCodeUnlimit(params, page, 100, true, null, false);
         String resource = "/data/wwwroot/school.chundengtai.com/qrcode";
