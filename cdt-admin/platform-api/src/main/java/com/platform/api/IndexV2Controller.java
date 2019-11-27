@@ -5,6 +5,7 @@ import com.chundengtai.base.transfer.JsonTransfer;
 import com.github.pagehelper.PageHelper;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.dao.ApiAttributeCategoryMapper;
+import com.platform.dto.AttributeCategoryDTO;
 import com.platform.dto.GoodsDTO;
 import com.platform.entity.AdVo;
 import com.platform.entity.AttributeCategoryVo;
@@ -73,9 +74,8 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("showPosition", 0);
         param.put("enabled", 1);
         PageHelper.startPage(0, 10, false);
-//        List<CategoryVo> categoryList = categoryService.queryList(param);
         List<AttributeCategoryVo> categoryList = attributeCategoryMapper.queryList(param);
-        resultObj.put("categoryList", categoryList);
+        resultObj.put("categoryList", JsonTransfer.convertList(categoryList, AttributeCategoryDTO.class));
 
 
         //分类下面模块的商品

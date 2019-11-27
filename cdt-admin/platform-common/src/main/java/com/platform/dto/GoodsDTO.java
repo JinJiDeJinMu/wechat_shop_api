@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 
 /**
@@ -33,8 +32,8 @@ public class GoodsDTO implements Serializable {
     private String goods_brief;
 
     //添加时间
-    @ApiModelProperty(value = "添加时间")
-    private Date add_time;
+//    @ApiModelProperty(value = "添加时间")
+//    private Date add_time;
 
     @ApiModelProperty(value = "商品主图")
     private String primary_pic_url;
