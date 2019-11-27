@@ -63,8 +63,17 @@
     <select id="queryTotal" resultType="int">
         select count(*) from nideshop_comment_v2
         WHERE 1=1
-        <if test="name != null">
-            AND name LIKE concat('%',#{name},'%')
+        <if test="goodId != null">
+            AND good_id = #{goodId}
+        </if>
+        <if test="orderNo != null">
+            AND order_no = #{orderNo}
+        </if>
+        <if test="starLevel != null">
+            AND star_level = #{starLevel}
+        </if>
+        <if test="userId != null">
+            AND user_id = #{userId}
         </if>
         <if test="status != null">
             AND status = #{status}
