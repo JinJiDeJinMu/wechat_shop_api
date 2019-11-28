@@ -22,8 +22,14 @@ public enum OrderTypeEnum {
     DELETE_ORDER(102, "订单已删除"),
     CLOSED_ORDER(103, "订单已关闭"),
     PAYED_ORDER(201, "订单已付款"),
+
+
     WRITE_OFF_PAY(202, "未核销"),
     WRITE_OFF_PAYED(203, "已核销"),
+
+
+    EXPRESS_NO_GET(204, "未代取"),
+    EXPRESS_GETED(205, "已代取"),
 
     SHIPPED_ORDER(300, "订单已发货"),
     CONFIRM_GOODS(301, "用户确认收货"),
