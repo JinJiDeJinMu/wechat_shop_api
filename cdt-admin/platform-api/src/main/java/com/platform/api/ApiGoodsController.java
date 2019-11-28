@@ -1,6 +1,8 @@
 package com.platform.api;
 
 import com.chundengtai.base.result.Result;
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
+import com.chundengtai.base.weixinapi.OrderTypeEnum;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.platform.annotation.APPLoginUser;
@@ -119,7 +121,7 @@ public class ApiGoodsController extends ApiBaseAction {
         Map params = new HashMap();
         params.put("page", page);
         params.put("limit", size);
-        params.put("is_secKill", "2");// 秒杀
+        params.put("is_secKill", GoodsTypeEnum.SECONDS_KILL.getCode());// 秒杀
         params.put("sidx", "start_time");
         params.put("order", "asc");
 
@@ -143,7 +145,7 @@ public class ApiGoodsController extends ApiBaseAction {
         Map params = new HashMap();
         params.put("page", page);
         params.put("limit", size);
-        params.put("is_secKill", "3");// 团购
+        params.put("is_secKill", GoodsTypeEnum.GROUP_GOODS.getCode());// 团购
         params.put("sidx", "id");
         params.put("order", "asc");
 
