@@ -19,8 +19,9 @@ public enum GoodsTypeEnum {
     ORDINARY_GOODS(1,"普通商品"),
     SECONDS_KILL(2,"秒杀"),
     GROUP_GOODS(3, "团购"),
-    EXPRESS_GET(4, "快递代取"),
-    WRITEOFF_ORDER(5, "核销订单");
+    KANJIA(4, "砍价"),
+    EXPRESS_GET(5, "快递代取"),
+    WRITEOFF_ORDER(6, "核销订单");
 
     private Integer code;
     private String desc;

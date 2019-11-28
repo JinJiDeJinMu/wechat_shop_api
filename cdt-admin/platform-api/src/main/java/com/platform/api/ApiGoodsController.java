@@ -2,7 +2,6 @@ package com.platform.api;
 
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
-import com.chundengtai.base.weixinapi.OrderTypeEnum;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.platform.annotation.APPLoginUser;

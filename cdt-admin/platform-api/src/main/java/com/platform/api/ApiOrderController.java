@@ -1,6 +1,6 @@
 package com.platform.api;
 
-import com.chundengtai.base.weixinapi.OrderTypeEnum;
+import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
@@ -242,9 +242,9 @@ public class ApiOrderController extends ApiBaseAction {
             allPrice = allPrice.add(o.getAll_price());
         }
 
-        if (orderVo.getOrder_status().equals(OrderTypeEnum.SHIPPED_ORDER.getCode())) {
+        if (orderVo.getOrder_status().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
             return toResponsFail("已发货，不能取消");
-        } else if (orderVo.getOrder_status().equals(OrderTypeEnum.CONFIRM_GOODS.getCode())) {
+        } else if (orderVo.getOrder_status().equals(OrderStatusEnum.CONFIRM_GOODS.getCode())) {
             return toResponsFail("已收货，不能取消");
         }
         try {
@@ -270,10 +270,10 @@ public class ApiOrderController extends ApiBaseAction {
                 //测试修改金额
                 //WechatRefundApiResult result2 = WechatUtil.wxRefund(orderVo.getAll_order_id().toString(), 0.01d, 0.01d);
                 if (wxResult.getResultCode().equals("SUCCESS")) {
-                    if (orderVo.getOrder_status().equals(OrderTypeEnum.PAYED_ORDER.getCode())) {
-                        orderVo.setOrder_status(OrderTypeEnum.REFUND_ORDER.getCode());
-                    } else if (orderVo.getOrder_status().equals(OrderTypeEnum.SHIPPED_ORDER.getCode())) {
-                        orderVo.setOrder_status(OrderTypeEnum.COMPLETED_ORDER.getCode());
+                    if (orderVo.getOrder_status().equals(OrderStatusEnum.PAYED_ORDER.getCode())) {
+                        orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
+                    } else if (orderVo.getOrder_status().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
+                        orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
                     }
 
                     orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
@@ -296,7 +296,7 @@ public class ApiOrderController extends ApiBaseAction {
         } catch (WxPayException e) {
             logger.error(e.getXmlString());
             if (e.getErrCodeDes().contains("订单已全额退款")) {
-                orderVo.setOrder_status(OrderTypeEnum.REFUND_ORDER.getCode());
+                orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
                 orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
                 orderService.update(orderVo);
             }

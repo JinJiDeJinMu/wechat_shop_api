@@ -16,7 +16,7 @@ package com.chundengtai.base.weixinapi;
  * 修改内容    :
  * **************************************************************
  */
-public enum OrderTypeEnum {
+public enum OrderStatusEnum {
     WAIT_PAY(0, "待付款"),
     CANCEL_ORDER(101, "订单已取消"),
     DELETE_ORDER(102, "订单已删除"),
@@ -26,11 +26,8 @@ public enum OrderTypeEnum {
 
     WRITE_OFF_PAY(202, "未核销"),
     WRITE_OFF_PAYED(203, "已核销"),
-
-
     EXPRESS_NO_GET(204, "未代取"),
     EXPRESS_GETED(205, "已代取"),
-
     NOT_USED(206, "待使用"),
 
     SHIPPED_ORDER(300, "订单已发货"),
@@ -55,16 +52,16 @@ public enum OrderTypeEnum {
     private String desc;
     private Integer code;
 
-    private OrderTypeEnum(Integer code, String desc) {
+    private OrderStatusEnum(Integer code, String desc) {
         this.code = code;
         this.desc = desc;
     }
 
-    public static OrderTypeEnum getEnumByKey(Integer key) {
+    public static OrderStatusEnum getEnumByKey(Integer key) {
         if (null == key) {
             return null;
         }
-        for (OrderTypeEnum temp : OrderTypeEnum.values()) {
+        for (OrderStatusEnum temp : OrderStatusEnum.values()) {
             if (temp.getCode().equals(key)) {
                 return temp;
             }

@@ -84,45 +84,45 @@ public class ApiOrderService {
 		String payType = jsonParam.getString("payType");
 		//团购小组的ID，如果创建团购则id为空
 		String groupBuyingId = jsonParam.getString("groupBuyingId");
-		Map<String, UserCouponVo> couponMerchant = null;
-		if(StringUtils.isNotBlank(couponIds)) {
-			couponMerchant = new HashMap<String, UserCouponVo>();//供应商与优惠券对应map
-			String[] couponList = couponIds.split(",");
-			for(String coupon : couponList) {
-				UserCouponVo userCouponVo = userCouponService.queryObject(Integer.parseInt(coupon));
-				if(userCouponVo ==null || userCouponVo.getId() == null) {
-					resultObj.put("errno", 702);
-					resultObj.put("errmsg", "优惠券ID错误！");
-					return resultObj;
-				}
-				if(loginUser.getUserId().intValue() != userCouponVo.getUser_id().intValue()) {
-					resultObj.put("errno", 600);
-					resultObj.put("errmsg", "优惠券信息错误！");
-					return resultObj;
-				}
-				if(couponMerchant.get(userCouponVo.getMerchantId()) != null) {
-					resultObj.put("errno", 700);
-					resultObj.put("errmsg", "一个商家只能一张优惠券！");
-					return resultObj;
-				}
-				if(userCouponVo.getCoupon_status() != 1) {
-					resultObj.put("errno", 701);
-					resultObj.put("errmsg", "优惠券不可用！");
-					return resultObj;
-				}
-				//优惠券还未开始使用、优惠券已经过期
-				Long use_start_date = userCouponVo.getUse_start_date().getTime();
-				Long use_end_date = userCouponVo.getUse_end_date().getTime();
-				Long new_date = new Date().getTime();
-				if(use_start_date > new_date || new_date > use_end_date) {
-					resultObj.put("errno", 703);
-					resultObj.put("errmsg", "优惠券不在使用时间范围！");
-					return resultObj;
-				}
-				couponMerchant.put(userCouponVo.getMerchantId().toString(), userCouponVo);
-			}
-			
-		}
+//		Map<String, UserCouponVo> couponMerchant = null;
+//		if(StringUtils.isNotBlank(couponIds)) {
+//			couponMerchant = new HashMap<String, UserCouponVo>();//供应商与优惠券对应map
+//			String[] couponList = couponIds.split(",");
+//			for(String coupon : couponList) {
+//				UserCouponVo userCouponVo = userCouponService.queryObject(Integer.parseInt(coupon));
+//				if(userCouponVo ==null || userCouponVo.getId() == null) {
+//					resultObj.put("errno", 702);
+//					resultObj.put("errmsg", "优惠券ID错误！");
+//					return resultObj;
+//				}
+//				if(loginUser.getUserId().intValue() != userCouponVo.getUser_id().intValue()) {
+//					resultObj.put("errno", 600);
+//					resultObj.put("errmsg", "优惠券信息错误！");
+//					return resultObj;
+//				}
+//				if(couponMerchant.get(userCouponVo.getMerchantId()) != null) {
+//					resultObj.put("errno", 700);
+//					resultObj.put("errmsg", "一个商家只能一张优惠券！");
+//					return resultObj;
+//				}
+//				if(userCouponVo.getCoupon_status() != 1) {
+//					resultObj.put("errno", 701);
+//					resultObj.put("errmsg", "优惠券不可用！");
+//					return resultObj;
+//				}
+//				//优惠券还未开始使用、优惠券已经过期
+//				Long use_start_date = userCouponVo.getUse_start_date().getTime();
+//				Long use_end_date = userCouponVo.getUse_end_date().getTime();
+//				Long new_date = new Date().getTime();
+//				if(use_start_date > new_date || new_date > use_end_date) {
+//					resultObj.put("errno", 703);
+//					resultObj.put("errmsg", "优惠券不在使用时间范围！");
+//					return resultObj;
+//				}
+//				couponMerchant.put(userCouponVo.getMerchantId().toString(), userCouponVo);
+//			}
+//
+//		}
 		String type = jsonParam.getString("type");//提交方式
 		String postscript = jsonParam.getString("postscript");//留言
 		Long promoterId = jsonParam.getLong("promoterId");// 获取推荐人id
@@ -199,19 +199,19 @@ public class ApiOrderService {
 					}
 				}
 				//根据供应商的所有商品金额判断优惠券是否可以用
-				if(couponMerchant != null) {
-					UserCouponVo userCoupon = couponMerchant.get(merchant_id.toString());
-					if(userCoupon != null) {
-						BigDecimal min_goods_amount = userCoupon.getMin_goods_amount();
-						if(goodsTotalPrice.compareTo(min_goods_amount) < 0) {
-							resultObj.put("errno", 800);
-							resultObj.put("errmsg", "优惠券不符合规则！");
-							return resultObj;
-						}
-						couponId = userCoupon.getId();//优惠券ID
-						couponPrice = userCoupon.getCoupon_price();//优惠券金额
-					}
-				}
+//				if(couponMerchant != null) {
+//					UserCouponVo userCoupon = couponMerchant.get(merchant_id.toString());
+//					if(userCoupon != null) {
+//						BigDecimal min_goods_amount = userCoupon.getMin_goods_amount();
+//						if(goodsTotalPrice.compareTo(min_goods_amount) < 0) {
+//							resultObj.put("errno", 800);
+//							resultObj.put("errmsg", "优惠券不符合规则！");
+//							return resultObj;
+//						}
+//						couponId = userCoupon.getId();//优惠券ID
+//						couponPrice = userCoupon.getCoupon_price();//优惠券金额
+//					}
+//				}
 				
 				// 订单价格计算
 				BigDecimal orderTotalPrice = goodsTotalPrice.add(freightPrice); // 订单的总价
@@ -294,11 +294,11 @@ public class ApiOrderService {
 				resultObj.put("data", orderInfoMap);
 				
 				// 优惠券标记已用
-				UserCouponVo uc = new UserCouponVo();
-				uc.setId(couponId);
-				uc.setCoupon_status(2);
-				uc.setUsed_time(new Date());
-				userCouponService.updateCouponStatus(uc);
+//				UserCouponVo uc = new UserCouponVo();
+//				uc.setId(couponId);
+//				uc.setCoupon_status(2);
+//				uc.setUsed_time(new Date());
+//				userCouponService.updateCouponStatus(uc);
 			}
 			
 		} else {//直接购买
@@ -344,17 +344,17 @@ public class ApiOrderService {
 				
 
 				//根据供应商的所有商品金额判断优惠券是否可以用
-				if(couponMerchant != null) {
-					UserCouponVo userCoupon = couponMerchant.get(goods.getMerchantId().toString());
-					BigDecimal min_goods_amount = userCoupon.getMin_goods_amount();
-					if(goodsTotalPrice.compareTo(min_goods_amount) < 0) {
-						resultObj.put("errno", 800);
-						resultObj.put("errmsg", "优惠券不符合规则！");
-						return resultObj;
-					}
-					couponId = userCoupon.getId();//优惠券ID
-					couponPrice = userCoupon.getCoupon_price();//优惠券金额
-				}
+//				if(couponMerchant != null) {
+//					UserCouponVo userCoupon = couponMerchant.get(goods.getMerchantId().toString());
+//					BigDecimal min_goods_amount = userCoupon.getMin_goods_amount();
+//					if(goodsTotalPrice.compareTo(min_goods_amount) < 0) {
+//						resultObj.put("errno", 800);
+//						resultObj.put("errmsg", "优惠券不符合规则！");
+//						return resultObj;
+//					}
+//					couponId = userCoupon.getId();//优惠券ID
+//					couponPrice = userCoupon.getCoupon_price();//优惠券金额
+//				}
 				
 				// 订单价格计算
 				BigDecimal orderTotalPrice = goodsTotalPrice.add(freightPrice); // 订单的总价
@@ -451,11 +451,11 @@ public class ApiOrderService {
 				resultObj.put("data", orderInfoMap);
 				
 				// 优惠券标记已用
-				UserCouponVo uc = new UserCouponVo();
-				uc.setId(couponId);
-				uc.setCoupon_status(2);
-				uc.setUsed_time(new Date());
-				userCouponService.updateCouponStatus(uc);
+//				UserCouponVo uc = new UserCouponVo();
+//				uc.setId(couponId);
+//				uc.setCoupon_status(2);
+//				uc.setUsed_time(new Date());
+//				userCouponService.updateCouponStatus(uc);
 			}
 			//团购购买
 			else {
@@ -498,17 +498,17 @@ public class ApiOrderService {
 				
 
 				//根据供应商的所有商品金额判断优惠券是否可以用（团购无法使用优惠卷）
-				if(couponMerchant != null) {
-					UserCouponVo userCoupon = couponMerchant.get(goods.getMerchantId().toString());
-					BigDecimal min_goods_amount = userCoupon.getMin_goods_amount();
-					if(goodsTotalPrice.compareTo(min_goods_amount) < 0) {
-						resultObj.put("errno", 800);
-						resultObj.put("errmsg", "优惠券不符合规则！");
-						return resultObj;
-					}
-					couponId = userCoupon.getId();//优惠券ID
-					couponPrice = userCoupon.getCoupon_price();//优惠券金额
-				}
+//				if(couponMerchant != null) {
+//					UserCouponVo userCoupon = couponMerchant.get(goods.getMerchantId().toString());
+//					BigDecimal min_goods_amount = userCoupon.getMin_goods_amount();
+//					if(goodsTotalPrice.compareTo(min_goods_amount) < 0) {
+//						resultObj.put("errno", 800);
+//						resultObj.put("errmsg", "优惠券不符合规则！");
+//						return resultObj;
+//					}
+//					couponId = userCoupon.getId();//优惠券ID
+//					couponPrice = userCoupon.getCoupon_price();//优惠券金额
+//				}
 				
 				// 订单价格计算
 				BigDecimal orderTotalPrice = goodsTotalPrice.add(freightPrice); // 订单的总价
@@ -608,20 +608,17 @@ public class ApiOrderService {
 				resultObj.put("data", orderInfoMap);
 				
 				// 优惠券标记已用
-				UserCouponVo uc = new UserCouponVo();
-				uc.setId(couponId);
-				uc.setCoupon_status(2);
-				uc.setUsed_time(new Date());
-				userCouponService.updateCouponStatus(uc);
+//				UserCouponVo uc = new UserCouponVo();
+//				uc.setId(couponId);
+//				uc.setCoupon_status(2);
+//				uc.setUsed_time(new Date());
+//				userCouponService.updateCouponStatus(uc);
 			}
 			
 		}
-
-		
-		
-
 		return resultObj;
 	}
+
 	private String[] getSpecificationIdsArray(String ids) {
 		String[] idsArray = null;
 		if (org.apache.commons.lang.StringUtils.isNotEmpty(ids)) {
@@ -632,6 +629,7 @@ public class ApiOrderService {
 		}
 		return idsArray;
 	}
+
 	public void updateStatus(OrderVo vo) {
 		apiOrderMapper.updateStatus(vo);
 	}
