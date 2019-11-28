@@ -96,7 +96,7 @@ public class IndexV2Controller extends ApiBaseAction {
             param = null;
             param = new HashMap<String, Object>();
             param.put("attribute_category", categoryItem.getId());
-            param.put("sidx", "add_time");
+            param.put("sidx", "sort_order");
             param.put("order", "desc");
             param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price,market_price as market_price");
             PageHelper.startPage(0, 4, false);
