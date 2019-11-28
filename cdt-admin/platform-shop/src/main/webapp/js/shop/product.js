@@ -93,6 +93,8 @@ let vm = new Vue({
                 async: true,
                 successCallback: function (r) {
                     vm.specifications= r.list;
+                    console.log("打印結果");
+                    console.log(vm.specifications);
                 }
             });
             vm.isSecKill=model.isSecKill;
@@ -225,8 +227,6 @@ let vm = new Vue({
                     vm.goodss = r.list;
                 }
             });
-            
-           
         },
         changeAttributes: function(){
             Ajax.request({

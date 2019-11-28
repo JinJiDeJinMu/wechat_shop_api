@@ -116,14 +116,18 @@ public class ApiCommentV2Controller extends ApiBaseAction {
             @RequestParam Integer goodId,
             @RequestParam String content,
             @RequestParam Integer starLevel,
-            MultipartFile[] imageList
+            @RequestParam(required = false) MultipartFile[] imageList
     ) {
         CommentReq commentReq = new CommentReq();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
         commentReq.setUserId(userId);
         commentReq.setOrderNo(orderNo);
         commentReq.setGoodId(goodId);
-        commentReq.setStatus(1);
+        if(imageList==null){
+            commentReq.setStatus(0);
+        }else {
+            commentReq.setStatus(1);
+        }
         commentReq.setContent(content);
         commentReq.setStarLevel(starLevel);
         apiCommentV2Service.save(commentReq);

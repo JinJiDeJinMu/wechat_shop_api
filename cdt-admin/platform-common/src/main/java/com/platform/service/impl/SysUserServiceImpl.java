@@ -74,7 +74,7 @@ public class SysUserServiceImpl implements SysUserService {
     public void save(SysUserEntity user) {
         user.setCreateTime(new Date());
         //sha256加密
-        user.setPassword(new Sha256Hash(Constant.DEFAULT_PASS_WORD).toHex());
+        user.setPassword(new Sha256Hash(user.getPassword()).toHex());
         sysUserDao.save(user);
 
         //检查角色是否越权
@@ -87,11 +87,10 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     @Transactional
     public void update(SysUserEntity user) {
-        if (StringUtils.isBlank(user.getPassword())) {
-            user.setPassword(new Sha256Hash(Constant.DEFAULT_PASS_WORD).toHex());
-        } else {
-            user.setPassword(new Sha256Hash(user.getPassword()).toHex());
-        }
+
+
+        user.setPassword(new Sha256Hash(user.getPassword()).toHex());
+
         sysUserDao.update(user);
 
         //检查角色是否越权
