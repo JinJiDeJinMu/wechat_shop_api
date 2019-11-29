@@ -80,7 +80,7 @@ public class ApiOrderService {
 		Map<String, Object> resultObj = new HashMap<String, Object>();
 		
 		// 判断优惠券是否属于个人（防止个人通过接口请求）
-		String couponIds = jsonParam.getString("couponId");
+		String couponIds = jsonParam.getString(" ");
 		// payType 1：团购操作，2：秒杀，不传为普通购买
 		String payType = jsonParam.getString("payType");
 		//团购小组的ID，如果创建团购则id为空
@@ -93,7 +93,7 @@ public class ApiOrderService {
 //				UserCouponVo userCouponVo = userCouponService.queryObject(Integer.parseInt(coupon));
 //				if(userCouponVo ==null || userCouponVo.getId() == null) {
 //					resultObj.put("errno", 702);
-//					resultObj.put("errmsg", "优惠券ID错误！");
+//	  				resultObj.put("errmsg", "优惠券ID错误！");
 //					return resultObj;
 //				}
 //				if(loginUser.getUserId().intValue() != userCouponVo.getUser_id().intValue()) {
