@@ -119,15 +119,15 @@ public class OrderVo implements Serializable {
     //团购ID
     private String group_buying_id;
 
-    public Integer getGoodsType() {
-        return goodsType;
+    public Integer getGoods_type() {
+        return goods_type;
     }
 
-    public void setGoodsType(Integer goodsType) {
-        this.goodsType = goodsType;
+    public void setGoods_type(Integer goods_type) {
+        this.goods_type = goods_type;
     }
 
-    private Integer goodsType;
+    private Integer goods_type;
 
     public String getFull_region() {
     //    return full_region;

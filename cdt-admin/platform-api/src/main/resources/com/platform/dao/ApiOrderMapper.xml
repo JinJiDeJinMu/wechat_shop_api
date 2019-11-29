@@ -51,7 +51,7 @@
         <result property="merchant_id" column="merchant_id"/>
         <result property="group_buying_id" column="group_buying_id"/>
         <result property="order_type" column="order_type"/>
-        <result property="goodsType" column="goods_type"/>
+        <result property="goods_type" column="goods_type"/>
 
     </resultMap>
 
