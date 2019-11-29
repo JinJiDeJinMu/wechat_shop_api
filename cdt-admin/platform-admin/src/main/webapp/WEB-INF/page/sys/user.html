@@ -59,19 +59,20 @@
                 <Checkbox-group v-model="user.roleIdList">
                     <Checkbox :label="role.roleId" v-for="role in roleList">{{role.roleName}}</Checkbox>
                 </Checkbox-group>
-            </Form-item>            
-            <Form-item label="本人分佣" prop="fx">
-                <i-input v-model="user.fx" placeholder="例子：15%"/>
             </Form-item>
-            <Form-item label="分佣一级" prop="fx1">
-                <i-input v-model="user.fx1" placeholder="例子：15%"/>
-            </Form-item>
-            <Form-item label="分佣二级" prop="fx2">
-                <i-input v-model="user.fx2"  placeholder="例子：15%"/>
-            </Form-item>
-			<Form-item label="平台分佣" prop="pfx">
-                <i-input v-model="user.pfx"  placeholder="例子：15%"/>
-            </Form-item>
+
+            <!--<Form-item label="本人分佣" prop="fx">-->
+            <!--<i-input v-model="user.fx" placeholder="例子：15%"/>-->
+            <!--</Form-item>-->
+            <!--<Form-item label="分佣一级" prop="fx1">-->
+            <!--<i-input v-model="user.fx1" placeholder="例子：15%"/>-->
+            <!--</Form-item>-->
+            <!--<Form-item label="分佣二级" prop="fx2">-->
+            <!--<i-input v-model="user.fx2"  placeholder="例子：15%"/>-->
+            <!--</Form-item>-->
+            <!--<Form-item label="平台分佣" prop="pfx">-->
+            <!--<i-input v-model="user.pfx"  placeholder="例子：15%"/>-->
+            <!--</Form-item>-->
             
             <Form-item label="状态" prop="status">
                 <Radio-group v-model="user.status">
