@@ -31,4 +31,6 @@ public class CacheConstant {
 
     public static final String SHOP_GOODS_CACHE = SHOP_CACHE_NAME + ":" + GOODS_NAME + ":";
 
+    public static final String EXPRESS_GOODS_CACHE =  "expressGoodsCache";
+
 }

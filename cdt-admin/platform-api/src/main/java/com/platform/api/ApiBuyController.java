@@ -79,9 +79,10 @@ public class ApiBuyController extends ApiBaseAction {
         goodsVo.setNumber(number);
 
         redisTemplate.opsForValue().set(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId(), goodsVo);
+        redisTemplate.opsForValue().set(CacheConstant.EXPRESS_GOODS_CACHE+loginUser.getUserId(),expressOrderVo);
         //BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId());
 
-        apiExpressOrderService.save(expressOrderVo);
+//        apiExpressOrderService.save(expressOrderVo);
         return toResponsMsgSuccess("添加成功");
     }
 
