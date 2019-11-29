@@ -337,7 +337,7 @@ public class ApiOrderService {
 
 
 				//todo:集成核销  下单直接购买
-				orderInfo.setGoodsType(goods.getIs_secKill());
+                orderInfo.setGoods_type(goods.getIs_secKill());
 				// 保存订单信息
 				apiOrderMapper.save(orderInfo);
 				
