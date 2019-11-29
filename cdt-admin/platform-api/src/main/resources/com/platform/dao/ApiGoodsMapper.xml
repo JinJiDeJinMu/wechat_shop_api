@@ -101,7 +101,7 @@
             and attribute_category = #{attribute_category}
         </if>
         <if test="keyword != null">
-            and keywords like concat('%',#{keyword},'%')
+            and keywords like concat('%',#{keyword},'%') or name like concat('%',#{keyword},'%')
         </if>
         <!--<if test="is_delete != null">
             and is_delete = #{is_delete}
