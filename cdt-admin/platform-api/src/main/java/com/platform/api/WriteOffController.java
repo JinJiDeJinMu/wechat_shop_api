@@ -54,8 +54,8 @@ public class WriteOffController extends ApiBaseAction {
         OrderVo orderVo = new OrderVo();
         orderVo.setId(orderId);
         orderVo.setOrder_sn(orderNo);
-        orderVo.setOrder_status(OrderStatusEnum.WRITE_OFF_PAYED.getCode());
-        orderVo.setOrder_status_text(OrderStatusEnum.WRITE_OFF_PAYED.getDesc());
+        orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
+        orderVo.setOrder_status_text(OrderStatusEnum.COMPLETED_ORDER.getDesc());
         int rows = orderService.update(orderVo);
 
         log.info("核销====》" + orderNo);
