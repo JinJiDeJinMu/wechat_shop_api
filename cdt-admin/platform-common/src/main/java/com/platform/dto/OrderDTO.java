@@ -1,6 +1,9 @@
-package com.platform.entity;
+package com.platform.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
@@ -15,9 +18,10 @@ import java.util.Map;
  * @email 939961241@qq.com
  * @date 2017-08-15 08:03:40
  */
-public class OrderVo implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+@Data
+@NoArgsConstructor
+@ApiModel(value = "订单实体dto", description = "订单实体dto类")
+public class OrderDTO implements Serializable {
     //主键
     private Integer id;
     //订单序列号
@@ -119,32 +123,32 @@ public class OrderVo implements Serializable {
     //团购ID
     private String group_buying_id;
 
-    public Integer getGoodsType() {
-        return goodsType;
+    public Integer getGoods_type() {
+        return goods_type;
     }
 
-    public void setGoodsType(Integer goodsType) {
-        this.goodsType = goodsType;
+    public void setGoods_type(Integer goods_type) {
+        this.goods_type = goods_type;
     }
 
-    private Integer goodsType;
+    private Integer goods_type;
 
     public String getFull_region() {
-    //    return full_region;
-        if (StringUtils.isNotEmpty(this.full_region)){
+        //    return full_region;
+        if (StringUtils.isNotEmpty(this.full_region)) {
             return full_region;
-        } else{
+        } else {
             StringBuffer strBuff = new StringBuffer();
-            if (StringUtils.isNotEmpty(this.country)){
+            if (StringUtils.isNotEmpty(this.country)) {
                 strBuff.append(this.country).append(" ");
             }
-            if(StringUtils.isNotEmpty(this.province)){
+            if (StringUtils.isNotEmpty(this.province)) {
                 strBuff.append(this.province).append(" ");
             }
-            if (StringUtils.isNotEmpty(this.city)){
+            if (StringUtils.isNotEmpty(this.city)) {
                 strBuff.append(this.city).append(" ");
             }
-            if (StringUtils.isNotEmpty(this.district)){
+            if (StringUtils.isNotEmpty(this.district)) {
                 strBuff.append(this.district).append(" ");
             }
             this.full_region = strBuff.toString();
@@ -444,7 +448,7 @@ public class OrderVo implements Serializable {
             order_status_text = "未付款";
             switch (order_status) {
                 case 0:
-                	order_status_text = "等待付款";//order_status_text = "未付款";
+                    order_status_text = "等待付款";//order_status_text = "未付款";
                     break;
                 case 201:
                     order_status_text = "待发货";
@@ -555,45 +559,45 @@ public class OrderVo implements Serializable {
         this.shipping_no = shipping_no;
     }
 
-	public String getGoods_name() {
-		return goods_name;
-	}
+    public String getGoods_name() {
+        return goods_name;
+    }
 
-	public void setGoods_name(String goods_name) {
-		this.goods_name = goods_name;
-	}
+    public void setGoods_name(String goods_name) {
+        this.goods_name = goods_name;
+    }
 
-	public String getList_pic_url() {
-		return list_pic_url;
-	}
+    public String getList_pic_url() {
+        return list_pic_url;
+    }
 
-	public void setList_pic_url(String list_pic_url) {
-		this.list_pic_url = list_pic_url;
-	}
+    public void setList_pic_url(String list_pic_url) {
+        this.list_pic_url = list_pic_url;
+    }
 
-	public String getGoods_id() {
-		return goods_id;
-	}
+    public String getGoods_id() {
+        return goods_id;
+    }
 
-	public void setGoods_id(String goods_id) {
-		this.goods_id = goods_id;
-	}
+    public void setGoods_id(String goods_id) {
+        this.goods_id = goods_id;
+    }
 
-	public BigDecimal getAll_price() {
-		return all_price;
-	}
+    public BigDecimal getAll_price() {
+        return all_price;
+    }
 
-	public void setAll_price(BigDecimal all_price) {
-		this.all_price = all_price;
-	}
+    public void setAll_price(BigDecimal all_price) {
+        this.all_price = all_price;
+    }
 
-	public String getAll_order_id() {
-		return all_order_id;
-	}
+    public String getAll_order_id() {
+        return all_order_id;
+    }
 
-	public void setAll_order_id(String all_order_id) {
-		this.all_order_id = all_order_id;
-	}
+    public void setAll_order_id(String all_order_id) {
+        this.all_order_id = all_order_id;
+    }
 
     public int getPromoter_id() {
         return promoter_id;
@@ -611,28 +615,28 @@ public class OrderVo implements Serializable {
         this.brokerage = brokerage;
     }
 
-	public Integer getFx_status() {
-		return fx_status;
-	}
+    public Integer getFx_status() {
+        return fx_status;
+    }
 
-	public void setFx_status(Integer fx_status) {
-		this.fx_status = fx_status;
-	}
+    public void setFx_status(Integer fx_status) {
+        this.fx_status = fx_status;
+    }
 
     public Long getMerchant_id() {
-		return merchant_id;
-	}
+        return merchant_id;
+    }
 
     public void setMerchant_id(Long merchant_id) {
-		this.merchant_id = merchant_id;
-	}
+        this.merchant_id = merchant_id;
+    }
 
-	public String getGroup_buying_id() {
-		return group_buying_id;
-	}
+    public String getGroup_buying_id() {
+        return group_buying_id;
+    }
 
-	public void setGroup_buying_id(String group_buying_id) {
-		this.group_buying_id = group_buying_id;
-	}
-	
+    public void setGroup_buying_id(String group_buying_id) {
+        this.group_buying_id = group_buying_id;
+    }
+
 }

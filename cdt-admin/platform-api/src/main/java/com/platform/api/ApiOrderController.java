@@ -151,11 +151,11 @@ public class ApiOrderController extends ApiBaseAction {
     @GetMapping("detail")
     public Object detail(Integer orderId) {
         Map resultObj = new HashMap();
-        //
         OrderVo orderInfo = orderService.queryObject(orderId);
         if (null == orderInfo) {
             return toResponsObject(400, "订单不存在", "");
         }
+
         Map orderGoodsParam = new HashMap();
         orderGoodsParam.put("order_id", orderId);
         //订单的商品
