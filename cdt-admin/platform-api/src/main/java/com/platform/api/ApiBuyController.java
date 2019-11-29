@@ -5,10 +5,7 @@ import com.chundengtai.base.constant.CacheConstant;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.*;
-import com.platform.service.ApiGoodsService;
-import com.platform.service.ApiProductService;
-import com.platform.service.GroupBuyingDetailedService;
-import com.platform.service.GroupBuyingService;
+import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.utils.Base64;
 import io.swagger.annotations.Api;
@@ -32,6 +29,8 @@ public class ApiBuyController extends ApiBaseAction {
     private final ApiProductService productService;
     private final GroupBuyingService groupBuyingService;
     private final GroupBuyingDetailedService groupBuyingDetailedService;
+    @Autowired
+    private ApiExpressOrderService apiExpressOrderService;
 
     @Autowired
     public ApiBuyController(RedisTemplate<String, Object> redisTemplate, ApiGoodsService goodsService, ApiProductService productService, GroupBuyingService groupBuyingService, GroupBuyingDetailedService groupBuyingDetailedService) {
@@ -43,13 +42,25 @@ public class ApiBuyController extends ApiBaseAction {
     }
 
     @ApiOperation(value = "商品添加")
+    @IgnoreAuth
     @PostMapping("/add")
     public Object addBuy(@LoginUser UserVo loginUser) {
         JSONObject jsonParam = getJsonRequest();
         Integer goodsId = jsonParam.getInteger("goodsId");
         Integer productId = jsonParam.getInteger("productId");
         Integer number = jsonParam.getInteger("number");
-        
+
+        //添加快递代取商品的详细信息
+        ExpressOrderVo expressOrderVo = new ExpressOrderVo();
+        expressOrderVo.setName(jsonParam.getString("name"));
+        expressOrderVo.setMobile(jsonParam.getString("mobile"));
+        expressOrderVo.setProvince(jsonParam.getString("province"));
+        expressOrderVo.setCity(jsonParam.getString("city"));
+        expressOrderVo.setDistrict(jsonParam.getString("district"));
+        expressOrderVo.setAddress(jsonParam.getString("address"));
+        expressOrderVo.setRemarks(jsonParam.getString("remarks"));
+        expressOrderVo.setPickNumber(jsonParam.getString("pickNumber"));
+
         //判断商品是否可以购买
         GoodsVo goodsInfo = goodsService.queryObject(goodsId);
         if (null == goodsInfo || goodsInfo.getIs_delete() == 1 || goodsInfo.getIs_on_sale() != 1) {
@@ -69,6 +80,8 @@ public class ApiBuyController extends ApiBaseAction {
 
         redisTemplate.opsForValue().set(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId(), goodsVo);
         //BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId());
+
+        apiExpressOrderService.save(expressOrderVo);
         return toResponsMsgSuccess("添加成功");
     }
 
