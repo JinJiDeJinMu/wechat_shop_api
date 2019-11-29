@@ -44,6 +44,7 @@ var vm = new Vue({
         q: {
             username: null
         },
+        merchants: [],
         showList: true,
         title: null,
         roleList: {},
@@ -66,13 +67,16 @@ var vm = new Vue({
             ]
         }
     },
+    created: function () {
+        this.getMerchant();
+    },
     methods: {
         query: function () {
             vm.reload();
         },
         add: function () {
             vm.showList = false;
-            vm.title = "新增(默认密码：888888)";
+            //vm.title = "新增(默认密码：888888)";
             vm.roleList = {};
             vm.user = {status: 1, roleIdList: [], deptId: '', deptName: ''};
 
@@ -101,7 +105,6 @@ var vm = new Vue({
             if (userId == null) {
                 return;
             }
-
             vm.showList = false;
             vm.title = "修改";
 
@@ -115,14 +118,12 @@ var vm = new Vue({
                     vm.getDept();
                 }
             });
-
         },
         del: function () {
             var userIds = getSelectedRows("#jqGrid");
             if (userIds == null) {
                 return;
             }
-
             confirm('确定要删除选中的记录？', function () {
                 Ajax.request({
                     url: "../sys/user/delete",
@@ -180,7 +181,6 @@ var vm = new Vue({
                     //选择上级部门
                     vm.user.deptId = node[0].deptId;
                     vm.user.deptName = node[0].name;
-
                     layer.close(index);
                 }
             });
@@ -188,6 +188,15 @@ var vm = new Vue({
         handleSubmit: function (name) {
             handleSubmitValidate(this, name, function () {
                 vm.saveOrUpdate()
+            });
+        },
+        getMerchant: function () {
+            Ajax.request({
+                url: "../cdtmerchant/queryAll",
+                async: true,
+                successCallback: function (r) {
+                    vm.merchants = r.list;
+                }
             });
         },
         handleReset: function (name) {

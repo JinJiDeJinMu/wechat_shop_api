@@ -93,6 +93,13 @@
                     </Radio>
                 </Radio-group>
             </Form-item>
+            <Form-item label="店铺" prop="shop" style="width: 268px;">
+                <i-select v-model="user.merchantId" filterable>
+                    <i-option v-for="merchant in merchants" :value="merchant.id" :key="merchant.id">
+                        {{merchant.shopName}}
+                    </i-option>
+                </i-select>
+            </Form-item>
             <Form-item>
                 <i-button type="primary" @click="handleSubmit('formValidate')">提交</i-button>
                 <i-button type="warning" @click="reload" style="margin-left: 8px">返回</i-button>

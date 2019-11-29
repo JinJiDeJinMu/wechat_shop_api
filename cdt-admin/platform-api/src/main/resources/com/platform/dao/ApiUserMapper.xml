@@ -26,6 +26,7 @@
         <result property="is_return_cash" column="is_return_cash"/>
         <result property="first_buy_money" column="first_buy_money"/>
         <result property="qrCode" column="qr_code"/>
+        <result property="merchant_id" column="merchant_id"/>
         <result property="fid" column="fid"/>
 		<result property="fx1" column="fx1"/>
 		<result property="fx2" column="fx2"/>
@@ -81,6 +82,7 @@
 			`promoter_id`,
 			`promoter_name`,
 			`qr_code`
+			`merchant_id`
 
 
 		)
@@ -102,6 +104,7 @@
 			#{promoterId},
 			#{promoterName},
 			#{qrCode}
+			#{merchant_id}
 
 		)
 	</insert>
@@ -130,6 +133,7 @@
             <if test="first_buy_money != null">`first_buy_money` = #{first_buy_money}</if>
             <if test="qrCode != null">`qr_code` = #{qrCode}</if>
             <if test="realName != null">`real_name` = #{realName}</if>
+            <if test="merchant_id != null">`merchant_id` = #{merchant_id}</if>
 
         </set>
         where id = #{userId}
