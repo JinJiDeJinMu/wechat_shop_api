@@ -1,6 +1,8 @@
 package com.platform.api;
 
+import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.platform.annotation.IgnoreAuth;
+import com.platform.entity.OrderVo;
 import com.platform.service.ApiOrderService;
 import com.platform.util.ApiBaseAction;
 import io.swagger.annotations.Api;
@@ -38,17 +40,29 @@ public class WriteOffController extends ApiBaseAction {
     @IgnoreAuth
     public Object writeOffCodeExecute(
             @ApiParam(name = "orderNo", value = "订单号")
-                    String orderNo,
-            Integer orderId,
-            Integer userId,
+            @RequestParam String orderNo,
+            @RequestParam Integer orderId,
+            @RequestParam Integer userId,
             Integer merchatnId,
-            @ApiParam(name = "timestamp", value = "时间戳") @RequestParam String timestamp,
+            @ApiParam(name = "timestamp", value = "时间戳") String timestamp,
             @ApiParam(name = "tokenSgin", value = "token秘钥") String tokenSgin
     ) {
 
+        //todo:核销订单验证参数加密
+        //todo:核销订单验证权限
+        //todo:核销订单更改状态
+        OrderVo orderVo = new OrderVo();
+        orderVo.setId(orderId);
+        orderVo.setOrder_sn(orderNo);
+        orderVo.setOrder_status(OrderStatusEnum.WRITE_OFF_PAYED.getCode());
+        orderVo.setOrder_status_text(OrderStatusEnum.WRITE_OFF_PAYED.getDesc());
+        int rows = orderService.update(orderVo);
 
         log.info("核销====》" + orderNo);
-        return toResponsSuccess("核销成功");
+        if (rows > 0) {
+            return toResponsSuccess("核销成功");
+        }
+        return toResponsSuccess("核销失败");
     }
 
 }
