@@ -83,8 +83,6 @@
 			`promoter_name`,
 			`qr_code`,
 			`merchant_id`
-
-
 		)
 		values
 		(
@@ -105,7 +103,6 @@
 			#{promoterName},
 			#{qrCode},
 			#{merchant_id}
-
 		)
 	</insert>
 
