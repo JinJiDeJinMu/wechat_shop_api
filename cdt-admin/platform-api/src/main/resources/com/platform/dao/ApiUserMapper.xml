@@ -81,7 +81,7 @@
 			`weixin_openid`,
 			`promoter_id`,
 			`promoter_name`,
-			`qr_code`
+			`qr_code`,
 			`merchant_id`
 
 
@@ -103,7 +103,7 @@
 			#{weixin_openid},
 			#{promoterId},
 			#{promoterName},
-			#{qrCode}
+			#{qrCode},
 			#{merchant_id}
 
 		)

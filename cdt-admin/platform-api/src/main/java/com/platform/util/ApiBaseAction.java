@@ -38,6 +38,7 @@ public class ApiBaseAction {
      */
     @Autowired
     protected HttpServletRequest request;
+
     /**
      * 得到response对象
      */
@@ -82,7 +83,6 @@ public class ApiBaseAction {
 
     public Map<String, Object> toResponsSuccess(Object data) {
         Map<String, Object> rp = toResponsObject(0, "执行成功", data);
-//        logger.info("response:" + rp);
         return rp;
     }
 
