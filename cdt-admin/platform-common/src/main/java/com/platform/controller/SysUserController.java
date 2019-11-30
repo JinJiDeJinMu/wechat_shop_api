@@ -124,7 +124,7 @@ public class SysUserController extends AbstractController {
         }
         user.setCreateUserId(getUserId());
         sysUserService.save(user);
-        sysUserDao.updateMerchantId(user);
+        //sysUserDao.updateMerchantId(user);
         
         MlsUserEntity2 mlsUserVo=new MlsUserEntity2();
         mlsUserVo.setUserTel(user.getMobile());

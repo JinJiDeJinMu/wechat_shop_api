@@ -182,7 +182,6 @@
 
     <Card v-show="!showList">
         <p slot="title">{{title}}</p>
-
         <Tabs value="name1">
             <Tab-Pane label="通用信息" name="name1">
                 <i-form ref="formValidate" :model="goods" :rules="ruleValidate" :label-width="100">
@@ -193,9 +192,11 @@
                     <Form-item label="商品序列号" prop="goodsSn">
                         <i-input v-model="goods.goodsSn" placeholder="商品序列号"/>
                     </Form-item>
+
                     <Form-item label="名称" prop="name">
                         <i-input v-model="goods.name" placeholder="名称"/>
                     </Form-item>
+
                     <Form-item label="品牌" prop="brandId" style="width: 268px;">
                         <i-select v-model="goods.brandId" filterable>
                             <i-option v-for="brand in brands" :value="brand.id" :key="brand.id">{{brand.name}}
@@ -213,9 +214,11 @@
                             <i-option value="6">核销订单</i-option>
                         </i-select>
                     </Form-item>
+
                     <Form-item label="活动开始时间" prop="startTime" v-if="goods.isSecKill==3||goods.isSecKill==2">
                         <Date-picker v-model="goods.startTime" placeholder="活动开始时间"></Date-picker>
                     </Form-item>
+
                     <Form-item label="活动结束时间" prop="endTime" v-if="goods.isSecKill==3||goods.isSecKill==2">
                         <Date-picker v-model="goods.endTime" placeholder="活动结束时间"></Date-picker>
                     </Form-item>
@@ -224,15 +227,16 @@
                         <Input-number :min="0" :step="1" v-model="goods.successTime" placeholder="成团时间 单位分钟"
                                       style="width: 188px;"/>
                     </Form-item>
+
                     <Form-item label="成团时间人数" prop="successPeople" v-if="goods.isSecKill==3">
                         <Input-number :min="0" :step="1" v-model="goods.successPeople" placeholder="成团时间 单位分钟"
                                       style="width: 188px;"/>
                     </Form-item>
+
                     <Form-item label="团购价" prop="groupPrice" v-if="goods.isSecKill==3">
                         <Input-number :min="0" :step="1" v-model="goods.groupPrice" placeholder="团购价"
                                       style="width: 188px;"/>
                     </Form-item>
-
 
                     <Form-item label="属性类别" prop="attributeCategory" style="width: 268px;">
                         <i-select v-model="goods.attributeCategory" filterable label-in-value>
@@ -241,6 +245,7 @@
                             </i-option>
                         </i-select>
                     </Form-item>
+
                     <Form-item label="店铺" prop="merchantId" style="width: 268px;">
                         <i-select v-model="goods.merchantId" filterable label-in-value>
                             <i-option v-for="merchant in merchants" :value="merchant.id" :key="merchant.id">{{merchant.shopName}}
@@ -248,6 +253,7 @@
                         </i-select>
                         <!--</Form-item>-->
                     </Form-item>
+
                     <!--<Form-item label="商品类别" prop="category" style="width: 268px;">-->
                         <!--<i-select v-model="goods.category" filterable label-in-value>-->
                             <!--<i-option v-for="category in categories" :value="category.id"-->
@@ -255,11 +261,11 @@
                             <!--</i-option>-->
                         <!--</i-select>-->
                     <!--</Form-item>-->
+
                     <Form-item label="商品库存" prop="goodsNumber">
                         <Input-number :min="0" :step="1" v-model="goods.goodsNumber" placeholder="商品库存"
                                       style="width: 188px;"/>
                     </Form-item>
-
 
                     <!--<Form-item label="商品单位" prop="goodsUnit" style="width: 268px;">-->
                     <!--<i-select v-model="goods.goodsUnit" filterable>-->

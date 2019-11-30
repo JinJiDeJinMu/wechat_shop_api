@@ -84,6 +84,7 @@
 			`status`, 
 			`create_user_id`,
 			`dept_id`,
+			`merchant_id`,
 			`create_time`,
 			`merchant_name`,`FX`,`FX1`,`FX2`,`PFX`,all_show
 		)
@@ -97,6 +98,7 @@
 			#{status}, 
 			#{createUserId},
 			#{deptId},
+			#{merchantId},
 			#{createTime},
 			#{merchantName}, #{fx},	#{fx1},	#{fx2},#{pfx},#{allShow}
 		)
