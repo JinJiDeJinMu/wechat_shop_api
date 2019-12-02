@@ -440,7 +440,9 @@ public class ApiPayController extends ApiBaseAction {
         for (OrderVo orderInfo : orderItem) {
             orderInfo.setAll_order_id(out_trade_no);
             orderInfo.setPay_status(PayTypeEnum.PAYED.getCode());
-            if (orderInfo.getGoods_type().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode())) {
+            if (orderInfo.getGoods_type().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
+                    orderInfo.getGoods_type().equals(GoodsTypeEnum.EXPRESS_GET.getCode())
+            ) {
                 orderInfo.setOrder_status(OrderStatusEnum.NOT_USED.getCode());
             } else {
                 orderInfo.setOrder_status(OrderStatusEnum.PAYED_ORDER.getCode());
