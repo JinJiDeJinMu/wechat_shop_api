@@ -99,7 +99,6 @@
         </if>
     </select>
 
-
     <select id="queryGroupList" resultType="com.platform.entity.GroupBuyingEntity">
       	SELECT `id`, `goods_id`, `goods_name`, `group_num`, `success_num`, `types`, `merchant_id` FROM  `group_buying`   WHERE 1=1
         <if test="goodsName != null and goodsName.trim() != ''">
@@ -137,7 +136,6 @@
             AND merchant_id = #{merchantId}
         </if>
     </select>
-    
 
     <select id="queryTotal" resultType="int">
         select count(*) from nideshop_order WHERE 1=1
