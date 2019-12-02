@@ -22,8 +22,8 @@
                         <h4>单据编号：</h4>
                         <h4 class="text-navy">{{order.orderSn}}</h4>
                         <address>
-                            <strong>美平超市</strong><br>
-                            美平超市地址<br>
+                            <strong>未名严选商城</strong><br>
+                            小程序二维码<br>
                             <abbr title="Phone">总机：</abbr> (86) xxxxxxxx
                         </address>
                         <p>
@@ -46,6 +46,8 @@
                         <tr v-for="goods in orderGoods">
                             <td>
                                 <div><strong>{{goods.goodsName}}</strong>
+                                    --<strong>{{goods.goods_specifition_name_value}}</strong>
+                                    <!--<img  width="200px" height="200px">-->
                                 </div>
                             </td>
                             <td>{{goods.number}}</td>
@@ -58,6 +60,11 @@
 
                 <table class="table invoice-total">
                     <tbody>
+                    <tr>
+                        <td><strong>物流运费</strong>
+                        </td>
+                        <td>&yen;{{order.freightPrice}}</td>
+                    </tr>
                     <tr>
                         <td><strong>总计</strong>
                         </td>
@@ -112,7 +119,5 @@
         }
     });
 </script>
-
 </body>
-
 </html>

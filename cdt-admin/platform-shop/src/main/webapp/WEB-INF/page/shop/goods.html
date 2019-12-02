@@ -197,46 +197,46 @@
                         <i-input v-model="goods.name" placeholder="名称"/>
                     </Form-item>
 
-                    <Form-item label="品牌" prop="brandId" style="width: 268px;">
-                        <i-select v-model="goods.brandId" filterable>
-                            <i-option v-for="brand in brands" :value="brand.id" :key="brand.id">{{brand.name}}
-                            </i-option>
-                        </i-select>
-                    </Form-item>
+                    <!--<Form-item label="品牌" prop="brandId" style="width: 268px;">-->
+                    <!--<i-select v-model="goods.brandId" filterable>-->
+                    <!--<i-option v-for="brand in brands" :value="brand.id" :key="brand.id">{{brand.name}}-->
+                    <!--</i-option>-->
+                    <!--</i-select>-->
+                    <!--</Form-item>-->
 
                     <Form-item label="商品类型" prop="isSecKill" style="width: 268px;">
                         <i-select v-model="goods.isSecKill">
                             <i-option value="1">普通商品</i-option>
-                            <i-option value="2">秒杀</i-option>
-                            <i-option value="3">团购</i-option>
-                            <i-option value="4">砍价</i-option>
+                            <!--<i-option value="2">秒杀</i-option>-->
+                            <!--<i-option value="3">团购</i-option>-->
+                            <!--<i-option value="4">砍价</i-option>-->
                             <i-option value="5">快递代取</i-option>
                             <i-option value="6">核销订单</i-option>
                         </i-select>
                     </Form-item>
 
-                    <Form-item label="活动开始时间" prop="startTime" v-if="goods.isSecKill==3||goods.isSecKill==2">
-                        <Date-picker v-model="goods.startTime" placeholder="活动开始时间"></Date-picker>
-                    </Form-item>
+                    <!--<Form-item label="活动开始时间" prop="startTime" v-if="goods.isSecKill==3||goods.isSecKill==2">-->
+                    <!--<Date-picker v-model="goods.startTime" placeholder="活动开始时间"></Date-picker>-->
+                    <!--</Form-item>-->
 
-                    <Form-item label="活动结束时间" prop="endTime" v-if="goods.isSecKill==3||goods.isSecKill==2">
-                        <Date-picker v-model="goods.endTime" placeholder="活动结束时间"></Date-picker>
-                    </Form-item>
+                    <!--<Form-item label="活动结束时间" prop="endTime" v-if="goods.isSecKill==3||goods.isSecKill==2">-->
+                    <!--<Date-picker v-model="goods.endTime" placeholder="活动结束时间"></Date-picker>-->
+                    <!--</Form-item>-->
 
-                    <Form-item label="成团时间(分钟)" prop="successTime" v-if="goods.isSecKill==3">
-                        <Input-number :min="0" :step="1" v-model="goods.successTime" placeholder="成团时间 单位分钟"
-                                      style="width: 188px;"/>
-                    </Form-item>
+                    <!--<Form-item label="成团时间(分钟)" prop="successTime" v-if="goods.isSecKill==3">-->
+                    <!--<Input-number :min="0" :step="1" v-model="goods.successTime" placeholder="成团时间 单位分钟"-->
+                    <!--style="width: 188px;"/>-->
+                    <!--</Form-item>-->
 
-                    <Form-item label="成团时间人数" prop="successPeople" v-if="goods.isSecKill==3">
-                        <Input-number :min="0" :step="1" v-model="goods.successPeople" placeholder="成团时间 单位分钟"
-                                      style="width: 188px;"/>
-                    </Form-item>
+                    <!--<Form-item label="成团时间人数" prop="successPeople" v-if="goods.isSecKill==3">-->
+                    <!--<Input-number :min="0" :step="1" v-model="goods.successPeople" placeholder="成团时间 单位分钟"-->
+                    <!--style="width: 188px;"/>-->
+                    <!--</Form-item>-->
 
-                    <Form-item label="团购价" prop="groupPrice" v-if="goods.isSecKill==3">
-                        <Input-number :min="0" :step="1" v-model="goods.groupPrice" placeholder="团购价"
-                                      style="width: 188px;"/>
-                    </Form-item>
+                    <!--<Form-item label="团购价" prop="groupPrice" v-if="goods.isSecKill==3">-->
+                    <!--<Input-number :min="0" :step="1" v-model="goods.groupPrice" placeholder="团购价"-->
+                    <!--style="width: 188px;"/>-->
+                    <!--</Form-item>-->
 
                     <Form-item label="属性类别" prop="attributeCategory" style="width: 268px;">
                         <i-select v-model="goods.attributeCategory" filterable label-in-value>
@@ -285,10 +285,10 @@
                         <Input-number :min="0" :step="1" v-model="goods.marketPrice" placeholder="市场价"
                                       style="width: 188px;"/>
                     </Form-item>
-                    <Form-item label="分佣比例" prop="brokerage_percent">
-                        <Input-number :min="0" :step="1" v-model="goods.brokerage_percent" placeholder="分佣比例"
-                                      style="width: 188px;"/>
-                    </Form-item>
+                    <!--<Form-item label="分佣比例" prop="brokerage_percent">-->
+                    <!--<Input-number :min="0" :step="1" v-model="goods.brokerage_percent" placeholder="分佣比例"-->
+                    <!--style="width: 188px;"/>-->
+                    <!--</Form-item>-->
                     <Form-item label="邮费价格" prop="extraPrice">
                         <Input-number :min="0" :step="1" v-model="goods.extraPrice" placeholder="邮费价格"
                                       style="width: 188px;"/>
