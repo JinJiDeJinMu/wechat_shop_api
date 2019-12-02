@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * @author lipengjun
  * @email 939961241@qq.com
@@ -54,8 +53,7 @@ public class OrderController extends BaseController {
 
         return R.ok().put("page", pageUtil);
     }
-    
-    
+
     /**
      * 列表
      */
@@ -72,8 +70,6 @@ public class OrderController extends BaseController {
         PageUtils pageUtil = new PageUtils(list, total, query.getLimit(), query.getPage());
         return R.ok().put("page", pageUtil);
     }
-
-
 
     /**
      * 信息

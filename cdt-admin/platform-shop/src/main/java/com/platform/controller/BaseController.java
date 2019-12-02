@@ -14,7 +14,6 @@ public class BaseController {
         if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
             query.put("merchant_id", ShiroUtils.getUserEntity().getMerchantId());
         }
-
         return query;
     }
 

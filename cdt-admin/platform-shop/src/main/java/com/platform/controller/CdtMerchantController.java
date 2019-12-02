@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("cdtmerchant")
-public class CdtMerchantController {
+public class CdtMerchantController extends BaseController {
     @Autowired
     private CdtMerchantService cdtMerchantService;
 
@@ -34,8 +34,8 @@ public class CdtMerchantController {
     @ResponseBody
     public R list(@RequestParam Map<String, Object> params) {
         //查询列表数据
-        Query query = new Query(params);
-
+        Query query = getqCurrentQuery(params);
+        ;
         List<CdtMerchantEntity> cdtMerchantList = cdtMerchantService.queryList(query);
         int total = cdtMerchantService.queryTotal(query);
 

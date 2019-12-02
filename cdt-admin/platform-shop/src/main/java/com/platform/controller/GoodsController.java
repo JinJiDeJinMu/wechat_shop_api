@@ -24,7 +24,8 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("goods")
-public class GoodsController {
+public class GoodsController extends BaseController {
+
     @Autowired
     private GoodsService goodsService;
 
