@@ -17,42 +17,19 @@
         <result property="remarks" column="remarks"/>
         <result property="pickNumber" column="pick_number"/>
         <result property="orderId" column="order_id"/>
+        <result property="expressNo" column="express_no"/>
     </resultMap>
 
     <select id="queryObject" resultType="com.platform.entity.ExpressOrderVo">
 		select
-			`id`,
-    			`user_id`,
-    			`order_id`,
-    			`country`,
-    			`province`,
-    			`city`,
-    			`district`,
-    			`address`,
-    			`mobile`,
-    			`name`,
-    			`real_name`,
-    			`remarks`,
-    			`pick_number`    
+			*
 		from nideshop_express_order
 		where id = #{id}
 	</select>
 
     <select id="queryList" resultType="com.platform.entity.ExpressOrderVo">
         select
-        `id`,
-        `user_id`,
-        `order_id`,
-        `country`,
-        `province`,
-        `city`,
-        `district`,
-        `address`,
-        `mobile`,
-        `name`,
-        `real_name`,
-        `remarks`,
-        `pick_number`
+        *
         from nideshop_express_order
         WHERE 1=1
         <if test="name != null and name.trim() != ''">
@@ -93,7 +70,9 @@
                     			`name`,
                     			`real_name`,
                     			`remarks`,
-                    			`pick_number`            )
+                    			`pick_number`,
+                    			`express_no`
+                    			            )
 		values(
         			#{id},
                     			#{userId},
@@ -107,7 +86,9 @@
                     			#{name},
                     			#{realName},
                     			#{remarks},
-                    			#{pickNumber}            )
+                    			#{pickNumber},
+                    			#{expressNo}
+                    			            )
 	</insert>
 
     <update id="update" parameterType="com.platform.entity.ExpressOrderVo">
@@ -145,8 +126,7 @@
             <if test="remarks != null">`remarks` = #{remarks
                         },
             </if>
-            <if test="pickNumber != null">`pick_number` = #{pickNumber
-                        }
+            <if test="pickNumber != null">`pick_number` = #{pickNumber                        }
             </if>
         </set>
         where id = #{id}

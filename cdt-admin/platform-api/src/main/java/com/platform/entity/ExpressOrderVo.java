@@ -66,6 +66,7 @@ public class ExpressOrderVo implements Serializable {
      * 配送时间
      */
     private String pickNumber;
+    private String expressNo;
 
 
 }

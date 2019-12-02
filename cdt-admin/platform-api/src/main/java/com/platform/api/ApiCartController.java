@@ -431,6 +431,8 @@ public class ApiCartController extends ApiBaseAction {
         ArrayList checkedGoodsList = new ArrayList();
 
         List<MerCartVo> merCartVoList = new ArrayList<>();
+        BuyGoodsVo goodsVO = (BuyGoodsVo) redisTemplate.opsForValue().get(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId());
+
         if (type.equals("cart")) {
             Map<String, Object> cartData = (Map<String, Object>) this.getCart(loginUser);
             List<CartVo> cartVoList = new ArrayList<>();
@@ -460,10 +462,7 @@ public class ApiCartController extends ApiBaseAction {
                 merCartVo.setUserCouponList(validCouponVos);
                 merCartVoList.add(merCartVo);
             }
-            //goodsTotalPrice = (BigDecimal) ((HashMap) cartData.get("cartTotal")).get("checkedGoodsAmount");
         } else { // 是直接购买的
-            //BuyGoodsVo goodsVO1 = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "goods" + loginUser.getUserId() + "");
-            BuyGoodsVo goodsVO = (BuyGoodsVo) redisTemplate.opsForValue().get(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId());
             ProductVo productInfo = productService.queryObject(goodsVO.getProductId());
             GoodsVo goods = goodsService.queryObject(goodsVO.getGoodsId());
             //计算订单的费用
@@ -498,6 +497,7 @@ public class ApiCartController extends ApiBaseAction {
 
             //获取优惠券
             Map map = new HashMap();
+
             map.put("user_id", loginUser.getUserId());
             map.put("merchantId", merCartVo.getMerchantId());
             map.put("goodsTotalPrice", merCartVo.getOrderTotalPrice());
@@ -518,6 +518,9 @@ public class ApiCartController extends ApiBaseAction {
         //订单的总价
         BigDecimal orderTotalPrice = goodsTotalPrice.add(freightPrice);
         BigDecimal actualPrice = orderTotalPrice.subtract(couponPrice);  //减去其它支付的金额后，要实际支付的金额
+        if (goodsVO != null) {
+            resultObj.put("skuName", goodsVO.getSkuName());
+        }
         resultObj.put("freightPrice", freightPrice);
         resultObj.put("couponPrice", couponPrice);
         resultObj.put("checkedGoodsList", merCartVoList);

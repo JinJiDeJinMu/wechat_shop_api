@@ -2,6 +2,7 @@ package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chundengtai.base.constant.CacheConstant;
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.*;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @Api(tags = "商品购买")
 @RestController
 @RequestMapping("/api/buy")
@@ -49,17 +51,7 @@ public class ApiBuyController extends ApiBaseAction {
         Integer goodsId = jsonParam.getInteger("goodsId");
         Integer productId = jsonParam.getInteger("productId");
         Integer number = jsonParam.getInteger("number");
-
-        //添加快递代取商品的详细信息
-        ExpressOrderVo expressOrderVo = new ExpressOrderVo();
-        expressOrderVo.setName(jsonParam.getString("name"));
-        expressOrderVo.setMobile(jsonParam.getString("mobile"));
-        expressOrderVo.setProvince(jsonParam.getString("province"));
-        expressOrderVo.setCity(jsonParam.getString("city"));
-        expressOrderVo.setDistrict(jsonParam.getString("district"));
-        expressOrderVo.setAddress(jsonParam.getString("address"));
-        expressOrderVo.setRemarks(jsonParam.getString("remarks"));
-        expressOrderVo.setPickNumber(jsonParam.getString("pickNumber"));
+        String selectSkuName = jsonParam.getString("selectSkuName");
 
         //判断商品是否可以购买
         GoodsVo goodsInfo = goodsService.queryObject(goodsId);
@@ -71,18 +63,32 @@ public class ApiBuyController extends ApiBaseAction {
         if (null == productInfo || productInfo.getGoods_number() < number) {
             return this.toResponsObject(400, "库存不足", "");
         }
-        
-        
+
         BuyGoodsVo goodsVo = new BuyGoodsVo();
         goodsVo.setGoodsId(goodsId);
         goodsVo.setProductId(productId);
         goodsVo.setNumber(number);
-
+        goodsVo.setName(selectSkuName);
+        goodsVo.setSkuName(selectSkuName);
         redisTemplate.opsForValue().set(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId(), goodsVo);
-        redisTemplate.opsForValue().set(CacheConstant.EXPRESS_GOODS_CACHE+loginUser.getUserId(),expressOrderVo);
-        //BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId());
 
-//      apiExpressOrderService.save(expressOrderVo);
+        //todo:增加快递代取功能
+        if (goodsInfo.getIs_secKill().equals(GoodsTypeEnum.EXPRESS_GET.getCode())) {
+            //添加快递代取商品的详细信息
+            ExpressOrderVo expressOrderVo = new ExpressOrderVo();
+            expressOrderVo.setName(jsonParam.getString("userName"));
+            expressOrderVo.setMobile(jsonParam.getString("telNumber"));
+            expressOrderVo.setProvince(jsonParam.getString("province"));
+            expressOrderVo.setCity(jsonParam.getString("city"));
+            expressOrderVo.setDistrict(jsonParam.getString("district"));
+            expressOrderVo.setAddress(jsonParam.getString("detailInfo"));
+            expressOrderVo.setRemarks(jsonParam.getString("remark"));
+            expressOrderVo.setPickNumber(jsonParam.getString("pressTime"));
+            expressOrderVo.setExpressNo(jsonParam.getString("expressNo"));
+            redisTemplate.opsForValue().set(CacheConstant.EXPRESS_GOODS_CACHE + loginUser.getUserId(), expressOrderVo);
+            apiExpressOrderService.save(expressOrderVo);
+        }
+
         return toResponsMsgSuccess("添加成功");
     }
 
@@ -94,36 +100,36 @@ public class ApiBuyController extends ApiBaseAction {
     @IgnoreAuth
     @ApiOperation(value = "获取用户拼团列表")
     @PostMapping("/getGroupBuyList")
-    public  Object getGroupBuyList(@LoginUser  UserVo loginUser){
+    public Object getGroupBuyList(@LoginUser UserVo loginUser) {
         JSONObject jsonParam = getJsonRequest();
         Integer goodsId = jsonParam.getInteger("goodsId");
-        Map map=new HashMap<>();
-        map.put("goodsId",goodsId);
-        map.put("types","0");
-        int groupNum=0;
+        Map map = new HashMap<>();
+        map.put("goodsId", goodsId);
+        map.put("types", "0");
+        int groupNum = 0;
         List<GroupBuyingVo> groupBuyingEntityList = groupBuyingService.queryList(map);
-        if(groupBuyingEntityList!=null){
-            for(GroupBuyingVo groupBuyingVo:groupBuyingEntityList ){
-                groupNum=groupNum+groupBuyingVo.getGroupNum();
-                Map map1=new HashMap();
-                map1.put("group_buying_id",groupBuyingVo.getId());
-                map1.put("sidx","pay_time");
-                map1.put("order","asc");
+        if (groupBuyingEntityList != null) {
+            for (GroupBuyingVo groupBuyingVo : groupBuyingEntityList) {
+                groupNum = groupNum + groupBuyingVo.getGroupNum();
+                Map map1 = new HashMap();
+                map1.put("group_buying_id", groupBuyingVo.getId());
+                map1.put("sidx", "pay_time");
+                map1.put("order", "asc");
 
-                List<GroupBuyingDetailedVo> groupBuyingDetailedVoList =groupBuyingDetailedService.queryList(map1);
-               // groupBuyingEntity.setGroupBuyingDetailedList(groupBuyingDetailedVoList);
-                for(GroupBuyingDetailedVo groupBuyingDetailedVo:groupBuyingDetailedVoList){
+                List<GroupBuyingDetailedVo> groupBuyingDetailedVoList = groupBuyingDetailedService.queryList(map1);
+                // groupBuyingEntity.setGroupBuyingDetailedList(groupBuyingDetailedVoList);
+                for (GroupBuyingDetailedVo groupBuyingDetailedVo : groupBuyingDetailedVoList) {
                     groupBuyingDetailedVo.setUserName(Base64.decode(groupBuyingDetailedVo.getUserName()));
                 }
 
                 groupBuyingVo.setGroupBuyingDetailedList(groupBuyingDetailedVoList);
             }
         }
-        Map retMap=new HashMap();
-        retMap.put("groupBuyingEntityList",groupBuyingEntityList);
-        retMap.put("groupNum",groupNum);
+        Map retMap = new HashMap();
+        retMap.put("groupBuyingEntityList", groupBuyingEntityList);
+        retMap.put("groupNum", groupNum);
 
-     return toResponsSuccess(retMap);
+        return toResponsSuccess(retMap);
     }
 
 
