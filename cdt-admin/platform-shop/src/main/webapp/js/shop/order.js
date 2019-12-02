@@ -48,6 +48,8 @@ $(function () {
                         return '订单已删除';
                     } else if (value == '201') {
                         return '订单已付款';
+                    } else if (value == '206') {
+                        return '待使用';
                     } else if (value == '300') {
                         return '订单已发货';
                     } else if (value == '301') {
@@ -56,8 +58,14 @@ $(function () {
                         return '退款';
                     } else if (value == '402') {
                         return '完成';
-                    } else if (value == '103') {
-                        return '订单已失效';
+                    } else if (value == '501') {
+                        return '买家申请退货';
+                    } else if (value == '502') {
+                        return '退货寄回中';
+                    } else if (value == '503') {
+                        return '仓库已收退货';
+                    } else if (value == '504') {
+                        return '仓库拒绝退货';
                     }
                     return value;
                 }

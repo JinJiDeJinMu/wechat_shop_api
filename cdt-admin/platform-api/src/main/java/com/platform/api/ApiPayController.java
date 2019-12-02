@@ -1,6 +1,10 @@
 package com.platform.api;
 
 import com.chundengtai.base.constant.CacheConstant;
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
+import com.chundengtai.base.weixinapi.OrderStatusEnum;
+import com.chundengtai.base.weixinapi.PayTypeEnum;
+import com.chundengtai.base.weixinapi.ShippingTypeEnum;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -182,7 +186,7 @@ public class ApiPayController extends ApiBaseAction {
                     orderService.updateStatus(newOrder);
                     
                     //redis设置订单状态
-                    RedisUtils.set(allOrderId.toString(), "51", 60*60*24);
+                    redisTemplate.opsForValue().set(allOrderId.toString(), "51", 60 * 60 * 24);
                     return toResponsObject(0, "微信统一订单下单成功", resultObj);
                 }
             }
@@ -404,7 +408,6 @@ public class ApiPayController extends ApiBaseAction {
 
         String result_code = wxPayOrderNotifyResult.getResultCode();
         if (result_code.equalsIgnoreCase("FAIL")) {
-
             //订单编号
             String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
             log.error(reqId + "===notify==订单" + out_trade_no + "支付失败");
@@ -433,13 +436,19 @@ public class ApiPayController extends ApiBaseAction {
     }
 
     private void orderStatusLogic(String out_trade_no) {
-        OrderVo orderInfo = new OrderVo();
-        orderInfo.setAll_order_id(out_trade_no);
-        orderInfo.setPay_status(2);
-        orderInfo.setOrder_status(201);
-        orderInfo.setShipping_status(0);
-        orderInfo.setPay_time(new Date());
-        orderService.updateStatus(orderInfo);
+        List<OrderVo> orderItem = orderService.queryByAllOrderId(out_trade_no);
+        for (OrderVo orderInfo : orderItem) {
+            orderInfo.setAll_order_id(out_trade_no);
+            orderInfo.setPay_status(PayTypeEnum.PAYED.getCode());
+            if (orderInfo.getGoods_type().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode())) {
+                orderInfo.setOrder_status(OrderStatusEnum.NOT_USED.getCode());
+            } else {
+                orderInfo.setOrder_status(OrderStatusEnum.PAYED_ORDER.getCode());
+            }
+            orderInfo.setShipping_status(ShippingTypeEnum.NOSENDGOODS.getCode());
+            orderInfo.setPay_time(new Date());
+            orderService.updateStatus(orderInfo);
+        }
     }
 
 //    /**

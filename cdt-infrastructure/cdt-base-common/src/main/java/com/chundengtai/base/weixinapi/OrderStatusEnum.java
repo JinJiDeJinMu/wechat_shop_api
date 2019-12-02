@@ -21,6 +21,7 @@ public enum OrderStatusEnum {
     CANCEL_ORDER(101, "订单已取消"),
     DELETE_ORDER(102, "订单已删除"),
     CLOSED_ORDER(103, "订单已关闭"),
+
     PAYED_ORDER(201, "订单已付款"),
 
 
