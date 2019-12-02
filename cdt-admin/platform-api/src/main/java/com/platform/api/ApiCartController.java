@@ -495,6 +495,7 @@ public class ApiCartController extends ApiBaseAction {
             merCartVo.setOrderTotalPrice(goodsTotalPrice);
             merCartVo.setFreightPrice(freightPrice);
             merCartVo.setActualPrice(goodsTotalPrice.add(freightPrice));
+
             //获取优惠券
             Map map = new HashMap();
             map.put("user_id", loginUser.getUserId());
@@ -520,7 +521,6 @@ public class ApiCartController extends ApiBaseAction {
         resultObj.put("freightPrice", freightPrice);
         resultObj.put("couponPrice", couponPrice);
         resultObj.put("checkedGoodsList", merCartVoList);
-        //resultObj.put("checkedGoodsList", checkedGoodsList);
         resultObj.put("goodsTotalPrice", goodsTotalPrice);
         resultObj.put("orderTotalPrice", orderTotalPrice);
         resultObj.put("actualPrice", actualPrice);

@@ -90,7 +90,7 @@
 			#{adPositionId},
 			#{mediaType},
 			#{type},
-			#{goods_id},
+			#{goodsId},
 			#{name},
 			#{link},
 			#{imageUrl},
