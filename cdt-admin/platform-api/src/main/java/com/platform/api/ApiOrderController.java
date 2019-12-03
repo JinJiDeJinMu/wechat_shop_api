@@ -249,7 +249,7 @@ public class ApiOrderController extends ApiBaseAction {
         }
         try {
             // 需要退款
-            if (orderVo.getPay_status() == 2) {
+            if (orderVo.getPay_status().equals(PayTypeEnum.PAYED.getCode())) {
 
                 WxPayRefundRequest request = new WxPayRefundRequest();
                 request.setNonceStr(CharUtil.getRandomString(16));
