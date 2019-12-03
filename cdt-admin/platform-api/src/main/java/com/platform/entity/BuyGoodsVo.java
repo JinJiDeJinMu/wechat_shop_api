@@ -13,5 +13,6 @@ public class BuyGoodsVo implements Serializable {
     private Integer number;
     private String name;
     private String skuName;
+    private Integer goodsType;
 
 }

@@ -70,6 +70,7 @@ public class ApiBuyController extends ApiBaseAction {
         goodsVo.setNumber(number);
         goodsVo.setName(selectSkuName);
         goodsVo.setSkuName(selectSkuName);
+        goodsVo.setGoodsType(goodsInfo.getIs_secKill());
         redisTemplate.opsForValue().set(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId(), goodsVo);
 
         //todo:增加快递代取功能
