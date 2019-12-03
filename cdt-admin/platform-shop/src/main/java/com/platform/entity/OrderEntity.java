@@ -101,6 +101,16 @@ public class OrderEntity implements Serializable {
     //商品规格详情
   	private String goodsSpecifitionNameValue;
 
+    public Integer getGoods_type() {
+        return goods_type;
+    }
+
+    public void setGoods_type(Integer goods_type) {
+        this.goods_type = goods_type;
+    }
+
+    private Integer goods_type;
+
     public String getGoodsSpecifitionNameValue() {
 		return goodsSpecifitionNameValue;
 	}

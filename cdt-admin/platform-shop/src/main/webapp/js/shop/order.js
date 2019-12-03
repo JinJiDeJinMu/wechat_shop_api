@@ -25,15 +25,19 @@ $(function () {
             {label: '会员', name: 'userName', index: 'user_name', width: 80},
             {label: '真实姓名', name: 'realName', index: 'real_name', width: 80},
             {
-                label: '订单类型', name: 'orderType', index: 'order_type', width: 80, formatter: function (value) {
+                label: '订单类型', name: 'goods_type', index: 'goods_type', width: 80, formatter: function (value) {
                     if (value == '1') {
-                        return '购物车订单';
-                    } else if (value == '2') {
                         return '普通订单';
+                    } else if (value == '2') {
+                        return '秒杀';
                     } else if (value == '3') {
-                        return '秒杀订单';
+                        return '团购';
                     } else if (value == '4') {
-                        return '团购订单';
+                        return '砍价';
+                    } else if (value == '5') {
+                        return '快递代取';
+                    } else if (value == '6') {
+                        return '核销订单';
                     }
                     return '-';
                 }
@@ -97,6 +101,8 @@ $(function () {
                         return '付款中';
                     } else if (value == '2') {
                         return '已付款';
+                    } else if (value == '4') {
+                        return '退款';
                     }
                     return value;
                 }
@@ -112,8 +118,6 @@ $(function () {
                     return value;
                 }
             },
-            {label: '快递公司', name: 'shippingName', index: 'shipping_name', width: 80},
-            {label: '快递单号', name: 'shippingNo', index: 'shipping_No', width: 80},
             {label: '实际支付金额', name: 'actualPrice', index: 'actual_price', width: 80},
             {label: '订单总价', name: 'orderPrice', index: 'order_price', width: 60},
             {label: '商品总价', name: 'goodsPrice', index: 'goods_price', width: 60},

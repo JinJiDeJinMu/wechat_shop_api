@@ -26,12 +26,12 @@
                     </i-select>
                 </i-col>
                 <i-col span="4">
-                    <i-select v-model="q.orderType">
-                        <i-option value="1">购物车订单</i-option>
-                        <i-option value="2">普通订单</i-option>
-                        <i-option value="3">秒杀订单</i-option>
-                        <i-option value="4">团购订单</i-option>
-                        <i-option value="5">快递代取订单</i-option>
+                    <i-select v-model="q.goods_type">
+                        <i-option value="1">普通商品</i-option>
+                        <i-option value="2">秒杀</i-option>
+                        <i-option value="3">团购</i-option>
+                        <i-option value="4">砍价</i-option>
+                        <i-option value="5">快递代取</i-option>
                         <i-option value="6">核销订单</i-option>
                     </i-select>
                 </i-col>
@@ -91,12 +91,14 @@
             <Form-item label="真实姓名" prop="realName">
                 <i-input v-model="order.realName" readonly/>
             </Form-item>
-            <Form-item label="订单类型" prop="orderType">
-                <i-select v-model="order.orderType" disabled>
-                    <i-option value="1">普通订单</i-option>
-                    <i-option value="2">团购订单</i-option>
-                    <i-option value="3">砍价订单</i-option>
-                    <i-option value="4">立即购买</i-option>
+            <Form-item label="订单类型" prop="goods_type">
+                <i-select v-model="order.goods_type" disabled>
+                    <i-option value="1">普通商品</i-option>
+                    <i-option value="2">秒杀</i-option>
+                    <i-option value="3">团购</i-option>
+                    <i-option value="4">砍价</i-option>
+                    <i-option value="5">快递代取</i-option>
+                    <i-option value="6">核销订单</i-option>
                 </i-select>
             </Form-item>
             <Form-item label="订单状态" prop="orderStatus" readonly>
