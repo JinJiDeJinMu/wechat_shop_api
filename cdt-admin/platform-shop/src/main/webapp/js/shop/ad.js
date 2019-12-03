@@ -43,7 +43,7 @@ var vm = new Vue({
     data: {
         showList: true,
         title: null,
-        ad: {enabled: 1, imageUrl: '', mediaType: 0},
+        ad: {enabled: 1, imageUrl: '', mediaType: 0, type: 0},
         ruleValidate: {
             name: [
                 {required: true, message: '广告名称不能为空', trigger: 'blur'}
