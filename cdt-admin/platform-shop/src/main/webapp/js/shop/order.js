@@ -151,6 +151,21 @@ let vm = new Vue({
         query: function () {
             vm.reload();
         },
+        sendOrderComplete: function (event) {
+            let id = getSelectedRow("#jqGrid");
+            if (id == null) {
+                return;
+            }
+            vm.showList = false;
+            vm.title = "使用";
+            Ajax.request({
+                url: "../order/used/" + id,
+                async: true,
+                successCallback: function (r) {
+                    vm.order = r.order;
+                }
+            });
+        },
         sendGoods: function (event) {
             let id = getSelectedRow("#jqGrid");
             if (id == null) {

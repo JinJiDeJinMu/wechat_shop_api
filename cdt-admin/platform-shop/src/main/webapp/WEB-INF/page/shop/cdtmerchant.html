@@ -35,7 +35,7 @@
         <p slot="title">{{title}}</p>
         <i-form ref="formValidate" :model="cdtMerchant" :rules="ruleValidate" :label-width="80">
             <Form-item label="名称" prop="shopName">
-                <i-input v-model="cdtMerchant.shopName" placeholder="名称(数字、中文，英文(可混合，不可有特殊字符)，可修改)、不唯一"/>
+                <i-input v-model="cdtMerchant.shopName" placeholder="名称"/>
             </Form-item>
 
             <!--<Form-item label="用户id" prop="userId">-->
@@ -60,7 +60,7 @@
                 <i-input v-model="cdtMerchant.shopOwner" placeholder="店长"/>
             </Form-item>
             <Form-item label="店铺绑定的手机" prop="mobile">
-                <i-input v-model="cdtMerchant.mobile" placeholder="店铺绑定的手机(登录账号：唯一)"/>
+                <i-input v-model="cdtMerchant.mobile" placeholder="店铺绑定的手机"/>
             </Form-item>
             <Form-item label="店铺联系电话" prop="tel">
                 <i-input v-model="cdtMerchant.tel" placeholder="店铺联系电话"/>
@@ -170,34 +170,34 @@
             <!--<Form-item label="0:商家承担运费; 1:买家承担运费" prop="transportType">-->
             <!--<i-input v-model="cdtMerchant.transportType" placeholder="0:商家承担运费; 1:买家承担运费"/>-->
             <!--</Form-item>-->
-            <Form-item label="运费" prop="transportType">
-                <Radio-group v-model="cdtMerchant.transportType">
-                    <Radio label="0">
-                        <span>商家承担运费</span>
-                    </Radio>
-                    <Radio label="1">
-                        <span>买家承担运费</span>
-                    </Radio>
-                </Radio-group>
-            </Form-item>
-            <Form-item label="固定运费" prop="fixedFreight">
-                <i-input v-model="cdtMerchant.fixedFreight" placeholder="固定运费"/>
-            </Form-item>
-            <Form-item label="满X包邮" prop="fullFreeShipping">
-                <i-input v-model="cdtMerchant.fullFreeShipping" placeholder="满X包邮"/>
-            </Form-item>
+            <!--<Form-item label="运费" prop="transportType">-->
+            <!--<Radio-group v-model="cdtMerchant.transportType">-->
+            <!--<Radio label="0">-->
+            <!--<span>商家承担运费</span>-->
+            <!--</Radio>-->
+            <!--<Radio label="1">-->
+            <!--<span>买家承担运费</span>-->
+            <!--</Radio>-->
+            <!--</Radio-group>-->
+            <!--</Form-item>-->
+            <!--<Form-item label="固定运费" prop="fixedFreight">-->
+            <!--<i-input v-model="cdtMerchant.fixedFreight" placeholder="固定运费"/>-->
+            <!--</Form-item>-->
+            <!--<Form-item label="满X包邮" prop="fullFreeShipping">-->
+            <!--<i-input v-model="cdtMerchant.fullFreeShipping" placeholder="满X包邮"/>-->
+            <!--</Form-item>-->
             <!--<Form-item label="创建时间" prop="createTime">-->
             <!--<i-input v-model="cdtMerchant.createTime" placeholder="创建时间"/>-->
             <!--</Form-item>-->
-            <Form-item label="创建时间" prop="createTime">
-                <Date-picker v-model="cdtMerchant.createTime" placeholder="创建时间"></Date-picker>
-            </Form-item>
+            <!--<Form-item label="创建时间" prop="createTime">-->
+            <!--<Date-picker v-model="cdtMerchant.createTime" placeholder="创建时间"></Date-picker>-->
+            <!--</Form-item>-->
             <!--<Form-item label="更新时间" prop="updateTime">-->
             <!--<i-input v-model="cdtMerchant.updateTime" placeholder="更新时间"/>-->
             <!--</Form-item>-->
-            <Form-item label="更新时间" prop="updateTime">
-                <Date-picker v-model="cdtMerchant.updateTime" placeholder="更新时间"></Date-picker>
-            </Form-item>
+            <!--<Form-item label="更新时间" prop="updateTime">-->
+            <!--<Date-picker v-model="cdtMerchant.updateTime" placeholder="更新时间"></Date-picker>-->
+            <!--</Form-item>-->
             <!--<Form-item label="分销开关(0:开启 1:关闭)" prop="isDistribution">-->
             <!--<i-input v-model="cdtMerchant.isDistribution" placeholder="分销开关(0:开启 1:关闭)"/>-->
             <!--</Form-item>-->
