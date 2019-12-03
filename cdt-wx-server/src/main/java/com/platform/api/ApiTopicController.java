@@ -30,7 +30,6 @@ public class ApiTopicController extends ApiBaseAction {
     private ApiTopicService topicService;
 
     /**
-     *
      */
     @IgnoreAuth
     @GetMapping("list")
@@ -51,7 +50,6 @@ public class ApiTopicController extends ApiBaseAction {
     }
 
     /**
-     *
      */
     @IgnoreAuth
     @GetMapping("detail")
@@ -61,7 +59,6 @@ public class ApiTopicController extends ApiBaseAction {
     }
 
     /**
-     *
      */
     @IgnoreAuth
     @GetMapping("related")

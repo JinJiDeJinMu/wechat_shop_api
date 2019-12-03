@@ -299,11 +299,11 @@ public class ApiUserController extends ApiBaseAction {
             mlsuser.setGetProfit(new Double(amount * 100).intValue());
             mlsUserSer.getEntityMapper().tx(mlsuser);
 
-            RedisUtils.del("tx" + mlsuser.getMlsUserId());
-        } else {
-            return toResponsFail(ret.getErr_code_des());
-        }
-        return toResponsSuccess(ret);
-    }
+            RedisUtils.del("tx" +mlsuser.getMlsUserId());
+		}else {
+			return toResponsFail(ret.getErr_code_des()); 
+		}
+		return toResponsSuccess(ret);
+	}
 
 }

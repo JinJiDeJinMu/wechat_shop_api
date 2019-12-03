@@ -1,7 +1,7 @@
 package com.platform.entity;
 
 /**
- * 类名称：NideshopUserGoods<br>
+ * 类名称：NideshopUserGoods<br> 
  * 类描述：<br>
  */
 public class UserGoods {

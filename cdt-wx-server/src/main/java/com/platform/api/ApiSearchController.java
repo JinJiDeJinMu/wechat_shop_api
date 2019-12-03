@@ -1,23 +1,24 @@
 package com.platform.api;
 
+import com.chundengtai.base.result.Result;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
+import com.platform.entity.GoodsVo;
 import com.platform.entity.KeywordsVo;
 import com.platform.entity.SearchHistoryVo;
 import com.platform.entity.UserVo;
+import com.platform.service.ApiGoodsService;
 import com.platform.service.ApiKeywordsService;
 import com.platform.service.ApiSearchHistoryService;
 import com.platform.util.ApiBaseAction;
+import com.platform.util.ApiPageUtils;
 import com.platform.utils.Query;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,8 @@ public class ApiSearchController extends ApiBaseAction {
     private ApiKeywordsService keywordsService;
     @Autowired
     private ApiSearchHistoryService searchHistoryService;
+    @Autowired
+    private ApiGoodsService apiGoodsService;
 
     /**
      * 　　index
@@ -110,8 +113,31 @@ public class ApiSearchController extends ApiBaseAction {
                 i++;
             }
         }
-        //
         return toResponsSuccess(keys);
+    }
+
+
+    /**
+     * 　　search搜索
+     */
+    @ApiOperation(value = "搜索商品")
+    @ApiImplicitParams({@ApiImplicitParam(name = "keyword", value = "关键字", paramType = "path", required = true)})
+    @IgnoreAuth
+    @GetMapping("search")
+    public Result<Object> search(@LoginUser UserVo loginUser, String keyword,
+                                 @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
+                                 @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize) {
+        Map param = new HashMap();
+        param.put("keyword", keyword);
+        param.put("page", pageIndex);
+        param.put("limit", pagesize);
+        param.put("order", "desc");
+        param.put("sidx", "id");
+        Query query = new Query(param);
+        List<GoodsVo> goodsVoList = apiGoodsService.queryList(query);
+        int total = apiGoodsService.queryTotal(query);
+        ApiPageUtils pageUtil = new ApiPageUtils(goodsVoList, total, query.getLimit(), query.getPage());
+        return Result.success(pageUtil);
     }
 
     /**
@@ -120,7 +146,6 @@ public class ApiSearchController extends ApiBaseAction {
     @PostMapping("clearhistory")
     public Object clearhistory(@LoginUser UserVo loginUser) {
         searchHistoryService.deleteByUserId(loginUser.getUserId());
-        //
         return toResponsSuccess("");
     }
 }

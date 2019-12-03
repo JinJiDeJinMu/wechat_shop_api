@@ -228,5 +228,6 @@ public class OrderGoodsVo implements Serializable {
         this.coupon_id = coupon_id;
     }
 
-
+	
+	
 }

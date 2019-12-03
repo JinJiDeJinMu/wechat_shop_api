@@ -2,14 +2,14 @@ package com.platform.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.platform.cache.J2CacheUtils;
+import com.chundengtai.base.constant.CacheConstant;
 import com.platform.dao.ApiTokenMapper;
 import com.platform.entity.TokenEntity;
 import com.platform.util.ApiUserUtils;
-import com.platform.util.RedisUtils;
 import com.platform.utils.CharUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,6 +24,9 @@ public class TokenService {
     private ApiTokenMapper tokenDao;
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     //12小时后过期
     private final static int EXPIRE = 3600 * 12;
@@ -85,9 +88,10 @@ public class TokenService {
     public String getAccessToken() {
         String access_token = null;
 
-        boolean flag = RedisUtils.exists(J2CacheUtils.SYSTEM_ACCESS_TOKEN);
+        boolean flag = redisTemplate.hasKey(CacheConstant.SYSTEM_ACCESS_TOKEN);
+        //boolean flag = RedisUtils.exists(J2CacheUtils.SYSTEM_ACCESS_TOKEN);
         if (flag == true) {
-            access_token = RedisUtils.get(J2CacheUtils.SYSTEM_ACCESS_TOKEN).toString();
+            access_token = redisTemplate.opsForValue().get(CacheConstant.SYSTEM_ACCESS_TOKEN).toString();
             if (StringUtils.isNotBlank(access_token)) {
                 return access_token;
             }
@@ -100,7 +104,7 @@ public class TokenService {
         JSONObject sessionData = JSON.parseObject(res);
         access_token = sessionData.getString("access_token");
 
-        RedisUtils.set(J2CacheUtils.SYSTEM_ACCESS_TOKEN, access_token, EXPIRE2);
+        redisTemplate.opsForValue().set(CacheConstant.SYSTEM_ACCESS_TOKEN, access_token, EXPIRE2);
         return access_token;
 
     }

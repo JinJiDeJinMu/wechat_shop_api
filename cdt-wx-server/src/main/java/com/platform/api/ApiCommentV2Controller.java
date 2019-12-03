@@ -2,11 +2,7 @@ package com.platform.api;
 
 import com.chundengtai.base.result.Result;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.common.CommentReq;
-import com.platform.entity.CommentPictureVo;
-import com.platform.entity.CommentVo;
-import com.platform.entity.RepCommentVo;
-import com.platform.entity.UserVo;
+import com.platform.entity.*;
 import com.platform.oss.OSSFactory;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
@@ -30,7 +26,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v2/comment")
 @Slf4j
-public class CommentV2Controller extends ApiBaseAction {
+public class ApiCommentV2Controller extends ApiBaseAction {
 
     @Autowired
     private ApiCommentService commentService;
@@ -70,6 +66,7 @@ public class CommentV2Controller extends ApiBaseAction {
         param.put("page", pageIndex);
         param.put("limit", pagesize);
         param.put("goodId", goodId);
+        param.put("status", 0);
         param.put("order", "desc");
         param.put("sidx", "id");
         //查询列表数据
@@ -107,21 +104,26 @@ public class CommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
     @IgnoreAuth
-    @PostMapping("post")
+    @GetMapping("post")
     public Result<Object> post(
 //                               @LoginUser UserVo loginUser,
-            Long userId,
+            @RequestParam Long userId,
             @RequestParam String orderNo,
             @RequestParam Integer goodId,
             @RequestParam String content,
             @RequestParam Integer starLevel,
-            MultipartFile[] imageList
+            @RequestParam(required = false) MultipartFile[] imageList
     ) {
         CommentReq commentReq = new CommentReq();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
         commentReq.setUserId(userId);
         commentReq.setOrderNo(orderNo);
         commentReq.setGoodId(goodId);
+        if (imageList == null) {
+            commentReq.setStatus(0);
+        } else {
+            commentReq.setStatus(1);
+        }
         commentReq.setContent(content);
         commentReq.setStarLevel(starLevel);
         apiCommentV2Service.save(commentReq);

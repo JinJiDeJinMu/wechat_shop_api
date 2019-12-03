@@ -1,18 +1,25 @@
 package com.platform.service;
 
-import com.platform.dao.ApiCommentV2Mapper;
-import com.platform.entity.CommentReq;
+
+import com.platform.dao.ApiExpressOrderMapper;
+import com.platform.entity.ExpressOrderVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-@Service
-public class ApiCommentV2Service {
-    @Autowired
-    private ApiCommentV2Mapper apiCommentV2Mapper;
 
+/**
+ * Service接口
+ *
+ * @author lipengjun
+ * @date 2019-11-29 10:44:41
+ */
+@Service
+public class ApiExpressOrderService {
+    @Autowired
+    private ApiExpressOrderMapper apiExpressOrderMapper;
 
     /**
      * 根据主键查询实体
@@ -20,8 +27,8 @@ public class ApiCommentV2Service {
      * @param id 主键
      * @return 实体
      */
-    public CommentReq queryObject(Integer id) {
-        return apiCommentV2Mapper.queryObject(id);
+    public ExpressOrderVo queryObject(Integer id) {
+        return apiExpressOrderMapper.queryObject(id);
     }
 
     /**
@@ -30,8 +37,8 @@ public class ApiCommentV2Service {
      * @param map 参数
      * @return list
      */
-    public List<CommentReq> queryList(Map<String, Object> map) {
-        return apiCommentV2Mapper.queryList(map);
+    public List<ExpressOrderVo> queryList(Map<String, Object> map) {
+        return apiExpressOrderMapper.queryList(map);
     }
 
     /**
@@ -41,27 +48,27 @@ public class ApiCommentV2Service {
      * @return 总数
      */
     public int queryTotal(Map<String, Object> map) {
-        return apiCommentV2Mapper.queryTotal(map);
+        return apiExpressOrderMapper.queryTotal(map);
     }
 
     /**
      * 保存实体
      *
-     * @param commentReq 实体
+     * @param expressOrderVo 实体
      * @return 保存条数
      */
-    public int save(CommentReq commentReq) {
-        return apiCommentV2Mapper.save(commentReq);
+    public int save(ExpressOrderVo expressOrderVo) {
+        return apiExpressOrderMapper.save(expressOrderVo);
     }
 
     /**
      * 根据主键更新实体
      *
-     * @param commentReq 实体
+     * @param expressOrderVo 实体
      * @return 更新条数
      */
-    public int update(CommentReq commentReq) {
-        return apiCommentV2Mapper.update(commentReq);
+    public int update(ExpressOrderVo expressOrderVo) {
+        return apiExpressOrderMapper.update(expressOrderVo);
     }
 
     /**
@@ -71,7 +78,7 @@ public class ApiCommentV2Service {
      * @return 删除条数
      */
     public int delete(Integer id) {
-        return apiCommentV2Mapper.delete(id);
+        return apiExpressOrderMapper.delete(id);
     }
 
     /**
@@ -81,6 +88,6 @@ public class ApiCommentV2Service {
      * @return 删除条数
      */
     public int deleteBatch(Integer[] ids) {
-        return apiCommentV2Mapper.deleteBatch(ids);
+        return apiExpressOrderMapper.deleteBatch(ids);
     }
 }

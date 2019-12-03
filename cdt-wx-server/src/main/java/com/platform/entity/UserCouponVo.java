@@ -43,7 +43,6 @@ public class UserCouponVo implements Serializable {
     private Date use_end_date;
     //最小使用金额
     private BigDecimal min_goods_amount;
-
     public Integer getId() {
         return id;
     }
@@ -172,6 +171,7 @@ public class UserCouponVo implements Serializable {
     public void setMin_goods_amount(BigDecimal min_goods_amount) {
         this.min_goods_amount = min_goods_amount;
     }
-
-
+    
+    
+    
 }

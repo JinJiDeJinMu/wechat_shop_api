@@ -1,10 +1,11 @@
 package com.platform.service;
 
-import com.platform.cache.J2CacheUtils;
+import com.chundengtai.base.constant.CacheConstant;
 import com.platform.util.JuheUtil;
-import com.platform.util.RedisUtils;
 import jline.internal.Log;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,10 +18,11 @@ import java.util.Map;
 @Service
 public class LifeServiceSer {
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 身份验证
-     *
      * @param idcard
      * @param realname
      * @return
@@ -29,10 +31,10 @@ public class LifeServiceSer {
         Map<String, Object> resultObj = new HashMap<String, Object>();
 
         int count = 0;
-        boolean flag = RedisUtils.exists(J2CacheUtils.SYS_ID_CARD_CHECL + userId);
+        boolean flag = redisTemplate.hasKey(CacheConstant.SYS_ID_CARD_CHECL + userId);
         if (flag == true) {
-            System.out.println(RedisUtils.get(J2CacheUtils.SYS_ID_CARD_CHECL + userId));
-            count = Integer.parseInt(RedisUtils.get(J2CacheUtils.SYS_ID_CARD_CHECL + userId).toString());
+            //System.out.println(RedisUtils.get(J2CacheUtils.SYS_ID_CARD_CHECL + userId));
+            count = Integer.parseInt(redisTemplate.opsForValue().get(CacheConstant.SYS_ID_CARD_CHECL + userId).toString());
             if (count == 3) {
                 resultObj.put("errno", 3);
                 resultObj.put("errmsg", "同一用户一分钟只可以认证三次。");
@@ -40,12 +42,12 @@ public class LifeServiceSer {
             } else {
                 count++;
                 Log.info("不够三次增加次数" + count);
-                RedisUtils.del(J2CacheUtils.SYS_ID_CARD_CHECL + userId);
-                RedisUtils.set(J2CacheUtils.SYS_ID_CARD_CHECL + userId, String.valueOf(count), 60);
+                redisTemplate.delete(CacheConstant.SYS_ID_CARD_CHECL + userId);
+                redisTemplate.opsForValue().set(CacheConstant.SYS_ID_CARD_CHECL + userId, String.valueOf(count), 60);
             }
         } else {
             Log.info("第一次设置次数60秒");
-            RedisUtils.set(J2CacheUtils.SYS_ID_CARD_CHECL + userId, String.valueOf(++count), 60);
+            redisTemplate.opsForValue().set(CacheConstant.SYS_ID_CARD_CHECL + userId, String.valueOf(++count), 60);
         }
 //    	if(1==1) {
 //        	return resultObj;

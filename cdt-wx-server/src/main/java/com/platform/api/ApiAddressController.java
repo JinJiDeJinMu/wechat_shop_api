@@ -121,7 +121,6 @@ public class ApiAddressController extends ApiBaseAction {
         addressService.delete(id);
         return toResponsSuccess("");
     }
-
     /**
      * 获取用户的收货地址
      */

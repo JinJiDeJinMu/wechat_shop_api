@@ -1,5 +1,6 @@
 package com.platform.entity;
 
+import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang.StringUtils;
 
@@ -118,6 +119,16 @@ public class OrderVo implements Serializable {
     private Long merchant_id;
     //团购ID
     private String group_buying_id;
+
+    public Integer getGoods_type() {
+        return goods_type;
+    }
+
+    public void setGoods_type(Integer goods_type) {
+        this.goods_type = goods_type;
+    }
+
+    private Integer goods_type;
 
     public String getFull_region() {
         //    return full_region;
@@ -430,35 +441,36 @@ public class OrderVo implements Serializable {
     }
 
     public String getOrder_status_text() {
-        if (null != order_status && StringUtils.isEmpty(order_status_text)) {
-            order_status_text = "未付款";
-            switch (order_status) {
-                case 0:
-                    order_status_text = "等待付款";//order_status_text = "未付款";
-                    break;
-                case 201:
-                    order_status_text = "待发货";
-                    break;
-                case 300:
-                    order_status_text = "待收货";
-                    break;
-                case 301:
-                    order_status_text = "已完成";
-                    break;
-                case 200:
-                    order_status_text = "已付款";
-                    break;
-                case 101:
-                    order_status_text = "已取消";
-                    break;
-                case 401:
-                    order_status_text = "已取消";
-                    break;
-                case 402:
-                    order_status_text = "已退货";
-                    break;
-            }
-        }
+//        if (null != order_status && StringUtils.isEmpty(order_status_text)) {
+//            order_status_text = "未付款";
+//            switch (order_status) {
+//                case 0:
+//                	order_status_text = "等待付款";//order_status_text = "未付款";
+//                    break;
+//                case 201:
+//                    order_status_text = "待发货";
+//                    break;
+//                case 300:
+//                    order_status_text = "待收货";
+//                    break;
+//                case 301:
+//                    order_status_text = "已完成";
+//                    break;
+//                case 200:
+//                    order_status_text = "已付款";
+//                    break;
+//                case 101:
+//                    order_status_text = "已取消";
+//                    break;
+//                case 401:
+//                    order_status_text = "已取消";
+//                    break;
+//                case 402:
+//                    order_status_text = "已退货";
+//                    break;
+//            }
+//        }
+        order_status_text = OrderStatusEnum.getEnumByKey(order_status).getDesc();
         return order_status_text;
     }
 
@@ -624,5 +636,5 @@ public class OrderVo implements Serializable {
     public void setGroup_buying_id(String group_buying_id) {
         this.group_buying_id = group_buying_id;
     }
-
+	
 }

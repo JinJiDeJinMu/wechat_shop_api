@@ -48,5 +48,5 @@ public class ApiBrandService {
     public void deleteBatch(Integer[] ids) {
         brandDao.deleteBatch(ids);
     }
-
+	
 }

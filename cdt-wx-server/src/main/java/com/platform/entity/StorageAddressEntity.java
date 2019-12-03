@@ -1,7 +1,6 @@
 package com.platform.entity;
 
 import java.io.Serializable;
-
 /**
  * 存放地址表实体
  * 表名 storage_address
@@ -13,7 +12,7 @@ public class StorageAddressEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     *
+     * 
      */
     private Integer id;
     /**
@@ -46,7 +45,6 @@ public class StorageAddressEntity implements Serializable {
     public Integer getId() {
         return id;
     }
-
     /**
      * 设置：省
      */
@@ -60,7 +58,6 @@ public class StorageAddressEntity implements Serializable {
     public String getProvince() {
         return province;
     }
-
     /**
      * 设置：市
      */
@@ -74,7 +71,6 @@ public class StorageAddressEntity implements Serializable {
     public String getCity() {
         return city;
     }
-
     /**
      * 设置：区
      */
@@ -88,7 +84,6 @@ public class StorageAddressEntity implements Serializable {
     public String getArea() {
         return area;
     }
-
     /**
      * 设置：使用者id
      */

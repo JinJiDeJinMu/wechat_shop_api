@@ -47,7 +47,6 @@ public class ApiIndexController extends ApiBaseAction {
     private ApiCartService cartService;
     @Autowired
     private LifeServiceSer lifeServiceSer;
-
     /**
      * 测试
      */
@@ -246,7 +245,7 @@ public class ApiIndexController extends ApiBaseAction {
     @GetMapping(value = "serviceGoods")
     public Object serviceGoods(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                @RequestParam(value = "size", defaultValue = "10") Integer size) {
-
+        
         Map params = new HashMap();
         params.put("is_delete", 0);
         params.put("is_on_sale", 1);

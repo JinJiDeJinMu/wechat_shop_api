@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+
 /**
  * 分销用户<br>
  */
@@ -41,7 +42,7 @@ public class MlsUserSer {
     public MlsUserMapper getEntityMapper() {
         return mlsUserDao;
     }
-
+	
     public MlsUserEntity2 queryObject(Long userId) {
         return mlsUserDao.getById(userId);
     }

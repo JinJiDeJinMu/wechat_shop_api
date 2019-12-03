@@ -1,5 +1,11 @@
 package com.platform.api;
 
+import com.chundengtai.base.weixinapi.OrderStatusEnum;
+import com.chundengtai.base.weixinapi.PayTypeEnum;
+import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
+import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.OrderGoodsVo;
@@ -9,8 +15,7 @@ import com.platform.entity.UserVo;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiPageUtils;
-import com.platform.util.wechat.WechatRefundApiResult;
-import com.platform.util.wechat.WechatUtil;
+import com.platform.utils.CharUtil;
 import com.platform.utils.Query;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,15 +40,25 @@ import java.util.Map;
 @RequestMapping("/api/order")
 public class ApiOrderController extends ApiBaseAction {
     @Autowired
+    private WxPayService wxPayService;
+
+    @Autowired
     private ApiOrderService orderService;
+
     @Autowired
     private ApiOrderGoodsService orderGoodsService;
+
     @Autowired
     private UserRecordSer userRecordSer;
+
     @Autowired
     private MlsUserSer mlsUserSer;
+
     @Autowired
     private ApiUserCouponService userCouponService;
+
+    @Autowired
+    private KeygenService kengenService;
 
     /**
      *
@@ -59,50 +74,14 @@ public class ApiOrderController extends ApiBaseAction {
     /**
      * 获取订单列表(要验证)
      */
-//    @ApiOperation(value = "获取订单列表")
-//    @RequestMapping("list")
-//    public Object list(@LoginUser UserVo loginUser, Integer order_status,
-//                       @RequestParam(value = "page", defaultValue = "1") Integer page,
-//                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
-//
-//        Map params = new HashMap();
-//        params.put("user_id", loginUser.getUserId());
-//        params.put("page", page);
-//        params.put("limit", size);
-//        params.put("sidx", "id");
-//        params.put("order", "desc");
-//        params.put("order_status", order_status);
-//        //查询列表数据
-//        Query query = new Query(params);
-//        List<OrderVo> orderEntityList = orderService.queryList(query);
-//        int total = orderService.queryTotal(query);
-//        ApiPageUtils pageUtil = new ApiPageUtils(orderEntityList, total, query.getLimit(), query.getPage());
-//        //
-//        for (OrderVo item : orderEntityList) {
-//            Map orderGoodsParam = new HashMap();
-//            orderGoodsParam.put("order_id", item.getId());
-//            //订单的商品
-//            List<OrderGoodsVo> goodsList = orderGoodsService.queryList(orderGoodsParam);
-//            Integer goodsCount = 0;
-//            for (OrderGoodsVo orderGoodsEntity : goodsList) {
-//                goodsCount += orderGoodsEntity.getNumber();
-//                item.setGoodsCount(goodsCount);
-//            }
-//        }
-//        return toResponsSuccess(pageUtil);
-//    }
-
-    /**
-     * 获取订单列表（开发）
-     */
     @ApiOperation(value = "获取订单列表")
-    @IgnoreAuth
     @RequestMapping("list")
-    public Object list(Integer userId, Integer order_status,
+    public Object list(@LoginUser UserVo loginUser, Integer order_status,
                        @RequestParam(value = "page", defaultValue = "1") Integer page,
                        @RequestParam(value = "size", defaultValue = "10") Integer size) {
+
         Map params = new HashMap();
-        params.put("user_id", userId);
+        params.put("user_id", loginUser.getUserId());
         params.put("page", page);
         params.put("limit", size);
         params.put("sidx", "id");
@@ -129,6 +108,42 @@ public class ApiOrderController extends ApiBaseAction {
     }
 
     /**
+     * 获取订单列表（开发）
+     */
+//    @ApiOperation(value = "获取订单列表")
+//    @IgnoreAuth
+//    @RequestMapping("list")
+//    public Object list(Integer userId, Integer order_status,
+//                       @RequestParam(value = "page", defaultValue = "1") Integer page,
+//                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
+//        Map params = new HashMap();
+//        params.put("user_id", userId);
+//        params.put("page", page);
+//        params.put("limit", size);
+//        params.put("sidx", "id");
+//        params.put("order", "desc");
+//        params.put("order_status", order_status);
+//        //查询列表数据
+//        Query query = new Query(params);
+//        List<OrderVo> orderEntityList = orderService.queryList(query);
+//        int total = orderService.queryTotal(query);
+//        ApiPageUtils pageUtil = new ApiPageUtils(orderEntityList, total, query.getLimit(), query.getPage());
+//        //
+//        for (OrderVo item : orderEntityList) {
+//            Map orderGoodsParam = new HashMap();
+//            orderGoodsParam.put("order_id", item.getId());
+//            //订单的商品
+//            List<OrderGoodsVo> goodsList = orderGoodsService.queryList(orderGoodsParam);
+//            Integer goodsCount = 0;
+//            for (OrderGoodsVo orderGoodsEntity : goodsList) {
+//                goodsCount += orderGoodsEntity.getNumber();
+//                item.setGoodsCount(goodsCount);
+//            }
+//        }
+//        return toResponsSuccess(pageUtil);
+//    }
+
+    /**
      * 获取订单详情
      */
     @ApiOperation(value = "获取订单详情")
@@ -136,11 +151,11 @@ public class ApiOrderController extends ApiBaseAction {
     @GetMapping("detail")
     public Object detail(Integer orderId) {
         Map resultObj = new HashMap();
-        //
         OrderVo orderInfo = orderService.queryObject(orderId);
         if (null == orderInfo) {
             return toResponsObject(400, "订单不存在", "");
         }
+
         Map orderGoodsParam = new HashMap();
         orderGoodsParam.put("order_id", orderId);
         //订单的商品
@@ -219,53 +234,56 @@ public class ApiOrderController extends ApiBaseAction {
     @ApiOperation(value = "取消订单")
     @RequestMapping("cancelOrder")
     public Object cancelOrder(Integer orderId) {
+
+        OrderVo orderVo = orderService.queryObject(orderId);
+        List<OrderVo> orders = orderService.queryByAllOrderId(orderVo.getAll_order_id());
+        BigDecimal allPrice = BigDecimal.ZERO;
+        for (OrderVo o : orders) {
+            allPrice = allPrice.add(o.getAll_price());
+        }
+
+        if (orderVo.getOrder_status().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
+            return toResponsFail("已发货，不能取消");
+        } else if (orderVo.getOrder_status().equals(OrderStatusEnum.CONFIRM_GOODS.getCode())) {
+            return toResponsFail("已收货，不能取消");
+        }
         try {
-            OrderVo orderVo = orderService.queryObject(orderId);
-
-            List<OrderVo> orders = orderService.queryByAllOrderId(orderVo.getAll_order_id());
-
-            BigDecimal allPrice = BigDecimal.ZERO;
-            for (OrderVo o : orders) {
-                allPrice = allPrice.add(o.getAll_price());
-            }
-
-            if (orderVo.getOrder_status() == 300) {
-                return toResponsFail("已发货，不能取消");
-            } else if (orderVo.getOrder_status() == 301) {
-                return toResponsFail("已收货，不能取消");
-            }
             // 需要退款
             if (orderVo.getPay_status() == 2) {
 
-                WechatRefundApiResult result = WechatUtil.wxRefund(orderVo.getAll_order_id().toString(),
-                        allPrice.doubleValue(), orderVo.getAll_price().doubleValue());
+                WxPayRefundRequest request = new WxPayRefundRequest();
+                request.setNonceStr(CharUtil.getRandomString(16));
+                request.setOutTradeNo(orderVo.getAll_order_id());
+                //request.setRefundFee(orderVo.getActual_price().multiply(new BigDecimal(100)).intValue());
+                request.setRefundFee(allPrice.multiply(new BigDecimal(100)).intValue());
+                //request.setTotalFee(orderVo.getActual_price().multiply(new BigDecimal(100)).intValue());
+                request.setTotalFee(allPrice.multiply(new BigDecimal(100)).intValue());
+
+                long id = kengenService.genNumber().longValue();
+                request.setOutRefundNo(String.valueOf(id));
+                request.setOpUserId(orderVo.getUser_id().toString());
+
+                WxPayRefundResult wxResult = wxPayService.refund(request);
+//
+//                WechatRefundApiResult result = WechatUtil.wxRefund(orderVo.getAll_order_id().toString(),
+//                        allPrice.doubleValue(), orderVo.getAll_price().doubleValue());
                 //测试修改金额
-//                WechatRefundApiResult result = WechatUtil.wxRefund(orderVo.getId().toString(), 0.01d, 0.01d);
-                if (result.getResult_code().equals("SUCCESS")) {
-                    if (orderVo.getOrder_status() == 201) {
-                        orderVo.setOrder_status(401);
-                    } else if (orderVo.getOrder_status() == 300) {
-                        orderVo.setOrder_status(402);
+                //WechatRefundApiResult result2 = WechatUtil.wxRefund(orderVo.getAll_order_id().toString(), 0.01d, 0.01d);
+                if (wxResult.getResultCode().equals("SUCCESS")) {
+                    if (orderVo.getOrder_status().equals(OrderStatusEnum.PAYED_ORDER.getCode())) {
+                        orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
+                    } else if (orderVo.getOrder_status().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
+                        orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
                     }
 
-                    orderVo.setPay_status(4);
+                    orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
                     orderService.update(orderVo);
-
                     //更新优惠券状态和实际
                     UserCouponVo uc = new UserCouponVo();
                     uc.setId(orderVo.getCoupon_id());
                     uc.setCoupon_status(1);
                     uc.setUsed_time(null);
                     userCouponService.updateCouponStatus(uc);
-
-//                    //去掉订单成功成立分润退还
-//                    try {
-//                    	orderService.cancelFx(orderVo.getId(), orderVo.getPay_time(), orderVo.getAll_price().multiply(new BigDecimal("100")).intValue());
-//                    }catch(Exception e) {
-//                    	System.out.println("================取消订单返还分润开始================");
-//                    	e.printStackTrace();
-//                    	System.out.println("================取消订单返还分润开始================");
-//                    }
                     return toResponsSuccess("取消成功");
                 } else {
                     return toResponsObject(400, "取消成失败", "取消成失败");
@@ -275,6 +293,14 @@ public class ApiOrderController extends ApiBaseAction {
                 orderService.update(orderVo);
                 return toResponsSuccess("取消成功");
             }
+        } catch (WxPayException e) {
+            logger.error(e.getXmlString());
+            if (e.getErrCodeDes().contains("订单已全额退款")) {
+                orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
+                orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
+                orderService.update(orderVo);
+            }
+            return toResponsSuccess(e.getErrCodeDes());
         } catch (Exception e) {
             e.printStackTrace();
         }

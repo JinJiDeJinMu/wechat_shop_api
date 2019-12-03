@@ -111,7 +111,6 @@ public class ApiCommentController extends ApiBaseAction {
     }
 
     /**
-     *
      */
     @ApiOperation(value = "评论数量")
     @GetMapping("count")

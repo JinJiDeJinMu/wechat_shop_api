@@ -1,13 +1,12 @@
 package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chundengtai.base.constant.CacheConstant;
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.*;
-import com.platform.service.ApiGoodsService;
-import com.platform.service.ApiProductService;
-import com.platform.service.GroupBuyingDetailedService;
-import com.platform.service.GroupBuyingService;
+import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.utils.Base64;
 import io.swagger.annotations.Api;
@@ -27,22 +26,32 @@ import java.util.Map;
 @RequestMapping("/api/buy")
 public class ApiBuyController extends ApiBaseAction {
 
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final ApiGoodsService goodsService;
+    private final ApiProductService productService;
+    private final GroupBuyingService groupBuyingService;
+    private final GroupBuyingDetailedService groupBuyingDetailedService;
     @Autowired
-    private ApiGoodsService goodsService;
+    private ApiExpressOrderService apiExpressOrderService;
+
     @Autowired
-    private ApiProductService productService;
-    @Autowired
-    private GroupBuyingService groupBuyingService;
-    @Autowired
-    private GroupBuyingDetailedService groupBuyingDetailedService;
+    public ApiBuyController(RedisTemplate<String, Object> redisTemplate, ApiGoodsService goodsService, ApiProductService productService, GroupBuyingService groupBuyingService, GroupBuyingDetailedService groupBuyingDetailedService) {
+        this.redisTemplate = redisTemplate;
+        this.goodsService = goodsService;
+        this.productService = productService;
+        this.groupBuyingService = groupBuyingService;
+        this.groupBuyingDetailedService = groupBuyingDetailedService;
+    }
 
     @ApiOperation(value = "商品添加")
+    @IgnoreAuth
     @PostMapping("/add")
     public Object addBuy(@LoginUser UserVo loginUser) {
         JSONObject jsonParam = getJsonRequest();
         Integer goodsId = jsonParam.getInteger("goodsId");
         Integer productId = jsonParam.getInteger("productId");
         Integer number = jsonParam.getInteger("number");
+        String selectSkuName = jsonParam.getString("selectSkuName");
 
         //判断商品是否可以购买
         GoodsVo goodsInfo = goodsService.queryObject(goodsId);
@@ -55,19 +64,35 @@ public class ApiBuyController extends ApiBaseAction {
             return this.toResponsObject(400, "库存不足", "");
         }
 
-
         BuyGoodsVo goodsVo = new BuyGoodsVo();
         goodsVo.setGoodsId(goodsId);
         goodsVo.setProductId(productId);
         goodsVo.setNumber(number);
+        goodsVo.setName(selectSkuName);
+        goodsVo.setSkuName(selectSkuName);
+        goodsVo.setGoodsType(goodsInfo.getIs_secKill());
+        redisTemplate.opsForValue().set(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId(), goodsVo);
 
-        //J2CacheUtils.put(J2CacheUtils.SHOP_CACHE_NAME, "goods" + loginUser.getUserId() + "", goodsVo);
-        redisTemplate.opsForValue().set("shopCache:goods" + loginUser.getUserId() + "", goodsVo);
+        //todo:增加快递代取功能
+        if (goodsInfo.getIs_secKill().equals(GoodsTypeEnum.EXPRESS_GET.getCode())) {
+            //添加快递代取商品的详细信息
+            ExpressOrderVo expressOrderVo = new ExpressOrderVo();
+            expressOrderVo.setName(jsonParam.getString("userName"));
+            expressOrderVo.setMobile(jsonParam.getString("telNumber"));
+//            expressOrderVo.setProvince(jsonParam.getString("province"));
+//            expressOrderVo.setCity(jsonParam.getString("city"));
+//            expressOrderVo.setDistrict(jsonParam.getString("district"));
+            expressOrderVo.setAddress(jsonParam.getString("detailInfo"));
+            expressOrderVo.setRemarks(jsonParam.getString("remark"));
+            expressOrderVo.setPickNumber(jsonParam.getString("pressTime"));
+            expressOrderVo.setExpressNo(jsonParam.getString("expressNo"));
+            redisTemplate.opsForValue().set(CacheConstant.EXPRESS_GOODS_CACHE + loginUser.getUserId(), expressOrderVo);
+            //apiExpressOrderService.save(expressOrderVo);
+        }
+
         return toResponsMsgSuccess("添加成功");
     }
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
     /**
      * 获取用户拼团列表
      *

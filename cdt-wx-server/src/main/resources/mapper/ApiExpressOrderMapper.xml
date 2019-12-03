@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiExpressOrderMapper">
+
+    <resultMap type="com.platform.entity.ExpressOrderVo" id="ExpressOrderMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="country" column="country"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="district" column="district"/>
+        <result property="address" column="address"/>
+        <result property="mobile" column="mobile"/>
+        <result property="name" column="name"/>
+        <result property="realName" column="real_name"/>
+        <result property="remarks" column="remarks"/>
+        <result property="pickNumber" column="pick_number"/>
+        <result property="orderId" column="order_id"/>
+        <result property="expressNo" column="express_no"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.platform.entity.ExpressOrderVo">
+		select
+			*
+		from nideshop_express_order
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultType="com.platform.entity.ExpressOrderVo">
+        select
+        *
+        from nideshop_express_order
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from nideshop_express_order
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.ExpressOrderVo">
+		insert into nideshop_express_order(
+        			`id`,
+                    			`user_id`,
+                    			`order_id`,
+                    			`country`,
+                    			`province`,
+                    			`city`,
+                    			`district`,
+                    			`address`,
+                    			`mobile`,
+                    			`name`,
+                    			`real_name`,
+                    			`remarks`,
+                    			`pick_number`,
+                    			`express_no`
+                    			            )
+		values(
+        			#{id},
+                    			#{userId},
+                    			#{orderId},
+                    			#{country},
+                    			#{province},
+                    			#{city},
+                    			#{district},
+                    			#{address},
+                    			#{mobile},
+                    			#{name},
+                    			#{realName},
+                    			#{remarks},
+                    			#{pickNumber},
+                    			#{expressNo}
+                    			            )
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.ExpressOrderVo">
+        update nideshop_express_order
+        <set>
+            <if test="userId != null">`user_id` = #{userId
+                        },
+            </if>
+            <if test="orderId != null">`order_id` = #{orderId
+                        },
+            </if>
+            <if test="country != null">`country` = #{country
+                        },
+            </if>
+            <if test="province != null">`province` = #{province
+                        },
+            </if>
+            <if test="city != null">`city` = #{city
+                        },
+            </if>
+            <if test="district != null">`district` = #{district
+                        },
+            </if>
+            <if test="address != null">`address` = #{address
+                        },
+            </if>
+            <if test="mobile != null">`mobile` = #{mobile
+                        },
+            </if>
+            <if test="name != null">`name` = #{name
+                        },
+            </if>
+            <if test="realName != null">`real_name` = #{realName
+                        },
+            </if>
+            <if test="remarks != null">`remarks` = #{remarks
+                        },
+            </if>
+            <if test="pickNumber != null">`pick_number` = #{pickNumber                        }
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from nideshop_express_order where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from nideshop_express_order where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

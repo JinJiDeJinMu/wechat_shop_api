@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 
 /**
- * 类名称：UserRecord<br>
+ * 类名称：UserRecord<br> 
  * 类描述：<br>
  */
 @ApiModel(value = "分销用户流水记录")

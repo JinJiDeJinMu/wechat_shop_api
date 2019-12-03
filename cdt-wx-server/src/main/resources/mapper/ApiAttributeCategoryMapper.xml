@@ -18,11 +18,14 @@
 		select * from nideshop_attribute_category where id = #{value}
 	</select>
 
-    <select id="queryList" resultMap="attributeCategoryMap">
+    <select id="queryList" resultType="com.platform.entity.AttributeCategoryVo">
         select * from nideshop_attribute_category
         where 1 = 1
         <if test="showPosition != null">
             AND show_position = #{showPosition}
+        </if>
+        <if test="enabled != null">
+            AND enabled = #{enabled}
         </if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">

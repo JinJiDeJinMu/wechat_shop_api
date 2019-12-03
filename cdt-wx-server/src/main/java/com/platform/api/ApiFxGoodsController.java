@@ -77,7 +77,6 @@ public class ApiFxGoodsController extends ApiBaseAction {
     private ApiCartService cartService;
 
     /**
-     *
      */
     @ApiOperation(value = "分销商品首页")
     @IgnoreAuth
@@ -667,6 +666,7 @@ public class ApiFxGoodsController extends ApiBaseAction {
         goodsData.setGoodsList(goodsData.getData());
         return toResponsSuccess(goodsData);
     }
+
 
 
     /**

@@ -30,7 +30,6 @@ public class ApiFootprintController extends ApiBaseAction {
     private ApiFootprintService footprintService;
 
     /**
-     *
      */
     @ApiOperation(value = "删除足迹")
     @ApiImplicitParams({@ApiImplicitParam(name = "footprintId", value = "足迹id", paramType = "path", required = true)})
@@ -55,7 +54,6 @@ public class ApiFootprintController extends ApiBaseAction {
     }
 
     /**
-     *
      */
     @ApiOperation(value = "获取足迹列表")
     @GetMapping("list")
@@ -111,7 +109,6 @@ public class ApiFootprintController extends ApiBaseAction {
 
 
     /**
-     *
      */
     @ApiOperation(value = "分享足迹")
     @PostMapping("sharelist")

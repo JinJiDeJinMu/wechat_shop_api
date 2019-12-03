@@ -48,7 +48,6 @@ public class ApiAuthController extends ApiBaseAction {
     private RestTemplate restTemplate;
     @Autowired
     private MlsUserSer mlsUserSer;
-
     /**
      * 登录
      */
@@ -99,7 +98,7 @@ public class ApiAuthController extends ApiBaseAction {
         UserVo userVo = userService.queryByOpenId(openid);
         if (null == userVo) {
             userVo = new UserVo();
-
+            
             userVo.setUsername(Base64.encode(loginInfo.getNickName()));
             userVo.setPassword(openid);
             userVo.setRegister_time(nowTime);
@@ -192,8 +191,8 @@ public class ApiAuthController extends ApiBaseAction {
     public Object createCode(String scene) {
 
         System.out.println(tokenService.getAccessToken());
-
-
+        
+        
         return toResponsSuccess(null);
     }
 }

@@ -1,5 +1,7 @@
 package com.platform.api;
 
+import com.chundengtai.base.result.Result;
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.platform.annotation.APPLoginUser;
@@ -84,14 +86,13 @@ public class ApiGoodsController extends ApiBaseAction {
     private CdtMerchantService cdtMerchantService;
 
     //上传文件集合   
-    private List<File> file;
+    private List<File> file;   
     //上传文件名集合   
-    private List<String> fileFileName;
+    private List<String> fileFileName;   
     //上传文件内容类型集合   
-    private List<String> fileContentType;
+    private List<String> fileContentType;   
 
     /**
-     *
      */
     @ApiOperation(value = "商品首页")
     @IgnoreAuth
@@ -119,7 +120,7 @@ public class ApiGoodsController extends ApiBaseAction {
         Map params = new HashMap();
         params.put("page", page);
         params.put("limit", size);
-        params.put("is_secKill", "2");// 秒杀
+        params.put("is_secKill", GoodsTypeEnum.SECONDS_KILL.getCode());// 秒杀
         params.put("sidx", "start_time");
         params.put("order", "asc");
 
@@ -131,7 +132,6 @@ public class ApiGoodsController extends ApiBaseAction {
         goodsData.setGoodsList(goodsData.getData());
         return toResponsSuccess(goodsData);
     }
-
     /**
      * 团购产品列表
      */
@@ -144,7 +144,7 @@ public class ApiGoodsController extends ApiBaseAction {
         Map params = new HashMap();
         params.put("page", page);
         params.put("limit", size);
-        params.put("is_secKill", "3");// 团购
+        params.put("is_secKill", GoodsTypeEnum.GROUP_GOODS.getCode());// 团购
         params.put("sidx", "id");
         params.put("order", "asc");
 
@@ -194,6 +194,7 @@ public class ApiGoodsController extends ApiBaseAction {
         Long userId = getUserId();
         //查找商品信息
         GoodsVo info = goodsService.queryObject(id);
+        if (info == null) return Result.failure("数据不存在!");
         //请求一次浏览量加一
         if (info.getBrowse() == null) {
             info.setBrowse(0);
@@ -742,19 +743,19 @@ public class ApiGoodsController extends ApiBaseAction {
      * 　　为您推荐
      */
     @ApiOperation(value = "为您推荐")
-    @ApiImplicitParams({@ApiImplicitParam(name = "categoryId", value = "分类id", paramType = "path", required = true)})
+    @ApiImplicitParams({@ApiImplicitParam(name = "attribute_category", value = "分类id", paramType = "path", required = true)})
     @IgnoreAuth
     @GetMapping(value = "hot")
-    public Object hot(Integer categoryId) {
+    public Object hot(Integer attribute_category) {
         Map<String, Object> resultObj = new HashMap();
         List<Map<String, Object>> newCategoryList = new ArrayList<>();
         List<GoodsVo> categoryGoods = new ArrayList<>();
         Map param = new HashMap<String, Object>();
-        param.put("category_id", categoryId);
+        param.put("attribute_category", attribute_category);
         param.put("sidx", "add_time");
         param.put("order", "desc");
         param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price");
-        PageHelper.startPage(0, 5, false);
+        PageHelper.startPage(0, 6, false);
         categoryGoods = goodsService.queryList(param);
 
         Map<String, Object> newCategory = new HashMap<String, Object>();
@@ -890,8 +891,8 @@ public class ApiGoodsController extends ApiBaseAction {
     }
 
 
-    /**
-     * 商品二维码图片请求
+    /**商品二维码图片请求
+     *
      */
     @ApiOperation(value = "商品二维码图片请求")
     @GetMapping("getGoodCode")
@@ -910,7 +911,8 @@ public class ApiGoodsController extends ApiBaseAction {
 
         //底图
         String baseFilePath = urlPath + "statics/base/base.png";
-
+		
+		
 
         //获取商品主图和2张配图
         GoodsVo goods = goodsService.queryObject(goodId);
@@ -926,12 +928,12 @@ public class ApiGoodsController extends ApiBaseAction {
          String accessToken = tokenService.getAccessToken() ;
          BufferedInputStream bis = QRCodeUtils.getGoodQrCode(accessToken,this.getUserId(), goodId);
          **/
-
+        
         try {
             //非调用小程序生产二维码
             String content = "http://muserqrcode.51shop.ink?id=" + goodId + "&userId=" + loginUser.getMlsUserId();
             BufferedImage qrcode = QRCodeUtil.createImage(content, null, false);
-
+        	
 //        	FileInputStream baseIn = new FileInputStream(baseFilePath);  
 //        	InputStream p1In = ImageUtils.getImage(p1);
 //        	InputStream p2In = ImageUtils.getImage(p1);
@@ -974,7 +976,8 @@ public class ApiGoodsController extends ApiBaseAction {
 
         //底图
         String baseFilePath = urlPath + "statics/base/base2.png";
-
+		
+		
 
         //获取商品主图和2张配图
         GoodsVo goods = goodsService.queryObject(goodId);
@@ -990,12 +993,12 @@ public class ApiGoodsController extends ApiBaseAction {
          String accessToken = tokenService.getAccessToken() ;
          BufferedInputStream bis = QRCodeUtils.getGoodQrCode(accessToken,this.getUserId(), goodId);
          **/
-
+        
         try {
             //非调用小程序生产二维码
             String content = "http://muserqrcode.51shop.ink?id=" + goodId + "&userId=" + loginUser.getMlsUserId();
             BufferedImage qrcode = QRCodeUtil.createImage(content, null, false);
-
+        	
 //        	FileInputStream baseIn = new FileInputStream(baseFilePath);  
 //        	InputStream p1In = ImageUtils.getImage(p1);
 //        	InputStream p2In = ImageUtils.getImage(p1);
@@ -1096,6 +1099,6 @@ public class ApiGoodsController extends ApiBaseAction {
     public void setFileContentType(List<String> fileContentType) {
         this.fileContentType = fileContentType;
     }
-
-
+    
+    
 }

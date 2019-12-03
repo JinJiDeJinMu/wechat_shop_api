@@ -11,6 +11,7 @@
         <result property="commentTime" column="comment_time"/>
         <result property="starLevel" column="star_level"/>
         <result property="userId" column="user_id"/>
+        <result property="status" column="status"/>
     </resultMap>
 
     <select id="queryObject" resultType="com.platform.entity.CommentReq">
@@ -21,7 +22,8 @@
     			`content`,
     			`comment_time`,
     			`star_level`,
-    			`user_id`
+    			`user_id`,
+    			`status`
 		from nideshop_comment_v2
 		where id = #{id}
 	</select>
@@ -42,6 +44,9 @@
         <if test="userId != null">
             AND user_id = #{userId}
         </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -58,8 +63,20 @@
     <select id="queryTotal" resultType="int">
         select count(*) from nideshop_comment_v2
         WHERE 1=1
-        <if test="name != null and name.trim() != ''">
-            AND name LIKE concat('%',#{name},'%')
+        <if test="goodId != null">
+            AND good_id = #{goodId}
+        </if>
+        <if test="orderNo != null">
+            AND order_no = #{orderNo}
+        </if>
+        <if test="starLevel != null">
+            AND star_level = #{starLevel}
+        </if>
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
         </if>
     </select>
 
@@ -70,14 +87,18 @@
                     			`content`,
                     			`comment_time`,
                     			`star_level`,
-                    			`user_id`            )
+                    			`user_id`,
+                    			`status`
+                    			            )
 		values(
                     			#{orderNo},
                     			#{goodId},
                     			#{content},
                     			#{commentTime},
                     			#{starLevel},
-                    			#{userId}            )
+                    			#{userId},
+                    			#{status}
+                    			            )
 	</insert>
 
     <update id="update" parameterType="com.platform.entity.CommentReq">
@@ -99,6 +120,9 @@
                         },
             </if>
             <if test="userId != null">`user_id` = #{userId
+                        },
+            </if>
+            <if test="status != null">`status` = #{status
                         }
             </if>
         </set>

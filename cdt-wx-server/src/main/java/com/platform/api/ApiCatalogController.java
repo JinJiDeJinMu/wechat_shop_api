@@ -74,7 +74,6 @@ public class ApiCatalogController extends ApiBaseAction {
     }
 
     /**
-     *
      */
     @ApiOperation(value = "分类目录当前分类数据接口")
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "id", paramType = "query", required = false)})

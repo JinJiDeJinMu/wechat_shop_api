@@ -51,7 +51,8 @@
         <result property="merchant_id" column="merchant_id"/>
         <result property="group_buying_id" column="group_buying_id"/>
         <result property="order_type" column="order_type"/>
-        
+        <result property="goods_type" column="goods_type"/>
+
     </resultMap>
 
     <select id="queryObject" resultMap="orderMap">
@@ -197,7 +198,8 @@
 			`promoter_id`,
 			`brokerage`,
 			`merchant_id`,
-			`group_buying_id`
+			`group_buying_id`,
+			`goods_type`
 
 		)
 		values
@@ -241,8 +243,9 @@
 			#{promoter_id},
 			#{brokerage},
 			#{merchant_id},
-			#{group_buying_id}
-			
+			#{group_buying_id},
+			#{goods_type}
+
 		)
 	</insert>
 
@@ -285,6 +288,7 @@
             <if test="promoter_id != null">`promoter_id` = #{promoter_id},</if>
             <if test="brokerage != null">`brokerage` = #{brokerage},</if>
             <if test="fx_status != null">`fx_status` = #{fx_status},</if>
+            <if test="goods_type != null">`goods_type` = #{goods_type},</if>
         </set>
         where id = #{id}
     </update>

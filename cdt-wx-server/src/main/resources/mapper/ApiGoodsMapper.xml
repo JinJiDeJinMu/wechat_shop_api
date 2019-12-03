@@ -61,6 +61,18 @@
         and  is_on_sale =0
 	</select>
 
+    <select id="queryTotal" resultType="int">
+        select count(*) from nideshop_goods
+        where 1 = 1
+        and is_delete = 0 and is_on_sale = 1
+        <if test="is_hot != null and is_hot != ''">
+            and is_hot = #{is_hot}
+        </if>
+        <if test="is_new != null and is_new != ''">
+            and is_new = #{is_new}
+        </if>
+    </select>
+
     <select id="queryList" resultMap="goodsMap">
         select
         <if test="fields != null and fields != ''">
@@ -89,7 +101,7 @@
             and attribute_category = #{attribute_category}
         </if>
         <if test="keyword != null">
-            and keywords like concat('%',#{keyword},'%')
+            and keywords like concat('%',#{keyword},'%') or name like concat('%',#{keyword},'%')
         </if>
         <!--<if test="is_delete != null">
             and is_delete = #{is_delete}
@@ -254,14 +266,7 @@
         </if>
     </select>
 
-    <select id="queryTotal" resultType="int">
-		select count(*) from nideshop_goods
-		where 1 = 1
-        and is_delete = 0 and is_on_sale = 1
-        <if test="is_hot != null and is_hot != ''">
-            and is_hot = #{is_hot}
-        </if>
-	</select>
+
 
     <select id="queryMaxId" resultType="java.lang.Integer" parameterType="map">
         SELECT MAX(id) FROM nideshop_goods

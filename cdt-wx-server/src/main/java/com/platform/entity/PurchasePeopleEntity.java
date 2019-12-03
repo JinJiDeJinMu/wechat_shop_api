@@ -1,7 +1,6 @@
 package com.platform.entity;
 
 import java.io.Serializable;
-
 /**
  * 实体
  * 表名 nideshop_purchase_people
@@ -13,7 +12,7 @@ public class PurchasePeopleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     *
+     * 
      */
     private Integer id;
     /**
@@ -21,7 +20,7 @@ public class PurchasePeopleEntity implements Serializable {
      */
     private Integer goodsId;
     /**
-     *
+     * 
      */
     private Integer userId;
     /**
@@ -48,7 +47,6 @@ public class PurchasePeopleEntity implements Serializable {
     public Integer getId() {
         return id;
     }
-
     /**
      * 设置：商品id
      */
@@ -62,7 +60,6 @@ public class PurchasePeopleEntity implements Serializable {
     public Integer getGoodsId() {
         return goodsId;
     }
-
     /**
      * 设置：
      */
@@ -76,7 +73,6 @@ public class PurchasePeopleEntity implements Serializable {
     public Integer getUserId() {
         return userId;
     }
-
     /**
      * 设置：规格ID
      */
