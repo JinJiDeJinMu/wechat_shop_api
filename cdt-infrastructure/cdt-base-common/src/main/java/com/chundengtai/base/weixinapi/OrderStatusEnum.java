@@ -21,9 +21,7 @@ public enum OrderStatusEnum {
     CANCEL_ORDER(101, "订单已取消"),
     DELETE_ORDER(102, "订单已删除"),
     CLOSED_ORDER(103, "订单已关闭"),
-
     PAYED_ORDER(201, "订单已付款"),
-
 
     WRITE_OFF_PAY(202, "未核销"),
     WRITE_OFF_PAYED(203, "已核销"),
@@ -35,6 +33,7 @@ public enum OrderStatusEnum {
     CONFIRM_GOODS(301, "用户确认收货"),
     REFUND_ORDER(401, "订单已退款"),
     COMPLETED_ORDER(402, "订单完成"),
+    PINGLUN_ORDER(403, "评价订单完成"),
 
     APPLY_REFUND_GOODS(501, "买家申请退货"),
     GOOD_SENDING(502, "退货寄回中"),

@@ -2,6 +2,7 @@ package com.platform.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chundengtai.base.constant.CacheConstant;
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.platform.dao.*;
 import com.platform.entity.*;
@@ -78,54 +79,14 @@ public class ApiOrderService {
 
     @Transactional
     public Map<String, Object> submit(JSONObject jsonParam, UserVo loginUser) {
-
         Map<String, Object> resultObj = new HashMap<String, Object>();
-
         // 判断优惠券是否属于个人（防止个人通过接口请求）
         String couponIds = jsonParam.getString(" ");
         // payType 1：团购操作，2：秒杀，不传为普通购买
         String payType = jsonParam.getString("payType");
         //团购小组的ID，如果创建团购则id为空
         String groupBuyingId = jsonParam.getString("groupBuyingId");
-//		Map<String, UserCouponVo> couponMerchant = null;
-//		if(StringUtils.isNotBlank(couponIds)) {
-//			couponMerchant = new HashMap<String, UserCouponVo>();//供应商与优惠券对应map
-//			String[] couponList = couponIds.split(",");
-//			for(String coupon : couponList) {
-//				UserCouponVo userCouponVo = userCouponService.queryObject(Integer.parseInt(coupon));
-//				if(userCouponVo ==null || userCouponVo.getId() == null) {
-//					resultObj.put("errno", 702);
-//	  				resultObj.put("errmsg", "优惠券ID错误！");
-//					return resultObj;
-//				}
-//				if(loginUser.getUserId().intValue() != userCouponVo.getUser_id().intValue()) {
-//					resultObj.put("errno", 600);
-//					resultObj.put("errmsg", "优惠券信息错误！");
-//					return resultObj;
-//				}
-//				if(couponMerchant.get(userCouponVo.getMerchantId()) != null) {
-//					resultObj.put("errno", 700);
-//					resultObj.put("errmsg", "一个商家只能一张优惠券！");
-//					return resultObj;
-//				}
-//				if(userCouponVo.getCoupon_status() != 1) {
-//					resultObj.put("errno", 701);
-//					resultObj.put("errmsg", "优惠券不可用！");
-//					return resultObj;
-//				}
-//				//优惠券还未开始使用、优惠券已经过期
-//				Long use_start_date = userCouponVo.getUse_start_date().getTime();
-//				Long use_end_date = userCouponVo.getUse_end_date().getTime();
-//				Long new_date = new Date().getTime();
-//				if(use_start_date > new_date || new_date > use_end_date) {
-//					resultObj.put("errno", 703);
-//					resultObj.put("errmsg", "优惠券不在使用时间范围！");
-//					return resultObj;
-//				}
-//				couponMerchant.put(userCouponVo.getMerchantId().toString(), userCouponVo);
-//			}
-//
-//		}
+
         String type = jsonParam.getString("type");//提交方式
         String postscript = jsonParam.getString("postscript");//留言
         Long promoterId = jsonParam.getLong("promoterId");// 获取推荐人id
@@ -138,7 +99,6 @@ public class ApiOrderService {
             promoterId = mlsuser.getMlsUserId();
         }
         AddressVo addressVo = apiAddressMapper.queryObject(jsonParam.getInteger("addressId"));//收货地址
-
 
         //需要一个总订单ID,付款的时候计算全部价格
         String all_order_id = UUID.randomUUID().toString().replaceAll("-", "");
@@ -201,22 +161,8 @@ public class ApiOrderService {
                         merchant_id = cartItem.getMerchant_id();
                     }
                 }
-                //根据供应商的所有商品金额判断优惠券是否可以用
-//				if(couponMerchant != null) {
-//					UserCouponVo userCoupon = couponMerchant.get(merchant_id.toString());
-//					if(userCoupon != null) {
-//						BigDecimal min_goods_amount = userCoupon.getMin_goods_amount();
-//						if(goodsTotalPrice.compareTo(min_goods_amount) < 0) {
-//							resultObj.put("errno", 800);
-//							resultObj.put("errmsg", "优惠券不符合规则！");
-//							return resultObj;
-//						}
-//						couponId = userCoupon.getId();//优惠券ID
-//						couponPrice = userCoupon.getCoupon_price();//优惠券金额
-//					}
-//				}
-                OrderVo orderInfo = getOrderVo(loginUser, postscript, addressVo, all_order_id, goodsTotalPrice, freightPrice, couponId, couponPrice);
 
+                OrderVo orderInfo = getOrderVo(loginUser, postscript, addressVo, all_order_id, goodsTotalPrice, freightPrice, couponId, couponPrice);
                 // 加入推荐人
                 if (promoterId != null) {
                     orderInfo.setPromoter_id(promoterId.intValue());
@@ -225,11 +171,9 @@ public class ApiOrderService {
                 orderInfo.setBrokerage(brokerage_price);
                 // 供应商ID
                 orderInfo.setMerchant_id(merchant_id);
-
                 orderInfo.setOrder_type("1");
                 // 保存订单信息
                 apiOrderMapper.save(orderInfo);
-
                 // 循环订单商品表
                 for (CartVo goodsItem : checkedGoodsList) {
                     OrderGoodsVo orderGoodsVo = new OrderGoodsVo();
@@ -245,27 +189,16 @@ public class ApiOrderService {
                     //保存商品规格等信息
                     orderGoodsVo.setGoods_specifition_ids(goodsItem.getGoods_specifition_ids());//规格属性id集合
                     orderGoodsVo.setGoods_specifition_name_value(goodsItem.getGoods_specifition_name_value());//规格属性集合
-
                     // 保存订单商品表
                     apiOrderGoodsMapper.save(orderGoodsVo);
-
                 }
 
-                // 清空已购买的商品
-//				apiCartMapper.deleteByCart(loginUser.getUserId(), 1, 1);
                 // 返回对象
                 Map<String, OrderVo> orderInfoMap = new HashMap<String, OrderVo>();
                 orderInfoMap.put("orderInfo", orderInfo);
                 resultObj.put("errno", 0);
                 resultObj.put("errmsg", "订单提交成功");
                 resultObj.put("data", orderInfoMap);
-
-                // 优惠券标记已用
-//				UserCouponVo uc = new UserCouponVo();
-//				uc.setId(couponId);
-//				uc.setCoupon_status(2);
-//				uc.setUsed_time(new Date());
-//				userCouponService.updateCouponStatus(uc);
             }
 
         } else {//直接购买
@@ -274,16 +207,13 @@ public class ApiOrderService {
                 Integer couponId = null;
                 BigDecimal couponPrice = BigDecimal.ZERO;//优惠券金额
 
-//				BuyGoodsVo goodsVo = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME,
-//						"goods" + loginUser.getUserId());
-
                 BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId());
                 if (null == goodsVo) {
                     resultObj.put("errno", 400);
                     resultObj.put("errmsg", "请选择商品");
                     return resultObj;
                 }
-                ExpressOrderVo expressOrderVo = (ExpressOrderVo) redisTemplate.opsForValue().get(CacheConstant.EXPRESS_GOODS_CACHE + loginUser.getUserId());
+
                 // 商品规格信息
                 ProductVo productInfo = productService.queryObject(goodsVo.getProductId());
                 // 商品总价
@@ -309,23 +239,8 @@ public class ApiOrderService {
                 BigDecimal brokerage_price = goods.getRetail_price()
                         .multiply(new BigDecimal(goods.getBrokerage_percent() * goodsVo.getNumber())).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
 
-
-                //根据供应商的所有商品金额判断优惠券是否可以用
-//				if(couponMerchant != null) {
-//					UserCouponVo userCoupon = couponMerchant.get(goods.getMerchantId().toString());
-//					BigDecimal min_goods_amount = userCoupon.getMin_goods_amount();
-//					if(goodsTotalPrice.compareTo(min_goods_amount) < 0) {
-//						resultObj.put("errno", 800);
-//						resultObj.put("errmsg", "优惠券不符合规则！");
-//						return resultObj;
-//					}
-//					couponId = userCoupon.getId();//优惠券ID
-//					couponPrice = userCoupon.getCoupon_price();//优惠券金额
-//				}
-
                 // 订单价格计算
                 OrderVo orderInfo = getOrderVo(loginUser, postscript, addressVo, all_order_id, goodsTotalPrice, freightPrice, couponId, couponPrice);
-
                 // 加入推荐人
                 if (promoterId != null) {
                     orderInfo.setPromoter_id(promoterId.intValue());
@@ -334,15 +249,12 @@ public class ApiOrderService {
                 orderInfo.setBrokerage(brokerage_price);
                 // 供应商ID
                 orderInfo.setMerchant_id(goods.getMerchantId());
-
                 orderInfo.setOrder_type(payType == null ? "2" : "3");
-
 
                 //todo:集成核销  下单直接购买
                 orderInfo.setGoods_type(goods.getIs_secKill());
                 // 保存订单信息
                 apiOrderMapper.save(orderInfo);
-
 
                 // 保存订单商品表
                 OrderGoodsVo orderGoodsVo = new OrderGoodsVo();
@@ -376,14 +288,15 @@ public class ApiOrderService {
                 if (null != goodsSepcifitionValue) {
                     orderGoodsVo.setGoods_specifition_name_value(StringUtils.join(goodsSepcifitionValue, ";"));
                 }
-
                 apiOrderGoodsMapper.save(orderGoodsVo);
 
-                //保存快递订单表
-                expressOrderVo.setUserId(loginUser.getUserId().intValue());
-                expressOrderVo.setOrderId(orderInfo.getId().toString());
-                apiExpressOrderService.save(expressOrderVo);
-
+                if (goodsVo.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode())) {
+                    ExpressOrderVo expressOrderVo = (ExpressOrderVo) redisTemplate.opsForValue().get(CacheConstant.EXPRESS_GOODS_CACHE + loginUser.getUserId());
+                    //保存快递订单表
+                    expressOrderVo.setUserId(loginUser.getUserId().intValue());
+                    expressOrderVo.setOrderId(orderInfo.getId().toString());
+                    apiExpressOrderService.save(expressOrderVo);
+                }
 
                 // 返回对象
                 Map<String, OrderVo> orderInfoMap = new HashMap<String, OrderVo>();
@@ -391,13 +304,6 @@ public class ApiOrderService {
                 resultObj.put("errno", 0);
                 resultObj.put("errmsg", "订单提交成功");
                 resultObj.put("data", orderInfoMap);
-
-                // 优惠券标记已用
-//				UserCouponVo uc = new UserCouponVo();
-//				uc.setId(couponId);
-//				uc.setCoupon_status(2);
-//				uc.setUsed_time(new Date());
-//				userCouponService.updateCouponStatus(uc);
             }
             //团购购买
             else {
@@ -405,8 +311,6 @@ public class ApiOrderService {
                 Integer couponId = null;
                 BigDecimal couponPrice = BigDecimal.ZERO;//优惠券金额
 
-//				BuyGoodsVo goodsVo = (BuyGoodsVo) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME,
-//						"goods" + loginUser.getUserId());
                 BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(CacheConstant.SHOP_GOODS_CACHE + loginUser.getUserId());
                 if (null == goodsVo) {
                     resultObj.put("errno", 400);
@@ -438,20 +342,6 @@ public class ApiOrderService {
 						.multiply(new BigDecimal(goods.getBrokerage_percent() * goodsVo.getNumber())).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
 				*/
 
-
-                //根据供应商的所有商品金额判断优惠券是否可以用（团购无法使用优惠卷）
-//				if(couponMerchant != null) {
-//					UserCouponVo userCoupon = couponMerchant.get(goods.getMerchantId().toString());
-//					BigDecimal min_goods_amount = userCoupon.getMin_goods_amount();
-//					if(goodsTotalPrice.compareTo(min_goods_amount) < 0) {
-//						resultObj.put("errno", 800);
-//						resultObj.put("errmsg", "优惠券不符合规则！");
-//						return resultObj;
-//					}
-//					couponId = userCoupon.getId();//优惠券ID
-//					couponPrice = userCoupon.getCoupon_price();//优惠券金额
-//				}
-
                 // 订单价格计算
                 OrderVo orderInfo = getOrderVo(loginUser, postscript, addressVo, all_order_id, goodsTotalPrice, freightPrice, couponId, couponPrice);
 
@@ -459,8 +349,7 @@ public class ApiOrderService {
                 if (promoterId != null) {
                     orderInfo.setPromoter_id(promoterId.intValue());
                 }
-                // 计算佣金
-                //orderInfo.setBrokerage(brokerage_price);
+
                 // 供应商ID
                 orderInfo.setMerchant_id(goods.getMerchantId());
                 if (StringUtils.isBlank(groupBuyingId)) {
@@ -471,7 +360,6 @@ public class ApiOrderService {
                 orderInfo.setOrder_type("4");
                 // 保存订单信息
                 apiOrderMapper.save(orderInfo);
-
 
                 // 保存订单商品表
                 OrderGoodsVo orderGoodsVo = new OrderGoodsVo();
@@ -507,22 +395,12 @@ public class ApiOrderService {
                 }
 
                 apiOrderGoodsMapper.save(orderGoodsVo);
-
-
-
                 // 返回对象
                 Map<String, OrderVo> orderInfoMap = new HashMap<String, OrderVo>();
                 orderInfoMap.put("orderInfo", orderInfo);
                 resultObj.put("errno", 0);
                 resultObj.put("errmsg", "订单提交成功");
                 resultObj.put("data", orderInfoMap);
-
-                // 优惠券标记已用
-//				UserCouponVo uc = new UserCouponVo();
-//				uc.setId(couponId);
-//				uc.setCoupon_status(2);
-//				uc.setUsed_time(new Date());
-//				userCouponService.updateCouponStatus(uc);
             }
 
         }
@@ -600,7 +478,6 @@ public class ApiOrderService {
     public List<OrderVo> queryGroupBuyRefundList(Map map) {
         return apiOrderMapper.queryGroupBuyRefundList(map);
     }
-
 
     public void cancelFx(int orderId, Date payTime, int orderPrice) {
         UserRecord entity = new UserRecord();

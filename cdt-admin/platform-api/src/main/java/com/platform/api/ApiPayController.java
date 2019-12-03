@@ -384,6 +384,7 @@ public class ApiPayController extends ApiBaseAction {
         response.setContentType("text/html;charset=UTF-8");
         response.setHeader("Access-Control-Allow-Origin", "*");
 
+
         //微信给返回的东西
         try {
             while ((inputLine = request.getReader().readLine()) != null) {
@@ -437,7 +438,9 @@ public class ApiPayController extends ApiBaseAction {
 
     private void orderStatusLogic(String out_trade_no) {
         List<OrderVo> orderItem = orderService.queryByAllOrderId(out_trade_no);
+        log.info("微信回调设置=====>orderItems条数:" + orderItem.size());
         for (OrderVo orderInfo : orderItem) {
+
             orderInfo.setAll_order_id(out_trade_no);
             orderInfo.setPay_status(PayTypeEnum.PAYED.getCode());
             if (orderInfo.getGoods_type().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||

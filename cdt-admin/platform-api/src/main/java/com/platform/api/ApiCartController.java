@@ -482,9 +482,8 @@ public class ApiCartController extends ApiBaseAction {
             checkedGoodsList.add(cartVo);
 
             //计算运费
-
             if (goods.getExtra_price() != null) {
-                freightPrice = freightPrice.add(goods.getExtra_price().multiply(new BigDecimal(cartVo.getNumber())));
+                freightPrice = freightPrice.add(goods.getExtra_price().multiply(new BigDecimal(goodsVO.getNumber())));
             }
             MerCartVo merCartVo = new MerCartVo();
             merCartVo.setMerchantId(productInfo.getMerchant_id());
@@ -494,27 +493,12 @@ public class ApiCartController extends ApiBaseAction {
             merCartVo.setOrderTotalPrice(goodsTotalPrice);
             merCartVo.setFreightPrice(freightPrice);
             merCartVo.setActualPrice(goodsTotalPrice.add(freightPrice));
-
-            //获取优惠券
-            Map map = new HashMap();
-
-            map.put("user_id", loginUser.getUserId());
-            map.put("merchantId", merCartVo.getMerchantId());
-            map.put("goodsTotalPrice", merCartVo.getOrderTotalPrice());
-            List<CouponVo> couponVos = apiCouponService.queryUserCoupons(map);
-            List<CouponVo> validCouponVos = apiCouponService.getValidUserCoupons(map);
-            merCartVo.setUserCouponList(validCouponVos);
             merCartVoList.add(merCartVo);
+
         }
+
         //获取可用的优惠券信息
         BigDecimal couponPrice = new BigDecimal(0.00);
-        /*if (couponId != null && couponId != 0) {
-            CouponVo couponVo = apiCouponMapper.getUserCoupon(couponId);
-            if (couponVo != null) {
-                couponPrice = couponVo.getType_money();
-            }
-        }*/
-
         //订单的总价
         BigDecimal orderTotalPrice = goodsTotalPrice.add(freightPrice);
         BigDecimal actualPrice = orderTotalPrice.subtract(couponPrice);  //减去其它支付的金额后，要实际支付的金额
@@ -522,7 +506,7 @@ public class ApiCartController extends ApiBaseAction {
             resultObj.put("skuName", goodsVO.getSkuName());
         }
         resultObj.put("freightPrice", freightPrice);
-        resultObj.put("couponPrice", couponPrice);
+        //resultObj.put("couponPrice", couponPrice);
         resultObj.put("checkedGoodsList", merCartVoList);
         resultObj.put("goodsTotalPrice", goodsTotalPrice);
         resultObj.put("orderTotalPrice", orderTotalPrice);
