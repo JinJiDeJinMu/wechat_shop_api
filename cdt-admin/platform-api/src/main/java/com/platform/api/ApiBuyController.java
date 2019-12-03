@@ -78,15 +78,15 @@ public class ApiBuyController extends ApiBaseAction {
             ExpressOrderVo expressOrderVo = new ExpressOrderVo();
             expressOrderVo.setName(jsonParam.getString("userName"));
             expressOrderVo.setMobile(jsonParam.getString("telNumber"));
-            expressOrderVo.setProvince(jsonParam.getString("province"));
-            expressOrderVo.setCity(jsonParam.getString("city"));
-            expressOrderVo.setDistrict(jsonParam.getString("district"));
+//            expressOrderVo.setProvince(jsonParam.getString("province"));
+//            expressOrderVo.setCity(jsonParam.getString("city"));
+//            expressOrderVo.setDistrict(jsonParam.getString("district"));
             expressOrderVo.setAddress(jsonParam.getString("detailInfo"));
             expressOrderVo.setRemarks(jsonParam.getString("remark"));
             expressOrderVo.setPickNumber(jsonParam.getString("pressTime"));
             expressOrderVo.setExpressNo(jsonParam.getString("expressNo"));
             redisTemplate.opsForValue().set(CacheConstant.EXPRESS_GOODS_CACHE + loginUser.getUserId(), expressOrderVo);
-            apiExpressOrderService.save(expressOrderVo);
+            //apiExpressOrderService.save(expressOrderVo);
         }
 
         return toResponsMsgSuccess("添加成功");
