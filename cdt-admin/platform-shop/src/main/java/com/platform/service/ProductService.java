@@ -38,6 +38,7 @@ public interface ProductService {
      */
     int queryTotal(Map<String, Object> map);
 
+    int saveOne(ProductEntity product);
     /**
      * 保存实体
      *
