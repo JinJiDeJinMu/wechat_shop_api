@@ -7,6 +7,7 @@ import com.platform.dao.GoodsGalleryDao;
 import com.platform.dao.ProductDao;
 import com.platform.entity.*;
 import com.platform.service.GoodsService;
+import com.platform.service.KeygenService;
 import com.platform.utils.RRException;
 import com.platform.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private GoodsGalleryDao goodsGalleryDao;
 
+    @Autowired
+    private KeygenService keygenService;
+
     @Override
     public GoodsEntity queryObject(Integer id) {
         return goodsDao.queryObject(id);
@@ -63,7 +67,7 @@ public class GoodsServiceImpl implements GoodsService {
         if (null != list && list.size() != 0) {
             throw new RRException("商品名称已存在！");
         }
-        Integer id = goodsDao.queryMaxId() + 1;
+        Integer id = Integer.valueOf(keygenService.genNumber().shortValue());
         goods.setId(id);
 
         //保存产品信息
@@ -76,7 +80,7 @@ public class GoodsServiceImpl implements GoodsService {
         productEntity.setGoodsSpecificationIds("");
 
         if (goods.getMerchantId() != null) {
-            productEntity.setMerchant_id(goods.getMerchantId().intValue());
+            productEntity.setMerchant_id(goods.getMerchantId());
         }
         productEntity.setGroupPrice(goods.getGroupPrice());
         productDao.save(productEntity);

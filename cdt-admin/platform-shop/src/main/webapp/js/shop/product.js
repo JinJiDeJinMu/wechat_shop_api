@@ -123,17 +123,17 @@ let vm = new Vue({
                 successCallback: function (r) {
                     alert('操作成功', function (index) {
                         vm.reload();
-                        vm.product.goodsId=0;
-                        vm.product.goodsSn = '';
-                        vm.product.goodsNumber = 1;
-                        vm.product.retailPrice = 1;
-                        vm.product.marketPrice = 1;
-                        vm.product.goodsSpecificationIds='';
-                        vm.params=[
-                            { param : [] , ggArr:[]},
-                            { param : [] , ggArr:[]},
-                            { param : [] , ggArr:[]}
-                        ]
+                        // vm.product.goodsId=0;
+                        // vm.product.goodsSn = '';
+                        // vm.product.goodsNumber = 1;
+                        // vm.product.retailPrice = 1;
+                        // vm.product.marketPrice = 1;
+                        // vm.product.goodsSpecificationIds='';
+                        // vm.params=[
+                        //     { param : [] , ggArr:[]},
+                        //     { param : [] , ggArr:[]},
+                        //     { param : [] , ggArr:[]}
+                        // ]
                     });
                 }
             });

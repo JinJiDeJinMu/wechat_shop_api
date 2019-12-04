@@ -30,7 +30,7 @@ public class ProductEntity implements Serializable {
     //市场价格
     private BigDecimal marketPrice;
     //商户ID
-    private Integer merchant_id;
+    private long merchant_id;
     
     //商品
     private String goodsName;
@@ -153,11 +153,11 @@ public class ProductEntity implements Serializable {
         this.goodsName = goodsName;
     }
 
-	public Integer getMerchant_id() {
+    public long getMerchant_id() {
 		return merchant_id;
 	}
 
-	public void setMerchant_id(Integer merchant_id) {
+    public void setMerchant_id(long merchant_id) {
 		this.merchant_id = merchant_id;
 	}
 }
