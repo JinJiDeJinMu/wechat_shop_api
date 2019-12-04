@@ -67,7 +67,8 @@ public class GoodsServiceImpl implements GoodsService {
         if (null != list && list.size() != 0) {
             throw new RRException("商品名称已存在！");
         }
-        Integer id = Integer.valueOf(keygenService.genNumber().shortValue());
+        //Integer id = Integer.valueOf(keygenService.genNumber().shortValue());
+        Integer id = goodsDao.queryMaxId() + 1;
         goods.setId(id);
 
         //保存产品信息
