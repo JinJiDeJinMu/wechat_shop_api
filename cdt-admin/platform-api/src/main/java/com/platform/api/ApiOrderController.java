@@ -10,7 +10,6 @@ import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.OrderGoodsVo;
 import com.platform.entity.OrderVo;
-import com.platform.entity.UserCouponVo;
 import com.platform.entity.UserVo;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
@@ -234,7 +233,6 @@ public class ApiOrderController extends ApiBaseAction {
     @ApiOperation(value = "取消订单")
     @RequestMapping("cancelOrder")
     public Object cancelOrder(Integer orderId) {
-
         OrderVo orderVo = orderService.queryObject(orderId);
         List<OrderVo> orders = orderService.queryByAllOrderId(orderVo.getAll_order_id());
         BigDecimal allPrice = BigDecimal.ZERO;
@@ -279,11 +277,11 @@ public class ApiOrderController extends ApiBaseAction {
                     orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
                     orderService.update(orderVo);
                     //更新优惠券状态和实际
-                    UserCouponVo uc = new UserCouponVo();
-                    uc.setId(orderVo.getCoupon_id());
-                    uc.setCoupon_status(1);
-                    uc.setUsed_time(null);
-                    userCouponService.updateCouponStatus(uc);
+//                    UserCouponVo uc = new UserCouponVo();
+//                    uc.setId(orderVo.getCoupon_id());
+//                    uc.setCoupon_status(1);
+//                    uc.setUsed_time(null);
+//                    userCouponService.updateCouponStatus(uc);
                     return toResponsSuccess("取消成功");
                 } else {
                     return toResponsObject(400, "取消成失败", "取消成失败");

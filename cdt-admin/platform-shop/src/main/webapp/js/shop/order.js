@@ -23,7 +23,6 @@ $(function () {
             {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
             {label: '订单号', name: 'orderSn', index: 'order_sn', width: 100},
             {label: '会员', name: 'userName', index: 'user_name', width: 80},
-            {label: '真实姓名', name: 'realName', index: 'real_name', width: 80},
             {
                 label: '订单类型', name: 'goods_type', index: 'goods_type', width: 80, formatter: function (value) {
                     if (value == '1') {
@@ -107,18 +106,18 @@ $(function () {
                     return value;
                 }
             },
-            {
-                label: '评价状态', name: 'evaluateStatus', index: 'evaluateStatus', width: 80,
-                formatter: function (value) {
-                    if (value == 0) {
-                        return '未评价';
-                    } else if (value == 1) {
-                        return '已评价';
-                    }
-                    return value;
-                }
-            },
-            {label: '实际支付金额', name: 'actualPrice', index: 'actual_price', width: 80},
+            // {
+            //     label: '评价状态', name: 'evaluateStatus', index: 'evaluateStatus', width: 80,
+            //     formatter: function (value) {
+            //         if (value == 0) {
+            //             return '未评价';
+            //         } else if (value == 1) {
+            //             return '已评价';
+            //         }
+            //         return value;
+            //     }
+            // },
+            // {label: '实际支付金额', name: 'actualPrice', index: 'actual_price', width: 80},
             {label: '订单总价', name: 'orderPrice', index: 'order_price', width: 60},
             {label: '商品总价', name: 'goodsPrice', index: 'goods_price', width: 60},
             {

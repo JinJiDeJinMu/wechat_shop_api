@@ -46,7 +46,7 @@
         <result property="gid" column="gid"/>
         <result property="realName" column="real_name"/>
         <result property="merchantId" column="merchant_id"/>
-        <result property="goods_type" column="goods_type"/>
+        <result property="goodsType" column="goods_type"/>
     </resultMap>
 
     <select id="queryObject" resultType="com.platform.entity.OrderEntity">
@@ -59,7 +59,7 @@
     <select id="queryList" resultType="com.platform.entity.OrderEntity">
         SELECT
         o.id AS id,o.order_sn as orderSn,o.evaluate_status as evaluateStatus,u.username AS username,u.real_name as
-        realName,o.order_type as orderType,o.goods_type as goods_type,
+        realName,o.order_type as orderType,o.goods_type as goodsType,
         o.order_status as orderStatus, o.shipping_status as shippingStatus,
         o.pay_status as payStatus,o.shipping_name as shippingName, o.merchant_id as merchantId,
         o.shipping_no as shippingNo,o.actual_price as actualPrice,  
