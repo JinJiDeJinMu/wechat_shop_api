@@ -147,7 +147,7 @@ let vm = new Vue({
         q: {
             orderSn: '',
             orderStatus: '',
-            orderType: ''
+            goodsType: ''
         }
     },
     methods: {
@@ -226,7 +226,7 @@ let vm = new Vue({
                 postData: {
                     'orderSn': vm.q.orderSn,
                     'orderStatus': vm.q.orderStatus,
-                    'orderType': vm.q.orderType
+                    'goodsType': vm.q.goodsType
                 },
                 page: page
             }).trigger("reloadGrid");
