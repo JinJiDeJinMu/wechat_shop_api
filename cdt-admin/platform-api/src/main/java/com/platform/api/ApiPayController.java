@@ -539,10 +539,11 @@ public class ApiPayController extends ApiBaseAction {
 
     private void orderSetPayedStatus(OrderVo orderItem) {
         orderItem.setPay_status(PayTypeEnum.PAYED.getCode());
-        if (orderItem.getGoods_type().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
-                orderItem.getGoods_type().equals(GoodsTypeEnum.EXPRESS_GET.getCode())
+        if (orderItem.getGoods_type().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode())
         ) {
             orderItem.setOrder_status(OrderStatusEnum.NOT_USED.getCode());
+        } else if (orderItem.getGoods_type().equals(GoodsTypeEnum.EXPRESS_GET.getCode())) {
+            orderItem.setOrder_status(OrderStatusEnum.SHIPPED_ORDER.getCode());
         } else {
             orderItem.setOrder_status(OrderStatusEnum.PAYED_ORDER.getCode());
         }
