@@ -514,7 +514,7 @@ public class ApiPayController extends ApiBaseAction {
                 log.error("=====weixin===notify===error", ex);
                 return setXml("fail", "fail");
             }
-            return setXml("fail", "fail");
+            return setXml("SUCCESS", "OK");
         }
         return setXml("SUCCESS", "OK");
     }
