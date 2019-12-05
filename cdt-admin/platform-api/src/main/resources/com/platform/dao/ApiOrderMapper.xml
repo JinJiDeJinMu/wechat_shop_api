@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="com.platform.dao.ApiOrderMapper">
-
     <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.platform.entity.OrderVo" id="orderMap">
         <result property="id" column="id"/>
@@ -52,7 +50,7 @@
         <result property="group_buying_id" column="group_buying_id"/>
         <result property="order_type" column="order_type"/>
         <result property="goods_type" column="goods_type"/>
-
+        <result property="goods_num" column="goods_num"/>
     </resultMap>
 
     <select id="queryObject" resultMap="orderMap">
@@ -77,6 +75,37 @@
     	<![CDATA[ DATE_ADD(confirm_time,INTERVAL 1 WEEK) < now() ]]>
     	and order_status=301 and fx_status=0
 	</select>
+
+    <select id="queryPageList" resultMap="orderMap">
+        SELECT o.*, g.goods_name, g.list_pic_url, g.goods_id FROM nideshop_order o
+        LEFT JOIN nideshop_order_goods g ON o.id = g.order_id
+        <where>
+            <if test="user_id != null">
+                and o.user_id = #{user_id}
+            </if>
+            <if test="order_status != null">
+                AND o.order_status =#{order_status}
+            </if>
+            <if test="all_order_id != null and all_order_id != ''">
+                and o.all_order_id = #{all_order_id}
+            </if>
+            <if test="promoter_id != null and promoter_id != 0">
+                and o.promoter_id = #{promoter_id}
+            </if>
+            <if test="group_buying_id != null and group_buying_id != 0">
+                and o.group_buying_id = #{group_buying_id}
+            </if>
+        </where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+    </select>
+
     <select id="queryList" resultMap="orderMap">
         SELECT o.*, g.goods_name, g.list_pic_url, g.goods_id FROM nideshop_order o
         LEFT JOIN nideshop_order_goods g ON o.id = g.order_id
@@ -154,8 +183,6 @@
             </if>
         </where>
 	</select>
-	
-
 
     <insert id="save" parameterType="com.platform.entity.OrderVo" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_order
@@ -200,8 +227,8 @@
 			`brokerage`,
 			`merchant_id`,
 			`group_buying_id`,
-			`goods_type`
-
+			`goods_type`,
+			`goods_num`
 		)
 		values
 		(
@@ -245,8 +272,8 @@
 			#{brokerage},
 			#{merchant_id},
 			#{group_buying_id},
-			#{goods_type}
-
+			#{goods_type},
+			#{goods_num}
 		)
 	</insert>
 
@@ -290,6 +317,7 @@
             <if test="brokerage != null">`brokerage` = #{brokerage},</if>
             <if test="fx_status != null">`fx_status` = #{fx_status},</if>
             <if test="goods_type != null">`goods_type` = #{goods_type},</if>
+            <if test="goods_num != null">`goods_num` = #{goods_num},</if>
         </set>
         where id = #{id}
     </update>

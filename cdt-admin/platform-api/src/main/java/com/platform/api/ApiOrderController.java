@@ -2,10 +2,13 @@ package com.platform.api;
 
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
+import com.chundengtai.base.weixinapi.ShippingTypeEnum;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.OrderGoodsVo;
@@ -13,7 +16,6 @@ import com.platform.entity.OrderVo;
 import com.platform.entity.UserVo;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
-import com.platform.util.ApiPageUtils;
 import com.platform.utils.CharUtil;
 import com.platform.utils.Query;
 import io.swagger.annotations.Api;
@@ -60,17 +62,6 @@ public class ApiOrderController extends ApiBaseAction {
     private KeygenService kengenService;
 
     /**
-     *
-     */
-    @ApiOperation(value = "订单首页")
-    @IgnoreAuth
-    @GetMapping("index")
-    public Object index() {
-        //
-        return toResponsSuccess("");
-    }
-
-    /**
      * 获取订单列表(要验证)
      */
     @ApiOperation(value = "获取订单列表")
@@ -78,7 +69,6 @@ public class ApiOrderController extends ApiBaseAction {
     public Object list(@LoginUser UserVo loginUser, Integer order_status,
                        @RequestParam(value = "page", defaultValue = "1") Integer page,
                        @RequestParam(value = "size", defaultValue = "10") Integer size) {
-
         Map params = new HashMap();
         params.put("user_id", loginUser.getUserId());
         params.put("page", page);
@@ -88,22 +78,10 @@ public class ApiOrderController extends ApiBaseAction {
         params.put("order_status", order_status);
         //查询列表数据
         Query query = new Query(params);
-        List<OrderVo> orderEntityList = orderService.queryList(query);
-        int total = orderService.queryTotal(query);
-        ApiPageUtils pageUtil = new ApiPageUtils(orderEntityList, total, query.getLimit(), query.getPage());
-        //
-        for (OrderVo item : orderEntityList) {
-            Map orderGoodsParam = new HashMap();
-            orderGoodsParam.put("order_id", item.getId());
-            //订单的商品
-            List<OrderGoodsVo> goodsList = orderGoodsService.queryList(orderGoodsParam);
-            Integer goodsCount = 0;
-            for (OrderGoodsVo orderGoodsEntity : goodsList) {
-                goodsCount += orderGoodsEntity.getNumber();
-                item.setGoodsCount(goodsCount);
-            }
-        }
-        return toResponsSuccess(pageUtil);
+        PageHelper.startPage(page, size);
+        List<OrderVo> orderEntityList = orderService.queryPageList(query);
+        PageInfo pageInfo = new PageInfo(orderEntityList);
+        return toResponsSuccess(pageInfo);
     }
 
     /**
@@ -314,8 +292,8 @@ public class ApiOrderController extends ApiBaseAction {
     public Object confirmOrder(Integer orderId) {
         try {
             OrderVo orderVo = orderService.queryObject(orderId);
-            orderVo.setOrder_status(301);
-            orderVo.setShipping_status(2);
+            orderVo.setOrder_status(OrderStatusEnum.CONFIRM_GOODS.getCode());
+            orderVo.setShipping_status(ShippingTypeEnum.GETEDGOODS.getCode());
             orderVo.setConfirm_time(new Date());
             orderService.update(orderVo);
             return toResponsSuccess("确认收货成功");

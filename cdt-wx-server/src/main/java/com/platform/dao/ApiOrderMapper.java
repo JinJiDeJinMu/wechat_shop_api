@@ -18,6 +18,8 @@ public interface ApiOrderMapper extends BaseBizMapper<OrderVo> {
 
     public List<OrderVo> queryFxList();
 
+    public List<OrderVo> queryPageList(Map<String, Object> map);
+
     public List<OrderVo> queryByAllOrderId(String allOrderId);
 
     List<OrderVo> queryGroupBuyRefundList(Map map);
