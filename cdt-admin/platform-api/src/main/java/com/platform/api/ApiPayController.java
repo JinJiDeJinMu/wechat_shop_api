@@ -496,7 +496,7 @@ public class ApiPayController extends ApiBaseAction {
             //订单编号
             String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
             log.error(reqId + "===notify==订单" + out_trade_no + "支付失败");
-            return setXml("SUCCESS", "OK");
+            return setXml("fail", "fail");
         } else if (result_code.equalsIgnoreCase("SUCCESS")) {
             //订单编号
             String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
