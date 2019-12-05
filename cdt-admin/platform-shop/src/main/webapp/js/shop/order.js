@@ -121,13 +121,13 @@ $(function () {
             {label: '订单总价', name: 'orderPrice', index: 'order_price', width: 60},
             {label: '商品总价', name: 'goodsPrice', index: 'goods_price', width: 60},
             {
-                label: '下单时间', name: 'addTime', index: 'add_time', width: 80,
+                label: '下单时间', name: 'addTime', index: 'add_time', width: 100,
                 formatter: function (value) {
                     return transDate(value);
                 }
             },
             {
-                label: '操作', width: 160, align: 'center', sortable: false, formatter: function (value, col, row) {
+                label: '操作', width: 100, align: 'center', sortable: false, formatter: function (value, col, row) {
                     return '<button class="btn btn-outline btn-info" onclick="vm.lookDetail(' + row.id + ')"><i class="fa fa-info-circle"></i>&nbsp;详情</button>' +
                         '<button class="btn btn-outline btn-primary" style="margin-top: 10px;" onclick="vm.printDetail(' + row.id + ')"><i class="fa fa-print"></i>&nbsp;打印</button>';
                 }

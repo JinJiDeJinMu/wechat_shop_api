@@ -287,7 +287,7 @@ public class ApiOrderController extends ApiBaseAction {
                     return toResponsObject(400, "取消成失败", "取消成失败");
                 }
             } else {
-                orderVo.setOrder_status(101);
+                orderVo.setOrder_status(OrderStatusEnum.CANCEL_ORDER.getCode());
                 orderService.update(orderVo);
                 return toResponsSuccess("取消成功");
             }

@@ -1,20 +1,19 @@
 package com.platform.service.impl;
 
 import com.platform.dao.GoodsSpecificationDao;
+import com.platform.dao.ProductDao;
 import com.platform.entity.GoodsSpecificationEntity;
+import com.platform.entity.ProductEntity;
+import com.platform.service.ProductService;
 import com.platform.utils.BeanUtils;
 import com.platform.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import com.platform.dao.ProductDao;
-import com.platform.entity.ProductEntity;
-import com.platform.service.ProductService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service实现类
@@ -72,41 +71,74 @@ public class ProductServiceImpl implements ProductService {
     public int save(ProductEntity product) {
         int result = 0;
         String goodsSpecificationIds = product.getGoodsSpecificationIds();
-        if (!StringUtils.isNullOrEmpty(goodsSpecificationIds)) {
+        if (!StringUtils.isNullOrEmpty(goodsSpecificationIds) && !goodsSpecificationIds.equals("_")) {
             String[] goodsSpecificationIdArr = goodsSpecificationIds.split("_");
             if(goodsSpecificationIdArr.length==2) {
-            	 for (int i = 0; i < goodsSpecificationIdArr.length - 1; i++) {
-                     String[] oneId = goodsSpecificationIdArr[i].split(",");
-                     String[] twoId = goodsSpecificationIdArr[i + 1].split(",");
-                     for (int j = 0; j < oneId.length; j++) {
-                         for (int k = 0; k < twoId.length; k++) {
-                             String strGoodsSpecificationIds = null;
-                             if (StringUtils.isNullOrEmpty(oneId[j]) || StringUtils.isNullOrEmpty(twoId[k])){
-                                 continue;
-                             }
-                             strGoodsSpecificationIds = oneId[j] + "_" + twoId[k];
-                             product.setGoodsSpecificationIds(strGoodsSpecificationIds);
-                             ProductEntity entity = new ProductEntity();
-                             BeanUtils.copyProperties(product, entity);
-                             result += productDao.save(entity);
-                         }
-                     }
-                 }
+                for (int i = 0; i < goodsSpecificationIdArr.length - 1; i++) {
+                    String[] oneId = goodsSpecificationIdArr[i].split(",");
+                    String[] twoId = goodsSpecificationIdArr[i + 1].split(",");
+                    for (int j = 0; j < oneId.length; j++) {
+                        for (int k = 0; k < twoId.length; k++) {
+                            String strGoodsSpecificationIds = null;
+                            if (StringUtils.isNullOrEmpty(oneId[j]) || StringUtils.isNullOrEmpty(twoId[k])){
+                                continue;
+                            }
+                            strGoodsSpecificationIds = oneId[j] + "_" + twoId[k];
+                            product.setGoodsSpecificationIds(strGoodsSpecificationIds);
+                            ProductEntity entity = new ProductEntity();
+                            BeanUtils.copyProperties(product, entity);
+                            result += productDao.save(entity);
+                        }
+                    }
+                }
             }else if(goodsSpecificationIdArr.length==1) {
-            	String goodsSpecificationId[]=goodsSpecificationIdArr[0].split(",");
-            	for (int i = 0; i < goodsSpecificationId.length; i++) {
-					String string = goodsSpecificationId[i];
-					 product.setGoodsSpecificationIds(string);
-                     ProductEntity entity = new ProductEntity();
-                     BeanUtils.copyProperties(product, entity);
-                     result += productDao.save(entity);
-				}
+                String goodsSpecificationId[]=goodsSpecificationIdArr[0].split(",");
+                for (int i = 0; i < goodsSpecificationId.length; i++) {
+                    String string = goodsSpecificationId[i];
+                    product.setGoodsSpecificationIds(string);
+                    ProductEntity entity = new ProductEntity();
+                    BeanUtils.copyProperties(product, entity);
+                    result += productDao.save(entity);
+                }
             }
-           
+
+        } else {
+            if (product.getGoodsSpecificationIds().equals("_")) {
+                product.setGoodsSpecificationIds("");
+            }
+            result += productDao.save(product);
         }
         return result;
     }
 
+
+    @Override
+    @Transactional
+    public int saveOne(ProductEntity product) {
+        int result = 0;
+        String goodsSpecificationIds = product.getGoodsSpecificationIds();
+        if (!StringUtils.isNullOrEmpty(goodsSpecificationIds)) {
+            String[] goodsSpecificationIdArr = goodsSpecificationIds.split("_");
+            for (int i = 0; i < goodsSpecificationIdArr.length - 1; i++) {
+                String[] oneId = goodsSpecificationIdArr[i].split(",");
+                String[] twoId = goodsSpecificationIdArr[i + 1].split(",");
+                for (int j = 0; j < oneId.length; j++) {
+                    for (int k = 0; k < twoId.length; k++) {
+                        String strGoodsSpecificationIds = null;
+                        if (StringUtils.isNullOrEmpty(oneId[j]) || StringUtils.isNullOrEmpty(twoId[k])) {
+                            continue;
+                        }
+                        strGoodsSpecificationIds = oneId[j] + "_" + twoId[k];
+                        product.setGoodsSpecificationIds(strGoodsSpecificationIds);
+                        ProductEntity entity = new ProductEntity();
+                        BeanUtils.copyProperties(product, entity);
+                        result += productDao.save(entity);
+                    }
+                }
+            }
+        }
+        return result;
+    }
     @Override
     public int update(ProductEntity product) {
         if (StringUtils.isNullOrEmpty(product.getGoodsSpecificationIds())){
