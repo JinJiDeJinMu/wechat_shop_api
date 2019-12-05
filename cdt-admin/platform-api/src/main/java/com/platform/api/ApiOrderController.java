@@ -223,7 +223,8 @@ public class ApiOrderController extends ApiBaseAction {
             if (orderVo.getPay_status().equals(PayTypeEnum.PAYED.getCode())) {
                 WxPayRefundRequest request = new WxPayRefundRequest();
                 request.setNonceStr(CharUtil.getRandomString(16));
-                request.setOutTradeNo(orderVo.getAll_order_id());
+                //request.setOutTradeNo(orderVo.getAll_order_id());
+                request.setOutTradeNo(orderVo.getOrder_sn());
                 //request.setRefundFee(orderVo.getActual_price().multiply(new BigDecimal(100)).intValue());
                 request.setRefundFee(allPrice.multiply(new BigDecimal(100)).intValue());
                 request.setTotalFee(allPrice.multiply(new BigDecimal(100)).intValue());

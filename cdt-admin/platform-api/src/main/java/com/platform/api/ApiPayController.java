@@ -521,10 +521,15 @@ public class ApiPayController extends ApiBaseAction {
 
     private void orderStatusLogic(String out_trade_no) {
         OrderVo orderItem = orderService.queryOrderNo(out_trade_no);
-        if (orderItem == null) orderItem = orderService.queryOrderNo(out_trade_no);
+        if (orderItem == null) {
+            orderItem = orderService.queryOrderNo(out_trade_no);
+            orderItem.setAll_order_id(out_trade_no);
+        } else {
+            orderItem.setOrder_sn(out_trade_no);
+        }
         log.info("微信回调设置=====out_trade_no>:" + out_trade_no);
         log.info("微信回调Json=====>:" + JSON.toJSONString(orderItem));
-        orderItem.setOrder_sn(out_trade_no);
+
         orderSetPayedStatus(orderItem);
         orderItem.setPay_time(new Date());
         int rows = orderService.update(orderItem);
