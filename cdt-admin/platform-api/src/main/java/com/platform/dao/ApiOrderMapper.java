@@ -15,6 +15,8 @@ import java.util.Map;
 public interface ApiOrderMapper extends BaseDao<OrderVo> {
 	public void updateStatus(OrderVo vo);
 	public List<OrderVo> queryWaitList();
+
+	public List<OrderVo> queryPageList(Map<String, Object> map);
 	public List<OrderVo> queryFxList();
 	public List<OrderVo> queryByAllOrderId(String allOrderId);
 

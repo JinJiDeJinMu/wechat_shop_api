@@ -53,6 +53,10 @@ public class ApiOrderService {
         return orderDao.queryObject(id);
     }
 
+    public List<OrderVo> queryPageList(Map<String, Object> map) {
+        return orderDao.queryPageList(map);
+    }
+
     public List<OrderVo> queryList(Map<String, Object> map) {
         return orderDao.queryList(map);
     }
@@ -172,6 +176,11 @@ public class ApiOrderService {
                 // 供应商ID
                 orderInfo.setMerchant_id(merchant_id);
                 orderInfo.setOrder_type("1");
+
+                int goodsNum = Optional
+                        .ofNullable(checkedGoodsList.size())
+                        .orElse(0);
+                orderInfo.setGoods_num(goodsNum);
                 // 保存订单信息
                 apiOrderMapper.save(orderInfo);
                 // 循环订单商品表

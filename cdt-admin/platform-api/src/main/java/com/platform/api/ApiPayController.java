@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.alibaba.fastjson.JSON;
 import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
@@ -206,9 +207,7 @@ public class ApiPayController extends ApiBaseAction {
         if (orderId == null) {
             return toResponsFail("订单不存在");
         }
-        
         OrderVo order = orderService.queryObject(orderId);
-        
         //处理订单的redis状态
     	String value = RedisUtils.get(order.getAll_order_id());
     	if(value != null && "51".equals(value)) {
@@ -230,7 +229,6 @@ public class ApiPayController extends ApiBaseAction {
         parame.put("nonce_str", randomStr);
         // 商户订单编号
         parame.put("out_trade_no", order.getAll_order_id());
-
         String sign = WechatUtil.arraySign(parame, ResourceUtil.getConfigByName("wx.paySignKey"));
         // 数字签证
         parame.put("sign", sign);
@@ -261,7 +259,6 @@ public class ApiPayController extends ApiBaseAction {
         	order.setShipping_status(0);
         	order.setPay_time(new Date());
             orderService.updateStatus(order);
-            
             //1购物车、2普通、3秒杀、4团购
             String orderType = order.getOrder_type();
             //只有购物车、普通购买有分润。
@@ -289,7 +286,6 @@ public class ApiPayController extends ApiBaseAction {
             	orderGoodsMap.put("order_id", order.getId());
             	List<OrderGoodsVo> OrderGoodsVos = orderGoodsService.queryList(orderGoodsMap);
             	OrderGoodsVo orderGoods = OrderGoodsVos.get(0);
-            	
             	//查询根据团ID查询是否已经有创建，有则增加数量，没有则创建
                 GroupBuyingVo gb = groupBuyingService.queryObject(order.getGroup_buying_id());
             	if(gb == null) {
@@ -317,7 +313,6 @@ public class ApiPayController extends ApiBaseAction {
             		}
             		groupBuyingService.update(gb);
             	}
-            	
             	//记录团购买人信息
             	GroupBuyingDetailedVo gbd = new GroupBuyingDetailedVo();
             	gbd.setGroupBuyingId(gb.getId());
@@ -327,12 +322,10 @@ public class ApiPayController extends ApiBaseAction {
             	gbd.setUserImg(loginUser.getAvatar());
             	groupBuyingDetailedService.save(gbd);
             }
-            
             //感觉没用
             //mlsUserSer.upUserProfit(order);
             return toResponsMsgSuccess("支付成功");
         } else if ("USERPAYING".equals(trade_state)) {
-
             Integer num = (Integer) redisTemplate.opsForValue().get(CacheConstant.SHOP_CACHE_NAME + "queryRepeatNum" + order.getAll_order_id());
             // 重新查询 正在支付中
             //Integer num = (Integer) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + order.getAll_order_id() + "");
@@ -347,7 +340,6 @@ public class ApiPayController extends ApiBaseAction {
             } else {
                 return toResponsFail("查询失败,error=" + trade_state);
             }
-
             OrderVo orderInfo = new OrderVo();
             orderInfo.setAll_order_id(order.getAll_order_id());
             orderInfo.setPay_status(0);
@@ -362,7 +354,6 @@ public class ApiPayController extends ApiBaseAction {
         }
         return toResponsFail("查询失败，未知错误");
     }
-
 
     /**
      * 微信订单回调接口
@@ -383,7 +374,6 @@ public class ApiPayController extends ApiBaseAction {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         response.setHeader("Access-Control-Allow-Origin", "*");
-
 
         //微信给返回的东西
         try {
@@ -406,7 +396,6 @@ public class ApiPayController extends ApiBaseAction {
 
         log.info(reqId + "===notify==微信回调返回======================>" + reponseXml);
         WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(reponseXml);
-
         String result_code = wxPayOrderNotifyResult.getResultCode();
         if (result_code.equalsIgnoreCase("FAIL")) {
             //订单编号
@@ -421,7 +410,6 @@ public class ApiPayController extends ApiBaseAction {
                 // 更改订单状态
                 // 业务处理
                 orderStatusLogic(out_trade_no);
-
 //                Future<Boolean> dealResult = tradeService.weixinNotifyOrderLogic(out_trade_no);
 //                if (dealResult.get()) {
 //                    return setXml("SUCCESS", "OK");
@@ -439,6 +427,8 @@ public class ApiPayController extends ApiBaseAction {
     private void orderStatusLogic(String out_trade_no) {
         List<OrderVo> orderItem = orderService.queryByAllOrderId(out_trade_no);
         log.info("微信回调设置=====>orderItems条数:" + orderItem.size());
+        log.info("微信回调设置=====out_trade_no>:" + out_trade_no);
+        log.info("微信回调Json=====>:" + JSON.toJSONString(orderItem));
         for (OrderVo orderInfo : orderItem) {
 
             orderInfo.setAll_order_id(out_trade_no);

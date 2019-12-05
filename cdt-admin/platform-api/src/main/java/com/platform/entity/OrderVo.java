@@ -130,6 +130,17 @@ public class OrderVo implements Serializable {
 
     private Integer goods_type;
 
+    public Integer getGoods_num() {
+        return goods_num;
+    }
+
+    public void setGoods_num(Integer goods_num) {
+        this.goods_num = goods_num;
+    }
+
+    private Integer goods_num;
+
+
     public String getFull_region() {
     //    return full_region;
         if (StringUtils.isNotEmpty(this.full_region)){
