@@ -10,10 +10,21 @@
         <div class="col-sm-12">
             <div class="ibox-content p-xl">
                 <div class="row">
-                    <div class="col-sm-6">
-                        <address>
-                            <strong>{{order.consignee}}</strong><br>
-                            {{order.address}}<br>
+                    <div class="col-sm-6" >
+                           <address v-if="goodsType == 5">
+                               <abbr title="name">姓名：</abbr>{{expressOrder.name}}<br>
+                               <abbr title="address">地址：</abbr>{{expressOrder.address}}<br>
+                               <abbr title="remarks">备注：</abbr>{{expressOrder.remarks}}<br>
+                               <abbr title="mobile">联系方式：</abbr> {{expressOrder.mobile}}<br>
+                               <abbr title="expressNo">快递单号：</abbr> {{expressOrder.expressNo}}<br>
+                               <abbr title="pickNumber">配送时间：</abbr> {{expressOrder.pickNumber}}
+                           </address>
+
+                        <address v-else-if="goodsType == 6"></address>
+
+                        <address v-else>
+                            <strong>{{order.consignee}}</strong>
+                            <br>{{order.address}}<br>
                             <abbr title="Phone">联系方式：</abbr> {{order.mobile}}
                         </address>
                     </div>
@@ -88,7 +99,9 @@
         data: {
             showBtn: true,
             order: {},
+            goodsType: {},
             orderGoods: {},
+            expressOrder: {},
             sumRetailPrice: 0,
             nowDate: transDate(new Date())
         },
@@ -104,6 +117,16 @@
                 async: true,
                 successCallback: function (r) {
                     vm.order = r.order;
+                    vm.goodsType = r.order.goodsType;
+                    alert(order);
+                }
+            });
+
+            Ajax.request({
+                url: "../order/express/" + orderId,
+                async: true,
+                successCallback: function (r) {
+                    vm.expressOrder = r.expressOrder;
                 }
             });
             Ajax.request({
