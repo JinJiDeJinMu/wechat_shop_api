@@ -14,11 +14,15 @@ import java.util.Map;
  * @date 2017-08-11 09:16:46
  */
 public interface ApiOrderMapper extends BaseDao<OrderVo> {
+    public OrderVo queryOrderNo(String order_sn);
+
 	public void updateStatus(OrderVo vo);
-	public List<OrderVo> queryWaitList();
+
+    public List<OrderVo> queryWaitList();
 
 	public List<OrderVo> queryPageList(Map<String, Object> map);
-	public List<OrderVo> queryFxList();
+
+    public List<OrderVo> queryFxList();
 
 	public List<OrderVo> queryByAllOrderId(@Param("allOrderId") String allOrderId);
 

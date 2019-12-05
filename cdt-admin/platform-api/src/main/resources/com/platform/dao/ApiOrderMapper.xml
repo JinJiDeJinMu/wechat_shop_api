@@ -328,7 +328,20 @@
         </set>
         where id = #{id}
     </update>
-    
+
+    <update id="autoCancelOrder">
+        update nideshop_order set order_status=103 WHERE
+        <![CDATA[`add_time` <= DATE_ADD(now(),INTERVAL -20 minute ) AND `order_status` =0
+
+        ]]>
+    </update>
+
+    <select id="queryOrderNo" resultMap="orderMap">
+		select a.*
+		from nideshop_order a
+		where a.order_sn = #{value}
+	</select>
+
     <update id="updateStatus" parameterType="com.platform.entity.OrderVo">
         update nideshop_order
         <set>
