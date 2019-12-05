@@ -2,7 +2,7 @@ $(function () {
     let shippingStatus = getQueryString("shippingStatus");
     let payStatus = getQueryString("payStatus");
     let orderStatus = getQueryString("orderStatus");
-    let orderType = getQueryString("orderType");
+    let goodsType = getQueryString("goodsType");
     let url = '../order/list';
     if (shippingStatus) {
         url += '?shippingStatus=' + shippingStatus;
@@ -13,8 +13,8 @@ $(function () {
     if (orderStatus) {
         url += '?orderStatus=' + orderStatus;
     }
-    if (orderType) {
-        url += '?orderType=' + orderType;
+    if (goodsType) {
+        url += '?goodsType=' + goodsType;
     }
     $("#jqGrid").Grid({
         url: url,
@@ -24,7 +24,7 @@ $(function () {
             {label: '订单号', name: 'orderSn', index: 'order_sn', width: 100},
             {label: '会员', name: 'userName', index: 'user_name', width: 80},
             {
-                label: '订单类型', name: 'goods_type', index: 'goods_type', width: 80, formatter: function (value) {
+                label: '订单类型', name: 'goodsType', index: 'goods_type', width: 80, formatter: function (value) {
                     if (value == '1') {
                         return '普通订单';
                     } else if (value == '2') {
