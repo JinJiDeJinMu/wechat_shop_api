@@ -147,7 +147,7 @@ let vm = new Vue({
         q: {
             orderSn: '',
             orderStatus: '',
-            orderType: ''
+            goodsType: ''
         }
     },
     methods: {

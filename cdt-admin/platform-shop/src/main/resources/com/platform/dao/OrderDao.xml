@@ -81,8 +81,8 @@
         <if test="orderStatus != null and orderStatus != ''">
             AND o.order_status = #{orderStatus}
         </if>
-        <if test="orderType != null and orderType!= ''">
-            AND o.order_type = #{orderType}
+        <if test="goodsType != null and goodsType!= ''">
+            AND o.goods_type = #{goodsType}
         </if>
         <if test="merchantId != null and merchantId != ''">
             AND o.merchant_id = #{merchantId}
@@ -152,8 +152,8 @@
         <if test="orderStatus != null and orderStatus.trim() != ''">
             AND order_status = #{orderStatus}
         </if>
-        <if test="orderType != null and orderType.trim() != ''">
-            AND order_type = #{orderType}
+        <if test="goodsType != null and goodsType.trim() != ''">
+            AND goods_type = #{goodsType}
         </if>
         <if test="merchantId != null and merchantId != ''">
             AND merchant_id = #{merchantId}
