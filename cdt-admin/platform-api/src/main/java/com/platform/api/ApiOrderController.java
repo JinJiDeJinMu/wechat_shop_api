@@ -219,41 +219,7 @@ public class ApiOrderController extends ApiBaseAction {
             return toResponsFail("已收货，不能取消");
         }
         try {
-            // 需要退款
-            if (orderVo.getPay_status().equals(PayTypeEnum.PAYED.getCode())) {
-                WxPayRefundRequest request = new WxPayRefundRequest();
-                request.setNonceStr(CharUtil.getRandomString(16));
-                //request.setOutTradeNo(orderVo.getAll_order_id());
-                request.setOutTradeNo(orderVo.getOrder_sn());
-                //request.setRefundFee(orderVo.getActual_price().multiply(new BigDecimal(100)).intValue());
-                request.setRefundFee(allPrice.multiply(new BigDecimal(100)).intValue());
-                request.setTotalFee(allPrice.multiply(new BigDecimal(100)).intValue());
-
-                long id = kengenService.genNumber().longValue();
-                request.setOutRefundNo(String.valueOf(id));
-                request.setOpUserId(orderVo.getUser_id().toString());
-                WxPayRefundResult wxResult = wxPayService.refund(request);
-
-                if (wxResult.getResultCode().equals("SUCCESS")) {
-                    if (orderVo.getOrder_status().equals(OrderStatusEnum.PAYED_ORDER.getCode())) {
-                        orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
-                    } else if (orderVo.getOrder_status().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
-                        orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
-                    } else {
-                        orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
-                    }
-                    orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
-                    logger.warn("=====退款回调成功=====" + JSON.toJSONString(wxResult));
-                    orderService.update(orderVo);
-                    return toResponsSuccess("取消成功");
-                } else {
-                    return toResponsObject(400, "取消成失败", "取消成失败");
-                }
-            } else {
-                orderVo.setOrder_status(OrderStatusEnum.CANCEL_ORDER.getCode());
-                orderService.update(orderVo);
-                return toResponsSuccess("取消成功");
-            }
+            return returnMoney(orderVo, allPrice, orderVo.getOrder_sn());
         } catch (WxPayException e) {
             logger.error(e.getXmlString());
             if (e.getErrCodeDes().contains("订单已全额退款")) {
@@ -261,11 +227,60 @@ public class ApiOrderController extends ApiBaseAction {
                 orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
                 orderService.update(orderVo);
             }
+            if (e.getErrCodeDes().contains("订单不存在")) {
+                try {
+                    return returnMoney(orderVo, allPrice, orderVo.getAll_order_id());
+                } catch (WxPayException ex) {
+                    if (e.getErrCodeDes().contains("订单已全额退款")) {
+                        orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
+                        orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
+                        orderService.update(orderVo);
+                    }
+                }
+            }
             return toResponsSuccess(e.getErrCodeDes());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return toResponsSuccess("提交失败");
+    }
+
+    private Object returnMoney(OrderVo orderVo, BigDecimal allPrice, String outTradeNo) throws WxPayException {
+        // 需要退款
+        if (orderVo.getPay_status().equals(PayTypeEnum.PAYED.getCode())) {
+            WxPayRefundRequest request = new WxPayRefundRequest();
+            request.setNonceStr(CharUtil.getRandomString(16));
+            //request.setOutTradeNo(orderVo.getAll_order_id());
+            request.setOutTradeNo(outTradeNo);
+            //request.setRefundFee(orderVo.getActual_price().multiply(new BigDecimal(100)).intValue());
+            request.setRefundFee(allPrice.multiply(new BigDecimal(100)).intValue());
+            request.setTotalFee(allPrice.multiply(new BigDecimal(100)).intValue());
+
+            long id = kengenService.genNumber().longValue();
+            request.setOutRefundNo(String.valueOf(id));
+            request.setOpUserId(orderVo.getUser_id().toString());
+            WxPayRefundResult wxResult = wxPayService.refund(request);
+
+            if (wxResult.getResultCode().equals("SUCCESS")) {
+                if (orderVo.getOrder_status().equals(OrderStatusEnum.PAYED_ORDER.getCode())) {
+                    orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
+                } else if (orderVo.getOrder_status().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
+                    orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
+                } else {
+                    orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
+                }
+                orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
+                logger.warn("=====退款回调成功=====" + JSON.toJSONString(wxResult));
+                orderService.update(orderVo);
+                return toResponsSuccess("取消成功");
+            } else {
+                return toResponsObject(400, "取消成失败", "取消成失败");
+            }
+        } else {
+            orderVo.setOrder_status(OrderStatusEnum.CANCEL_ORDER.getCode());
+            orderService.update(orderVo);
+            return toResponsSuccess("取消成功");
+        }
     }
 
 
