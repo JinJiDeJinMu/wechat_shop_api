@@ -236,7 +236,7 @@
 			#{couponPrice}, 
 			#{callbackStatus},
 			#{orderType},
-			#{goods_type}
+			#{goodsType}
 		)
 	</insert>
 
