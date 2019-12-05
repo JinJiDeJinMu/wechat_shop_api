@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
-
 /**
  * 作者: @author Harmon <br>
  * 时间: 2017-08-11 08:32<br>
@@ -43,7 +42,6 @@ public class ApiPayController extends ApiBaseAction {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-
     @Autowired
     private ApiOrderService orderService;
     @Autowired
@@ -60,15 +58,14 @@ public class ApiPayController extends ApiBaseAction {
     private GroupBuyingService groupBuyingService;
     @Autowired
     private GroupBuyingDetailedService groupBuyingDetailedService;
-
     @Autowired
     private WxPayService wxPayService;
+
     /**
      */
     @ApiOperation(value = "跳转")
     @GetMapping("index")
     public Object index() {
-        //
         return toResponsSuccess("");
     }
 
@@ -78,9 +75,7 @@ public class ApiPayController extends ApiBaseAction {
     @ApiOperation(value = "获取支付的请求参数")
     @GetMapping("prepay")
     public Object payPrepay(@LoginUser UserVo loginUser, Integer orderId) {
-    	
     	String allOrderId = orderService.queryObject(orderId).getAll_order_id();
-    	
     	List<OrderVo> orders = orderService.queryByAllOrderId(allOrderId);
     	
     	String body = null;
@@ -93,8 +88,7 @@ public class ApiPayController extends ApiBaseAction {
             if (o.getPay_status().compareTo(1)> 0) {
                 return toResponsObject(400, "订单已支付，请不要重复操作", "");
             }
-            
-            
+
             //计算总价格
             allPrice = allPrice.add(o.getActual_price());
             
@@ -113,17 +107,13 @@ public class ApiPayController extends ApiBaseAction {
                         body = body+"等";
                         break;
                     }
-
                 }
                
             }
     	}
 
         String nonceStr = CharUtil.getRandomString(32);
-
-        //https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=7_7&index=3
         Map<Object, Object> resultObj = new TreeMap();
-
         try {
             Map<Object, Object> parame = new TreeMap<Object, Object>();
             parame.put("appid", ResourceUtil.getConfigByName("wx.appId"));
@@ -159,7 +149,6 @@ public class ApiPayController extends ApiBaseAction {
             // 响应报文
             String return_code = MapUtils.getString("return_code", resultUn);
             String return_msg = MapUtils.getString("return_msg", resultUn);
-            //
             if (return_code.equalsIgnoreCase("FAIL")) {
                 return toResponsFail("支付失败," + return_msg);
             } else if (return_code.equalsIgnoreCase("SUCCESS")) {
@@ -182,7 +171,7 @@ public class ApiPayController extends ApiBaseAction {
                     
                     OrderVo newOrder = new OrderVo();
                     newOrder.setPay_id(prepay_id);
-                    newOrder.setPay_status(1);
+                    newOrder.setPay_status(PayTypeEnum.PAYING.getCode());
                     newOrder.setAll_order_id(allOrderId.toString());
                     orderService.updateStatus(newOrder);
                     

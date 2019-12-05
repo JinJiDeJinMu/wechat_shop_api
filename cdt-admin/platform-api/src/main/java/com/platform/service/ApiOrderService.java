@@ -6,8 +6,8 @@ import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.platform.dao.*;
 import com.platform.entity.*;
-import com.platform.util.CommonUtil;
 import com.platform.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Service
+@Slf4j
 public class ApiOrderService {
     @Autowired
     private ApiOrderMapper orderDao;
@@ -45,9 +46,10 @@ public class ApiOrderService {
     private ApiGoodsSpecificationService goodsSpecificationService;
     @Autowired
     private ApiExpressOrderService apiExpressOrderService;
-
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private KeygenService keygenService;
 
     public OrderVo queryObject(Integer id) {
         return orderDao.queryObject(id);
@@ -94,7 +96,7 @@ public class ApiOrderService {
         String type = jsonParam.getString("type");//提交方式
         String postscript = jsonParam.getString("postscript");//留言
         Long promoterId = jsonParam.getLong("promoterId");// 获取推荐人id
-        System.out.println("=====================获取推荐人id:" + promoterId);
+        log.info("=====================获取推荐人id:" + promoterId);
         if (0 == promoterId.intValue()) {
             MlsUserEntity2 mlsuser = mlsUserSer.getEntityMapper().findByUserId(loginUser.getUserId());
             promoterId = mlsuser.getFid();
@@ -105,7 +107,8 @@ public class ApiOrderService {
         AddressVo addressVo = apiAddressMapper.queryObject(jsonParam.getInteger("addressId"));//收货地址
 
         //需要一个总订单ID,付款的时候计算全部价格
-        String all_order_id = UUID.randomUUID().toString().replaceAll("-", "");
+        //String all_order_id = UUID.randomUUID().toString().replaceAll("-", "");
+        String allOrderId = "pay" + String.valueOf(keygenService.genNumber().intValue());
         if (type.equals("cart")) {//购物车提交
             //查询所有购物车根据供应商分类
             Map<String, Object> param = new HashMap<String, Object>();
@@ -166,7 +169,7 @@ public class ApiOrderService {
                     }
                 }
 
-                OrderVo orderInfo = getOrderVo(loginUser, postscript, addressVo, all_order_id, goodsTotalPrice, freightPrice, couponId, couponPrice);
+                OrderVo orderInfo = getOrderVo(loginUser, postscript, addressVo, allOrderId, goodsTotalPrice, freightPrice, couponId, couponPrice);
                 // 加入推荐人
                 if (promoterId != null) {
                     orderInfo.setPromoter_id(promoterId.intValue());
@@ -249,7 +252,7 @@ public class ApiOrderService {
                         .multiply(new BigDecimal(goods.getBrokerage_percent() * goodsVo.getNumber())).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
 
                 // 订单价格计算
-                OrderVo orderInfo = getOrderVo(loginUser, postscript, addressVo, all_order_id, goodsTotalPrice, freightPrice, couponId, couponPrice);
+                OrderVo orderInfo = getOrderVo(loginUser, postscript, addressVo, allOrderId, goodsTotalPrice, freightPrice, couponId, couponPrice);
                 // 加入推荐人
                 if (promoterId != null) {
                     orderInfo.setPromoter_id(promoterId.intValue());
@@ -352,8 +355,7 @@ public class ApiOrderService {
 				*/
 
                 // 订单价格计算
-                OrderVo orderInfo = getOrderVo(loginUser, postscript, addressVo, all_order_id, goodsTotalPrice, freightPrice, couponId, couponPrice);
-
+                OrderVo orderInfo = getOrderVo(loginUser, postscript, addressVo, allOrderId, goodsTotalPrice, freightPrice, couponId, couponPrice);
                 // 加入推荐人
                 if (promoterId != null) {
                     orderInfo.setPromoter_id(promoterId.intValue());
@@ -365,11 +367,9 @@ public class ApiOrderService {
                     groupBuyingId = UUID.randomUUID().toString().replaceAll("-", "");
                 }
                 orderInfo.setGroup_buying_id(groupBuyingId);
-
                 orderInfo.setOrder_type("4");
                 // 保存订单信息
                 apiOrderMapper.save(orderInfo);
-
                 // 保存订单商品表
                 OrderGoodsVo orderGoodsVo = new OrderGoodsVo();
                 orderGoodsVo.setOrder_id(orderInfo.getId());
@@ -420,11 +420,11 @@ public class ApiOrderService {
         // 订单价格计算
         BigDecimal orderTotalPrice = goodsTotalPrice.add(freightPrice); // 订单的总价
         BigDecimal actualPrice = orderTotalPrice.subtract(couponPrice); // 减去其它支付的金额后，要实际支付的金额
-
         OrderVo orderInfo = new OrderVo();
         // 总订单编号
         orderInfo.setAll_order_id(all_order_id);
-        orderInfo.setOrder_sn(CommonUtil.generateOrderNumber());
+        //orderInfo.setOrder_sn(CommonUtil.generateOrderNumber());
+        orderInfo.setOrder_sn(String.valueOf(keygenService.genNumber().intValue()));
         orderInfo.setUser_id(loginUser.getUserId());
         // 收货地址和运费
         orderInfo.setConsignee(addressVo.getUserName());

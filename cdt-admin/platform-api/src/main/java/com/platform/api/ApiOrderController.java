@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.alibaba.fastjson.JSON;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
 import com.chundengtai.base.weixinapi.ShippingTypeEnum;
@@ -31,11 +32,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 作者: @author Harmon <br>
- * 时间: 2017-08-11 08:32<br>
- * 描述: ApiIndexController <br>
- */
 @Api(tags = "订单相关")
 @RestController
 @RequestMapping("/api/order")
@@ -148,7 +144,6 @@ public class ApiOrderController extends ApiBaseAction {
 
         //订单可操作的选择,删除，支付，收货，评论，退换货
         Map handleOption = orderInfo.getHandleOption();
-        //
         resultObj.put("orderInfo", orderInfo);
         resultObj.put("orderGoods", orderGoods);
         resultObj.put("handleOption", handleOption);
@@ -175,9 +170,9 @@ public class ApiOrderController extends ApiBaseAction {
         }
 
         orderInfo.setId(orderId);
-        orderInfo.setPay_status(2);
-        orderInfo.setOrder_status(201);
-        orderInfo.setShipping_status(0);
+        orderInfo.setPay_status(PayTypeEnum.PAYED.getCode());
+        orderInfo.setOrder_status(OrderStatusEnum.PAYED_ORDER.getCode());
+        orderInfo.setShipping_status(ShippingTypeEnum.NOSENDGOODS.getCode());
         orderInfo.setPay_time(new Date());
         int num = orderService.update(orderInfo);
         if (num > 0) {
@@ -226,40 +221,27 @@ public class ApiOrderController extends ApiBaseAction {
         try {
             // 需要退款
             if (orderVo.getPay_status().equals(PayTypeEnum.PAYED.getCode())) {
-
                 WxPayRefundRequest request = new WxPayRefundRequest();
                 request.setNonceStr(CharUtil.getRandomString(16));
                 request.setOutTradeNo(orderVo.getAll_order_id());
                 //request.setRefundFee(orderVo.getActual_price().multiply(new BigDecimal(100)).intValue());
                 request.setRefundFee(allPrice.multiply(new BigDecimal(100)).intValue());
-                //request.setTotalFee(orderVo.getActual_price().multiply(new BigDecimal(100)).intValue());
                 request.setTotalFee(allPrice.multiply(new BigDecimal(100)).intValue());
 
                 long id = kengenService.genNumber().longValue();
                 request.setOutRefundNo(String.valueOf(id));
                 request.setOpUserId(orderVo.getUser_id().toString());
-
                 WxPayRefundResult wxResult = wxPayService.refund(request);
-//
-//                WechatRefundApiResult result = WechatUtil.wxRefund(orderVo.getAll_order_id().toString(),
-//                        allPrice.doubleValue(), orderVo.getAll_price().doubleValue());
-                //测试修改金额
-                //WechatRefundApiResult result2 = WechatUtil.wxRefund(orderVo.getAll_order_id().toString(), 0.01d, 0.01d);
+
                 if (wxResult.getResultCode().equals("SUCCESS")) {
                     if (orderVo.getOrder_status().equals(OrderStatusEnum.PAYED_ORDER.getCode())) {
                         orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
                     } else if (orderVo.getOrder_status().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
                         orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
                     }
-
                     orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
+                    logger.warn("=====退款回调成功=====" + JSON.toJSONString(wxResult));
                     orderService.update(orderVo);
-                    //更新优惠券状态和实际
-//                    UserCouponVo uc = new UserCouponVo();
-//                    uc.setId(orderVo.getCoupon_id());
-//                    uc.setCoupon_status(1);
-//                    uc.setUsed_time(null);
-//                    userCouponService.updateCouponStatus(uc);
                     return toResponsSuccess("取消成功");
                 } else {
                     return toResponsObject(400, "取消成失败", "取消成失败");
