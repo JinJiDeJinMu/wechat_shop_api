@@ -1,10 +1,8 @@
 package com.platform.controller;
 
 import com.platform.constance.ShopShow;
-import com.platform.entity.GroupBuyingEntity;
-import com.platform.entity.OrderEntity;
-import com.platform.entity.OrderGoodsEntity;
-import com.platform.entity.SysUserEntity;
+import com.platform.entity.*;
+import com.platform.service.ExpressOrderService;
 import com.platform.service.OrderGoodsService;
 import com.platform.service.OrderService;
 import com.platform.service.ShippingService;
@@ -31,6 +29,8 @@ public class OrderController extends BaseController {
 	private OrderGoodsService orderGoodsService;
 	@Autowired
 	ShippingService shippingService;
+	@Autowired
+	private ExpressOrderService expressOrderService;
 
     /**
      * 列表
@@ -187,5 +187,18 @@ public class OrderController extends BaseController {
         orderService.sendGoods(order);
 
         return R.ok();
+    }
+
+
+    /**
+     * 查询订单状态为快递代收的详细信息
+     * @param id
+     * @return
+     */
+    @RequestMapping("/express/{id}")
+    @RequiresPermissions("order:info")
+    public R expressOrder(@PathVariable Integer id){
+        ExpressOrderEntity expressOrderEntity = expressOrderService.queryOrderId(id);
+        return R.ok().put("expressOrder",expressOrderEntity);
     }
 }
