@@ -337,9 +337,8 @@
     </update>
 
     <select id="queryOrderNo" resultMap="orderMap">
-		select a.*,b.code as  shipping_code
+		select a.*
 		from nideshop_order a
-		left join nideshop_shipping b on a.shipping_id = b.id
 		where a.order_sn = #{value}
 	</select>
 

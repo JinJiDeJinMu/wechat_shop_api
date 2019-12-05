@@ -522,7 +522,8 @@ public class ApiPayController extends ApiBaseAction {
     private void orderStatusLogic(String out_trade_no) {
         OrderVo orderItem = orderService.queryOrderNo(out_trade_no);
         if (orderItem == null) {
-            orderItem = orderService.queryOrderNo(out_trade_no);
+            orderItem = orderService.queryByOrderId(out_trade_no);
+
             orderItem.setAll_order_id(out_trade_no);
         } else {
             orderItem.setOrder_sn(out_trade_no);
