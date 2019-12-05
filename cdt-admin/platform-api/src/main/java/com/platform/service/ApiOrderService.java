@@ -108,7 +108,7 @@ public class ApiOrderService {
 
         //需要一个总订单ID,付款的时候计算全部价格
         //String all_order_id = UUID.randomUUID().toString().replaceAll("-", "");
-        String allOrderId = "pay" + String.valueOf(keygenService.genNumber().intValue());
+        String allOrderId = "pay" + String.valueOf(keygenService.genNumber().longValue());
         if (type.equals("cart")) {//购物车提交
             //查询所有购物车根据供应商分类
             Map<String, Object> param = new HashMap<String, Object>();
@@ -425,7 +425,7 @@ public class ApiOrderService {
         // 总订单编号
         orderInfo.setAll_order_id(all_order_id);
         //orderInfo.setOrder_sn(CommonUtil.generateOrderNumber());
-        orderInfo.setOrder_sn(String.valueOf(keygenService.genNumber().intValue()));
+        orderInfo.setOrder_sn(String.valueOf(keygenService.genNumber().longValue()));
         orderInfo.setUser_id(loginUser.getUserId());
         // 收货地址和运费
         orderInfo.setConsignee(addressVo.getUserName());
@@ -485,9 +485,14 @@ public class ApiOrderService {
         return apiOrderMapper.queryByAllOrderId(all_order_id);
     }
 
+    public OrderVo queryOrderNo(String order_sn) {
+        return apiOrderMapper.queryOrderNo(order_sn);
+    }
+
     public OrderVo queryByOrderId(String allOrderId) {
         return apiOrderMapper.queryByOrderId(allOrderId);
     }
+
     public List<OrderVo> queryGroupBuyRefundList(Map map) {
         return apiOrderMapper.queryGroupBuyRefundList(map);
     }
