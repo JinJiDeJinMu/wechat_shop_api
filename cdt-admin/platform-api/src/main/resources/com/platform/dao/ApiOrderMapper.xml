@@ -59,8 +59,15 @@
 		left join nideshop_shipping b on a.shipping_id = b.id
 		where a.id = #{value}
 	</select>
-	
-	<select id="queryByAllOrderId" resultMap="orderMap">
+
+    <select id="queryByOrderId" resultMap="orderMap">
+		select *
+		from nideshop_order
+		where all_order_id = #{allOrderId}
+	</select>
+
+
+    <select id="queryByAllOrderId" resultMap="orderMap">
 		select *
 		from nideshop_order
 		where all_order_id = #{allOrderId}

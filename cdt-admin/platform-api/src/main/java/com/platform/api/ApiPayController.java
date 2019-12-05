@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
+
 /**
  * 作者: @author Harmon <br>
  * 时间: 2017-08-11 08:32<br>
@@ -62,6 +63,7 @@ public class ApiPayController extends ApiBaseAction {
     private WxPayService wxPayService;
 
     /**
+     *
      */
     @ApiOperation(value = "跳转")
     @GetMapping("index")
@@ -75,25 +77,25 @@ public class ApiPayController extends ApiBaseAction {
     @ApiOperation(value = "获取支付的请求参数")
     @GetMapping("prepay")
     public Object payPrepay(@LoginUser UserVo loginUser, Integer orderId) {
-    	String allOrderId = orderService.queryObject(orderId).getAll_order_id();
-    	List<OrderVo> orders = orderService.queryByAllOrderId(allOrderId);
-    	
-    	String body = null;
-    	BigDecimal allPrice = BigDecimal.ZERO;
-    	for(OrderVo o : orders) {
-    		if (null == o) {
+        String allOrderId = orderService.queryObject(orderId).getAll_order_id();
+        List<OrderVo> orders = orderService.queryByAllOrderId(allOrderId);
+
+        String body = null;
+        BigDecimal allPrice = BigDecimal.ZERO;
+        for (OrderVo o : orders) {
+            if (null == o) {
                 return toResponsObject(400, "订单已取消", "");
             }
 
-            if (o.getPay_status().compareTo(1)> 0) {
+            if (o.getPay_status().compareTo(1) > 0) {
                 return toResponsObject(400, "订单已支付，请不要重复操作", "");
             }
 
             //计算总价格
             allPrice = allPrice.add(o.getActual_price());
-            
-            if(!(body == null)) {
-            	continue;
+
+            if (!(body == null)) {
+                continue;
             }
             Map orderGoodsParam = new HashMap();
             orderGoodsParam.put("order_id", o.getId());
@@ -101,16 +103,16 @@ public class ApiPayController extends ApiBaseAction {
             List<OrderGoodsVo> orderGoods = orderGoodsService.queryList(orderGoodsParam);
             if (null != orderGoods) {
                 for (OrderGoodsVo goodsVo : orderGoods) {
-                    if(body == null) {
+                    if (body == null) {
                         body = goodsVo.getGoods_name();
-                    }else {
-                        body = body+"等";
+                    } else {
+                        body = body + "等";
                         break;
                     }
                 }
-               
+
             }
-    	}
+        }
 
         String nonceStr = CharUtil.getRandomString(32);
         Map<Object, Object> resultObj = new TreeMap();
@@ -128,7 +130,7 @@ public class ApiPayController extends ApiBaseAction {
             parame.put("body", body);
             //支付金额
             parame.put("total_fee", allPrice.multiply(new BigDecimal(100)).intValue());
-            System.out.println("***************"+parame.get("total_fee")+"***************");
+            System.out.println("***************" + parame.get("total_fee") + "***************");
             //System.out.println(orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue() + "***************");
             //parame.put("total_fee", 1);
             // 回调地址
@@ -142,10 +144,10 @@ public class ApiPayController extends ApiBaseAction {
             parame.put("sign", sign);
 
             String xml = MapUtils.convertMap2Xml(parame);
-            System.out.println("***************xml="+xml+"***************");
+            System.out.println("***************xml=" + xml + "***************");
             Map<String, Object> resultUn = XmlUtil.xmlStrToMap(WechatUtil.requestOnce(ResourceUtil.getConfigByName("wx.uniformorder"), xml));
-            System.out.println("================resultUn="+resultUn+"================");
-            
+            System.out.println("================resultUn=" + resultUn + "================");
+
             // 响应报文
             String return_code = MapUtils.getString("return_code", resultUn);
             String return_msg = MapUtils.getString("return_msg", resultUn);
@@ -168,13 +170,13 @@ public class ApiPayController extends ApiBaseAction {
                     resultObj.put("signType", "MD5");
                     String paySign = WechatUtil.arraySign(resultObj, ResourceUtil.getConfigByName("wx.paySignKey"));
                     resultObj.put("paySign", paySign);
-                    
+
                     OrderVo newOrder = new OrderVo();
                     newOrder.setPay_id(prepay_id);
                     newOrder.setPay_status(PayTypeEnum.PAYING.getCode());
                     newOrder.setAll_order_id(allOrderId.toString());
                     orderService.updateStatus(newOrder);
-                    
+
                     //redis设置订单状态
                     redisTemplate.opsForValue().set(allOrderId.toString(), "51", 60 * 60 * 24);
                     return toResponsObject(0, "微信统一订单下单成功", resultObj);
@@ -198,15 +200,15 @@ public class ApiPayController extends ApiBaseAction {
         }
         OrderVo order = orderService.queryObject(orderId);
         //处理订单的redis状态
-    	String value = RedisUtils.get(order.getAll_order_id());
-    	if(value != null && "51".equals(value)) {
-    		RedisUtils.del(orderId.toString());
-    	}else {
-    		//异步回调已结操作过
-    		return toResponsMsgSuccess("已完成");
-    	}
-        
-        if(order.getPay_status().intValue() == 2) {
+        String value = RedisUtils.get(order.getAll_order_id());
+        if (value != null && "51".equals(value)) {
+            RedisUtils.del(orderId.toString());
+        } else {
+            //异步回调已结操作过
+            return toResponsMsgSuccess("已完成");
+        }
+
+        if (order.getPay_status().intValue() == 2) {
             return toResponsMsgSuccess("支付成功");
         }
         Map<Object, Object> parame = new TreeMap<Object, Object>();
@@ -243,15 +245,15 @@ public class ApiPayController extends ApiBaseAction {
         if ("SUCCESS".equals(trade_state)) {
             // 更改订单状态
             // 业务处理
-        	order.setPay_status(2);
-        	order.setOrder_status(201);
-        	order.setShipping_status(0);
-        	order.setPay_time(new Date());
+            order.setPay_status(2);
+            order.setOrder_status(201);
+            order.setShipping_status(0);
+            order.setPay_time(new Date());
             orderService.updateStatus(order);
             //1购物车、2普通、3秒杀、4团购
             String orderType = order.getOrder_type();
             //只有购物车、普通购买有分润。
-            if(orderType == null || "1".equals(orderType) || "2".equals(orderType)) {
+            if (orderType == null || "1".equals(orderType) || "2".equals(orderType)) {
 //            	Map<String, Object> map = new HashMap<String, Object>();
 //                map.put("all_order_id", order.getAll_order_id());
 //                List<OrderVo> lists = orderService.queryList(map);
@@ -269,47 +271,47 @@ public class ApiPayController extends ApiBaseAction {
 //                }
             }
             //如果是团购在付款成功后要去增加团购记录表
-            else if("4".equals(orderType)){
-            	//获取订单商品表信息
-            	Map<String, Object> orderGoodsMap = new HashMap<String, Object>();
-            	orderGoodsMap.put("order_id", order.getId());
-            	List<OrderGoodsVo> OrderGoodsVos = orderGoodsService.queryList(orderGoodsMap);
-            	OrderGoodsVo orderGoods = OrderGoodsVos.get(0);
-            	//查询根据团ID查询是否已经有创建，有则增加数量，没有则创建
+            else if ("4".equals(orderType)) {
+                //获取订单商品表信息
+                Map<String, Object> orderGoodsMap = new HashMap<String, Object>();
+                orderGoodsMap.put("order_id", order.getId());
+                List<OrderGoodsVo> OrderGoodsVos = orderGoodsService.queryList(orderGoodsMap);
+                OrderGoodsVo orderGoods = OrderGoodsVos.get(0);
+                //查询根据团ID查询是否已经有创建，有则增加数量，没有则创建
                 GroupBuyingVo gb = groupBuyingService.queryObject(order.getGroup_buying_id());
-            	if(gb == null) {
-            		//创建团购主表
-            		gb = new GroupBuyingVo();
-            		gb.setId(order.getGroup_buying_id());
-            		gb.setGoodsId(orderGoods.getGoods_id());
-                	gb.setGoodsName(orderGoods.getGoods_name());
-                	gb.setGroupNum(1);
-                	GoodsVo goods = apiGoodsService.queryObject(orderGoods.getGoods_id());
-                	gb.setSuccessNum(goods.getSuccess_people());//去要从商品表中取值
-                	gb.setMerchantId(goods.getMerchantId());
-                	Calendar calendar = new GregorianCalendar();
-                	Date date = new Date();
-                	calendar.setTime(date); 
-                	calendar.add(calendar.DATE,1);//把日期往后增加一天
-                	gb.setEndTime(calendar.getTime());
-                	groupBuyingService.save(gb);
-                	
-            	}else {
-            		gb.setGroupNum(gb.getGroupNum() + 1);
-            		//根据判断人数判断是否拼团成功
-            		if(gb.getGroupNum() >= gb.getSuccessNum()) {
-            			gb.setTypes(1);//拼团成功状态
-            		}
-            		groupBuyingService.update(gb);
-            	}
-            	//记录团购买人信息
-            	GroupBuyingDetailedVo gbd = new GroupBuyingDetailedVo();
-            	gbd.setGroupBuyingId(gb.getId());
-            	gbd.setPayTime(new Date());
-            	gbd.setUserId(loginUser.getUserId());
-            	gbd.setUserName(loginUser.getUsername());
-            	gbd.setUserImg(loginUser.getAvatar());
-            	groupBuyingDetailedService.save(gbd);
+                if (gb == null) {
+                    //创建团购主表
+                    gb = new GroupBuyingVo();
+                    gb.setId(order.getGroup_buying_id());
+                    gb.setGoodsId(orderGoods.getGoods_id());
+                    gb.setGoodsName(orderGoods.getGoods_name());
+                    gb.setGroupNum(1);
+                    GoodsVo goods = apiGoodsService.queryObject(orderGoods.getGoods_id());
+                    gb.setSuccessNum(goods.getSuccess_people());//去要从商品表中取值
+                    gb.setMerchantId(goods.getMerchantId());
+                    Calendar calendar = new GregorianCalendar();
+                    Date date = new Date();
+                    calendar.setTime(date);
+                    calendar.add(calendar.DATE, 1);//把日期往后增加一天
+                    gb.setEndTime(calendar.getTime());
+                    groupBuyingService.save(gb);
+
+                } else {
+                    gb.setGroupNum(gb.getGroupNum() + 1);
+                    //根据判断人数判断是否拼团成功
+                    if (gb.getGroupNum() >= gb.getSuccessNum()) {
+                        gb.setTypes(1);//拼团成功状态
+                    }
+                    groupBuyingService.update(gb);
+                }
+                //记录团购买人信息
+                GroupBuyingDetailedVo gbd = new GroupBuyingDetailedVo();
+                gbd.setGroupBuyingId(gb.getId());
+                gbd.setPayTime(new Date());
+                gbd.setUserId(loginUser.getUserId());
+                gbd.setUserName(loginUser.getUsername());
+                gbd.setUserImg(loginUser.getAvatar());
+                groupBuyingDetailedService.save(gbd);
             }
             //感觉没用
             //mlsUserSer.upUserProfit(order);
@@ -335,7 +337,7 @@ public class ApiPayController extends ApiBaseAction {
             orderService.updateStatus(orderInfo);
         } else {
             // 失败
-        	OrderVo orderInfo = new OrderVo();
+            OrderVo orderInfo = new OrderVo();
             orderInfo.setAll_order_id(order.getAll_order_id());
             orderInfo.setPay_status(0);
             orderService.updateStatus(orderInfo);
@@ -414,25 +416,22 @@ public class ApiPayController extends ApiBaseAction {
     }
 
     private void orderStatusLogic(String out_trade_no) {
-        List<OrderVo> orderItem = orderService.queryByAllOrderId(out_trade_no);
-        log.info("微信回调设置=====>orderItems条数:" + orderItem.size());
+        OrderVo orderItem = orderService.queryByOrderId(out_trade_no);
+
         log.info("微信回调设置=====out_trade_no>:" + out_trade_no);
         log.info("微信回调Json=====>:" + JSON.toJSONString(orderItem));
-        for (OrderVo orderInfo : orderItem) {
-
-            orderInfo.setAll_order_id(out_trade_no);
-            orderInfo.setPay_status(PayTypeEnum.PAYED.getCode());
-            if (orderInfo.getGoods_type().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
-                    orderInfo.getGoods_type().equals(GoodsTypeEnum.EXPRESS_GET.getCode())
-            ) {
-                orderInfo.setOrder_status(OrderStatusEnum.NOT_USED.getCode());
-            } else {
-                orderInfo.setOrder_status(OrderStatusEnum.PAYED_ORDER.getCode());
-            }
-            orderInfo.setShipping_status(ShippingTypeEnum.NOSENDGOODS.getCode());
-            orderInfo.setPay_time(new Date());
-            orderService.updateStatus(orderInfo);
+        orderItem.setAll_order_id(out_trade_no);
+        orderItem.setPay_status(PayTypeEnum.PAYED.getCode());
+        if (orderItem.getGoods_type().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
+                orderItem.getGoods_type().equals(GoodsTypeEnum.EXPRESS_GET.getCode())
+        ) {
+            orderItem.setOrder_status(OrderStatusEnum.NOT_USED.getCode());
+        } else {
+            orderItem.setOrder_status(OrderStatusEnum.PAYED_ORDER.getCode());
         }
+        orderItem.setShipping_status(ShippingTypeEnum.NOSENDGOODS.getCode());
+        orderItem.setPay_time(new Date());
+        orderService.updateStatus(orderItem);
     }
 
 //    /**
@@ -574,130 +573,133 @@ public class ApiPayController extends ApiBaseAction {
     public static String callbakcXml(String orderNum) {
         return "<xml><appid><![CDATA[wx2421b1c4370ec43b]]></appid><attach><![CDATA[支付测试]]></attach><bank_type><![CDATA[CFT]]></bank_type><fee_type><![CDATA[CNY]]></fee_type> <is_subscribe><![CDATA[Y]]></is_subscribe><mch_id><![CDATA[10000100]]></mch_id><nonce_str><![CDATA[5d2b6c2a8db53831f7eda20af46e531c]]></nonce_str><openid><![CDATA[oUpF8uMEb4qRXf22hE3X68TekukE]]></openid> <out_trade_no><![CDATA[" + orderNum + "]]></out_trade_no>  <result_code><![CDATA[SUCCESS]]></result_code> <return_code><![CDATA[SUCCESS]]></return_code><sign><![CDATA[B552ED6B279343CB493C5DD0D78AB241]]></sign><sub_mch_id><![CDATA[10000100]]></sub_mch_id> <time_end><![CDATA[20140903131540]]></time_end><total_fee>1</total_fee><trade_type><![CDATA[JSAPI]]></trade_type><transaction_id><![CDATA[1004400740201409030005092168]]></transaction_id></xml>";
     }
-    
-    
+
+
     /**
      * 计算分润
-     * @param userId		用户Id
-     * @param fx_money		分销的分润金额
-     * @param order_price	订单金额
-     * @param orderId		订单ID
+     *
+     * @param userId      用户Id
+     * @param fx_money    分销的分润金额
+     * @param order_price 订单金额
+     * @param orderId     订单ID
      */
     @ApiOperation(value = "微信订单回调接口")
     @RequestMapping(value = "/fx", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @IgnoreAuth
     public void fx(Long userId, BigDecimal fx_money, BigDecimal orderPrice, int orderId, Long merchantId) {
-    	if(userId == null || userId==0L || fx_money.compareTo(BigDecimal.ZERO)==0) {
-    		System.out.println("*****分润参数错误userId="+userId+",fx_money="+fx_money);
-    		return;
-    	}
-    	
-    	
-    	Map<String, Object> map = mlsUserSer.getEntityMapper().getSysUserByMid(new Long(merchantId));
-    	if(map == null) {
-    		System.out.println("==============分销报错："+merchantId +"=====没有找到供应商");
-    		return;
-    	}
-    	Integer order_price = orderPrice.multiply(new BigDecimal("100")).intValue();
-    	//MlsUserEntity2 user = mlsUserSer.queryObject(userId);
-    	MlsUserEntity2 user = mlsUserSer.getEntityMapper().getById(userId);
-    	if(user == null) {
-    		System.out.println("==============分销报错："+userId +"=====没有找到用户");
-    		return;
-    	}
-    	BigDecimal fx = new BigDecimal(map.get("FX").toString());//上级分销比例
-    	BigDecimal fx1 = new BigDecimal(map.get("FX1").toString());//上级分销比例
-    	BigDecimal fx2 = new BigDecimal(map.get("FX2").toString());//上上级分销比例
-    	BigDecimal pfx = new BigDecimal(map.get("PFX").toString());//平台分销比例
-    	Integer fx1_money = 0;//上级分润金额
-    	Integer fx2_money = 0;//上上级分润金额
-    	Integer pfx_money = 0;//上上级分润金额
-    	Integer user_money = 0;//本人分润金额
-    	Integer brand_money = 0;//供应商金额
-    	Long fid1 = 0L;//上级
-    	Long fid2 = 0L;//上上级
-    	
-    	//读取系统分润比例
+        if (userId == null || userId == 0L || fx_money.compareTo(BigDecimal.ZERO) == 0) {
+            System.out.println("*****分润参数错误userId=" + userId + ",fx_money=" + fx_money);
+            return;
+        }
+
+
+        Map<String, Object> map = mlsUserSer.getEntityMapper().getSysUserByMid(new Long(merchantId));
+        if (map == null) {
+            System.out.println("==============分销报错：" + merchantId + "=====没有找到供应商");
+            return;
+        }
+        Integer order_price = orderPrice.multiply(new BigDecimal("100")).intValue();
+        //MlsUserEntity2 user = mlsUserSer.queryObject(userId);
+        MlsUserEntity2 user = mlsUserSer.getEntityMapper().getById(userId);
+        if (user == null) {
+            System.out.println("==============分销报错：" + userId + "=====没有找到用户");
+            return;
+        }
+        BigDecimal fx = new BigDecimal(map.get("FX").toString());//上级分销比例
+        BigDecimal fx1 = new BigDecimal(map.get("FX1").toString());//上级分销比例
+        BigDecimal fx2 = new BigDecimal(map.get("FX2").toString());//上上级分销比例
+        BigDecimal pfx = new BigDecimal(map.get("PFX").toString());//平台分销比例
+        Integer fx1_money = 0;//上级分润金额
+        Integer fx2_money = 0;//上上级分润金额
+        Integer pfx_money = 0;//上上级分润金额
+        Integer user_money = 0;//本人分润金额
+        Integer brand_money = 0;//供应商金额
+        Long fid1 = 0L;//上级
+        Long fid2 = 0L;//上上级
+
+        //读取系统分润比例
 //    	String sys_fx = sysConfigService.getValue("sys_fx", null);
 //    	if(StringUtils.isNotBlank(sys_fx)) {
 //    		sys_fx_money = computeFx(orderPrice, new BigDecimal(sys_fx));
 //    		addUserRecord(0L, sys_fx_money, userId, order_price, orderId);//0L固定留给平台ID
 //    	}
-    	
-    	//分人分润=总金额-系统分润（默认0）
-    	//个人分润金额包括自己的分润、上级分润和上上级分润
-    	//第一情况：没有上级或者上上级的情况分润给个人(现在使用)
-    	//第二情况：没有上级或者上上级的情况分润给系统
-    	
-    	//获得上级和上上级ID
-    	fid1 = user.getFid();
-    	if(fid1 != null && fid1>0) {
-    		 MlsUserEntity2 fuser = mlsUserSer.queryObject(fid1);
-    		 if(fuser != null) {
-    			 fid2 = fuser.getFid();
-    		 }
-    	}
-    	//判断是否存在上级和上上级增加分润比例
-    	if(fxblIsNull(fx1) == true && fid1 != null && fid1 > 0) {
-    		fx1_money = computeFx(fx_money, fx1);
-    		addUserRecord(fid1, fx1_money, userId, order_price, orderId);
-    	}
-    	if(fxblIsNull(fx2) == true && fid2 != null && fid2 > 0) {
-    		fx2_money = computeFx(fx_money, fx2);
-    		addUserRecord(fid2, fx2_money, userId, order_price, orderId);
-    	}
-    	//计算平台分佣比例
-    	if(fxblIsNull(pfx)) {
-    		pfx_money = computeFx(fx_money, pfx);
-    		addUserRecord(0L, pfx_money, userId, order_price, orderId);
-    	}
-    	//计算自己的分润比例
-    	user_money = computeFx(fx_money, fx);
-    	addUserRecord(user.getMlsUserId(), user_money, userId, order_price, orderId);
-    	//计算供应商金额
-    	brand_money = order_price - user_money - fx1_money - fx2_money - pfx_money;
-    	//查询供应商ID
-    	MlsUserEntity2 u = mlsUserSer.getEntityMapper().findByMerchantId(merchantId);
-    	addUserRecord(u.getMlsUserId(), brand_money, userId, order_price, orderId);//1L固定留给供应商ID，多商户版本填写他的MLS_USER_ID
+
+        //分人分润=总金额-系统分润（默认0）
+        //个人分润金额包括自己的分润、上级分润和上上级分润
+        //第一情况：没有上级或者上上级的情况分润给个人(现在使用)
+        //第二情况：没有上级或者上上级的情况分润给系统
+
+        //获得上级和上上级ID
+        fid1 = user.getFid();
+        if (fid1 != null && fid1 > 0) {
+            MlsUserEntity2 fuser = mlsUserSer.queryObject(fid1);
+            if (fuser != null) {
+                fid2 = fuser.getFid();
+            }
+        }
+        //判断是否存在上级和上上级增加分润比例
+        if (fxblIsNull(fx1) == true && fid1 != null && fid1 > 0) {
+            fx1_money = computeFx(fx_money, fx1);
+            addUserRecord(fid1, fx1_money, userId, order_price, orderId);
+        }
+        if (fxblIsNull(fx2) == true && fid2 != null && fid2 > 0) {
+            fx2_money = computeFx(fx_money, fx2);
+            addUserRecord(fid2, fx2_money, userId, order_price, orderId);
+        }
+        //计算平台分佣比例
+        if (fxblIsNull(pfx)) {
+            pfx_money = computeFx(fx_money, pfx);
+            addUserRecord(0L, pfx_money, userId, order_price, orderId);
+        }
+        //计算自己的分润比例
+        user_money = computeFx(fx_money, fx);
+        addUserRecord(user.getMlsUserId(), user_money, userId, order_price, orderId);
+        //计算供应商金额
+        brand_money = order_price - user_money - fx1_money - fx2_money - pfx_money;
+        //查询供应商ID
+        MlsUserEntity2 u = mlsUserSer.getEntityMapper().findByMerchantId(merchantId);
+        addUserRecord(u.getMlsUserId(), brand_money, userId, order_price, orderId);//1L固定留给供应商ID，多商户版本填写他的MLS_USER_ID
     }
-    
+
     /**
      * 增加分润记录
+     *
      * @param userId
      * @param price
      */
     private void addUserRecord(Long userId, int price, Long fxuser, int order_price, int orderId) {
-    	UserRecord ur = new UserRecord();
-    	ur.setMlsUserId(userId);
-    	ur.setTypes(2);
-    	ur.setTypesStr("分润");
-    	ur.setPrice(price);
-    	ur.setRemarks("id:"+fxuser+"分润，金额："+price);
-    	ur.setOrderId(orderId);
-    	userRecordSer.save(ur);
-    	
-    	MlsUserEntity2 mlsUserVo= new MlsUserEntity2();
-    	mlsUserVo.setMlsUserId(userId);
-		mlsUserVo.setTodaySales(order_price);
-		mlsUserVo.setGetProfit(price);
-		mlsUserSer.updateMoney(mlsUserVo);
+        UserRecord ur = new UserRecord();
+        ur.setMlsUserId(userId);
+        ur.setTypes(2);
+        ur.setTypesStr("分润");
+        ur.setPrice(price);
+        ur.setRemarks("id:" + fxuser + "分润，金额：" + price);
+        ur.setOrderId(orderId);
+        userRecordSer.save(ur);
+
+        MlsUserEntity2 mlsUserVo = new MlsUserEntity2();
+        mlsUserVo.setMlsUserId(userId);
+        mlsUserVo.setTodaySales(order_price);
+        mlsUserVo.setGetProfit(price);
+        mlsUserSer.updateMoney(mlsUserVo);
     }
-    
+
     /**
      * 根据金额和比例计算出金额
+     *
      * @param all 金额
-     * @param bl 比例
+     * @param bl  比例
      * @return
      */
     private Integer computeFx(BigDecimal all, BigDecimal bl) {
-    	return all.multiply(bl).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).intValue();
-    	//return all.multiply(bl).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
+        return all.multiply(bl).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).intValue();
+        //return all.multiply(bl).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
     }
-    
+
     private Boolean fxblIsNull(BigDecimal fx) {
-    	if(fx != null && fx.compareTo(BigDecimal.ZERO) > 0) {
-    		return true;
-    	}
-    	return false;
+        if (fx != null && fx.compareTo(BigDecimal.ZERO) > 0) {
+            return true;
+        }
+        return false;
     }
 }

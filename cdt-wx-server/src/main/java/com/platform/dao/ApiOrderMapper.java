@@ -2,6 +2,7 @@ package com.platform.dao;
 
 import com.platform.common.BaseBizMapper;
 import com.platform.entity.OrderVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public interface ApiOrderMapper extends BaseBizMapper<OrderVo> {
 
     public List<OrderVo> queryPageList(Map<String, Object> map);
 
-    public List<OrderVo> queryByAllOrderId(String allOrderId);
+    public List<OrderVo> queryByAllOrderId(@Param("") String allOrderId);
 
     List<OrderVo> queryGroupBuyRefundList(Map map);
 }

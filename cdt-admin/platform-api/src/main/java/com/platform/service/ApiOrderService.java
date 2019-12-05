@@ -485,6 +485,9 @@ public class ApiOrderService {
         return apiOrderMapper.queryByAllOrderId(all_order_id);
     }
 
+    public OrderVo queryByOrderId(String allOrderId) {
+        return apiOrderMapper.queryByOrderId(allOrderId);
+    }
     public List<OrderVo> queryGroupBuyRefundList(Map map) {
         return apiOrderMapper.queryGroupBuyRefundList(map);
     }
