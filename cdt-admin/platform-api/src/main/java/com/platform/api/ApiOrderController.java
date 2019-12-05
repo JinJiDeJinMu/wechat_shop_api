@@ -238,6 +238,8 @@ public class ApiOrderController extends ApiBaseAction {
                         orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
                     } else if (orderVo.getOrder_status().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
                         orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
+                    } else {
+                        orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
                     }
                     orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
                     logger.warn("=====退款回调成功=====" + JSON.toJSONString(wxResult));
