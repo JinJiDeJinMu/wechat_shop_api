@@ -527,7 +527,8 @@ public class ApiPayController extends ApiBaseAction {
         orderItem.setOrder_sn(out_trade_no);
         orderSetPayedStatus(orderItem);
         orderItem.setPay_time(new Date());
-        orderService.update(orderItem);
+        int rows = orderService.update(orderItem);
+        log.warn("=====此次更新影响===行数====" + rows);
     }
 
     private void orderSetPayedStatus(OrderVo orderItem) {
