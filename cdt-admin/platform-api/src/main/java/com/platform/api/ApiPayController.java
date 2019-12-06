@@ -552,7 +552,7 @@ public class ApiPayController extends ApiBaseAction {
             payrecord.setTradePrice(BigDecimal.valueOf(result.getTotalFee()));
             payrecord.setAppId("");
             payrecord.setCreateDate(new Date());
-            payrecord.setPayOrderId(result.getTransactionId());
+            //payrecord.setPayOrderId(result.getTransactionId());
             payrecord.setPayType(PayTypeEnum.PAYED.getCode());
             payrecord.setMemo(result.getPromotionDetail());
             payrecord.setPayState(PayTypeEnum.PAYED.getCode());
