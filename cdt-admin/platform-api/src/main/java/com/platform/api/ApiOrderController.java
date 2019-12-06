@@ -12,6 +12,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
+import com.platform.entity.CdtPaytransRecordEntity;
 import com.platform.entity.OrderGoodsVo;
 import com.platform.entity.OrderVo;
 import com.platform.entity.UserVo;
@@ -21,6 +22,7 @@ import com.platform.utils.CharUtil;
 import com.platform.utils.Query;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ import java.util.Map;
 @Api(tags = "订单相关")
 @RestController
 @RequestMapping("/api/order")
+@Slf4j
 public class ApiOrderController extends ApiBaseAction {
     @Autowired
     private WxPayService wxPayService;
@@ -56,6 +59,9 @@ public class ApiOrderController extends ApiBaseAction {
 
     @Autowired
     private KeygenService kengenService;
+
+    @Autowired
+    private CdtPaytransRecordService paytransRecordService;
 
     /**
      * 获取订单列表(要验证)
@@ -222,20 +228,12 @@ public class ApiOrderController extends ApiBaseAction {
             return returnMoney(orderVo, allPrice, orderVo.getOrder_sn());
         } catch (WxPayException e) {
             logger.error(e.getXmlString());
-            if (e.getErrCodeDes().contains("订单已全额退款")) {
-                orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
-                orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
-                orderService.update(orderVo);
-            }
+            returnAllMoney(orderVo, e);
             if (e.getErrCodeDes().contains("订单不存在")) {
                 try {
                     return returnMoney(orderVo, allPrice, orderVo.getAll_order_id());
                 } catch (WxPayException ex) {
-                    if (e.getErrCodeDes().contains("订单已全额退款")) {
-                        orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
-                        orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
-                        orderService.update(orderVo);
-                    }
+                    returnAllMoney(orderVo, e);
                 }
             }
             return toResponsSuccess(e.getErrCodeDes());
@@ -243,6 +241,32 @@ public class ApiOrderController extends ApiBaseAction {
             e.printStackTrace();
         }
         return toResponsSuccess("提交失败");
+    }
+
+    private void returnAllMoney(OrderVo orderVo, WxPayException e) {
+        if (e.getErrCodeDes().contains("订单已全额退款")) {
+            orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
+            orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
+            orderService.update(orderVo);
+
+            try {
+                //FIXME:支付成功后入账
+                CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
+                payrecord.setMchOrderNo(orderVo.getOrder_sn());
+                payrecord.setOrderNo(orderVo.getOrder_sn());
+                payrecord.setAmount(orderVo.getActual_price());
+                payrecord.setTradePrice(orderVo.getActual_price());
+                payrecord.setAppId("");
+                payrecord.setCreateDate(new Date());
+                //payrecord.setPayOrderId("");
+                payrecord.setPayType(PayTypeEnum.REFUND.getCode());
+                payrecord.setMemo("订单已全额退款");
+                payrecord.setPayState(PayTypeEnum.REFUND.getCode());
+                paytransRecordService.save(payrecord);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     private Object returnMoney(OrderVo orderVo, BigDecimal allPrice, String outTradeNo) throws WxPayException {
@@ -272,6 +296,27 @@ public class ApiOrderController extends ApiBaseAction {
                 orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
                 logger.warn("=====退款回调成功=====" + JSON.toJSONString(wxResult));
                 orderService.update(orderVo);
+
+
+                try {
+                    CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
+                    payrecord.setMchOrderNo(orderVo.getOrder_sn());
+                    payrecord.setAmount(BigDecimal.valueOf(request.getTotalFee()));
+                    payrecord.setTradePrice(BigDecimal.valueOf(request.getRefundFee()));
+                    payrecord.setAppId("");
+                    payrecord.setCreateDate(new Date());
+                    //payrecord.setPayOrderId(wxResult.getTransactionId());
+                    payrecord.setPayType(PayTypeEnum.REFUND.getCode());
+                    payrecord.setMemo(wxResult.getXmlString());
+                    payrecord.setPayState(PayTypeEnum.REFUND.getCode());
+                    payrecord.setReqText(request.toXML());
+                    payrecord.setResText(wxResult.getXmlString());
+                    paytransRecordService.save(payrecord);
+                } catch (Exception ex) {
+                    log.error("订单退款异常=====>" + ex.getMessage());
+                    ex.printStackTrace();
+                }
+
                 return toResponsSuccess("取消成功");
             } else {
                 return toResponsObject(400, "取消成失败", "取消成失败");
