@@ -9,11 +9,21 @@
     <div v-show="!detail&&showList">
         <Row :gutter="16">
             <div class="search-group">
-                <i-col span="4">
+                <i-col span="3">
                     <i-input v-model="q.orderSn" @on-enter="query" placeholder="订单号"/>
                 </i-col>
-                <i-col span="4">
-                    <i-select v-model="q.orderStatus">
+                <i-col span="3">
+                    <i-select v-model="q.goodsType" placeholder="订单类型">
+                        <i-option value="1">普通商品</i-option>
+                        <i-option value="2">秒杀</i-option>
+                        <i-option value="3">团购</i-option>
+                        <i-option value="4">砍价</i-option>
+                        <i-option value="5">快递代取</i-option>
+                        <i-option value="6">核销订单</i-option>
+                    </i-select>
+                </i-col>
+                <i-col span="3">
+                    <i-select v-model="q.orderStatus" placeholder="订单状态">
                         <i-option value="0">待付款</i-option>
                         <i-option value="101">订单已取消</i-option>
                         <i-option value="102">订单已删除</i-option>
@@ -26,15 +36,12 @@
                     </i-select>
                 </i-col>
                 <i-col span="4">
-                    <i-select v-model="q.goodsType">
-                        <i-option value="1">普通商品</i-option>
-                        <i-option value="2">秒杀</i-option>
-                        <i-option value="3">团购</i-option>
-                        <i-option value="4">砍价</i-option>
-                        <i-option value="5">快递代取</i-option>
-                        <i-option value="6">核销订单</i-option>
-                    </i-select>
+                    <el-date-picker v-model="q.addTime" type="datetime" placeholder="开始时间"  value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" style="height: 32px;"></el-date-picker>
                 </i-col>
+                <i-col span="4">
+                    <el-date-picker v-model="q.endTime" type="datetime" placeholder="结束时间"  value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm"></el-date-picker>
+                </i-col>
+
                 <i-button @click="query">查询</i-button>
             </div>
             <div class="buttons-group">
@@ -49,6 +56,8 @@
         </Row>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
+        <div id="jqGridSum">
+        </div>
     </div>
 
     <Card v-show="!showList&&!detail">
