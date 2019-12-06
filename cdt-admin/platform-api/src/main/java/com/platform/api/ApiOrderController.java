@@ -69,10 +69,14 @@ public class ApiOrderController extends ApiBaseAction {
     @ApiOperation(value = "获取订单列表")
     @RequestMapping("list")
     public Object list(@LoginUser UserVo loginUser, Integer order_status,
+                       Integer merchantId,
                        @RequestParam(value = "page", defaultValue = "1") Integer page,
                        @RequestParam(value = "size", defaultValue = "10") Integer size) {
         Map params = new HashMap();
-        params.put("user_id", loginUser.getUserId());
+        //params.put("user_id", loginUser.getUserId());
+        if (merchantId != null && !merchantId.equals(0)) {
+            params.put("merchantId", merchantId);
+        }
         params.put("page", page);
         params.put("limit", size);
         params.put("sidx", "id");

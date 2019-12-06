@@ -87,6 +87,9 @@
         SELECT o.*, g.goods_name, g.list_pic_url, g.goods_id FROM nideshop_order o
         LEFT JOIN nideshop_order_goods g ON o.id = g.order_id
         <where>
+            <if test="merchantId != null and merchantId != ''">
+                and o.merchant_id = #{merchantId}
+            </if>
             <if test="user_id != null">
                 and o.user_id = #{user_id}
             </if>
