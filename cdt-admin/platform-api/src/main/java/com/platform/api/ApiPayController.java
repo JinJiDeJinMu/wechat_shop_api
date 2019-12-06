@@ -65,6 +65,8 @@ public class ApiPayController extends ApiBaseAction {
     @Autowired
     private WxPayService wxPayService;
 
+    @Autowired
+    private CdtPaytransRecordService paytransRecordService;
     /**
      *
      */
@@ -123,18 +125,19 @@ public class ApiPayController extends ApiBaseAction {
         }
         Map<Object, Object> resultObj = new TreeMap();
         try {
+            String wxResutlJson = JSON.toJSONString(wxPayUnifiedOrderResult);
             if (wxPayUnifiedOrderResult.getReturnCode().equalsIgnoreCase("FAIL")) {
-                log.info(reqId + "=====>微信支付请求失败返回1:" + System.lineSeparator() + JSON.toJSONString(wxPayUnifiedOrderResult));
+                log.info(reqId + "=====>微信支付请求失败返回1:" + System.lineSeparator() + wxResutlJson);
                 return toResponsFail("支付失败," + wxPayUnifiedOrderResult.getReturnMsg());
             } else if (wxPayUnifiedOrderResult.getReturnCode().equalsIgnoreCase("SUCCESS")) {
                 // 返回数据
                 String result_code = wxPayUnifiedOrderResult.getReturnCode();
                 String err_code_des = wxPayUnifiedOrderResult.getErrCodeDes();
                 if (result_code.equalsIgnoreCase("FAIL")) {
-                    log.info(reqId + "=====>微信支付请求失败返回2:" + System.lineSeparator() + JSON.toJSONString(wxPayUnifiedOrderResult));
+                    log.info(reqId + "=====>微信支付请求失败返回2:" + System.lineSeparator() + wxResutlJson);
                     return toResponsFail("支付失败," + err_code_des);
                 } else if (result_code.equalsIgnoreCase("SUCCESS")) {
-                    log.info(reqId + "=====>微信支付请求成功返回:" + System.lineSeparator() + JSON.toJSONString(wxPayUnifiedOrderResult));
+                    log.info(reqId + "=====>微信支付请求成功返回:" + System.lineSeparator() + wxResutlJson);
                     String prepayId = wxPayUnifiedOrderResult.getPrepayId();
                     resultObj.put("appId", wxPayUnifiedOrderResult.getAppid());
                     resultObj.put("timeStamp", DateUtils.timeToStr(System.currentTimeMillis() / 1000, DateUtils.DATE_TIME_PATTERN));
@@ -151,18 +154,31 @@ public class ApiPayController extends ApiBaseAction {
 
                     //redis设置订单状态
                     redisTemplate.opsForValue().set(orderInfo.getOrder_sn(), "51", 60 * 60 * 24);
-                    //FIXME:支付成功后入账
-//                    Payrecord payrecord = new Payrecord();
-//                    payrecord.setMchOrderNo(orderInfo.getOrder_sn());
-//                    payrecord.setAmount(orderInfo.getActual_price());
-//                    payrecord.setRetailPrice(orderInfo.getActual_price());
-//                    payrecord.setAppId(appId);
-//                    payrecord.setCreateDate(new Date());
-//                    payrecord.setPayOrderId(prepayId);
-//                    payrecord.setPayType(ChujianPayTypeEnum.PAYING.getCode());
-//                    payrecord.setMemo(detail);
-//                    payrecord.setPayState(ChujianPayTypeEnum.PAYING.getCode());
-//                    payTransactionRecordService.getPayRecord(payrecord);
+                    try {
+                        //FIXME:支付成功后入账
+                        CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
+                        payrecord.setMchOrderNo(orderInfo.getOrder_sn());
+                        payrecord.setOrderNo(orderInfo.getOrder_sn());
+                        payrecord.setCreator(loginUser.getUserId().intValue());
+                        payrecord.setCreatorName(loginUser.getNickname());
+
+                        payrecord.setMchId(wxPayUnifiedOrderResult.getMchId());
+
+                        payrecord.setAmount(orderInfo.getActual_price());
+                        payrecord.setTradePrice(orderInfo.getActual_price());
+                        payrecord.setAppId(appId);
+                        payrecord.setCreateDate(new Date());
+                        //payrecord.setPayOrderId(prepayId);
+                        payrecord.setPayType(PayTypeEnum.PAYING.getCode());
+                        payrecord.setMemo(detail);
+                        payrecord.setPayState(PayTypeEnum.PAYING.getCode());
+                        payrecord.setReqText(payRequest.toXML());
+                        //payrecord.setResText(wxResutlJson);
+                        payrecord.setResText(wxPayUnifiedOrderResult.getXmlString());
+                        paytransRecordService.save(payrecord);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                     return toResponsObject(0, "微信统一订单下单成功", resultObj);
                 }
             }
@@ -469,7 +485,6 @@ public class ApiPayController extends ApiBaseAction {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         response.setHeader("Access-Control-Allow-Origin", "*");
-
         //微信给返回的东西
         try {
             while ((inputLine = request.getReader().readLine()) != null) {
@@ -504,12 +519,7 @@ public class ApiPayController extends ApiBaseAction {
             try {
                 // 更改订单状态
                 // 业务处理
-                orderStatusLogic(out_trade_no);
-//                Future<Boolean> dealResult = tradeService.weixinNotifyOrderLogic(out_trade_no);
-//                if (dealResult.get()) {
-//                    return setXml("SUCCESS", "OK");
-//                }
-
+                orderStatusLogic(out_trade_no, wxPayOrderNotifyResult);
             } catch (Exception ex) {
                 log.error("=====weixin===notify===error", ex);
                 return setXml("fail", "fail");
@@ -519,7 +529,7 @@ public class ApiPayController extends ApiBaseAction {
         return setXml("SUCCESS", "OK");
     }
 
-    private void orderStatusLogic(String out_trade_no) {
+    private void orderStatusLogic(String out_trade_no, WxPayOrderNotifyResult result) {
         OrderVo orderItem = orderService.queryOrderNo(out_trade_no);
         if (orderItem == null) {
             orderItem = orderService.queryByOrderId(out_trade_no);
@@ -535,6 +545,22 @@ public class ApiPayController extends ApiBaseAction {
         orderItem.setPay_time(new Date());
         int rows = orderService.update(orderItem);
         log.warn("=====此次更新影响===行数====" + rows);
+        try {
+            CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
+            payrecord.setMchOrderNo(orderItem.getOrder_sn());
+            payrecord.setAmount(BigDecimal.valueOf(result.getTotalFee()));
+            payrecord.setTradePrice(BigDecimal.valueOf(result.getTotalFee()));
+            payrecord.setAppId("");
+            payrecord.setCreateDate(new Date());
+            payrecord.setPayOrderId(result.getTransactionId());
+            payrecord.setPayType(PayTypeEnum.PAYED.getCode());
+            payrecord.setMemo(result.getPromotionDetail());
+            payrecord.setPayState(PayTypeEnum.PAYED.getCode());
+            payrecord.setResText(result.getXmlString());
+            paytransRecordService.save(payrecord);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void orderSetPayedStatus(OrderVo orderItem) {
