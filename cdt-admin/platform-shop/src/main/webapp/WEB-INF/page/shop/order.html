@@ -14,6 +14,7 @@
                 </i-col>
                 <i-col span="3">
                     <i-select v-model="q.goodsType" placeholder="订单类型">
+                        <i-option value="">所有</i-option>
                         <i-option value="1">普通商品</i-option>
                         <i-option value="2">秒杀</i-option>
                         <i-option value="3">团购</i-option>
@@ -24,6 +25,7 @@
                 </i-col>
                 <i-col span="3">
                     <i-select v-model="q.orderStatus" placeholder="订单状态">
+                        <i-option value="">所有</i-option>
                         <i-option value="0">待付款</i-option>
                         <i-option value="101">订单已取消</i-option>
                         <i-option value="102">订单已删除</i-option>
@@ -56,8 +58,7 @@
         </Row>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
-        <div id="jqGridSum">
-        </div>
+        <div id="jqGridSum"></div>
     </div>
 
     <Card v-show="!showList&&!detail">
