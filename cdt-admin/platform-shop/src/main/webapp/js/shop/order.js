@@ -3,6 +3,8 @@ $(function () {
     let payStatus = getQueryString("payStatus");
     let orderStatus = getQueryString("orderStatus");
     let goodsType = getQueryString("goodsType");
+    let addTime = getQueryString("add_time");
+    let endTime = getQueryString("end_time");
     let url = '../order/list';
     if (shippingStatus) {
         url += '?shippingStatus=' + shippingStatus;
@@ -16,15 +18,21 @@ $(function () {
     if (goodsType) {
         url += '?goodsType=' + goodsType;
     }
+    if (addTime) {
+        url += '?addTime=' + addTime;
+    }
+    if (endTime) {
+        url += '?endTime=' + endTime;
+    }
     $("#jqGrid").Grid({
         url: url,
         datatype: "json",
         colModel: [
-            {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
-            {label: '订单号', name: 'orderSn', index: 'order_sn', width: 100},
-            {label: '会员', name: 'userName', index: 'user_name', width: 80},
+            {label: 'id', name: 'id', index: 'id', key: true,hidden: true},
+            {label: '订单号', name: 'orderSn', index: 'order_sn',align: 'center', width: 100},
+            {label: '会员', name: 'userName', index: 'user_name',align: 'center',width: 80},
             {
-                label: '订单类型', name: 'goodsType', index: 'goods_type', width: 80, formatter: function (value) {
+                label: '订单类型', name: 'goodsType', index: 'goods_type',align: 'center',width: 80, formatter: function (value) {
                     if (value == '1') {
                         return '普通订单';
                     } else if (value == '2') {
@@ -42,7 +50,7 @@ $(function () {
                 }
             },
             {
-                label: '订单状态', name: 'orderStatus', index: 'order_status', width: 80, formatter: function (value) {
+                label: '订单状态', name: 'orderStatus',align: 'center', index: 'order_status', width: 80, formatter: function (value) {
                     if (value == '0') {
                         return '待付款';
                     } else if (value == '101') {
@@ -78,6 +86,7 @@ $(function () {
                 name: 'shippingStatus',
                 index: 'shipping_status',
                 width: 60,
+                align: 'center',
                 formatter: function (value) {
                     if (value == '0') {
                         return '未发货';
@@ -92,7 +101,7 @@ $(function () {
                 }
             },
             {
-                label: '付款状态', name: 'payStatus', index: 'pay_status', width: 80,
+                label: '付款状态', name: 'payStatus',align: 'center', index: 'pay_status', width: 80,
                 formatter: function (value) {
                     if (value == '0') {
                         return '未付款';
@@ -118,18 +127,18 @@ $(function () {
             //     }
             // },
             // {label: '实际支付金额', name: 'actualPrice', index: 'actual_price', width: 80},
-            {label: '订单总价', name: 'orderPrice', index: 'order_price', width: 60},
-            {label: '商品总价', name: 'goodsPrice', index: 'goods_price', width: 60},
+            {label: '订单总价', name: 'orderPrice', index: 'order_price',align: 'center', width: 60},
+            {label: '商品总价', name: 'goodsPrice', index: 'goods_price',align: 'center', width: 60},
             {
-                label: '下单时间', name: 'addTime', index: 'add_time', width: 100,
+                label: '下单时间', name: 'addTime', index: 'add_time',align: 'center', width: 100,
                 formatter: function (value) {
                     return transDate(value);
                 }
             },
             {
-                label: '操作', width: 100, align: 'center', sortable: false, formatter: function (value, col, row) {
+                label: '操作', width: 120, align: 'center', sortable: false, formatter: function (value, col, row) {
                     return '<button class="btn btn-outline btn-info" onclick="vm.lookDetail(' + row.id + ')"><i class="fa fa-info-circle"></i>&nbsp;详情</button>' +
-                        '<button class="btn btn-outline btn-primary" style="margin-top: 10px;" onclick="vm.printDetail(' + row.id + ')"><i class="fa fa-print"></i>&nbsp;打印</button>';
+                        '<button class="btn btn-outline btn-primary" style="margin-top: 0px;" onclick="vm.printDetail(' + row.id + ')"><i class="fa fa-print"></i>&nbsp;打印</button>';
                 }
             }
         ]
@@ -147,13 +156,16 @@ let vm = new Vue({
         q: {
             orderSn: '',
             orderStatus: '',
-            goodsType: ''
+            goodsType: '',
+            addTime:'',
+            endTime:''
         }
     },
     methods: {
         query: function () {
             vm.reload();
         },
+
         sendOrderComplete: function (event) {
             let id = getSelectedRow("#jqGrid");
             if (id == null) {
@@ -226,7 +238,9 @@ let vm = new Vue({
                 postData: {
                     'orderSn': vm.q.orderSn,
                     'orderStatus': vm.q.orderStatus,
-                    'goodsType': vm.q.goodsType
+                    'goodsType': vm.q.goodsType,
+                    'addTime': vm.q.addTime,
+                    'endTime': vm.q.endTime
                 },
                 page: page
             }).trigger("reloadGrid");

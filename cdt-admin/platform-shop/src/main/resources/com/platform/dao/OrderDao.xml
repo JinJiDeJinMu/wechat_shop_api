@@ -84,6 +84,12 @@
         <if test="goodsType != null and goodsType!= ''">
             AND o.goods_type = #{goodsType}
         </if>
+        <if test="addTime != null and addTime!= ''">
+            AND o.add_time >= #{addTime}
+        </if>
+        <if test="endTime != null and endTime!= ''">
+            AND o.add_time &lt;= #{endTime}
+        </if>
         <if test="merchantId != null and merchantId != ''">
             AND o.merchant_id = #{merchantId}
         </if>
@@ -243,41 +249,41 @@
     <update id="update" parameterType="com.platform.entity.OrderEntity">
         update nideshop_order
         <set>
-            <if test="orderSn != null">`order_sn` = #{orderSn},</if>
-            <if test="userId != null">`user_id` = #{userId},</if>
-            <if test="orderStatus != null">`order_status` = #{orderStatus},</if>
-            <if test="shippingStatus != null">`shipping_status` = #{shippingStatus},</if>
-            <if test="payStatus != null">`pay_status` = #{payStatus},</if>
-            <if test="evaluateStatus != null">`evaluate_status` = #{evaluateStatus},</if>
-            <if test="consignee != null">`consignee` = #{consignee},</if>
-            <if test="country != null">`country` = #{country},</if>
-            <if test="province != null">`province` = #{province},</if>
-            <if test="city != null">`city` = #{city},</if>
-            <if test="district != null">`district` = #{district},</if>
-            <if test="address != null">`address` = #{address},</if>
-            <if test="mobile != null">`mobile` = #{mobile},</if>
-            <if test="postscript != null">`postscript` = #{postscript},</if>
-            <if test="shippingId != null">`shipping_id` = #{shippingId},</if>
-            <if test="shippingName != null">`shipping_name` = #{shippingName},</if>
-            <if test="shippingNo != null">`shipping_no` = #{shippingNo},</if>
-            <if test="payId != null">`pay_id` = #{payId},</if>
-            <if test="payName != null">`pay_name` = #{payName},</if>
-            <if test="shippingFee != null">`shipping_fee` = #{shippingFee},</if>
-            <if test="actualPrice != null">`actual_price` = #{actualPrice},</if>
-            <if test="integral != null">`integral` = #{integral},</if>
-            <if test="integralMoney != null">`integral_money` = #{integralMoney},</if>
-            <if test="orderPrice != null">`order_price` = #{orderPrice},</if>
-            <if test="goodsPrice != null">`goods_price` = #{goodsPrice},</if>
-            <if test="addTime != null">`add_time` = #{addTime},</if>
-            <if test="confirmTime != null">`confirm_time` = #{confirmTime},</if>
-            <if test="payTime != null">`pay_time` = #{payTime},</if>
-            <if test="freightPrice != null">`freight_price` = #{freightPrice},</if>
-            <if test="couponId != null">`coupon_id` = #{couponId},</if>
-            <if test="parentId != null">`parent_id` = #{parentId},</if>
-            <if test="couponPrice != null">`coupon_price` = #{couponPrice},</if>
-            <if test="callbackStatus != null">`callback_status` = #{callbackStatus},</if>
-            <if test="orderType != null">`order_type` = #{orderType}</if>
-            <if test="goodsType != null">`goods_type` = #{goodsType}</if>
+            <if test="orderSn != null">order_sn = #{orderSn},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="shippingStatus != null">shipping_status = #{shippingStatus},</if>
+            <if test="payStatus != null">pay_status = #{payStatus},</if>
+            <if test="evaluateStatus != null">evaluate_status = #{evaluateStatus},</if>
+            <if test="consignee != null">consignee = #{consignee},</if>
+            <if test="country != null">country = #{country},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="district != null">district = #{district},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="postscript != null">postscript = #{postscript},</if>
+            <if test="shippingId != null">shipping_id = #{shippingId},</if>
+            <if test="shippingName != null">shipping_name = #{shippingName},</if>
+            <if test="shippingNo != null">shipping_no = #{shippingNo},</if>
+            <if test="payId != null">pay_id = #{payId},</if>
+            <if test="payName != null">pay_name = #{payName},</if>
+            <if test="shippingFee != null">shipping_fee = #{shippingFee},</if>
+            <if test="actualPrice != null">actual_price = #{actualPrice},</if>
+            <if test="integral != null">integral = #{integral},</if>
+            <if test="integralMoney != null">integral_money = #{integralMoney},</if>
+            <if test="orderPrice != null">order_price = #{orderPrice},</if>
+            <if test="goodsPrice != null">goods_price = #{goodsPrice},</if>
+            <if test="addTime != null">add_time = #{addTime},</if>
+            <if test="confirmTime != null">confirm_time = #{confirmTime},</if>
+            <if test="payTime != null">pay_time = #{payTime},</if>
+            <if test="freightPrice != null">freight_price = #{freightPrice},</if>
+            <if test="couponId != null">coupon_id = #{couponId},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="couponPrice != null">coupon_price = #{couponPrice},</if>
+            <if test="callbackStatus != null">callback_status = #{callbackStatus},</if>
+            <if test="orderType != null">order_type = #{orderType},</if>
+            <if test="goodsType != null">goods_type = #{goodsType}</if>
         </set>
         where id = #{id}
     </update>

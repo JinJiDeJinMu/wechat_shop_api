@@ -11,9 +11,11 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author lipengjun
@@ -45,13 +47,17 @@ public class OrderController extends BaseController {
             query.put("merchantId", sysUserEntity.getMerchantId());
         }
         List<OrderEntity> orderList = orderService.queryList(query);
+        BigDecimal sum1 = orderList.stream().map(OrderEntity::getOrderPrice).reduce(BigDecimal.ZERO,BigDecimal::add);
         int total = orderService.queryTotal(query);
         for(OrderEntity user : orderList) {
         	user.setUserName(Base64.decode(user.getUserName()));
         }
         PageUtils pageUtil = new PageUtils(orderList, total, query.getLimit(), query.getPage());
+        Map<String,Object> map = new HashMap<>();
+        map.put("page",pageUtil);
+        map.put("sum1",sum1);
 
-        return R.ok().put("page", pageUtil);
+        return R.ok(map);
     }
 
     /**
@@ -201,4 +207,5 @@ public class OrderController extends BaseController {
         ExpressOrderEntity expressOrderEntity = expressOrderService.queryOrderId(id);
         return R.ok().put("expressOrder",expressOrderEntity);
     }
+
 }
