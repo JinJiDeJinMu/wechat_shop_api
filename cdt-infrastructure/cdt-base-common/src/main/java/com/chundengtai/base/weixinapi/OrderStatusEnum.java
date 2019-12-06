@@ -28,6 +28,7 @@ public enum OrderStatusEnum {
     EXPRESS_NO_GET(204, "未代取"),
     EXPRESS_GETED(205, "已代取"),
     NOT_USED(206, "待使用"),
+    WAIT_SHIPPED(207, "待发货"),
 
     SHIPPED_ORDER(300, "订单已发货"),
     CONFIRM_GOODS(301, "用户确认收货"),
