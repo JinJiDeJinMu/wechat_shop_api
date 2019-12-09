@@ -2,6 +2,10 @@ package com.chundengtai.base.constant;
 
 public class CacheConstant {
 
+    public final static String USER = "weixinapi:user:";
+    public final static String TOKEN = "weixinapi:token:";
+    public final static String ORDERSTATE = "weixinapi:orderstate:";
+
     /**
      * 商城业务缓存
      */

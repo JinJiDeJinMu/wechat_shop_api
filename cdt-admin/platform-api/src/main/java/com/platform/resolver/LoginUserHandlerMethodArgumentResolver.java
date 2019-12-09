@@ -19,6 +19,13 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  * @date 2017-03-23 22:02
  */
 public class LoginUserHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
+//    @Autowired
+//    private RedisTemplate<String, Object> redisTemplate;
+//
+//    public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
+//        this.redisTemplate = redisTemplate;
+//    }
+
     private ApiUserService userService;
 
     public void setUserService(ApiUserService userService) {
@@ -35,11 +42,20 @@ public class LoginUserHandlerMethodArgumentResolver implements HandlerMethodArgu
                                   NativeWebRequest request, WebDataBinderFactory factory) throws Exception {
         //获取用户ID
     	UserVo user =(UserVo) request.getAttribute(AuthorizationInterceptor.LOGIN_USER_KEY, RequestAttributes.SCOPE_REQUEST);
+
+//        user = (UserVo) redisTemplate.opsForValue().get(CacheConstant.USER + user.getUserId());
+//        if (user == null) {
+//            //获取用户信息
+//            user = userService.queryObject((Long) object);
+//            redisTemplate.opsForValue().set(RedisKey.USER + object.toString(), user, 12, TimeUnit.HOURS);
+//        }
+
         if (user == null) {
             return null;
         }
         //获取用户信息
 //        UserVo user = userService.queryObject((Long) object);
+
         return user;
     }
 }

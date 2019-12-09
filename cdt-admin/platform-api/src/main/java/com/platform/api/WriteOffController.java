@@ -47,7 +47,7 @@ public class WriteOffController extends ApiBaseAction {
             @RequestParam String orderNo,
             @RequestParam Integer orderId,
             @RequestParam Integer userId,
-            Integer merchatnId,
+            Integer merchantId,
             @ApiParam(name = "timestamp", value = "时间戳") String timestamp,
             @ApiParam(name = "tokenSgin", value = "token秘钥") String tokenSgin
     ) {
@@ -61,7 +61,7 @@ public class WriteOffController extends ApiBaseAction {
         orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
         orderVo.setOrder_status_text(OrderStatusEnum.COMPLETED_ORDER.getDesc());
         int rows = orderService.update(orderVo);
-        redisTemplate.opsForValue().set(CacheConstant.ORDER_HEXIAO_CACHE + merchatnId + ":" + orderNo + ":" + userId, "true", 180, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(CacheConstant.ORDER_HEXIAO_CACHE + merchantId + ":" + orderNo + ":" + userId, "true", 180, TimeUnit.MINUTES);
         log.info("核销====》" + orderNo);
         if (rows > 0) {
             return toResponsSuccess("核销成功");
@@ -78,11 +78,11 @@ public class WriteOffController extends ApiBaseAction {
             @RequestParam String orderNo,
             @RequestParam Integer orderId,
             @RequestParam Integer userId,
-            Integer merchatnId,
+            Integer merchantId,
             @ApiParam(name = "timestamp", value = "时间戳") String timestamp,
             @ApiParam(name = "tokenSgin", value = "token秘钥") String tokenSgin
     ) {
-        Object result = redisTemplate.opsForValue().get(CacheConstant.ORDER_HEXIAO_CACHE + merchatnId + ":" + orderNo + ":" + userId);
+        Object result = redisTemplate.opsForValue().get(CacheConstant.ORDER_HEXIAO_CACHE + merchantId + ":" + orderNo + ":" + userId);
         if (result == null) {
             return toResponsObject(1, "还未核销", false);
         } else if (result.equals("true")) {
