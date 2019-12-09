@@ -141,7 +141,13 @@ $(function () {
                         '<button class="btn btn-outline btn-primary" style="margin-top: 0px;" onclick="vm.printDetail(' + row.id + ')"><i class="fa fa-print"></i>&nbsp;打印</button>';
                 }
             }
-        ]
+        ],
+        footerrow: true,
+        gridComplete: function() {
+            var sum_order=$("#jqGrid").getCol('orderPrice',false,'sum');
+            var sum_goods=$("#jqGrid").getCol('goodsPrice',false,'sum');
+            $("#jqGrid").footerData('set', {orderSn:"合计",orderPrice:sum_order,goodsPrice:sum_goods})
+        }
     });
 });
 
@@ -164,7 +170,7 @@ let vm = new Vue({
     methods: {
         query: function () {
             vm.reload();
-        },
+    },
 
         sendOrderComplete: function (event) {
             let id = getSelectedRow("#jqGrid");
