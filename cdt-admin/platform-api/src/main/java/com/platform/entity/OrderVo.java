@@ -452,35 +452,6 @@ public class OrderVo implements Serializable {
     }
 
     public String getOrder_status_text() {
-//        if (null != order_status && StringUtils.isEmpty(order_status_text)) {
-//            order_status_text = "未付款";
-//            switch (order_status) {
-//                case 0:
-//                	order_status_text = "等待付款";//order_status_text = "未付款";
-//                    break;
-//                case 201:
-//                    order_status_text = "待发货";
-//                    break;
-//                case 300:
-//                    order_status_text = "待收货";
-//                    break;
-//                case 301:
-//                    order_status_text = "已完成";
-//                    break;
-//                case 200:
-//                    order_status_text = "已付款";
-//                    break;
-//                case 101:
-//                    order_status_text = "已取消";
-//                    break;
-//                case 401:
-//                    order_status_text = "已取消";
-//                    break;
-//                case 402:
-//                    order_status_text = "已退货";
-//                    break;
-//            }
-//        }
         order_status_text = OrderStatusEnum.getEnumByKey(order_status).getDesc();
         return order_status_text;
     }

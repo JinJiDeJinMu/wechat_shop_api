@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.OrderVo;
@@ -10,10 +11,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * 订单核销功能<br>
@@ -23,6 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v2/writeoff")
 @Slf4j
 public class WriteOffController extends ApiBaseAction {
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     @Autowired
     private ApiOrderService orderService;
 
@@ -43,7 +47,7 @@ public class WriteOffController extends ApiBaseAction {
             @RequestParam String orderNo,
             @RequestParam Integer orderId,
             @RequestParam Integer userId,
-            Integer merchatnId,
+            Integer merchantId,
             @ApiParam(name = "timestamp", value = "时间戳") String timestamp,
             @ApiParam(name = "tokenSgin", value = "token秘钥") String tokenSgin
     ) {
@@ -57,12 +61,35 @@ public class WriteOffController extends ApiBaseAction {
         orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
         orderVo.setOrder_status_text(OrderStatusEnum.COMPLETED_ORDER.getDesc());
         int rows = orderService.update(orderVo);
-
+        redisTemplate.opsForValue().set(CacheConstant.ORDER_HEXIAO_CACHE + merchantId + ":" + orderNo + ":" + userId, "true", 180, TimeUnit.MINUTES);
         log.info("核销====》" + orderNo);
         if (rows > 0) {
             return toResponsSuccess("核销成功");
         }
         return toResponsSuccess("核销失败");
+    }
+
+    @ApiOperation(value = "二维码核销回调", httpMethod = "POST")
+    @GetMapping("/writeOffCodeNotify")
+    @ResponseBody
+    @IgnoreAuth
+    public Object writeOffCodeNotify(
+            @ApiParam(name = "orderNo", value = "订单号")
+            @RequestParam String orderNo,
+            @RequestParam Integer orderId,
+            @RequestParam Integer userId,
+            Integer merchantId,
+            @ApiParam(name = "timestamp", value = "时间戳") String timestamp,
+            @ApiParam(name = "tokenSgin", value = "token秘钥") String tokenSgin
+    ) {
+        Object result = redisTemplate.opsForValue().get(CacheConstant.ORDER_HEXIAO_CACHE + merchantId + ":" + orderNo + ":" + userId);
+        if (result == null) {
+            return toResponsObject(1, "还未核销", false);
+        } else if (result.equals("true")) {
+            return toResponsObject(0, "核销成功", true);
+        }
+        return toResponsSuccess("核销成功");
+
     }
 
 }
