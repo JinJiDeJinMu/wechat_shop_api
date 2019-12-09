@@ -49,7 +49,6 @@
             <div class="buttons-group">
                 #if($shiro.hasPermission("order:sendGoods"))
                 <i-button type="warning" @click="sendGoods">发货</i-button>
-                <i-button type="warning" @click="sendOrderComplete">使用</i-button>
                 #end
                 #if($shiro.hasPermission("order:confirm"))
                 <i-button type="error" @click="confirm">确认收货</i-button>
