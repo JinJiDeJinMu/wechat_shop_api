@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Controller
@@ -34,6 +35,9 @@ public class UserController {
     public R list(@RequestParam Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
+        if(query.containsKey("username")){
+            query.put("username",Base64.encode(query.get("username").toString()));
+        }
         List<UserEntity> userList = userService.queryList(query);
         int total = userService.queryTotal(query);
         for(UserEntity user : userList) {
