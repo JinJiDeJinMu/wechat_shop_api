@@ -371,7 +371,8 @@ public class ApiOrderController extends ApiBaseAction {
     public Object confirmOrder(Integer orderId) {
         try {
             OrderVo orderVo = orderService.queryObject(orderId);
-            orderVo.setOrder_status(OrderStatusEnum.CONFIRM_GOODS.getCode());
+            orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
+            orderVo.setOrder_status_text(OrderStatusEnum.COMPLETED_ORDER.getDesc());
             orderVo.setShipping_status(ShippingTypeEnum.GETEDGOODS.getCode());
             orderVo.setConfirm_time(new Date());
             orderService.update(orderVo);
