@@ -569,7 +569,7 @@ public class ApiPayController extends ApiBaseAction {
         ) {
             orderItem.setOrder_status(OrderStatusEnum.NOT_USED.getCode());
         } else if (orderItem.getGoods_type().equals(GoodsTypeEnum.EXPRESS_GET.getCode())) {
-            orderItem.setOrder_status(OrderStatusEnum.PAYED_ORDER.getCode());
+            orderItem.setOrder_status(OrderStatusEnum.WAIT_SHIPPED.getCode());
         } else {
             orderItem.setOrder_status(OrderStatusEnum.PAYED_ORDER.getCode());
         }
