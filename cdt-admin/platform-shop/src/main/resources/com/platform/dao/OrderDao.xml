@@ -158,8 +158,42 @@
         <if test="orderStatus != null and orderStatus.trim() != ''">
             AND order_status = #{orderStatus}
         </if>
-        <if test="goodsType != null and goodsType.trim() != ''">
-            AND goods_type = #{goodsType}
+        <if test="goodsType != null and goodsType!= ''">
+            AND o.goods_type = #{goodsType}
+        </if>
+        <if test="addTime != null and addTime!= ''">
+            AND o.add_time >= #{addTime}
+        </if>
+        <if test="endTime != null and endTime!= ''">
+            AND o.add_time &lt;= #{endTime}
+        </if>
+        <if test="merchantId != null and merchantId != ''">
+            AND merchant_id = #{merchantId}
+        </if>
+    </select>
+    
+    <select id="getTotalSum" resultType="map">
+        select sum(order_price) order_sum,sum(goods_price) goods_sum from nideshop_order WHERE 1=1
+        <if test="orderSn != null and orderSn.trim() != ''">
+            AND order_sn LIKE concat('%',#{orderSn},'%')
+        </if>
+        <if test="shippingStatus != null and shippingStatus.trim() != ''">
+            AND shipping_status = #{shippingStatus}
+        </if>
+        <if test="payStatus != null and payStatus.trim() != ''">
+            AND pay_status = #{payStatus}
+        </if>
+        <if test="orderStatus != null and orderStatus.trim() != ''">
+            AND order_status = #{orderStatus}
+        </if>
+        <if test="goodsType != null and goodsType!= ''">
+            AND o.goods_type = #{goodsType}
+        </if>
+        <if test="addTime != null and addTime!= ''">
+            AND o.add_time >= #{addTime}
+        </if>
+        <if test="endTime != null and endTime!= ''">
+            AND o.add_time &lt;= #{endTime}
         </if>
         <if test="merchantId != null and merchantId != ''">
             AND merchant_id = #{merchantId}

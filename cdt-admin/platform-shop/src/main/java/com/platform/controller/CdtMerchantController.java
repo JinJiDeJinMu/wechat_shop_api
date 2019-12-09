@@ -1,10 +1,13 @@
 package com.platform.controller;
 
+import com.platform.constance.ShopShow;
 import com.platform.entity.CdtMerchantEntity;
+import com.platform.entity.SysUserEntity;
 import com.platform.service.CdtMerchantService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
+import com.platform.utils.ShiroUtils;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +103,10 @@ public class CdtMerchantController extends BaseController {
     @Ignore
     public R queryAll(@RequestParam Map<String, Object> params) {
 
+        SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
+        if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
+            params.put("merchant_id", sysUserEntity.getMerchantId());
+        }
         List<CdtMerchantEntity> list = cdtMerchantService.queryList(params);
 
         return R.ok().put("list", list);

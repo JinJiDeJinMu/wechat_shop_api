@@ -144,8 +144,8 @@ $(function () {
         ],
         footerrow: true,
         gridComplete: function() {
-            var sum_order=$("#jqGrid").getCol('orderPrice',false,'sum');
-            var sum_goods=$("#jqGrid").getCol('goodsPrice',false,'sum');
+            var sum_order=$("#jqGrid").getCol('orderPrice',false,'sum').toFixed(4);
+            var sum_goods=$("#jqGrid").getCol('goodsPrice',false,'sum').toFixed(4);
             $("#jqGrid").footerData('set', {orderSn:"合计",orderPrice:sum_order,goodsPrice:sum_goods})
         }
     });
