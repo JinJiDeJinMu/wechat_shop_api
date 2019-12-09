@@ -33,4 +33,7 @@ public class CacheConstant {
 
     public static final String EXPRESS_GOODS_CACHE =  "expressGoodsCache";
 
+
+    public static final String ORDER_HEXIAO_CACHE = "checkHexiao:";
+
 }
