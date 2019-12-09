@@ -54,6 +54,6 @@ public class UserVo implements Serializable {
     private String qrCode;
     //真实姓名
     private String realName;
-    private long merchant_id;
+    private Long merchant_id;
     
 }

@@ -73,7 +73,7 @@ public class ApiOrderController extends ApiBaseAction {
                        @RequestParam(value = "page", defaultValue = "1") Integer page,
                        @RequestParam(value = "size", defaultValue = "10") Integer size) {
         Map params = new HashMap();
-        //params.put("user_id", loginUser.getUserId());
+        params.put("user_id", loginUser.getUserId());
         if (merchantId != null && !merchantId.equals(0)) {
             params.put("merchantId", merchantId);
         }
@@ -88,6 +88,36 @@ public class ApiOrderController extends ApiBaseAction {
         List<OrderVo> orderEntityList = orderService.queryPageList(query);
         PageInfo pageInfo = new PageInfo(orderEntityList);
         return toResponsSuccess(pageInfo);
+    }
+
+    /**
+     * 获取订单列表(要验证)
+     */
+    @ApiOperation(value = "获取订单列表")
+    @RequestMapping("merchantlist")
+    public Object merchantlist(@LoginUser UserVo loginUser, Integer order_status,
+                               Integer merchantId,
+                               @RequestParam(value = "page", defaultValue = "1") Integer page,
+                               @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        if (merchantId != null && !merchantId.equals(0)) {
+            if (!merchantId.equals(loginUser.getMerchant_id().intValue())) {
+                toResponsObject(3, "您不是对应的店铺管理员,无权查看", null);
+            }
+            Map params = new HashMap();
+            params.put("merchantId", merchantId);
+            params.put("page", page);
+            params.put("limit", size);
+            params.put("sidx", "id");
+            params.put("order", "desc");
+            params.put("order_status", order_status);
+            //查询列表数据
+            Query query = new Query(params);
+            PageHelper.startPage(page, size);
+            List<OrderVo> orderEntityList = orderService.queryPageList(query);
+            PageInfo pageInfo = new PageInfo(orderEntityList);
+            return toResponsSuccess(pageInfo);
+        }
+        return toResponsFail("无数据显示");
     }
 
     /**
