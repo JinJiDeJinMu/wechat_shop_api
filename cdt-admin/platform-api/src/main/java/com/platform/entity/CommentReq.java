@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -37,6 +38,9 @@ public class CommentReq implements Serializable {
 
     @ApiModelProperty(value = "评价时间")
     private Long commentTime;
+
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
 
     @ApiModelProperty(value = "状态")
     private Integer status;
