@@ -261,7 +261,7 @@ public class ApiGoodsController extends ApiBaseAction {
         ngaParam.put("goods_id", id);
         List<AttributeVo> attribute = attributeService.queryList(ngaParam);
         Map issueParam = new HashMap();
-        issueParam.put("goods_id", id);
+        //issueParam.put("goods_id", id);
         List<GoodsIssueVo> issue = goodsIssueService.queryList(issueParam);
         resultObj.put("issue", issue);
 
