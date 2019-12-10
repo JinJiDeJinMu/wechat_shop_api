@@ -88,6 +88,12 @@
                 <env>prod</env>
             </properties>
         </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <env>test</env>
+            </properties>
+        </profile>
     </profiles>
 
     <build>
@@ -99,6 +105,7 @@
                 <excludes>
                     <exclude>dev/*</exclude>
                     <exclude>prod/*</exclude>
+                    <exclude>test/*</exclude>
                 </excludes>
             </resource>
             <resource>
@@ -140,6 +147,7 @@
                             <excludes>
                                 <exclude>dev/*</exclude>
                                 <exclude>prod/*</exclude>
+                                <exclude>test/*</exclude>
                             </excludes>
                         </resource>
                     </webResources>
