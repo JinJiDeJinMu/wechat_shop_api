@@ -64,7 +64,6 @@ public class IndexV2Controller extends ApiBaseAction {
         List<AdVo> banner = adService.queryList(param);
         List<AdVo> hotProduct = getCollectByType(banner, BannerType.HOT.getCode());
         List<AdVo> activity = getCollectByType(banner, BannerType.ACTIVITY.getCode());
-
         resultObj.put("hotProduct", hotProduct);
         resultObj.put("activity", activity);
 
@@ -78,7 +77,6 @@ public class IndexV2Controller extends ApiBaseAction {
         PageHelper.startPage(0, 10, false);
         List<AttributeCategoryVo> categoryList = attributeCategoryMapper.queryList(param);
         resultObj.put("categoryList", JsonTransfer.convertList(categoryList, AttributeCategoryDTO.class));
-
 
         //分类下面模块的商品
         param = new HashMap<String, Object>();
@@ -98,7 +96,7 @@ public class IndexV2Controller extends ApiBaseAction {
             param.put("attribute_category", categoryItem.getId());
             param.put("sidx", "sort_order");
             param.put("order", "desc");
-            param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price,market_price as market_price");
+            param.put("fields", "id as id, name as name, list_pic_url as list_pic_url,primary_pic_url,retail_price as retail_price,market_price as market_price");
             PageHelper.startPage(0, 4, false);
             categoryGoods = goodsService.queryList(param);
 
@@ -128,7 +126,7 @@ public class IndexV2Controller extends ApiBaseAction {
         param.put("is_on_sale", 1);
         param.put("sidx", "add_time");
         param.put("order", "desc");
-        param.put("fields", "id, name, list_pic_url, retail_price,market_price");
+        param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price");
         PageHelper.startPage(0, 10, false);
         List<GoodsVo> newGoods = goodsService.queryList(param);
         List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(newGoods, GoodsDTO.class);
