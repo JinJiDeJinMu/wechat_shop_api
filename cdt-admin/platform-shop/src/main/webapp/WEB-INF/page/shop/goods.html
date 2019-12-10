@@ -318,7 +318,7 @@
                     </Row>
                     <Row>
                         <i-col span="16">
-                            <Form-item label="商品海报图" prop="listPicUrl">
+                            <Form-item label="商品列表图--首页列表显示" prop="listPicUrl">
                                 <i-input v-model="goods.listPicUrl" placeholder="商品海报图"/>
                             </Form-item>
                         </i-col>
@@ -344,7 +344,7 @@
             <Tab-Pane label="详细描述" name="name2">
                 <template>
                     <div class="upload-list" v-for="item in uploadList">
-                        <template v-if="item.status === 'finished'">
+                        <template v-if="item.status === 'finished'||item.imgUrl!=''">
                             <img :src="item.imgUrl"/>
                             <div class="upload-list-cover">
                                 <Icon type="ios-eye-outline" @click.native="handleView(item.imgUrl)"></Icon>

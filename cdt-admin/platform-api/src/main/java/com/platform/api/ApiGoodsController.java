@@ -202,12 +202,12 @@ public class ApiGoodsController extends ApiBaseAction {
         info.setBrowse(info.getBrowse() + 1);
         goodsService.updateBrowse(info);
         Long mid = info.getMerchantId();
-        if(mid>0){
-            Map<String, Object> sysuser = this.mlsUserSer.getEntityMapper().getSysUserByMid(mid);
-            if (sysuser != null) {
-                info.setUser_brokerage_price(info.getRetail_price().multiply(new BigDecimal(sysuser.get("FX").toString())).multiply(new BigDecimal(info.getBrokerage_percent()).divide(new BigDecimal("10000"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-            }
-        }
+//        if(mid>0){
+//            Map<String, Object> sysuser = this.mlsUserSer.getEntityMapper().getSysUserByMid(mid);
+//            if (sysuser != null) {
+//                info.setUser_brokerage_price(info.getRetail_price().multiply(new BigDecimal(sysuser.get("FX").toString())).multiply(new BigDecimal(info.getBrokerage_percent()).divide(new BigDecimal("10000"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+//            }
+//        }
         resultObj.put("info", info);
         //添加商家信息
         CdtMerchantEntity cdtMerchant = cdtMerchantService.queryObject(info.getMerchantId());
@@ -229,7 +229,6 @@ public class ApiGoodsController extends ApiBaseAction {
         //按规格名称分组
         for (int i = 0; i < goodsSpecificationEntityList.size(); i++) {
             GoodsSpecificationVo specItem = goodsSpecificationEntityList.get(i);
-            //
             List<GoodsSpecificationVo> tempList = null;
             for (int j = 0; j < specificationList.size(); j++) {
                 if (specificationList.get(j).get("specification_id").equals(specItem.getSpecification_id())) {
@@ -324,41 +323,41 @@ public class ApiGoodsController extends ApiBaseAction {
         resultObj.put("specificationList", specificationList);
         resultObj.put("productList", productEntityList);
         // 记录推荐人是否可以领取红包，用户登录时校验
-        try {
-            // 是否已经有可用的转发红包
-            Map params = new HashMap();
-            params.put("user_id", userId);
-            params.put("send_type", 2);
-            params.put("unUsed", true);
-            List<CouponVo> enabledCouponVos = apiCouponService.queryUserCoupons(params);
-            if ((null == enabledCouponVos || enabledCouponVos.size() == 0)
-                    && null != referrer && null != userId) {
-                // 获取优惠信息提示
-                Map couponParam = new HashMap();
-                couponParam.put("enabled", true);
-                Integer[] send_types = new Integer[]{2};
-                couponParam.put("send_types", send_types);
-                List<CouponVo> couponVos = apiCouponService.queryList(couponParam);
-                if (null != couponVos && couponVos.size() > 0) {
-                    CouponVo couponVo = couponVos.get(0);
-                    Map footprintParam = new HashMap();
-                    footprintParam.put("goods_id", id);
-                    footprintParam.put("referrer", referrer);
-                    Integer footprintNum = footprintService.queryTotal(footprintParam);
-                    if (null != footprintNum && null != couponVo.getMin_transmit_num()
-                            && footprintNum > couponVo.getMin_transmit_num()) {
-                        UserCouponVo userCouponVo = new UserCouponVo();
-                        userCouponVo.setAdd_time(new Date());
-                        userCouponVo.setCoupon_id(couponVo.getId());
-                        userCouponVo.setCoupon_number(CharUtil.getRandomString(12));
-                        userCouponVo.setUser_id(getUserId());
-                        apiUserCouponService.save(userCouponVo);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            // 是否已经有可用的转发红包
+//            Map params = new HashMap();
+//            params.put("user_id", userId);
+//            params.put("send_type", 2);
+//            params.put("unUsed", true);
+//            List<CouponVo> enabledCouponVos = apiCouponService.queryUserCoupons(params);
+//            if ((null == enabledCouponVos || enabledCouponVos.size() == 0)
+//                    && null != referrer && null != userId) {
+//                // 获取优惠信息提示
+//                Map couponParam = new HashMap();
+//                couponParam.put("enabled", true);
+//                Integer[] send_types = new Integer[]{2};
+//                couponParam.put("send_types", send_types);
+//                List<CouponVo> couponVos = apiCouponService.queryList(couponParam);
+//                if (null != couponVos && couponVos.size() > 0) {
+//                    CouponVo couponVo = couponVos.get(0);
+//                    Map footprintParam = new HashMap();
+//                    footprintParam.put("goods_id", id);
+//                    footprintParam.put("referrer", referrer);
+//                    Integer footprintNum = footprintService.queryTotal(footprintParam);
+//                    if (null != footprintNum && null != couponVo.getMin_transmit_num()
+//                            && footprintNum > couponVo.getMin_transmit_num()) {
+//                        UserCouponVo userCouponVo = new UserCouponVo();
+//                        userCouponVo.setAdd_time(new Date());
+//                        userCouponVo.setCoupon_id(couponVo.getId());
+//                        userCouponVo.setCoupon_number(CharUtil.getRandomString(12));
+//                        userCouponVo.setUser_id(getUserId());
+//                        apiUserCouponService.save(userCouponVo);
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         return toResponsSuccess(resultObj);
     }
     

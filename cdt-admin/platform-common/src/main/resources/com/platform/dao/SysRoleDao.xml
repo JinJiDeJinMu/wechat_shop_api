@@ -92,7 +92,7 @@
 		delete from sys_user_role where role_id in 
 		<foreach item="roleId" collection="array" open="(" separator="," close=")">
 			#{roleId}
-		</foreach>
+		</foreach>;
 	</delete>
 	
 	<!-- 查询用户创建的角色ID列表 -->
