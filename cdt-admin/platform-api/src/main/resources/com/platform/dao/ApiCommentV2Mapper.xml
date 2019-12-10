@@ -9,6 +9,7 @@
         <result property="goodId" column="good_id"/>
         <result property="content" column="content"/>
         <result property="commentTime" column="comment_time"/>
+        <result property="createTime" column="create_time"/>
         <result property="starLevel" column="star_level"/>
         <result property="userId" column="user_id"/>
         <result property="status" column="status"/>
@@ -21,6 +22,7 @@
     			`good_id`,
     			`content`,
     			`comment_time`,
+    			`create_time`,
     			`star_level`,
     			`user_id`,
     			`status`
@@ -86,6 +88,7 @@
                     			`good_id`,
                     			`content`,
                     			`comment_time`,
+                    			`create_time`,
                     			`star_level`,
                     			`user_id`,
                     			`status`
@@ -95,6 +98,7 @@
                     			#{goodId},
                     			#{content},
                     			#{commentTime},
+                    			#{createTime},
                     			#{starLevel},
                     			#{userId},
                     			#{status}
@@ -114,6 +118,9 @@
                         },
             </if>
             <if test="commentTime != null">`comment_time` = #{commentTime
+                        },
+            </if>
+            <if test="createtTime != null">`create_time` = #{createTime
                         },
             </if>
             <if test="starLevel != null">`star_level` = #{starLevel
