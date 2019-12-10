@@ -394,7 +394,7 @@
     <update id="updateBrowse" parameterType="com.platform.entity.GoodsVo">
         update nideshop_goods
         <set>
-            <if test="browse != null">`browse` = #{browse},</if>
+            `browse` =browse+1
         </set>
         where id = #{id}
     </update>
