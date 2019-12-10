@@ -1,6 +1,7 @@
 package com.platform.dao;
 
 import com.platform.entity.CdtMerchantEntity;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 商家Dao
@@ -10,6 +11,7 @@ import com.platform.entity.CdtMerchantEntity;
  */
 public interface CdtMerchantDao extends BaseDao<CdtMerchantEntity> {
 
-    CdtMerchantEntity queryByGoodsId(Integer goodsid);
+
+    CdtMerchantEntity queryByGoodsId(@Param("goodsId") Integer goodsId);
 
 }

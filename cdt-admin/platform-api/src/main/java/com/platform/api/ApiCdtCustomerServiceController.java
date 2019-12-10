@@ -118,7 +118,7 @@ public class ApiCdtCustomerServiceController {
      */
     @RequestMapping("/cdtMechant/{goodsId}")
     @ResponseBody
-    public R queryList(@PathVariable Integer goodsId) {
+    public R queryList(@PathVariable("goodsId") Integer goodsId) {
         CdtMerchantEntity cdtMerchantEntity = cdtMerchantService.queryByGoodsId(goodsId);
         return R.ok().put("merchant",cdtMerchantEntity);
     }

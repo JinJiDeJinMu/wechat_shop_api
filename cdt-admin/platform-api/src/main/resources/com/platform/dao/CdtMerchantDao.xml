@@ -224,9 +224,39 @@
         </foreach>
     </delete>
 
-   <select id="queryByGoodsId" resultType="com.platform.entity.CdtMerchantEntity">
-       select cm.* from cdt_merchant cm LEFT JOIN nideshop_goods ng on
+    <select id="queryByGoodsId" resultType="com.platform.entity.CdtMerchantEntity">
+         select
+         cm.id,
+        cm.shop_name,
+        cm.user_id,
+        cm.shop_type,
+        cm.intro,
+        cm.shop_notice,
+        cm.shop_industry,
+        cm.shop_owner,
+        cm.mobile,
+        cm.tel,
+        cm.shop_lat,
+        cm.shop_lng,
+        cm.shop_address,
+        cm.province,
+        cm.city,
+        cm.area,
+        cm.pca_code,
+        cm.shop_logo,
+        cm.shop_photos,
+        cm.open_time,
+        cm.shop_status,
+        cm.transport_type,
+        cm.fixed_freight,
+        cm.full_free_shipping,
+        cm.create_time,
+        cm.update_time,
+        cm.is_distribution
+         from cdt_merchant cm LEFT JOIN nideshop_goods ng on
          ng.merchant_id = cm.id where ng.goods_sn = #{goodsId}
-   </select>
+    </select>
+
+
 
 </mapper>
