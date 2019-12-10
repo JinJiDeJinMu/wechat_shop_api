@@ -3,10 +3,13 @@ package com.platform.api;
 import com.chundengtai.base.result.Result;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.CdtCustomerServiceVo;
+import com.platform.entity.CdtMerchantEntity;
 import com.platform.service.ApiCdtCustomerServiceService;
+import com.platform.service.CdtMerchantService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +29,9 @@ import java.util.Map;
 public class ApiCdtCustomerServiceController {
     @Autowired
     private ApiCdtCustomerServiceService cdtCustomerServiceService;
+
+    @Autowired
+    private CdtMerchantService cdtMerchantService;
 
     /**
      * 查看列表
@@ -103,5 +109,17 @@ public class ApiCdtCustomerServiceController {
         List<CdtCustomerServiceVo> list = cdtCustomerServiceService.queryList(params);
 
         return R.ok().put("list", list);
+    }
+
+    /**
+     * 查询商户信息
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping("/cdtMechant/{goodsId}")
+    @ResponseBody
+    public R queryList(@PathVariable Integer goodsId) {
+        CdtMerchantEntity cdtMerchantEntity = cdtMerchantService.queryByGoodsId(goodsId);
+        return R.ok().put("merchant",cdtMerchantEntity);
     }
 }

@@ -68,4 +68,11 @@ public interface CdtMerchantService {
      * @return 删除条数
      */
     int deleteBatch(Long[] ids);
+
+    /**
+     * 根据商品id获取商家信息
+     * @param goodsid
+     * @return
+     */
+    CdtMerchantEntity queryByGoodsId(Integer goodsid);
 }

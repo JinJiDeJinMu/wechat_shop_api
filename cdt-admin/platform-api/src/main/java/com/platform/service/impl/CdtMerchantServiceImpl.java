@@ -55,4 +55,9 @@ public class CdtMerchantServiceImpl implements CdtMerchantService {
     public int deleteBatch(Long[] ids) {
         return cdtMerchantDao.deleteBatch(ids);
     }
+
+    @Override
+    public CdtMerchantEntity queryByGoodsId(Integer goodsid) {
+        return cdtMerchantDao.queryByGoodsId(goodsid);
+    }
 }
