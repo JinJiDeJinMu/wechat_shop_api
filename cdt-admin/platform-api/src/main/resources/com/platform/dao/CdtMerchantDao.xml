@@ -224,4 +224,9 @@
         </foreach>
     </delete>
 
+   <select id="queryByGoodsId" resultType="com.platform.entity.CdtMerchantEntity">
+       select cm.* from cdt_merchant cm LEFT JOIN nideshop_goods ng on
+         ng.merchant_id = cm.id where ng.goods_sn = #{goodsId}
+   </select>
+
 </mapper>
