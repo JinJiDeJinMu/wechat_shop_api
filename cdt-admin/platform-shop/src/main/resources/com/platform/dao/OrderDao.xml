@@ -159,13 +159,13 @@
             AND order_status = #{orderStatus}
         </if>
         <if test="goodsType != null and goodsType!= ''">
-            AND o.goods_type = #{goodsType}
+            AND goods_type = #{goodsType}
         </if>
         <if test="addTime != null and addTime!= ''">
-            AND o.add_time >= #{addTime}
+            AND add_time >= #{addTime}
         </if>
         <if test="endTime != null and endTime!= ''">
-            AND o.add_time &lt;= #{endTime}
+            AND add_time &lt;= #{endTime}
         </if>
         <if test="merchantId != null and merchantId != ''">
             AND merchant_id = #{merchantId}
@@ -187,13 +187,13 @@
             AND order_status = #{orderStatus}
         </if>
         <if test="goodsType != null and goodsType!= ''">
-            AND o.goods_type = #{goodsType}
+            AND goods_type = #{goodsType}
         </if>
         <if test="addTime != null and addTime!= ''">
-            AND o.add_time >= #{addTime}
+            AND add_time >= #{addTime}
         </if>
         <if test="endTime != null and endTime!= ''">
-            AND o.add_time &lt;= #{endTime}
+            AND add_time &lt;= #{endTime}
         </if>
         <if test="merchantId != null and merchantId != ''">
             AND merchant_id = #{merchantId}
