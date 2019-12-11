@@ -195,11 +195,6 @@ public class ApiGoodsController extends ApiBaseAction {
         //查找商品信息
         GoodsVo info = goodsService.queryObject(id);
         if (info == null) return Result.failure("数据不存在!");
-        //请求一次浏览量加一
-        if (info.getBrowse() == null) {
-            info.setBrowse(0);
-        }
-        info.setBrowse(info.getBrowse() + 1);
         goodsService.updateBrowse(info);
         Long mid = info.getMerchantId();
 //        if(mid>0){
@@ -266,30 +261,30 @@ public class ApiGoodsController extends ApiBaseAction {
         ngaParam.put("goods_id", id);
         List<AttributeVo> attribute = attributeService.queryList(ngaParam);
         Map issueParam = new HashMap();
-//        issueParam.put("goods_id", id);
+        //issueParam.put("goods_id", id);
         List<GoodsIssueVo> issue = goodsIssueService.queryList(issueParam);
         resultObj.put("issue", issue);
 
-        BrandVo brand = brandService.queryObject(info.getBrand_id());
+        //BrandVo brand = brandService.queryObject(info.getBrand_id());
         param.put("value_id", id);
         param.put("type_id", 0);
-        Integer commentCount = commentService.queryTotal(param);
-        List<CommentVo> hotComment = commentService.queryList(param);
-        Map commentInfo = new HashMap();
-        if (null != hotComment && hotComment.size() > 0) {
-            UserVo commentUser = userService.queryObject(hotComment.get(0).getUser_id());
-            commentInfo.put("content", Base64.decode(hotComment.get(0).getContent()));
-            commentInfo.put("add_time", DateUtils.timeToStr(hotComment.get(0).getAdd_time(), DateUtils.DATE_PATTERN));
-            commentInfo.put("nickname", commentUser.getNickname());
-            commentInfo.put("avatar", commentUser.getAvatar());
-            Map paramPicture = new HashMap();
-            paramPicture.put("comment_id", hotComment.get(0).getId());
-            List<CommentPictureVo> commentPictureEntities = commentPictureService.queryList(paramPicture);
-            commentInfo.put("pic_list", commentPictureEntities);
-        }
-        Map comment = new HashMap();
-        comment.put("count", commentCount);
-        comment.put("data", commentInfo);
+//        Integer commentCount = commentService.queryTotal(param);
+//        List<CommentVo> hotComment = commentService.queryList(param);
+//        Map commentInfo = new HashMap();
+//        if (null != hotComment && hotComment.size() > 0) {
+//            UserVo commentUser = userService.queryObject(hotComment.get(0).getUser_id());
+//            commentInfo.put("content", Base64.decode(hotComment.get(0).getContent()));
+//            commentInfo.put("add_time", DateUtils.timeToStr(hotComment.get(0).getAdd_time(), DateUtils.DATE_PATTERN));
+//            commentInfo.put("nickname", commentUser.getNickname());
+//            commentInfo.put("avatar", commentUser.getAvatar());
+//            Map paramPicture = new HashMap();
+//            paramPicture.put("comment_id", hotComment.get(0).getId());
+//            List<CommentPictureVo> commentPictureEntities = commentPictureService.queryList(paramPicture);
+//            commentInfo.put("pic_list", commentPictureEntities);
+//        }
+        //Map comment = new HashMap();
+//        comment.put("count", commentCount);
+//        comment.put("data", commentInfo);
         //当前用户是否收藏
         Map collectParam = new HashMap();
         collectParam.put("user_id", getUserId());
@@ -318,8 +313,8 @@ public class ApiGoodsController extends ApiBaseAction {
         resultObj.put("gallery", gallery);
         resultObj.put("attribute", attribute);
         resultObj.put("userHasCollect", userHasCollect);
-        resultObj.put("comment", comment);
-        resultObj.put("brand", brand);
+        //resultObj.put("comment", comment);
+        //resultObj.put("brand", brand);
         resultObj.put("specificationList", specificationList);
         resultObj.put("productList", productEntityList);
         // 记录推荐人是否可以领取红包，用户登录时校验
