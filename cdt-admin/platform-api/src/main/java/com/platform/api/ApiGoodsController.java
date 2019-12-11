@@ -11,8 +11,8 @@ import com.platform.entity.*;
 import com.platform.oss.OSSFactory;
 import com.platform.service.*;
 import com.platform.util.*;
-import com.platform.utils.Base64;
-import com.platform.utils.*;
+import com.platform.utils.Query;
+import com.platform.utils.RRException;
 import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -30,10 +30,11 @@ import java.awt.*;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.math.BigDecimal;
 import java.text.AttributedString;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 
 /**
  * 作者: @author Harmon <br>
@@ -98,12 +99,10 @@ public class ApiGoodsController extends ApiBaseAction {
     @IgnoreAuth
     @GetMapping(value = "index")
     public Object index(Integer brand_id) {
-        //
         Map param = new HashMap();
         param.put("is_delete", 0);
         param.put("is_on_sale", 1);
         List<GoodsVo> goodsList = goodsService.queryList(param);
-        //
         return toResponsSuccess(goodsList);
     }
     
@@ -359,176 +358,6 @@ public class ApiGoodsController extends ApiBaseAction {
 //        }
         return toResponsSuccess(resultObj);
     }
-    
-    
-    /**
-     * 商品详情页数据
-     */
-    @ApiOperation(value = " app商品详情页数据")
-    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "商品id", paramType = "path", required = true),
-            @ApiImplicitParam(name = "referrer", value = "商品referrer", paramType = "path", required = false)})
-    @GetMapping(value = "detail2")
-    public Object detail2(@APPLoginUser MlsUserEntity2 loginUser, Integer id, Long referrer) {
-
-    	
-        Map<String, Object> resultObj = new HashMap();
-        //
-        Long userId = loginUser.getMlsUserId();
-        GoodsVo info = goodsService.queryObject(id);
-        info.setDiscount(info.getRetail_price().multiply(new BigDecimal("10")).divide(info.getMarket_price(), 1, BigDecimal.ROUND_HALF_UP).toString());
-        info.setUser_brokerage_price(info.getRetail_price().multiply(new BigDecimal(loginUser.getFx()).divide(new BigDecimal("100"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-        Map param = new HashMap();
-        param.put("goods_id", id);
-        //
-        Map specificationParam = new HashMap();
-        specificationParam.put("fields", "gs.*, s.name");
-        specificationParam.put("goods_id", id);
-        specificationParam.put("specification", true);
-        specificationParam.put("sidx", "s.sort_order");
-        specificationParam.put("order", "asc");
-        List<GoodsSpecificationVo> goodsSpecificationEntityList = goodsSpecificationService.queryList(specificationParam);
-
-        List<Map> specificationList = new ArrayList();
-        //按规格名称分组
-        for (int i = 0; i < goodsSpecificationEntityList.size(); i++) {
-            GoodsSpecificationVo specItem = goodsSpecificationEntityList.get(i);
-            //
-            List<GoodsSpecificationVo> tempList = null;
-            for (int j = 0; j < specificationList.size(); j++) {
-                if (specificationList.get(j).get("specification_id").equals(specItem.getSpecification_id())) {
-                    tempList = (List<GoodsSpecificationVo>) specificationList.get(j).get("valueList");
-                    break;
-                }
-            }
-            //
-            if (null == tempList) {
-                Map temp = new HashMap();
-                temp.put("specification_id", specItem.getSpecification_id());
-                temp.put("name", specItem.getName());
-                temp.put("pic_url",specItem.getPic_url());
-                tempList = new ArrayList();
-                tempList.add(specItem);
-                temp.put("valueList", tempList);
-                specificationList.add(temp);
-            } else {
-                for (int j = 0; j < specificationList.size(); j++) {
-                    if (specificationList.get(j).get("specification_id").equals(specItem.getSpecification_id())) {
-                        tempList = (List<GoodsSpecificationVo>) specificationList.get(j).get("valueList");
-                        tempList.add(specItem);
-                        break;
-                    }
-                }
-            }
-        }
-        //
-        List<ProductVo> productEntityList = productService.queryList(param);
-        //
-        List<GoodsGalleryVo> gallery = goodsGalleryService.queryList(param);
-        Map ngaParam = new HashMap();
-        ngaParam.put("fields", "nga.value, na.name");
-        ngaParam.put("sidx", "nga.id");
-        ngaParam.put("order", "asc");
-        ngaParam.put("goods_id", id);
-        List<AttributeVo> attribute = attributeService.queryList(ngaParam);
-        //
-        Map issueParam = new HashMap();
-//        issueParam.put("goods_id", id);
-        List<GoodsIssueVo> issue = goodsIssueService.queryList(issueParam);
-        //
-        BrandVo brand = brandService.queryObject(info.getBrand_id());
-        //
-        param.put("value_id", id);
-        param.put("type_id", 0);
-        Integer commentCount = commentService.queryTotal(param);
-        List<CommentVo> hotComment = commentService.queryList(param);
-        Map commentInfo = new HashMap();
-        if (null != hotComment && hotComment.size() > 0) {
-            UserVo commentUser = userService.queryObject(hotComment.get(0).getUser_id());
-            commentInfo.put("content", Base64.decode(hotComment.get(0).getContent()));
-            commentInfo.put("add_time", DateUtils.timeToStr(hotComment.get(0).getAdd_time(), DateUtils.DATE_PATTERN));
-            commentInfo.put("nickname", commentUser.getNickname());
-            commentInfo.put("avatar", commentUser.getAvatar());
-            Map paramPicture = new HashMap();
-            paramPicture.put("comment_id", hotComment.get(0).getId());
-            List<CommentPictureVo> commentPictureEntities = commentPictureService.queryList(paramPicture);
-            commentInfo.put("pic_list", commentPictureEntities);
-        }
-        Map comment = new HashMap();
-        comment.put("count", commentCount);
-        comment.put("data", commentInfo);
-        //当前用户是否收藏
-        Map collectParam = new HashMap();
-        collectParam.put("user_id", loginUser.getMlsUserId());
-        collectParam.put("value_id", id);
-        collectParam.put("type_id", 0);
-        Integer userHasCollect = collectService.queryTotal(collectParam);
-        if (userHasCollect > 0) {
-            userHasCollect = 1;
-        }
-        //记录用户的足迹
-        FootprintVo footprintEntity = new FootprintVo();
-        footprintEntity.setAdd_time(System.currentTimeMillis() / 1000);
-        footprintEntity.setGoods_brief(info.getGoods_brief());
-        footprintEntity.setList_pic_url(info.getList_pic_url());
-        footprintEntity.setGoods_id(info.getId());
-        footprintEntity.setName(info.getName());
-        footprintEntity.setRetail_price(info.getRetail_price());
-        footprintEntity.setUser_id(userId);
-        if (null != referrer) {
-            footprintEntity.setReferrer(referrer);
-        } else {
-            footprintEntity.setReferrer(0L);
-        }
-        footprintService.save(footprintEntity);
-        //
-        resultObj.put("info", info);
-        resultObj.put("gallery", gallery);
-        resultObj.put("attribute", attribute);
-        resultObj.put("userHasCollect", userHasCollect);
-        resultObj.put("issue", issue);
-        resultObj.put("comment", comment);
-        resultObj.put("brand", brand);
-        resultObj.put("specificationList", specificationList);
-        resultObj.put("productList", productEntityList);
-        // 记录推荐人是否可以领取红包，用户登录时校验
-        try {
-            // 是否已经有可用的转发红包
-            Map params = new HashMap();
-            params.put("user_id", userId);
-            params.put("send_type", 2);
-            params.put("unUsed", true);
-            List<CouponVo> enabledCouponVos = apiCouponService.queryUserCoupons(params);
-            if ((null == enabledCouponVos || enabledCouponVos.size() == 0)
-                    && null != referrer && null != userId) {
-                // 获取优惠信息提示
-                Map couponParam = new HashMap();
-                couponParam.put("enabled", true);
-                Integer[] send_types = new Integer[]{2};
-                couponParam.put("send_types", send_types);
-                List<CouponVo> couponVos = apiCouponService.queryList(couponParam);
-                if (null != couponVos && couponVos.size() > 0) {
-                    CouponVo couponVo = couponVos.get(0);
-                    Map footprintParam = new HashMap();
-                    footprintParam.put("goods_id", id);
-                    footprintParam.put("referrer", referrer);
-                    Integer footprintNum = footprintService.queryTotal(footprintParam);
-                    if (null != footprintNum && null != couponVo.getMin_transmit_num()
-                            && footprintNum > couponVo.getMin_transmit_num()) {
-                        UserCouponVo userCouponVo = new UserCouponVo();
-                        userCouponVo.setAdd_time(new Date());
-                        userCouponVo.setCoupon_id(couponVo.getId());
-                        userCouponVo.setCoupon_number(CharUtil.getRandomString(12));
-                        userCouponVo.setUser_id(loginUser.getMlsUserId());
-                        apiUserCouponService.save(userCouponVo);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return toResponsSuccess(resultObj);
-    }
 
     /**
      * 　获取分类下的商品
@@ -647,7 +476,7 @@ public class ApiGoodsController extends ApiBaseAction {
             params.put("categoryIds", categoryIds);
         }
         //查询列表数据
-        params.put("fields", "id, name, list_pic_url, market_price, retail_price, goods_brief,is_service");
+        params.put("fields", "id, name, list_pic_url,primary_pic_url, market_price, retail_price, goods_brief,is_service");
         Query query = new Query(params);
         PageHelper.startPage(query.getPage(), query.getLimit());
         List<GoodsVo> goodsList = goodsService.queryList(query);
@@ -752,7 +581,7 @@ public class ApiGoodsController extends ApiBaseAction {
         param.put("attribute_category", attribute_category);
         param.put("sidx", "add_time");
         param.put("order", "desc");
-        param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price");
+        param.put("fields", "id as id, name as name, list_pic_url as list_pic_url,primary_pic_url，retail_price as retail_price");
         PageHelper.startPage(0, 6, false);
         categoryGoods = goodsService.queryList(param);
 

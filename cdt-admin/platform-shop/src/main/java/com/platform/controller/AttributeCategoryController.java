@@ -39,7 +39,6 @@ public class AttributeCategoryController {
         return R.ok().put("page", pageUtil);
     }
 
-
     /**
      * 查看信息
      */
