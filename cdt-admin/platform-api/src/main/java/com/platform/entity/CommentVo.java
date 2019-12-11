@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 
@@ -34,7 +35,6 @@ public class CommentVo implements Serializable {
     @ApiModelProperty(value = "评论时间")
     //记录时间
     private Long add_time;
-
     @ApiModelProperty(value = "评论状态")
     //状态 是否被管理员批准显示;1是;0未批准显示
     private Integer status;

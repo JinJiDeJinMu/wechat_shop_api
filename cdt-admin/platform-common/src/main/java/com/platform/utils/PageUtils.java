@@ -3,6 +3,7 @@ package com.platform.utils;
 import com.github.pagehelper.PageInfo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -25,6 +26,10 @@ public class PageUtils implements Serializable {
     //列表数据
     private List<?> list;
 
+    private BigDecimal totalOrderSum;
+
+    private BigDecimal totalGoodsSum;
+
     /**
      * 分页
      *
@@ -39,6 +44,16 @@ public class PageUtils implements Serializable {
         this.pageSize = pageSize;
         this.currPage = currPage;
         this.totalPage = (int) Math.ceil((double) totalCount / pageSize);
+    }
+
+    public PageUtils(int totalCount, int pageSize, int currPage, List<?> list, BigDecimal totalOrderSum, BigDecimal totalGoodsSum) {
+        this.totalCount = totalCount;
+        this.pageSize = pageSize;
+        this.totalPage = (int) Math.ceil((double) totalCount / pageSize);
+        this.currPage = currPage;
+        this.list = list;
+        this.totalOrderSum = totalOrderSum;
+        this.totalGoodsSum = totalGoodsSum;
     }
 
     public PageUtils(PageInfo pageInfo) {
@@ -89,4 +104,19 @@ public class PageUtils implements Serializable {
         this.list = list;
     }
 
+    public BigDecimal getTotalOrderSum() {
+        return totalOrderSum;
+    }
+
+    public void setTotalOrderSum(BigDecimal totalOrderSum) {
+        this.totalOrderSum = totalOrderSum;
+    }
+
+    public BigDecimal getTotalGoodsSum() {
+        return totalGoodsSum;
+    }
+
+    public void setTotalGoodsSum(BigDecimal totalGoodsSum) {
+        this.totalGoodsSum = totalGoodsSum;
+    }
 }

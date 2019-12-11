@@ -1,5 +1,6 @@
 package com.platform.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -91,9 +92,13 @@ public class OrderServiceImpl implements OrderService {
         order.setShippingStatus(1);//已发货
         return orderDao.update(order);
     }
-    
-    
-    
+
+    @Override
+    public HashMap<String, Object> getTotalSum(Map<String, Object> map) {
+        return orderDao.getTotalSum(map);
+    }
+
+
     @Override
     public List<GroupBuyingEntity> queryGroupList(Map<String, Object> map) {
         return orderDao.queryGroupList(map);
