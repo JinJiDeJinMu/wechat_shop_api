@@ -68,6 +68,7 @@ public class GoodsController extends BaseController {
         if (sysUserEntity.getCreateUserId().intValue() != ShopShow.ADMINISTRATOR.getCode()) {
             goods.setMerchantId(sysUserEntity.getMerchantId());
         }
+        goods.setBrowse(1);
         goodsService.save(goods);
         return R.ok();
     }
