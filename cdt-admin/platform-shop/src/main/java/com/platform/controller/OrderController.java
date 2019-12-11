@@ -47,17 +47,17 @@ public class OrderController extends BaseController {
             query.put("merchantId", sysUserEntity.getMerchantId());
         }
         List<OrderEntity> orderList = orderService.queryList(query);
-        BigDecimal sum1 = orderList.stream().map(OrderEntity::getOrderPrice).reduce(BigDecimal.ZERO,BigDecimal::add);
+
         int total = orderService.queryTotal(query);
+        HashMap<String,Object> hashMap = orderService.getTotalSum(params);
         for(OrderEntity user : orderList) {
         	user.setUserName(Base64.decode(user.getUserName()));
         }
+        System.out.println("++========"+hashMap);
+        /*PageUtils pageUtil = new PageUtils(total, query.getLimit(), query.getPage(),orderList,
+        new BigDecimal(hashMap.get("order_sum").toString()),new BigDecimal(hashMap.get("goods_sum").toString()));*/
         PageUtils pageUtil = new PageUtils(orderList, total, query.getLimit(), query.getPage());
-        Map<String,Object> map = new HashMap<>();
-        map.put("page",pageUtil);
-        map.put("sum1",sum1);
-
-        return R.ok(map);
+        return R.ok(hashMap).put("page",pageUtil);
     }
 
     /**

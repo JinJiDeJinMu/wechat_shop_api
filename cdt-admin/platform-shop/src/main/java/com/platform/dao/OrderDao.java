@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,5 +17,6 @@ import com.platform.entity.OrderEntity;
 public interface OrderDao extends BaseDao<OrderEntity> {
     List<GroupBuyingEntity> queryGroupList(Map<String, Object> map);
     int queryGroupTotal(Map<String, Object> map);
+    HashMap<String, Object> getTotalSum(Map<String, Object> map);
 	
 }

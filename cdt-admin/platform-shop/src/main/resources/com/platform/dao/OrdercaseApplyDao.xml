@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.OrdercaseApplyDao">
+
+    <resultMap type="com.platform.entity.OrdercaseApplyEntity" id="OrdercaseApplyMap">
+                    <result property="id" column="id"/>
+                    <result property="orderId" column="order_id"/>
+                    <result property="merchantId" column="merchant_id"/>
+                    <result property="orderStatus" column="order_status"/>
+                    <result property="orderPrice" column="order_price"/>
+                    <result property="goodPrice" column="good_price"/>
+                    <result property="applyId" column="apply_id"/>
+                    <result property="applyTime" column="apply_time"/>
+                    <result property="endTime" column="end_time"/>
+                    <result property="status" column="status"/>
+                    <result property="remarks" column="remarks"/>
+                    <result property="operator" column="operator"/>
+            </resultMap>
+
+    <select id="queryObject" resultType="com.platform.entity.OrdercaseApplyEntity">
+		select
+			`id`,
+    			`order_id`,
+    			`merchant_id`,
+    			`order_status`,
+    			`order_price`,
+    			`good_price`,
+    			`apply_id`,
+    			`apply_time`,
+    			`end_time`,
+    			`status`,
+    			`remarks`,
+    			`operator`    
+		from nideshop_ordercase_apply
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultType="com.platform.entity.OrdercaseApplyEntity">
+        select
+                    `id`,
+                            `order_id`,
+                            `merchant_id`,
+                            `order_status`,
+                            `order_price`,
+                            `good_price`,
+                            `apply_id`,
+                            `apply_time`,
+                            `end_time`,
+                            `status`,
+                            `remarks`,
+                            `operator`        
+        from nideshop_ordercase_apply
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from nideshop_ordercase_apply
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.OrdercaseApplyEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into nideshop_ordercase_apply(
+                    			`order_id`,
+                    			`merchant_id`,
+                    			`order_status`,
+                    			`order_price`,
+                    			`good_price`,
+                    			`apply_id`,
+                    			`apply_time`,
+                    			`end_time`,
+                    			`status`,
+                    			`remarks`,
+                    			`operator`            )
+		values(
+                    			#{orderId},
+                    			#{merchantId},
+                    			#{orderStatus},
+                    			#{orderPrice},
+                    			#{goodPrice},
+                    			#{applyId},
+                    			#{applyTime},
+                    			#{endTime},
+                    			#{status},
+                    			#{remarks},
+                    			#{operator}            )
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.OrdercaseApplyEntity">
+        update nideshop_ordercase_apply
+        <set>
+                                                                            <if test="orderId != null">`order_id` = #{orderId
+                        }, </if>
+                                                                <if test="merchantId != null">`merchant_id` = #{merchantId
+                        }, </if>
+                                                                <if test="orderStatus != null">`order_status` = #{orderStatus
+                        }, </if>
+                                                                <if test="orderPrice != null">`order_price` = #{orderPrice
+                        }, </if>
+                                                                <if test="goodPrice != null">`good_price` = #{goodPrice
+                        }, </if>
+                                                                <if test="applyId != null">`apply_id` = #{applyId
+                        }, </if>
+                                                                <if test="applyTime != null">`apply_time` = #{applyTime
+                        }, </if>
+                                                                <if test="endTime != null">`end_time` = #{endTime
+                        }, </if>
+                                                                <if test="status != null">`status` = #{status
+                        }, </if>
+                                                                <if test="remarks != null">`remarks` = #{remarks
+                        }, </if>
+                                                                <if test="operator != null">`operator` = #{operator
+                        }</if>
+                                    </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from nideshop_ordercase_apply where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from nideshop_ordercase_apply where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="review">
+        update nideshop_ordercase_apply set status = #{status} where id={id}
+    </update>
+
+</mapper>

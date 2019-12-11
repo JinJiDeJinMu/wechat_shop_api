@@ -1,5 +1,6 @@
 package com.platform.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,4 +39,5 @@ public interface OrderService {
     int confirm(Integer id);
 
     int sendGoods(OrderEntity order);
+    HashMap<String,Object> getTotalSum(Map<String, Object> map);
 }

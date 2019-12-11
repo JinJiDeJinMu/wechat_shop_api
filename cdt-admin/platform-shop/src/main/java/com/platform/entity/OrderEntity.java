@@ -600,9 +600,11 @@ public class OrderEntity implements Serializable {
         this.callbackStatus = callbackStatus;
     }
 
+
     /**
      * 获取：
      */
+
     public String getCallbackStatus() {
         return callbackStatus;
     }
@@ -630,4 +632,5 @@ public class OrderEntity implements Serializable {
     public void setMerchantId(Long merchantId) {
         this.merchantId = merchantId;
     }
+
 }
