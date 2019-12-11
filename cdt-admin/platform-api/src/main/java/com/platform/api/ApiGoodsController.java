@@ -167,13 +167,10 @@ public class ApiGoodsController extends ApiBaseAction {
     @GetMapping(value = "sku")
     public Object sku(Integer id) {
         Map<String, Object> resultObj = new HashMap();
-        //
         Map param = new HashMap();
         param.put("goods_id", id);
         List<GoodsSpecificationVo> goodsSpecificationEntityList = goodsSpecificationService.queryList(param);
-        //
         List<ProductVo> productEntityList = productService.queryList(param);
-        //
         resultObj.put("specificationList", goodsSpecificationEntityList);
         resultObj.put("productList", productEntityList);
         return toResponsSuccess(resultObj);
@@ -190,24 +187,23 @@ public class ApiGoodsController extends ApiBaseAction {
     public Object detail(Integer id, Long referrer) {
 
         Map<String, Object> resultObj = new HashMap();
-
         Long userId = getUserId();
-        //查找商品信息
         GoodsVo info = goodsService.queryObject(id);
         if (info == null) return Result.failure("数据不存在!");
         goodsService.updateBrowse(info);
         Long mid = info.getMerchantId();
+
 //        if(mid>0){
 //            Map<String, Object> sysuser = this.mlsUserSer.getEntityMapper().getSysUserByMid(mid);
 //            if (sysuser != null) {
 //                info.setUser_brokerage_price(info.getRetail_price().multiply(new BigDecimal(sysuser.get("FX").toString())).multiply(new BigDecimal(info.getBrokerage_percent()).divide(new BigDecimal("10000"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
 //            }
 //        }
+
         resultObj.put("info", info);
         //添加商家信息
         CdtMerchantEntity cdtMerchant = cdtMerchantService.queryObject(info.getMerchantId());
         resultObj.put("merchantInfo", cdtMerchant);
-
 
         Map param = new HashMap();
         param.put("goods_id", id);
@@ -216,7 +212,7 @@ public class ApiGoodsController extends ApiBaseAction {
         specificationParam.put("fields", "gs.*, s.name");
         specificationParam.put("goods_id", id);
         specificationParam.put("specification", true);
-//        specificationParam.put("sidx", "s.sort_order");
+//      specificationParam.put("sidx", "s.sort_order");
         specificationParam.put("order", "asc");
         List<GoodsSpecificationVo> goodsSpecificationEntityList = goodsSpecificationService.queryList(specificationParam);
 
@@ -260,14 +256,17 @@ public class ApiGoodsController extends ApiBaseAction {
         ngaParam.put("order", "asc");
         ngaParam.put("goods_id", id);
         List<AttributeVo> attribute = attributeService.queryList(ngaParam);
-        Map issueParam = new HashMap();
-        //issueParam.put("goods_id", id);
-        List<GoodsIssueVo> issue = goodsIssueService.queryList(issueParam);
-        resultObj.put("issue", issue);
 
+        //todo:商品问答注释掉
+        //Map issueParam = new HashMap();
+        //issueParam.put("goods_id", id);
+        //List<GoodsIssueVo> issue = goodsIssueService.queryList(issueParam);
+        //resultObj.put("issue", issue);
         //BrandVo brand = brandService.queryObject(info.getBrand_id());
+
         param.put("value_id", id);
         param.put("type_id", 0);
+
 //        Integer commentCount = commentService.queryTotal(param);
 //        List<CommentVo> hotComment = commentService.queryList(param);
 //        Map commentInfo = new HashMap();
@@ -285,6 +284,7 @@ public class ApiGoodsController extends ApiBaseAction {
         //Map comment = new HashMap();
 //        comment.put("count", commentCount);
 //        comment.put("data", commentInfo);
+
         //当前用户是否收藏
         Map collectParam = new HashMap();
         collectParam.put("user_id", getUserId());
@@ -294,6 +294,7 @@ public class ApiGoodsController extends ApiBaseAction {
         if (userHasCollect > 0) {
             userHasCollect = 1;
         }
+
         //记录用户的足迹
         FootprintVo footprintEntity = new FootprintVo();
         footprintEntity.setAdd_time(System.currentTimeMillis() / 1000);
@@ -308,15 +309,18 @@ public class ApiGoodsController extends ApiBaseAction {
         } else {
             footprintEntity.setReferrer(0L);
         }
-        footprintService.save(footprintEntity);
 
+        footprintService.save(footprintEntity);
         resultObj.put("gallery", gallery);
         resultObj.put("attribute", attribute);
         resultObj.put("userHasCollect", userHasCollect);
+
         //resultObj.put("comment", comment);
         //resultObj.put("brand", brand);
+
         resultObj.put("specificationList", specificationList);
         resultObj.put("productList", productEntityList);
+
         // 记录推荐人是否可以领取红包，用户登录时校验
 //        try {
 //            // 是否已经有可用的转发红包
