@@ -615,13 +615,13 @@ public class ApiGoodsController extends ApiBaseAction {
             //查找同分类下的商品
             GoodsVo goodsCategory = goodsService.queryObject(id);
             Map paramRelated = new HashMap();
-            paramRelated.put("fields", "id, name, list_pic_url, retail_price");
+            paramRelated.put("fields", "id, name, list_pic_url,primary_pic_url, retail_price");
             paramRelated.put("category_id", goodsCategory.getCategory_id());
             relatedGoods = goodsService.queryList(paramRelated);
         } else {
             Map paramRelated = new HashMap();
             paramRelated.put("goods_ids", relatedGoodsIds);
-            paramRelated.put("fields", "id, name, list_pic_url, retail_price");
+            paramRelated.put("fields", "id, name, list_pic_url,primary_pic_url, retail_price");
             relatedGoods = goodsService.queryList(paramRelated);
         }
         resultObj.put("goodsList", relatedGoods);
