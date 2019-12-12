@@ -53,9 +53,6 @@ public class OrderController extends BaseController {
         for(OrderEntity user : orderList) {
         	user.setUserName(Base64.decode(user.getUserName()));
         }
-        System.out.println("++========"+hashMap);
-        /*PageUtils pageUtil = new PageUtils(total, query.getLimit(), query.getPage(),orderList,
-        new BigDecimal(hashMap.get("order_sum").toString()),new BigDecimal(hashMap.get("goods_sum").toString()));*/
         PageUtils pageUtil = new PageUtils(orderList, total, query.getLimit(), query.getPage());
         return R.ok(hashMap).put("page",pageUtil);
     }

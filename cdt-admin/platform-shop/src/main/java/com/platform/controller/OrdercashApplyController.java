@@ -77,6 +77,7 @@ public class OrdercashApplyController {
      * 保存
      */
     @RequestMapping("/save/{id}")
+    @RequiresPermissions("ordercashapply:save")
     @ResponseBody
     public R save(@PathVariable Integer id) {
 
@@ -88,6 +89,10 @@ public class OrdercashApplyController {
         OrderEntity orderEntity = orderService.queryObject(id);
         if(orderEntity == null || orderEntity.getMerchantId() == null){
             return R.error(CashApplyENUM.ORDER_CASH_NOEXISTEN.getMsg());
+        }
+
+        if(orderEntity.getMerchantId() <0){
+            return R.error(CashApplyENUM.NO_ADMIN_NO.getMsg());
         }
         //查询商家是否开通功能
         CdtMerchantEntity cdtMerchantEntity = cdtMerchantService.queryObject(orderEntity.getMerchantId());
