@@ -392,19 +392,23 @@ public class ApiGoodsController extends ApiBaseAction {
             @ApiImplicitParam(name = "isHot", value = "热卖商品", paramType = "path", required = true)})
     @IgnoreAuth
     @GetMapping(value = "list")
-    public Object list(@LoginUser UserVo loginUser, Integer categoryId,
-                       Integer brandId, String keyword, Integer isNew, Integer isHot,
+    public Object list(@LoginUser UserVo loginUser,
+                       Integer categoryId,
+                       Integer brandId,
+                       String keyword,
+                       Integer isNew,
+                       Integer isHot,
                        @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size", defaultValue = "10") Integer size,
                        String sort, String order) {
         Map params = new HashMap();
         params.put("is_delete", 0);
         params.put("is_on_sale", 1);
-        params.put("brand_id", brandId);
-        params.put("keyword", keyword);
-        params.put("is_new", isNew);
-        params.put("is_hot", isHot);
-        params.put("page", page);
-        params.put("limit", size);
+        //params.put("brand_id", brandId);
+        //params.put("keyword", keyword);
+        //params.put("is_new", isNew);
+        //params.put("is_hot", isHot);
+        //params.put("page", page);
+        // params.put("limit", size);
         params.put("order", sort);
         params.put("sidx", order);
         //
@@ -432,63 +436,60 @@ public class ApiGoodsController extends ApiBaseAction {
         rootCategory.setName("全部");
         rootCategory.setChecked(false);
         filterCategory.add(rootCategory);
-        //
-        params.put("fields", "category_id");
-        List<GoodsVo> categoryEntityList = goodsService.queryList(params);
-        params.remove("fields");
-        if (null != categoryEntityList && categoryEntityList.size() > 0) {
-            List<Integer> categoryIds = new ArrayList();
-            for (GoodsVo goodsVo : categoryEntityList) {
-                categoryIds.add(goodsVo.getCategory_id());
-            }
-            //查找二级分类的parent_id
-            Map categoryParam = new HashMap();
-            categoryParam.put("ids", categoryIds);
-            categoryParam.put("fields", "parent_id");
-            List<CategoryVo> parentCategoryList = categoryService.queryList(categoryParam);
-            //
-            List<Integer> parentIds = new ArrayList();
-            for (CategoryVo categoryEntity : parentCategoryList) {
-                parentIds.add(categoryEntity.getParent_id());
-            }
-            //一级分类
-            categoryParam = new HashMap();
-            categoryParam.put("fields", "id,name");
-            categoryParam.put("order", "asc");
-            categoryParam.put("sidx", "sort_order");
-            categoryParam.put("ids", parentIds);
-            List<CategoryVo> parentCategory = categoryService.queryList(categoryParam);
-            if (null != parentCategory) {
-                filterCategory.addAll(parentCategory);
-            }
-        }
-        //加入分类条件
-        if (null != categoryId && categoryId > 0) {
-            List<Integer> categoryIds = new ArrayList();
-            Map categoryParam = new HashMap();
-            categoryParam.put("parent_id", categoryId);
-            categoryParam.put("fields", "id");
-            List<CategoryVo> childIds = categoryService.queryList(categoryParam);
-            for (CategoryVo categoryEntity : childIds) {
-                categoryIds.add(categoryEntity.getId());
-            }
-            categoryIds.add(categoryId);
-            params.put("categoryIds", categoryIds);
-        }
+
+//        if (null != categoryEntityList && categoryEntityList.size() > 0) {
+//            List<Integer> categoryIds = new ArrayList();
+//            for (GoodsVo goodsVo : categoryEntityList) {
+//                categoryIds.add(goodsVo.getCategory_id());
+//            }
+//            //查找二级分类的parent_id
+//            Map categoryParam = new HashMap();
+//            categoryParam.put("ids", categoryIds);
+//            categoryParam.put("fields", "parent_id");
+//            List<CategoryVo> parentCategoryList = categoryService.queryList(categoryParam);
+//            List<Integer> parentIds = new ArrayList();
+//            for (CategoryVo categoryEntity : parentCategoryList) {
+//                parentIds.add(categoryEntity.getParent_id());
+//            }
+//            //一级分类
+//            categoryParam = new HashMap();
+//            categoryParam.put("fields", "id,name");
+//            categoryParam.put("order", "asc");
+//            categoryParam.put("sidx", "sort_order");
+//            categoryParam.put("ids", parentIds);
+//            List<CategoryVo> parentCategory = categoryService.queryList(categoryParam);
+//            if (null != parentCategory) {
+//                filterCategory.addAll(parentCategory);
+//            }
+//        }
+//        //加入分类条件
+//        if (null != categoryId && categoryId > 0) {
+//            List<Integer> categoryIds = new ArrayList();
+//            Map categoryParam = new HashMap();
+//            categoryParam.put("parent_id", categoryId);
+//            categoryParam.put("fields", "id");
+//            List<CategoryVo> childIds = categoryService.queryList(categoryParam);
+//            for (CategoryVo categoryEntity : childIds) {
+//                categoryIds.add(categoryEntity.getId());
+//            }
+//            categoryIds.add(categoryId);
+//            params.put("categoryIds", categoryIds);
+//        }
         //查询列表数据
-        params.put("fields", "id, name, list_pic_url,primary_pic_url, market_price, retail_price, goods_brief,is_service");
-        Query query = new Query(params);
-        PageHelper.startPage(query.getPage(), query.getLimit());
-        List<GoodsVo> goodsList = goodsService.queryList(query);
+        params.put("attribute_category", categoryId);
+        params.put("fields", "id, name, list_pic_url,primary_pic_url,market_price,retail_price, goods_brief,is_service");
+        //Query query = new Query(params);
+        PageHelper.startPage(page, size);
+        List<GoodsVo> goodsList = goodsService.queryList(params);
         ApiPageUtils goodsData = new ApiPageUtils(new PageInfo(goodsList));
         //搜索到的商品
-        for (CategoryVo categoryEntity : filterCategory) {
-            if (null != categoryId && categoryEntity.getId() == 0 || categoryEntity.getId() == categoryId) {
-                categoryEntity.setChecked(true);
-            } else {
-                categoryEntity.setChecked(false);
-            }
-        }
+//        for (CategoryVo categoryEntity : filterCategory) {
+//            if (null != categoryId && categoryEntity.getId() == 0 || categoryEntity.getId() == categoryId) {
+//                categoryEntity.setChecked(true);
+//            } else {
+//                categoryEntity.setChecked(false);
+//            }
+//        }
         goodsData.setFilterCategory(filterCategory);
         goodsData.setGoodsList(goodsList);
         return toResponsSuccess(goodsData);
@@ -581,7 +582,7 @@ public class ApiGoodsController extends ApiBaseAction {
         param.put("attribute_category", attribute_category);
         param.put("sidx", "add_time");
         param.put("order", "desc");
-        param.put("fields", "id as id, name as name, list_pic_url as list_pic_url,primary_pic_url，retail_price as retail_price");
+        param.put("fields", "id as id, name as name, list_pic_url as list_pic_url,primary_pic_url,retail_price as retail_price");
         PageHelper.startPage(0, 6, false);
         categoryGoods = goodsService.queryList(param);
 
@@ -615,13 +616,13 @@ public class ApiGoodsController extends ApiBaseAction {
             //查找同分类下的商品
             GoodsVo goodsCategory = goodsService.queryObject(id);
             Map paramRelated = new HashMap();
-            paramRelated.put("fields", "id, name, list_pic_url,primary_pic_url, retail_price");
+            paramRelated.put("fields", "id, name, list_pic_url,primary_pic_url,retail_price");
             paramRelated.put("category_id", goodsCategory.getCategory_id());
             relatedGoods = goodsService.queryList(paramRelated);
         } else {
             Map paramRelated = new HashMap();
             paramRelated.put("goods_ids", relatedGoodsIds);
-            paramRelated.put("fields", "id, name, list_pic_url,primary_pic_url, retail_price");
+            paramRelated.put("fields", "id, name, list_pic_url,primary_pic_url,retail_price");
             relatedGoods = goodsService.queryList(paramRelated);
         }
         resultObj.put("goodsList", relatedGoods);
