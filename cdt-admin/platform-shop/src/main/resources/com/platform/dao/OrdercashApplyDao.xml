@@ -7,14 +7,17 @@
                     <result property="orderId" column="order_id"/>
                     <result property="orderSn" column="order_sn"/>
                     <result property="merchantId" column="merchant_id"/>
+                    <result property="merchantName" column="merchant_name"/>
                     <result property="actualPrice" column="actual_price"/>
                     <result property="payTime" column="pay_time"/>
                     <result property="applyId" column="apply_id"/>
+                    <result property="applyName" column="apply_name"/>
                     <result property="applyTime" column="apply_time"/>
                     <result property="endTime" column="end_time"/>
                     <result property="status" column="status"/>
                     <result property="remarks" column="remarks"/>
                     <result property="operator" column="operator"/>
+                    <result property="operatorName" column="operator_name"/>
             </resultMap>
 
     <select id="queryObject" resultType="com.platform.entity.OrdercashApplyEntity">
@@ -22,14 +25,17 @@
 			`order_id`,
     			`order_sn`,
     			`merchant_id`,
+    			`merchant_name`,
     			`actual_price`,
     			`pay_time`,
     			`apply_id`,
+    			`apply_name`,
     			`apply_time`,
     			`end_time`,
     			`status`,
     			`remarks`,
-    			`operator`
+    			`operator`,
+    			`operator_name`
 		from nideshop_ordercash_apply
 		where order_id = #{id}
 	</select>
@@ -39,14 +45,17 @@
         `order_id`,
         `order_sn`,
         `merchant_id`,
+        `merchant_name`,
         `actual_price`,
         `pay_time`,
         `apply_id`,
+        `apply_name`,
         `apply_time`,
         `end_time`,
         `status`,
         `remarks`,
-        `operator`
+        `operator`,
+        `operator_name`
         from nideshop_ordercash_apply
         WHERE 1=1
         <if test="name != null and name.trim() != ''">
@@ -76,26 +85,34 @@
     <insert id="save" parameterType="com.platform.entity.OrdercashApplyEntity">
 		insert into nideshop_ordercash_apply(
         			`order_id`,
-                    			`order_sn`,
-                    			`merchant_id`,
-                    			`actual_price`,
-                    			`pay_time`,
-                    			`apply_id`,
-                    			`apply_time`,
-                    			`end_time`,
-                    			`remarks`,
-                    			`operator`            )
+    			`order_sn`,
+    			`merchant_id`,
+    			`merchant_name`,
+    			`actual_price`,
+    			`pay_time`,
+    			`apply_id`,
+    			`apply_name`,
+    			`apply_time`,
+    			`end_time`,
+    			`status`,
+    			`remarks`,
+    			`operator`,
+    			`operator_name`          )
 		values(
         			#{orderId},
                     			#{orderSn},
                     			#{merchantId},
+                    			#{merchantName},
                     			#{actualPrice},
                     			#{payTime},
                     			#{applyId},
+                    			#{merchantName},
                     			#{applyTime},
                     			#{endTime},
                     			#{remarks},
-                    			#{operator}            )
+                    			#{operator},
+                    			#{operatorName}
+                    			)
 	</insert>
 
     <update id="update" parameterType="com.platform.entity.OrdercashApplyEntity">
@@ -120,6 +137,12 @@
             <if test="remarks != null">`remarks` = #{remarks
                         }, </if>
             <if test="operator != null">`operator` = #{operator
+                        },</if>
+            <if test="merchantName != null">`merchant_name` = #{merchantName
+                        },</if>
+            <if test="applyName != null">`apply_name` = #{applyName
+                        },</if>
+            <if test="operatorName != null">`operator_name` = #{operatorName
                         }</if>
         </set>
         where order_id = #{orderId}
@@ -142,17 +165,20 @@
 
     <select id="query" resultType="com.platform.entity.OrdercashApplyEntity">
         select
-        `order_id`,
+         `order_id`,
         `order_sn`,
         `merchant_id`,
+        `merchant_name`,
         `actual_price`,
         `pay_time`,
         `apply_id`,
+        `apply_name`,
         `apply_time`,
         `end_time`,
         `status`,
         `remarks`,
-        `operator`
+        `operator`,
+        `operator_name`
         from nideshop_ordercash_apply
         WHERE order_id = #{id}
     </select>

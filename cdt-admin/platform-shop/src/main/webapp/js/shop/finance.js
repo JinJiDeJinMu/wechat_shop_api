@@ -5,11 +5,12 @@ $(function () {
         datatype: "json",
         colModel: [
             {label: 'id', name: 'orderId', index: 'order_id', key: true,align: 'center',width: 60,hidden:true},
-            {label: '订单号', name: 'orderSn', index: 'order_sn',align: 'center', width: 100 },
-            {label: '商户号', name: 'merchantId', index: 'merchant_id',align: 'center',width: 80},
+            {label: '订单号', name: 'orderSn', index: 'order_sn',align: 'center', width: 120 },
+            {label: '商户店铺', name: 'merchantName', index: 'merchant_name',align: 'center', width: 100 },
+            {label: '商户号', name: 'merchantId', index: 'merchant_id',align: 'center',width: 80,hidden:true},
             {label: '订单金额', name: 'actualPrice', index: 'actual_price',align: 'center',width: 80},
             {
-                label: '订单申请类型', name: 'status', index: 'status',align: 'center',width: 80, formatter: function (value) {
+                label: '订单申请类型', name: 'status', index: 'status',align: 'center',width: 60, formatter: function (value) {
                     if (value == '0') {
                         return '审核中';
                     } else if (value == '1') {
@@ -28,14 +29,16 @@ $(function () {
                     return transDate(value);
                 }
             },
-            {label: '提现申请人', name: 'applyId', index: 'apply_id',align: 'center',width: 80},
+            {label: '申请人id', name: 'applyId', index: 'apply_id',align: 'center',width: 80,hidden:true},
+            {label: '申请人', name: 'applyName', index: 'apply_name',align: 'center',width: 80},
             {
                 label: '提现申请时间', name: 'applyTime', index: 'apply_time',align: 'center', width: 100,
                 formatter: function (value) {
                     return transDate(value);
                 }
             },
-            {label: '提现审核人', name: 'operator', index: 'operator',align: 'center',width: 80},
+            {label: '审核人id', name: 'operator', index: 'operator',align: 'center',width: 80,hidden:true},
+            {label: '审核人', name: 'operatorName', index: 'operator_name',align: 'center',width: 80},
 
             {
                 label: '操作', width: 120, align: 'center', sortable: false, formatter: function (value, col, row) {

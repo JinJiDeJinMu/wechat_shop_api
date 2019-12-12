@@ -180,7 +180,6 @@ var vm = new Vue({
                 url: "../ordercashapply/save/" + id,
                 async: true,
                 successCallback: function (r) {
-                    alert(r.toString());
                 }
             });
         },

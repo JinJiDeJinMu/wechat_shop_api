@@ -26,6 +26,9 @@ public class OrdercashApplyEntity implements Serializable {
      * 
      */
     private Long merchantId;
+
+    private String merchantName;
+
     /**
      * 订单实际支付金额
      */
@@ -38,6 +41,8 @@ public class OrdercashApplyEntity implements Serializable {
      * 申请人ID
      */
     private Long applyId;
+
+    private String applyName;
     /**
      * 
      */
@@ -59,6 +64,7 @@ public class OrdercashApplyEntity implements Serializable {
      */
     private Long operator;
 
+    private String operatorName;
     /**
      * 设置：提交审核订单ID
      */
@@ -201,5 +207,29 @@ public class OrdercashApplyEntity implements Serializable {
      */
     public Long getOperator() {
         return operator;
+    }
+
+    public String getMerchantName() {
+        return merchantName;
+    }
+
+    public void setMerchantName(String merchantName) {
+        this.merchantName = merchantName;
+    }
+
+    public String getApplyName() {
+        return applyName;
+    }
+
+    public void setApplyName(String applyName) {
+        this.applyName = applyName;
+    }
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
     }
 }

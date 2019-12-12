@@ -102,7 +102,9 @@ public class OrdercashApplyController {
             ordercashApplyEntity.setPayTime(orderEntity.getPayTime());
             ordercashApplyEntity.setActualPrice(orderEntity.getActualPrice());
             ordercashApplyEntity.setMerchantId(orderEntity.getMerchantId());
+            ordercashApplyEntity.setMerchantName(cdtMerchantEntity.getShopName());
             ordercashApplyEntity.setApplyId(ShiroUtils.getUserEntity().getUserId());
+            ordercashApplyEntity.setApplyName(ShiroUtils.getUserEntity().getUsername());
             ordercashApplyEntity.setApplyTime(new Date());
 
             ordercashApplyService.save(ordercashApplyEntity);
@@ -179,6 +181,7 @@ public class OrdercashApplyController {
                 ordercashApplyEntity.setEndTime(new Date());
                 ordercashApplyEntity.setStatus(1);
                 ordercashApplyEntity.setOperator(ShiroUtils.getUserEntity().getMerchantId());
+                ordercashApplyEntity.setOperatorName(ShiroUtils.getUserEntity().getUsername());
                 //修改提现订单申请状态
                 ordercashApplyService.update(ordercashApplyEntity);
                 //微信转账
@@ -204,6 +207,7 @@ public class OrdercashApplyController {
             ordercashApplyEntity.setStatus(2);
             ordercashApplyEntity.setEndTime(new Date());
             ordercashApplyEntity.setOperator(ShiroUtils.getUserEntity().getUserId());
+            ordercashApplyEntity.setOperatorName(ShiroUtils.getUserEntity().getUsername());
 
             ordercashApplyService.update(ordercashApplyEntity);
             return R.ok(CashApplyENUM.ORDER_CASH_REJECT.getMsg());
