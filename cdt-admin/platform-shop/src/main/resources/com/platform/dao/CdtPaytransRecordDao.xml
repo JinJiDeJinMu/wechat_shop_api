@@ -79,8 +79,23 @@
         `res_text`
         from cdt_paytrans_record
         WHERE 1=1
+        <if test="orderNo != null and orderNo != ''">
+            AND order_no = #{orderNo}
+        </if>
+        <if test="payState != null and payState != ''">
+            AND pay_state = #{payState}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
         <if test="name != null and name.trim() != ''">
             AND name LIKE concat('%',#{name},'%')
+        </if>
+        <if test="createDate != null and createDate!= ''">
+            AND create_date >= #{createDate}
+        </if>
+        <if test="updateDate != null and updateDate!= ''">
+            AND create_date &lt;= #{updateDate}
         </if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
