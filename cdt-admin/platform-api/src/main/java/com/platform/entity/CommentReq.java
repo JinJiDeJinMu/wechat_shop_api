@@ -1,7 +1,5 @@
 package com.platform.entity;
 
-import com.platform.entity.CommentPictureVo;
-import com.platform.entity.UserVo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

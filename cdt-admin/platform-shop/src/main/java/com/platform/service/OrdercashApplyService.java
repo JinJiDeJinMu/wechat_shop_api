@@ -1,7 +1,7 @@
 package com.platform.service;
 
 
-import com.platform.entity.OrdercaseApplyEntity;
+import com.platform.entity.OrdercashApplyEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -10,9 +10,9 @@ import java.util.Map;
  * Service接口
  *
  * @author lipengjun
- * @date 2019-12-10 17:30:30
+ * @date 2019-12-11 11:29:38
  */
-public interface OrdercaseApplyService {
+public interface OrdercashApplyService {
 
     /**
      * 根据主键查询实体
@@ -20,7 +20,7 @@ public interface OrdercaseApplyService {
      * @param id 主键
      * @return 实体
      */
-    OrdercaseApplyEntity queryObject(Integer id);
+    OrdercashApplyEntity queryObject(Integer id);
 
     /**
      * 分页查询
@@ -28,7 +28,7 @@ public interface OrdercaseApplyService {
      * @param map 参数
      * @return list
      */
-    List<OrdercaseApplyEntity> queryList(Map<String, Object> map);
+    List<OrdercashApplyEntity> queryList(Map<String, Object> map);
 
     /**
      * 分页统计总数
@@ -41,18 +41,18 @@ public interface OrdercaseApplyService {
     /**
      * 保存实体
      *
-     * @param OrdercaseApply 实体
+     * @param ordercashApply 实体
      * @return 保存条数
      */
-    int save(OrdercaseApplyEntity OrdercaseApply);
+    int save(OrdercashApplyEntity ordercashApply);
 
     /**
      * 根据主键更新实体
      *
-     * @param OrdercaseApply 实体
+     * @param ordercashApply 实体
      * @return 更新条数
      */
-    int update(OrdercaseApplyEntity OrdercaseApply);
+    int update(OrdercashApplyEntity ordercashApply);
 
     /**
      * 根据主键删除
@@ -69,4 +69,18 @@ public interface OrdercaseApplyService {
      * @return 删除条数
      */
     int deleteBatch(Integer[] ids);
+
+    /**
+     * 修改状态
+     * @param id
+     * @return
+     */
+    int review(Integer id);
+
+    /**
+     * 查询申请订单是否存在
+     * @param orderId
+     * @return
+     */
+    OrdercashApplyEntity query(Integer orderId);
 }

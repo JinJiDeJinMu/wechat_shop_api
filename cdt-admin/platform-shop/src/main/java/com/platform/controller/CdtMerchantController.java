@@ -111,4 +111,27 @@ public class CdtMerchantController extends BaseController {
 
         return R.ok().put("list", list);
     }
+
+
+    @RequestMapping("/open/{id}/{status}")
+    @RequiresPermissions("cdtmerchant:open")
+    @ResponseBody
+    public R open(@PathVariable("id") Long id,@PathVariable("status") Integer status){
+
+        if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
+
+            return R.error("不是超级管理员，没有权限！");
+        }
+
+        CdtMerchantEntity cdtMerchantEntity = cdtMerchantService.queryObject(id);
+        if(null == cdtMerchantEntity){
+
+            return R.error("商户不存在！");
+        }
+
+        cdtMerchantEntity.setCashStatus(status);
+        cdtMerchantService.update(cdtMerchantEntity);
+        return R.ok();
+    }
+
 }

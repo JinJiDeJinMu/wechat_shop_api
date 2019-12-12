@@ -25,6 +25,7 @@
         <result property="shopPhotos" column="shop_photos"/>
         <result property="openTime" column="open_time"/>
         <result property="shopStatus" column="shop_status"/>
+        <result property="cashStatus" column="cash_status"/>
         <result property="transportType" column="transport_type"/>
         <result property="fixedFreight" column="fixed_freight"/>
         <result property="fullFreeShipping" column="full_free_shipping"/>
@@ -53,6 +54,7 @@
 			`area`,
 			`pca_code`,
 			`shop_logo`,
+			`cash_status`,
 			`shop_photos`,
 			`open_time`,
 			`shop_status`,
@@ -81,6 +83,7 @@
         `shop_lat`,
         `shop_lng`,
         `shop_address`,
+        `cash_status`,
         `province`,
         `city`,
         `area`,
@@ -206,6 +209,7 @@
             <if test="shopPhotos != null">`shop_photos` = #{shopPhotos},</if>
             <if test="openTime != null">`open_time` = #{openTime},</if>
             <if test="shopStatus != null">`shop_status` = #{shopStatus},</if>
+            <if test="cashStatus != null">`cash_status` = #{cashStatus},</if>
             <if test="transportType != null">`transport_type` = #{transportType},</if>
             <if test="fixedFreight != null">`fixed_freight` = #{fixedFreight},</if>
             <if test="fullFreeShipping != null">`full_free_shipping` = #{fullFreeShipping},</if>

@@ -75,6 +75,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         param.put("sidx", "id");
         //查询列表数据
         Query query = new Query(param);
+        System.out.println("---------"+query);
         commentList = apiCommentV2Service.queryList(query);
         int total = apiCommentV2Service.queryTotal(query);
         ApiPageUtils pageUtil = new ApiPageUtils(commentList, total, query.getLimit(), query.getPage());

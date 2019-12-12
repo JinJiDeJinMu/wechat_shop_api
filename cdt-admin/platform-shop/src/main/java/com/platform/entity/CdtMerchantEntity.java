@@ -105,6 +105,11 @@ public class CdtMerchantEntity implements Serializable {
      * 店铺状态(-1:未开通 0: 停业中 1:营业中)，可修改
      */
     private Integer shopStatus;
+
+    /**
+     * 商家是否提现状态
+     */
+    private Integer cashStatus;
     /**
      * 0:商家承担运费; 1:买家承担运费
      */

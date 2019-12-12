@@ -4,7 +4,9 @@ import com.chundengtai.base.result.Result;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.CdtCustomerServiceVo;
 import com.platform.entity.CdtMerchantEntity;
+import com.platform.entity.GoodsVo;
 import com.platform.service.ApiCdtCustomerServiceService;
+import com.platform.service.ApiGoodsService;
 import com.platform.service.CdtMerchantService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
@@ -32,6 +34,9 @@ public class ApiCdtCustomerServiceController {
 
     @Autowired
     private CdtMerchantService cdtMerchantService;
+
+    @Autowired
+    private ApiGoodsService apiGoodsService;
 
     /**
      * 查看列表
@@ -119,7 +124,13 @@ public class ApiCdtCustomerServiceController {
     @RequestMapping("/cdtMechant/{goodsId}")
     @ResponseBody
     public R queryList(@PathVariable("goodsId") Integer goodsId) {
-        CdtMerchantEntity cdtMerchantEntity = cdtMerchantService.queryByGoodsId(goodsId);
+
+        GoodsVo goodsVo = apiGoodsService.queryObject(goodsId);
+        CdtMerchantEntity cdtMerchantEntity = new CdtMerchantEntity();
+        if(goodsVo.getMerchantId() >0){//判断商品是不是管理员添加
+            cdtMerchantEntity = cdtMerchantService.queryByGoodsId(goodsId);
+        }
+        System.out.println("cdt------"+cdtMerchantEntity);
         return R.ok().put("merchant",cdtMerchantEntity);
     }
 }

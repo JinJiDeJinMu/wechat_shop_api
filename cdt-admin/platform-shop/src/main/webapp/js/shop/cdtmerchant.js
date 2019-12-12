@@ -5,7 +5,7 @@ $(function () {
             {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
             {label: '名称(数字、中文，英文(可混合，不可有特殊字符)，可修改)、不唯一', name: 'shopName', index: 'shop_name', width: 80},
             // {label: '用户id', name: 'userId', index: 'user_id', width: 80},
-            {label: '类型', name: 'shopType', index: 'shop_type', width: 80},
+            {label: '类型', name: 'shopType', index: 'shop_type', width: 50},
             // {label: '简介(可修改)', name: 'intro', index: 'intro', width: 80},
             // {label: '公告(可修改)', name: 'shopNotice', index: 'shop_notice', width: 80},
             // {label: '店铺行业(餐饮、生鲜果蔬、鲜花等)', name: 'shopIndustry', index: 'shop_industry', width: 80},
@@ -46,7 +46,7 @@ $(function () {
                 }
             },
             {
-                label: '运费', name: 'transportType', index: 'transport_type', width: 80,
+                label: '运费', name: 'transportType', index: 'transport_type', width: 50,
                 formatter: function (value) {
                     if (value === 0) {
                         return "商家承担运费";
@@ -68,7 +68,22 @@ $(function () {
                         return "关闭";
                     }
                 }
-            }]
+            },
+            {
+                label: '提现功能', name: 'cashStatus', index: 'cash_status', width: 80,
+                formatter: function (value) {
+                    if (value === 0) {
+                        return "未开通";
+                    } else if (value === 1) {
+                        return "已开通";
+                    } else if (value === 2) {
+                        return "已冻结";
+                    } else {
+                        return "其他";
+                    }
+                }
+            }
+        ]
     });
 });
 
@@ -99,8 +114,40 @@ let vm = new Vue({
             vm.title = "新增";
             vm.cdtMerchant = {};
         },
+        open: function () {
+            var id = getSelectedRow("#jqGrid");
+            if (id == null) {
+                return;
+            }
+            Ajax.request({
+                url: "../cdtmerchant/open/" + id +"/1",
+                async: true,
+                successCallback: function (r) {
+                    if(r.code ==0){
+                        alert("开通成功");
+                    }
+                    vm.reload();
+                }
+            });
+        },
+        close: function () {
+            var id = getSelectedRow("#jqGrid");
+            if (id == null) {
+                return;
+            }
+            Ajax.request({
+                url: "../cdtmerchant/open/" + id +"/2",
+                async: true,
+                successCallback: function (r) {
+                    if(r.code ==0){
+                        alert("冻结成功");
+                    }
+                    vm.reload();
+                }
+            });
+        },
         update: function (event) {
-            let id = getSelectedRow("#jqGrid");
+            var id = getSelectedRow("#jqGrid");
             if (id == null) {
                 return;
             }
@@ -110,7 +157,7 @@ let vm = new Vue({
             vm.getInfo(id)
         },
         saveOrUpdate: function (event) {
-            let url = vm.cdtMerchant.id == null ? "../cdtmerchant/save" : "../cdtmerchant/update";
+            var url = vm.cdtMerchant.id == null ? "../cdtmerchant/save" : "../cdtmerchant/update";
             Ajax.request({
                 url: url,
                 params: JSON.stringify(vm.cdtMerchant),

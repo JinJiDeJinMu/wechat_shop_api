@@ -28,7 +28,7 @@ $(function () {
         url: url,
         datatype: "json",
         colModel: [
-            {label: 'id', name: 'id', index: 'id', key: true,hidden: true},
+            {label: 'id', name: 'id', index: 'id', key: true,hidden:true},
             {label: '订单号', name: 'orderSn', index: 'order_sn',align: 'center', width: 100},
             {label: '会员', name: 'userName', index: 'user_name',align: 'center',width: 80},
             {
@@ -151,7 +151,7 @@ $(function () {
     });
 });
 
-let vm = new Vue({
+var vm = new Vue({
     el: '#rrapp',
     data: {
         showList: true,
@@ -171,9 +171,22 @@ let vm = new Vue({
         query: function () {
             vm.reload();
     },
+        review: function(){
+            var id = getSelectedRow("#jqGrid");
+            if (id == null) {
+                return;
+            }
+            Ajax.request({
+                url: "../ordercashapply/save/" + id,
+                async: true,
+                successCallback: function (r) {
+                    alert(r.toString());
+                }
+            });
+        },
 
         sendOrderComplete: function (event) {
-            let id = getSelectedRow("#jqGrid");
+            var id = getSelectedRow("#jqGrid");
             if (id == null) {
                 return;
             }
@@ -188,7 +201,7 @@ let vm = new Vue({
             });
         },
         sendGoods: function (event) {
-            let id = getSelectedRow("#jqGrid");
+            var id = getSelectedRow("#jqGrid");
             if (id == null) {
                 return;
             }
@@ -203,7 +216,7 @@ let vm = new Vue({
             });
         },
         confirm: function (event) {
-            let id = getSelectedRow("#jqGrid");
+            var id = getSelectedRow("#jqGrid");
             if (id == null) {
                 return;
             }
@@ -239,7 +252,7 @@ let vm = new Vue({
         reload: function (event) {
             vm.showList = true;
             vm.detail = false;
-            let page = $("#jqGrid").jqGrid('getGridParam', 'page');
+            var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
                 postData: {
                     'orderSn': vm.q.orderSn,
@@ -271,7 +284,7 @@ let vm = new Vue({
         }
     },
     created: function () {
-        let vue = this;
+        var vue = this;
         Ajax.request({
             url: "../shipping/queryAll",
             async: true,

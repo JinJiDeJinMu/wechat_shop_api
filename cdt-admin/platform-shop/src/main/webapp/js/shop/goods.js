@@ -413,7 +413,6 @@ var vm = new Vue({
                     successCallback: function (r) {
                         alert('操作成功', function (index) {
                             vm.reload();
-                            ;
                         });
                     }
                 });
