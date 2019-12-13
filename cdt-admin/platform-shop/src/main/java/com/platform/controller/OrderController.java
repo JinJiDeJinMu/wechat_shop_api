@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,7 @@ public class OrderController extends BaseController {
         SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
         // 查询列表数据
         Query query = new Query(params);
+        System.out.println("====="+query);
         if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
             query.put("merchantId", sysUserEntity.getMerchantId());
         }
