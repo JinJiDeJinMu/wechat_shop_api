@@ -191,7 +191,7 @@ public class OrdercashApplyController {
                 ordercashApplyEntity.setOperator(ShiroUtils.getUserEntity().getUserId());
                 ordercashApplyEntity.setOperatorName(ShiroUtils.getUserEntity().getUsername());
                 //修改提现订单申请状态
-                ordercashApplyService.update(ordercashApplyEntity);
+
                 //微信转账
                 //提现账号
                 UserEntity userEntity = userService.queryObject(cdtMerchantEntity.getUserId());
@@ -199,8 +199,9 @@ public class OrdercashApplyController {
                 boolean flag = ordercashApplyService.wechatMoneyToUser(userEntity,money);
                 System.out.println("======="+flag);
                 if(flag){
-                return R.ok(CashApplyENUM.ORDER_CASH_SUCCESS.getMsg());}
-                return R.ok("微信转账失败");
+                    ordercashApplyService.update(ordercashApplyEntity);
+                    return R.ok(CashApplyENUM.ORDER_CASH_SUCCESS.getMsg());}
+                    return R.ok("微信转账失败");
 
             }
             return R.ok(CashApplyENUM.ORDER_CASH_REBACK.getMsg());
