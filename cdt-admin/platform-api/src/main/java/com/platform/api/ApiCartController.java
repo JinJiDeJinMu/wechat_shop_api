@@ -457,9 +457,9 @@ public class ApiCartController extends ApiBaseAction {
                 cartVoList = cartService.queryCheckedByUserIdAndMerId(map);
                 merCartVo.setCartVoList(cartVoList);
                 //获取用户可用优惠券列表
-                List<CouponVo> couponVos = apiCouponService.queryUserCoupons(map);
-                List<CouponVo> validCouponVos = apiCouponService.getValidUserCoupons(map);
-                merCartVo.setUserCouponList(validCouponVos);
+//                List<CouponVo> couponVos = apiCouponService.queryUserCoupons(map);
+//                List<CouponVo> validCouponVos = apiCouponService.getValidUserCoupons(map);
+//                merCartVo.setUserCouponList(validCouponVos);
                 merCartVoList.add(merCartVo);
             }
         } else { // 是直接购买的
@@ -478,7 +478,12 @@ public class ApiCartController extends ApiBaseAction {
             cartVo.setGoods_name(productInfo.getGoods_name());
             cartVo.setNumber(goodsVO.getNumber());
             cartVo.setRetail_price(productInfo.getRetail_price());
-            cartVo.setList_pic_url(productInfo.getList_pic_url());
+            if (StringUtils.isNullOrEmpty(productInfo.getList_pic_url())) {
+                cartVo.setList_pic_url(goods.getPrimary_pic_url());
+            } else {
+                cartVo.setList_pic_url(productInfo.getList_pic_url());
+            }
+
             checkedGoodsList.add(cartVo);
 
             //计算运费
