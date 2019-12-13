@@ -210,6 +210,6 @@
         select * from nideshop_cart where user_id=#{user_id} and checked = 1 and merchant_id=#{merchantId}
     </select>
     <select id="queryMerchantName" parameterType="java.lang.Long" resultType="java.lang.String">
-        select merchant_name from sys_user where merchant_id=#{merchantId}
+        select shop_name from cdt_merchant where id=#{merchantId}
     </select>
 </mapper>

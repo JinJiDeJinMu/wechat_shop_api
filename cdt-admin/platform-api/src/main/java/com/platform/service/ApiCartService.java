@@ -5,6 +5,7 @@ import com.platform.entity.CartVo;
 import com.platform.entity.MerCartVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -143,6 +144,9 @@ public class ApiCartService {
     }
 
     public String queryMerchantName(Long merchantId) {
-       return  cartDao.queryMerchantName(merchantId);
+        String shopName = cartDao.queryMerchantName(merchantId);
+        if (StringUtils.isEmpty(shopName))
+            return "未名严选";
+        return shopName;
     }
 }
