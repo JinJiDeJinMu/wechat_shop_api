@@ -9,6 +9,7 @@
         <result property="goodId" column="good_id"/>
         <result property="content" column="content"/>
         <result property="commentTime" column="comment_time"/>
+        <result property="createTime" column="create_time"/>
         <result property="starLevel" column="star_level"/>
         <result property="userId" column="user_id"/>
         <result property="status" column="status"/>
