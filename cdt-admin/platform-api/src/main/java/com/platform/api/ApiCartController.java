@@ -196,13 +196,16 @@ public class ApiCartController extends ApiBaseAction {
                 }
             }
 
-
             cartInfo = new CartVo();
             cartInfo.setGoods_id(goodsId);
             cartInfo.setProduct_id(productId);
             cartInfo.setGoods_sn(productInfo.getGoods_sn());
             cartInfo.setGoods_name(goodsInfo.getName());
-            cartInfo.setList_pic_url(goodsInfo.getList_pic_url());
+            if (StringUtils.isNullOrEmpty(goodsInfo.getList_pic_url())) {
+                cartInfo.setList_pic_url(goodsInfo.getList_pic_url());
+            } else {
+                cartInfo.setList_pic_url(goodsInfo.getPrimary_pic_url());
+            }
             cartInfo.setNumber(number);
             cartInfo.setSession_id("1");
             cartInfo.setUser_id(loginUser.getUserId());
