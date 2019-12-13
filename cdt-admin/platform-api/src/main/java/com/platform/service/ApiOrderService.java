@@ -194,6 +194,7 @@ public class ApiOrderService {
                     orderGoodsVo.setGoods_sn(goodsItem.getGoods_sn());
                     orderGoodsVo.setProduct_id(goodsItem.getProduct_id());
                     orderGoodsVo.setGoods_name(goodsItem.getGoods_name());
+
                     orderGoodsVo.setList_pic_url(goodsItem.getList_pic_url());
                     orderGoodsVo.setMarket_price(goodsItem.getMarket_price());
                     orderGoodsVo.setRetail_price(goodsItem.getRetail_price());
@@ -276,7 +277,11 @@ public class ApiOrderService {
                 orderGoodsVo.setGoods_sn(productInfo.getGoods_sn());
                 orderGoodsVo.setProduct_id(goodsVo.getProductId());
                 orderGoodsVo.setGoods_name(productInfo.getGoods_name());
-                orderGoodsVo.setList_pic_url(productInfo.getList_pic_url());
+                if (StringUtils.isEmpty(productInfo.getList_pic_url())) {
+                    orderGoodsVo.setList_pic_url(goods.getPrimary_pic_url());
+                } else {
+                    orderGoodsVo.setList_pic_url(productInfo.getList_pic_url());
+                }
                 orderGoodsVo.setMarket_price(productInfo.getMarket_price());
                 orderGoodsVo.setRetail_price(productInfo.getRetail_price());
                 orderGoodsVo.setNumber(goodsVo.getNumber());
