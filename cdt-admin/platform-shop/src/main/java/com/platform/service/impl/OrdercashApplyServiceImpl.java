@@ -87,6 +87,7 @@ public class OrdercashApplyServiceImpl implements OrdercashApplyService {
         String openId = userEntity.getWeixinOpenid();
         String name = userEntity.getRealName();
         String txKey = RedisUtils.get("backtx"+userEntity.getMerchantId());
+        System.out.println(txKey);
         if(StringUtils.isNotBlank(txKey)) {
             return false;
         }
