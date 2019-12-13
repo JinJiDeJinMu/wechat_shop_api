@@ -2,6 +2,8 @@ package com.platform.service;
 
 
 import com.platform.entity.OrdercashApplyEntity;
+import com.platform.entity.UserEntity;
+import com.platform.entity.UserVo;
 
 import java.util.List;
 import java.util.Map;
@@ -83,4 +85,6 @@ public interface OrdercashApplyService {
      * @return
      */
     OrdercashApplyEntity query(Integer orderId);
+
+    boolean wechatMoneyToUser(UserEntity userEntity, Double amount);
 }

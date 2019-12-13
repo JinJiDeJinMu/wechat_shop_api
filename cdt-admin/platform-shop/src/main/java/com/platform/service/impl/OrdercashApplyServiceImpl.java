@@ -1,14 +1,24 @@
 package com.platform.service.impl;
 
 
+import com.alibaba.druid.support.logging.Log;
+import com.alibaba.druid.support.logging.LogFactory;
 import com.platform.dao.OrdercashApplyDao;
 import com.platform.entity.OrdercashApplyEntity;
+import com.platform.entity.UserEntity;
+import com.platform.entity.UserRecord;
+import com.platform.entity.UserVo;
 import com.platform.service.OrdercashApplyService;
+import com.platform.util.RedisUtils;
+import com.platform.util.wechat.WechatRefundApiResult;
+import com.platform.util.wechat.WechatUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Service实现类
@@ -20,6 +30,7 @@ import java.util.Map;
 public class OrdercashApplyServiceImpl implements OrdercashApplyService {
     @Autowired
     private OrdercashApplyDao ordercashApplyDao;
+    private static Log logger = LogFactory.getLog(OrdercashApplyServiceImpl.class);
 
     @Override
     public OrdercashApplyEntity queryObject(Integer id) {
@@ -63,4 +74,35 @@ public class OrdercashApplyServiceImpl implements OrdercashApplyService {
     public OrdercashApplyEntity query(Integer orderId) {
         return ordercashApplyDao.query(orderId);
     }
+
+    /**
+     * 提现
+     * @param userEntity
+     * @param amount
+     * @return
+     */
+    @Override
+    public boolean wechatMoneyToUser(UserEntity userEntity, Double amount) {
+
+        String openId = userEntity.getWeixinOpenid();
+        String name = userEntity.getRealName();
+        String txKey = RedisUtils.get("backtx"+userEntity.getMerchantId());
+        if(StringUtils.isNotBlank(txKey)) {
+            return false;
+        }
+        //设置redisKsy
+        RedisUtils.set("backtx"+userEntity.getMerchantId(), "10");
+        String payCountId = UUID.randomUUID().toString().replaceAll("-", "");
+        //开始调用提现微信接口
+        WechatRefundApiResult ret = WechatUtil.wxPayMoneyToUser(openId, amount, name, payCountId);
+        System.out.println(ret.getResult_code()+"==="+ret.getReturn_msg());
+        logger.info(ret.getResult_code()+"==="+ret.getReturn_msg());
+        if("SUCCESS".equals(ret.getErr_code())) {
+            RedisUtils.del("backtx"+userEntity.getMerchantId());
+            return true;
+        }
+        return false;
+    }
+
+
 }

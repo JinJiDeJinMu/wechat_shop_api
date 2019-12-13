@@ -39,12 +39,11 @@ public class OrderController extends BaseController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("order:list")
+    //@RequiresPermissions("order:list")
     public R list(@RequestParam Map<String, Object> params) {
         SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
         // 查询列表数据
         Query query = new Query(params);
-        System.out.println("====="+query);
         if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
             query.put("merchantId", sysUserEntity.getMerchantId());
         }
