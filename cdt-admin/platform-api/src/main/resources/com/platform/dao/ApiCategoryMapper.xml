@@ -53,7 +53,7 @@
             </foreach>
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>

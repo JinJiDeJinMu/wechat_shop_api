@@ -18,7 +18,7 @@
         LEFT JOIN USER_TABLES
         ON USER_TABLES.TABLE_NAME = USER_TAB_COMMENTS.TABLE_NAME
         WHERE 1 = 1
-        <if test="tableName != null and tableName.trim() != ''">
+        <if test="tableName != null and tableName != ''">
             AND USER_TABLES.table_Name LIKE concat(concat('%', #{tableName}), '%')
         </if>
         )
@@ -34,7 +34,7 @@
         LEFT JOIN USER_TABLES
         ON USER_TABLES.TABLE_NAME = USER_TAB_COMMENTS.TABLE_NAME
         WHERE 1 = 1
-        <if test="tableName != null and tableName.trim() != ''">
+        <if test="tableName != null and tableName != ''">
             and USER_TAB_COMMENTS.table_name like concat(concat('%', #{tableName}), '%')
         </if>
     </select>

@@ -10,7 +10,7 @@
 	<select id="queryList" resultType="com.platform.entity.SysRoleEntity">
 		select r.*, (select d.name from sys_dept d where d.dept_id = r.dept_id) deptName from sys_role r
 		<where>
-			<if test="roleName != null and roleName.trim() != ''">
+            <if test="roleName != null and roleName != ''">
 				and `role_name` like concat('%',#{roleName},'%')
 			</if>
 			<if test="createUserId != null">
@@ -18,7 +18,7 @@
 			</if>
 		</where>
 		<choose>
-			<when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
 				order by r.${sidx} ${order}
 			</when>
 			<otherwise>
@@ -33,7 +33,7 @@
 	<select id="queryTotal" resultType="int">
 		select count(*) from sys_role 
 		<where>
-			<if test="roleName != null and roleName.trim() != ''">
+            <if test="roleName != null and roleName != ''">
 				and `role_name` like concat('%',#{roleName},'%') 
 			</if>
 			<if test="createUserId != null">

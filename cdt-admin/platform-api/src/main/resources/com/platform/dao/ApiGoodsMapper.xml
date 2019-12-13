@@ -122,7 +122,7 @@
             </foreach>
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>
@@ -196,7 +196,7 @@
             </foreach>
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>
@@ -254,7 +254,7 @@
         </if>
         group by a.id, a.name, a.list_pic_url, a.market_price, a.retail_price, a.goods_brief, b.id
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>
@@ -335,7 +335,7 @@
             </foreach>
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>

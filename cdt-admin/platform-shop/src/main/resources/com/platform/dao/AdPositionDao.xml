@@ -31,11 +31,11 @@
         `desc`
         from nideshop_ad_position
         WHERE 1=1
-        <if test="name != null and name.trim() != ''">
+        <if test="name != null and name != ''">
             AND name LIKE concat('%',#{name},'%')
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>
@@ -50,7 +50,7 @@
     <select id="queryTotal" resultType="int">
 		select count(*) from nideshop_ad_position
 		WHERE 1=1
-        <if test="name != null and name.trim() != ''">
+        <if test="name != null and name != ''">
             AND name LIKE concat('%',#{name},'%')
         </if>
 	</select>

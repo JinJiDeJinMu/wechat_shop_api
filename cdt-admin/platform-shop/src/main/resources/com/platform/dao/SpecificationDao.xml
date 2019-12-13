@@ -21,11 +21,11 @@
         <if test="merchant_id != null and merchant_id() != ''">
 			and merchant_id = #{merchant_id}
 		</if>
-        <if test="name != null and name.trim() != ''">
+        <if test="name != null and name != ''">
             AND name LIKE concat('%',#{name},'%')
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
 			<otherwise>
@@ -40,7 +40,7 @@
  	<select id="queryTotal" resultType="int">
 		select count(*) from nideshop_specification 
 		  WHERE 1=1 and merchant_id = #{merchant_id}
-        <if test="name != null and name.trim() != ''">
+        <if test="name != null and name != ''">
             AND name LIKE concat('%',#{name},'%')
         </if>
 	</select>

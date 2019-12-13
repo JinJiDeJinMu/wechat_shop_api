@@ -108,7 +108,7 @@
 
     <select id="queryGroupList" resultType="com.platform.entity.GroupBuyingEntity">
       	SELECT `id`, `goods_id`, `goods_name`, `group_num`, `success_num`, `types`, `merchant_id` FROM  `group_buying`   WHERE 1=1
-        <if test="goodsName != null and goodsName.trim() != ''">
+        <if test="goodsName != null and goodsName != ''">
             AND goods_name LIKE concat('%',#{goodsName},'%')
         </if>
        
@@ -119,7 +119,7 @@
             AND merchant_id = #{merchantId}
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>
@@ -133,7 +133,7 @@
     
      <select id="queryGroupTotal" resultType="int">
         select count(*) from `group_buying` WHERE 1=1
-       <if test="goodsName != null and goodsName.trim() != ''">
+         <if test="goodsName != null and goodsName != ''">
             AND goods_name LIKE concat('%',#{goodsName},'%')
         </if>
         <if test="types != null">
@@ -146,16 +146,16 @@
 
     <select id="queryTotal" resultType="int">
         select count(*) from nideshop_order WHERE 1=1
-        <if test="orderSn != null and orderSn.trim() != ''">
+        <if test="orderSn != null and orderSn != ''">
             AND order_sn LIKE concat('%',#{orderSn},'%')
         </if>
-        <if test="shippingStatus != null and shippingStatus.trim() != ''">
+        <if test="shippingStatus != null and shippingStatus != ''">
             AND shipping_status = #{shippingStatus}
         </if>
-        <if test="payStatus != null and payStatus.trim() != ''">
+        <if test="payStatus != null and payStatus != ''">
             AND pay_status = #{payStatus}
         </if>
-        <if test="orderStatus != null and orderStatus.trim() != ''">
+        <if test="orderStatus != null and orderStatus != ''">
             AND order_status = #{orderStatus}
         </if>
         <if test="goodsType != null and goodsType!= ''">
@@ -174,16 +174,16 @@
     
     <select id="getTotalSum" resultType="map">
         select sum(order_price) order_sum,sum(goods_price) goods_sum from nideshop_order WHERE 1=1
-        <if test="orderSn != null and orderSn.trim() != ''">
+        <if test="orderSn != null and orderSn != ''">
             AND order_sn LIKE concat('%',#{orderSn},'%')
         </if>
-        <if test="shippingStatus != null and shippingStatus.trim() != ''">
+        <if test="shippingStatus != null and shippingStatus != ''">
             AND shipping_status = #{shippingStatus}
         </if>
-        <if test="payStatus != null and payStatus.trim() != ''">
+        <if test="payStatus != null and payStatus != ''">
             AND pay_status = #{payStatus}
         </if>
-        <if test="orderStatus != null and orderStatus.trim() != ''">
+        <if test="orderStatus != null and orderStatus != ''">
             AND order_status = #{orderStatus}
         </if>
         <if test="goodsType != null and goodsType!= ''">

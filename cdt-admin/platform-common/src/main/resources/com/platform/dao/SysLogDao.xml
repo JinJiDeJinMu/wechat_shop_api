@@ -10,10 +10,10 @@
 	<select id="queryList" resultType="com.platform.entity.SysLogEntity">
 		select * from sys_log
 		<where>
-			<if test="key != null and key.trim() != ''">
+            <if test="key != null and key != ''">
 				and `username` like concat('%',#{key},'%') or `operation` like concat('%',#{key},'%')
 			</if>
-			<if test="operation != null and operation.trim() != ''">
+            <if test="operation != null and operation != ''">
 				`operation` like concat('%',#{operation},'%')
 			</if>
 		</where>
@@ -26,10 +26,10 @@
  	<select id="queryTotal" resultType="int">
 		select count(*) from sys_log
 		<where>
-			<if test="key != null and key.trim() != ''">
+            <if test="key != null and key != ''">
                 `username` like concat('%',#{key},'%') or `operation` like concat('%',#{key},'%')
 			</if>
-			<if test="operation != null and operation.trim() != ''">
+            <if test="operation != null and operation != ''">
 				and `operation` like concat('%',#{operation},'%')
 			</if>
 		</where>

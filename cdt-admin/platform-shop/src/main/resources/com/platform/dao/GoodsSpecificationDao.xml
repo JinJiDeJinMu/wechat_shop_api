@@ -39,7 +39,7 @@
         <if test="merchantId != null and merchantId != ''">
             and nideshop_goods_specification.merchant_id=#{merchantId}
         </if>
-        <if test="goodsName != null and goodsName.trim() != ''">
+        <if test="goodsName != null and goodsName != ''">
             AND nideshop_goods.name LIKE concat('%',#{goodsName},'%')
         </if>
         <if test="goodsId != null">
@@ -49,7 +49,7 @@
             AND nideshop_goods_specification.specification_id = #{specificationId}
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>
@@ -65,7 +65,7 @@
         select count(*) from nideshop_goods_specification
         LEFT JOIN nideshop_goods ON nideshop_goods.id = nideshop_goods_specification.goods_id
         WHERE nideshop_goods_specification.merchant_id=#{merchantId}
-        <if test="goodsName != null and goodsName.trim() != ''">
+        <if test="goodsName != null and goodsName != ''">
             AND nideshop_goods.name LIKE concat('%',#{goodsName},'%')
         </if>
         <if test="goodsId != null">

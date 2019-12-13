@@ -9,7 +9,7 @@
 	<select id="queryList" resultType="com.platform.entity.ScheduleJobEntity" >
 		select * from schedule_job
 		<where>
-			<if test="beanName != null and beanName.trim() != ''">
+            <if test="beanName != null and beanName != ''">
 				bean_name like concat('%', #{beanName}, '%') 
 			</if>
 		</where>
@@ -21,7 +21,7 @@
  	<select id="queryTotal" resultType="int">
 		select count(1) from schedule_job 
 		<where>
-			<if test="beanName != null and beanName.trim() != ''">
+            <if test="beanName != null and beanName != ''">
 				bean_name like concat('%', #{beanName}, '%') 
 			</if>
 		</where>

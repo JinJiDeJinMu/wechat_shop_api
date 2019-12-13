@@ -12,12 +12,12 @@
 			<if test="createUserId != null">
 				and `create_user_id` = #{createUserId} 
 			</if>
-			<if test="username != null and username.trim() != ''">
+            <if test="username != null and username != ''">
 				and u.`username` like concat('%',#{username},'%')
 			</if>
 		</where>
 		<choose>
-			<when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
 				order by u.${sidx} ${order}
 			</when>
 			<otherwise>
@@ -34,7 +34,7 @@
 		id,username name,dept_Id
 		from sys_user
 		WHERE 1=1
-		<if test="name != null and name.trim() != ''" >
+        <if test="name != null and name != ''">
 			AND username LIKE concat('%',#{name},'%')
 		</if>
 	</select>
@@ -45,10 +45,10 @@
 			<if test="createUserId != null">
 				and `create_user_id` = #{createUserId} 
 			</if>
-			<if test="username != null and username.trim() != ''">
+            <if test="username != null and username != ''">
 				and `username` like concat('%',#{username},'%') 
 			</if>
-			<if test="status != null and status.trim() != ''">
+            <if test="status != null and status != ''">
 				and `status` = #{status}
 			</if>
 		</where>

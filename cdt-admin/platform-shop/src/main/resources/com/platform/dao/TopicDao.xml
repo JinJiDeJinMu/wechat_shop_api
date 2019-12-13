@@ -52,11 +52,11 @@
         `topic_tag_id`
         from nideshop_topic
         WHERE 1=1
-        <if test="title != null and title.trim() != ''">
+        <if test="title != null and title != ''">
             AND title LIKE concat('%',#{title},'%')
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>
@@ -71,7 +71,7 @@
     <select id="queryTotal" resultType="int">
         select count(*) from nideshop_topic
         WHERE 1=1
-        <if test="title != null and title.trim() != ''">
+        <if test="title != null and title != ''">
             AND title LIKE concat('%',#{title},'%')
         </if>
     </select>

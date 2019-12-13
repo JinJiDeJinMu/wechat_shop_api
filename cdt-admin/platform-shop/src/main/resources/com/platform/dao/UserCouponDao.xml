@@ -44,10 +44,10 @@
         LEFT JOIN nideshop_user ON nideshop_user_coupon.user_id = nideshop_user.id
         LEFT JOIN nideshop_coupon ON nideshop_user_coupon.coupon_id = nideshop_coupon.id
         WHERE 1=1
-        <if test="userName != null and userName.trim() != ''">
+        <if test="userName != null and userName != ''">
             AND nideshop_user.username LIKE concat('%',#{userName},'%')
         </if>
-        <if test="couponName != null and couponName.trim() != ''">
+        <if test="couponName != null and couponName != ''">
             AND nideshop_coupon.name LIKE concat('%',#{couponName},'%')
         </if>
         <if test="userId != null and userId != ''">
@@ -57,7 +57,7 @@
             AND nideshop_user_coupon.merchant_id = #{merchantId}
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>
@@ -75,7 +75,7 @@
         LEFT JOIN nideshop_user ON nideshop_user_coupon.user_id = nideshop_user.id
         LEFT JOIN nideshop_coupon ON nideshop_user_coupon.coupon_id = nideshop_coupon.id
         WHERE 1=1
-        <if test="userName != null and userName.trim() != ''">
+        <if test="userName != null and userName != ''">
             AND nideshop_user.username LIKE concat('%',#{userName},'%')
         </if>
 		<if test="userId != null and userId != ''">
@@ -84,7 +84,7 @@
         <if test="merchantId != null and merchantId != ''">
             AND nideshop_user_coupon.merchant_id = #{merchantId}
         </if>
-        <if test="couponName != null and couponName.trim() != ''">
+        <if test="couponName != null and couponName != ''">
             AND nideshop_coupon.name LIKE concat('%',#{couponName},'%')
         </if>
     </select>

@@ -45,14 +45,14 @@
     <select id="queryList" resultType="com.platform.entity.SysMenuEntity">
         select m.*,(select p.name from sys_menu p where p.menu_id = m.parent_id) as parentName
         from sys_menu m WHERE 1=1
-        <if test="menuName != null and menuName.trim() != ''">
+        <if test="menuName != null and menuName != ''">
             and m.name like concat('%',#{menuName},'%')
         </if>
-        <if test="parentName != null and parentName.trim() != ''">
+        <if test="parentName != null and parentName != ''">
             AND exists(SELECT 1 FROM sys_menu WHERE m.parent_id=sys_menu.menu_id AND sys_menu.name LIKE concat('%',#{parentName},'%'))
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by m.${sidx} ${order}
             </when>
             <otherwise>
@@ -75,10 +75,10 @@
 
     <select id="queryTotal" resultType="int">
 		select count(*) from sys_menu m WHERE 1=1
-        <if test="menuName != null and menuName.trim() != ''">
+        <if test="menuName != null and menuName != ''">
             and m.name like concat('%',#{menuName},'%')
         </if>
-        <if test="parentName != null and parentName.trim() != ''">
+        <if test="parentName != null and parentName != ''">
             AND exists(SELECT 1 FROM sys_menu WHERE m.parent_id=sys_menu.menu_id AND sys_menu.name LIKE concat('%',#{parentName},'%'))
         </if>
 	</select>

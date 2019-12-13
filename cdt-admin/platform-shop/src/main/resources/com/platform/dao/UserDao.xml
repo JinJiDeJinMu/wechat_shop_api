@@ -90,17 +90,17 @@
         nideshop_user_level.name levelName
         from nideshop_user LEFT JOIN nideshop_user_level ON nideshop_user.user_level_id=nideshop_user_level.id
         WHERE 1=1
-        <if test="username != null and username.trim() != ''">
+        <if test="username != null and username != ''">
             and username like concat('%',#{username},'%')
         </if>
         <if test="promoterId != null and promoterId != 0">
             and promoter_id=#{promoterId}
         </if>
-        <if test="mobile != null and mobile.trim()!= ''">
+        <if test="mobile != null and mobile!= ''">
             and mobile=#{mobile}
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>
@@ -115,7 +115,7 @@
     <select id="queryTotal" resultType="int">
         select count(*) from nideshop_user
         WHERE 1=1
-        <if test="username != null and username.trim() != ''">
+        <if test="username != null and username != ''">
             and username like concat('%',#{username},'%')
         </if>
         <if test="promoterId != null and promoterId != 0">
