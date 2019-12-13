@@ -196,9 +196,11 @@ public class OrdercashApplyController {
                 //提现账号
                 UserEntity userEntity = userService.queryObject(cdtMerchantEntity.getUserId());
                 Double money = ordercashApplyEntity.getActualPrice().doubleValue();
-
-                if(ordercashApplyService.wechatMoneyToUser(userEntity,money)){
+                boolean flag = ordercashApplyService.wechatMoneyToUser(userEntity,money);
+                System.out.println("======="+flag);
+                if(flag){
                 return R.ok(CashApplyENUM.ORDER_CASH_SUCCESS.getMsg());}
+                return R.ok("微信转账失败");
 
             }
             return R.ok(CashApplyENUM.ORDER_CASH_REBACK.getMsg());
