@@ -26,14 +26,14 @@
         *
         from nideshop_attribute_category
         WHERE 1=1
-        <if test="name != null and name.trim() != ''">
+        <if test="name != null and name != ''">
             AND name LIKE concat('%', #{name},'%')
         </if>
-        <if test="enabled != null and enabled.trim() != ''">
+        <if test="enabled != null and enabled != ''">
             AND enabled = #{enabled}
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>

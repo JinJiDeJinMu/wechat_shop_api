@@ -102,10 +102,10 @@
 		nideshop_address  na
 		<where>
 			nc.address_user_id = na.id
-			<if test="uid != null and uid.trim() != ''">
+            <if test="uid != null and uid != ''">
 				and nc.u_id=#{uid}
 			</if>
-			<if test="uname != null and uname.trim() != ''">
+            <if test="uname != null and uname != ''">
 				and ( nc.u_name  like concat('%',#{uname},'%') or nc.mobile like concat('%',#{uname},'%'))
 			</if>
 			<if test="customerState != null">
@@ -115,7 +115,7 @@
 		</where>
 
 		<choose>
-			<when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
 				order by ${sidx} ${order}
 			</when>
 			<otherwise>
@@ -135,7 +135,7 @@
 		<where>
 			nc.address_user_id = na.id
 			and nc.u_id=#{uid}
-			<if test="uname != null and uname.trim() != ''">
+            <if test="uname != null and uname != ''">
 				and ( nc.u_name  like concat('%',#{uname},'%') or nc.mobile like concat('%',#{uname},'%'))
 			</if>
 		</where>
@@ -175,10 +175,10 @@
 		nideshop_address  na,nideshop_user us
 		<where>
 			nc.address_user_id = na.id AND us.id = nc.u_id
-			<if test="uname != null and uname.trim() != ''">
+            <if test="uname != null and uname != ''">
 				and ( nc.u_name  like concat('%',#{uname},'%') or nc.mobile like concat('%',#{uname},'%'))
 			</if>
-			<if test="wcname != null and wcname.trim() != ''">
+            <if test="wcname != null and wcname != ''">
 				and ( us.real_name  like concat('%',#{wcname},'%') or us.mobile like concat('%',#{wcname},'%'))
 			</if>
 			<if test="customerState != null">
@@ -191,7 +191,7 @@
 		</where>
 
 		<choose>
-			<when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
 				order by ${sidx} ${order}
 			</when>
 			<otherwise>
@@ -210,10 +210,10 @@
 		nideshop_address  na,nideshop_user us
 		<where>
 			nc.address_user_id = na.id AND us.id = nc.u_id
-			<if test="uname != null and uname.trim() != ''">
+            <if test="uname != null and uname != ''">
 				and ( nc.u_name  like concat('%',#{uname},'%') or nc.mobile like concat('%',#{uname},'%'))
 			</if>
-			<if test="wcname != null and wcname.trim() != ''">
+            <if test="wcname != null and wcname != ''">
 				and ( us.real_name  like concat('%',#{wcname},'%') or us.mobile like concat('%',#{wcname},'%'))
 			</if>
 			<if test="customerState != null">

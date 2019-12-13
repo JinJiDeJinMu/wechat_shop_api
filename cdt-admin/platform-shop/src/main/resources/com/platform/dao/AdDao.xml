@@ -50,11 +50,11 @@
         nideshop_ad_position.name ad_Position_Name
         from nideshop_ad LEFT JOIN nideshop_ad_position on nideshop_ad.ad_position_id = nideshop_ad_position.id
         where 1=1
-        <if test="name != null and name.trim() != ''">
+        <if test="name != null and name != ''">
             AND nideshop_ad.name LIKE concat('%',#{name},'%')
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>
@@ -69,7 +69,7 @@
     <select id="queryTotal" resultType="int">
 		select count(*) from nideshop_ad
 		WHERE 1=1
-        <if test="name != null and name.trim() != ''">
+        <if test="name != null and name != ''">
             AND name LIKE concat('%',#{name},'%')
         </if>
 	</select>

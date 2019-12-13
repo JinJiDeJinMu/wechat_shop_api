@@ -36,17 +36,17 @@
         from nideshop_attribute a LEFT JOIN nideshop_attribute_category ac
         ON a.attribute_category_id = ac.id
         WHERE 1=1
-        <if test="name != null and name.trim() != ''">
+        <if test="name != null and name != ''">
             AND a.name LIKE concat('%', #{name},'%')
         </if>
-        <if test="categoryName != null and categoryName.trim() != ''">
+        <if test="categoryName != null and categoryName != ''">
             AND ac.name LIKE concat('%', #{categoryName},'%')
         </if>
-        <if test="attributeCategoryId != null and attributeCategoryId.trim() != ''">
+        <if test="attributeCategoryId != null and attributeCategoryId != ''">
             AND a.attribute_category_id = #{attributeCategoryId}
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>

@@ -14,7 +14,7 @@
 			and d.dept_id in (${deptFilter})
 		</if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by d.${sidx} ${order}
             </when>
 			<otherwise>
@@ -64,7 +64,7 @@
 		dept_id id,name,dept_id
 		from sys_dept
 		WHERE 1=1
-		<if test="name != null and name.trim() != ''" >
+        <if test="name != null and name != ''">
 			AND name=#{name}
 		</if>
 	</select>

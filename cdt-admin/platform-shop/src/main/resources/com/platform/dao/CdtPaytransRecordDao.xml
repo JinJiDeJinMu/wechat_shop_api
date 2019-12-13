@@ -88,7 +88,7 @@
         <if test="channelId != null and channelId != ''">
             AND channel_id = #{channelId}
         </if>
-        <if test="name != null and name.trim() != ''">
+        <if test="name != null and name != ''">
             AND name LIKE concat('%',#{name},'%')
         </if>
         <if test="createDate != null and createDate!= ''">
@@ -98,7 +98,7 @@
             AND create_date &lt;= #{updateDate}
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>
@@ -113,7 +113,7 @@
     <select id="queryTotal" resultType="int">
         select count(*) from cdt_paytrans_record
         WHERE 1=1
-        <if test="name != null and name.trim() != ''">
+        <if test="name != null and name != ''">
             AND name LIKE concat('%',#{name},'%')
         </if>
     </select>

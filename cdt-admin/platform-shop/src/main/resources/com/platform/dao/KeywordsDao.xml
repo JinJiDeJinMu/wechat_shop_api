@@ -40,11 +40,11 @@
     		`type`
 		from nideshop_keywords
 		WHERE 1=1
-		<if test="keyword != null and keyword.trim() != ''">
+        <if test="keyword != null and keyword != ''">
 			AND keyword LIKE concat('%',#{keyword},'%')
 		</if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
 			<otherwise>
@@ -59,7 +59,7 @@
  	<select id="queryTotal" resultType="int">
 		select count(*) from nideshop_keywords
 		WHERE 1=1
-        <if test="keyword != null and keyword.trim() != ''">
+        <if test="keyword != null and keyword != ''">
             AND keyword LIKE concat('%',#{keyword},'%')
         </if>
 	</select>
