@@ -197,8 +197,8 @@ public class OrdercashApplyController {
                 UserEntity userEntity = userService.queryObject(cdtMerchantEntity.getUserId());
                 Double money = ordercashApplyEntity.getActualPrice().doubleValue();
 
-                ordercashApplyService.wechatMoneyToUser(userEntity,money);
-                return R.ok(CashApplyENUM.ORDER_CASH_SUCCESS.getMsg());
+                if(ordercashApplyService.wechatMoneyToUser(userEntity,money)){
+                return R.ok(CashApplyENUM.ORDER_CASH_SUCCESS.getMsg());}
 
             }
             return R.ok(CashApplyENUM.ORDER_CASH_REBACK.getMsg());
