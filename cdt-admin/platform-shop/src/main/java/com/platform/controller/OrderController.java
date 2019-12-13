@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class OrderController extends BaseController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("order:list")
+    //@RequiresPermissions("order:list")
     public R list(@RequestParam Map<String, Object> params) {
         SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
         // 查询列表数据

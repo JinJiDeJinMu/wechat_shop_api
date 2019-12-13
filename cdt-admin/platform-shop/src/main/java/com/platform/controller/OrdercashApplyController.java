@@ -6,9 +6,12 @@ import com.platform.constance.ShopShow;
 import com.platform.entity.CdtMerchantEntity;
 import com.platform.entity.OrderEntity;
 import com.platform.entity.OrdercashApplyEntity;
+import com.platform.entity.UserEntity;
 import com.platform.service.CdtMerchantService;
 import com.platform.service.OrderService;
 import com.platform.service.OrdercashApplyService;
+import com.platform.service.UserService;
+import com.platform.util.wechat.WechatUtil;
 import com.platform.utils.*;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -39,6 +42,9 @@ public class OrdercashApplyController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 查看列表
@@ -182,11 +188,16 @@ public class OrdercashApplyController {
 
                 ordercashApplyEntity.setEndTime(new Date());
                 ordercashApplyEntity.setStatus(1);
-                ordercashApplyEntity.setOperator(ShiroUtils.getUserEntity().getMerchantId());
+                ordercashApplyEntity.setOperator(ShiroUtils.getUserEntity().getUserId());
                 ordercashApplyEntity.setOperatorName(ShiroUtils.getUserEntity().getUsername());
                 //修改提现订单申请状态
                 ordercashApplyService.update(ordercashApplyEntity);
                 //微信转账
+                //提现账号
+                UserEntity userEntity = userService.queryObject(cdtMerchantEntity.getUserId());
+                Double money = ordercashApplyEntity.getActualPrice().doubleValue();
+
+                ordercashApplyService.wechatMoneyToUser(userEntity,money);
                 return R.ok(CashApplyENUM.ORDER_CASH_SUCCESS.getMsg());
 
             }

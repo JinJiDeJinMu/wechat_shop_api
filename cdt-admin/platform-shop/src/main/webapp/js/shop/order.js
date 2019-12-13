@@ -1,11 +1,13 @@
 $(function () {
-    let shippingStatus = getQueryString("shippingStatus");
-    let payStatus = getQueryString("payStatus");
-    let orderStatus = getQueryString("orderStatus");
-    let goodsType = getQueryString("goodsType");
-    let addTime = getQueryString("add_time");
-    let endTime = getQueryString("end_time");
-    let url = '../order/list';
+    var shippingStatus = getQueryString("shippingStatus");
+    var payStatus = getQueryString("payStatus");
+    var orderStatus = getQueryString("orderStatus");
+    var goodsType = getQueryString("goodsType");
+    var d = new Date(getQueryString("addTime"));
+    var addTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours()
+        + ':' + d.getMinutes() + ':' + d.getSeconds();
+    var endTime = getQueryString("endTime");
+    var url = '../order/list';
     if (shippingStatus) {
         url += '?shippingStatus=' + shippingStatus;
     }
