@@ -10,7 +10,6 @@ import com.platform.service.SysUserRoleService;
 import com.platform.service.SysUserService;
 import com.platform.utils.Constant;
 import com.platform.utils.RRException;
-import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,8 +87,9 @@ public class SysUserServiceImpl implements SysUserService {
     @Transactional
     public void update(SysUserEntity user) {
 
-
-        user.setPassword(new Sha256Hash(user.getPassword()).toHex());
+        if (!(user.getPassword().equals(user.getPassword1()))) {
+            user.setPassword(new Sha256Hash(user.getPassword()).toHex());
+        }
 
         sysUserDao.update(user);
 

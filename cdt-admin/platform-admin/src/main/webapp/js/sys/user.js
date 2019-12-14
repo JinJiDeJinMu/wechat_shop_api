@@ -55,6 +55,9 @@ var vm = new Vue({
             roleIdList: []
         },
         ruleValidate: {
+            password: [
+                {required: true, message: '密码不能为空', trigger: 'blur'}
+            ],
             username: [
                 {required: true, message: '姓名不能为空', trigger: 'blur'}
             ],

@@ -4,6 +4,7 @@ import com.platform.validator.group.AddGroup;
 import com.platform.validator.group.UpdateGroup;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -35,6 +36,20 @@ public class SysUserEntity implements Serializable {
      */
     private transient String password;
 
+    public String getPassword1() {
+        if (StringUtils.isEmpty(password1))
+            return password;
+        return password1;
+    }
+
+    public void setPassword1(String password1) {
+        this.password1 = password1;
+    }
+
+    /**
+     * 密码
+     */
+    private transient String password1;
     /**
      * 邮箱
      */
