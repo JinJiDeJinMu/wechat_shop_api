@@ -115,6 +115,12 @@ var vm = new Vue({
         ruleValidate: {
             name: [
                 {required: true, message: '名称不能为空', trigger: 'blur'}
+            ],
+            goodsSn: [
+                {required: true, message: '序列号不能为空', trigger: 'blur'}
+            ],
+            listPicUrl: [
+                {required: true, message: '首页列表显示页不能为空', trigger: 'blur'}
             ]
         },
         q: {
@@ -238,7 +244,8 @@ var vm = new Vue({
                 successTime: 0,
                 groupPrice: 1,
                 categoryName: '',
-                purchaseType:1
+                purchaseType: 1,
+                extraPrice: 0
             };
             $('#goodsDesc').editable('setHTML', '');
             vm.getCategory();

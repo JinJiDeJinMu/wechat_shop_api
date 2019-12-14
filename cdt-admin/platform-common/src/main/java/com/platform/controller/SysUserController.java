@@ -150,6 +150,7 @@ public class SysUserController extends AbstractController {
         ValidatorUtils.validateEntity(user, UpdateGroup.class);
 
         user.setCreateUserId(getUserId());
+
         sysUserService.update(user);
         MlsUserEntity2 mlsUserVo=new MlsUserEntity2();
         mlsUserVo.setFx(user.getFx());

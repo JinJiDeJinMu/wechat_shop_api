@@ -1,6 +1,7 @@
 package com.platform.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 /**
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * @author lipengjun
  * @date 2019-11-29 10:44:41
  */
+@NoArgsConstructor
 @Data
 public class ExpressOrderVo implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -66,7 +68,22 @@ public class ExpressOrderVo implements Serializable {
      * 配送时间
      */
     private String pickNumber;
+
+    /**
+     * 快递
+     */
     private String expressNo;
+    /**
+     * 取件快递
+     */
+    private String getGoodsExpress;
+
+    /**
+     * 取件地址
+     */
+    private String getGoodsAddress;
+
+
 
 
 }

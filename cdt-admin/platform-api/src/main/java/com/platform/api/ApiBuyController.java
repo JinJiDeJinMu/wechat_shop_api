@@ -86,6 +86,8 @@ public class ApiBuyController extends ApiBaseAction {
             expressOrderVo.setRemarks(jsonParam.getString("remark"));
             expressOrderVo.setPickNumber(jsonParam.getString("pressTime"));
             expressOrderVo.setExpressNo(jsonParam.getString("expressNo"));
+            expressOrderVo.setGetGoodsAddress(jsonParam.getString("getGoodsAddress"));
+            expressOrderVo.setGetGoodsExpress(jsonParam.getString("getGoodsexpress"));
             redisTemplate.opsForValue().set(CacheConstant.EXPRESS_GOODS_CACHE + loginUser.getUserId(), expressOrderVo);
             //apiExpressOrderService.save(expressOrderVo);
         }
