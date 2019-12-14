@@ -4,8 +4,7 @@ $(function () {
     var orderStatus = getQueryString("orderStatus");
     var goodsType = getQueryString("goodsType");
     var d = new Date(getQueryString("addTime"));
-    var addTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours()
-        + ':' + d.getMinutes() + ':' + d.getSeconds();
+    var addTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
     var endTime = getQueryString("endTime");
     var url = '../order/list';
     if (shippingStatus) {

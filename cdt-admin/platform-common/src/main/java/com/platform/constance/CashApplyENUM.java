@@ -13,7 +13,8 @@ public enum CashApplyENUM {
     ORDER_CASH_SUCCESS("订单提现审核通过!"),
     ORDER_CASH_REBACK("订单提现状态已通过或者驳回!"),
     ORDER_CASH_REJECT("订单提现审核驳回成功!"),
-    ORDER_CASH_NOREJECT("提现订单不是审核状态，不能驳回!")
+    ORDER_CASH_NOREJECT("提现订单不是审核状态，不能驳回!"),
+    WHAT_PAY_ERROR("微信提现到商家账号失败!")
     ;
 
     private String msg;

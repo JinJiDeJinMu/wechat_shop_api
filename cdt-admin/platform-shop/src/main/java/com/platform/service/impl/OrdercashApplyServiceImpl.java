@@ -84,21 +84,22 @@ public class OrdercashApplyServiceImpl implements OrdercashApplyService {
     @Override
     public boolean wechatMoneyToUser(UserEntity userEntity, Double amount) {
 
-        String openId = userEntity.getWeixinOpenid();
-        String name = userEntity.getRealName();
+        if(userEntity == null || userEntity.getMerchantId() == null || StringUtils.isNotBlank(userEntity.getRealName())){
+            logger.info("UserEntity is null or MerchantId is null or RealName is null");
+            return false;
+        }
         String txKey = RedisUtils.get("backtx"+userEntity.getMerchantId());
-        System.out.println(txKey);
         if(StringUtils.isNotBlank(txKey)) {
+            logger.info("redis key "+ "backtx"+userEntity.getMerchantId() +" exists");
             return false;
         }
         //设置redisKsy
-        RedisUtils.set("backtx"+userEntity.getMerchantId(), "10");
+        RedisUtils.set("backtx"+userEntity.getMerchantId(), "10",180);
         String payCountId = UUID.randomUUID().toString().replaceAll("-", "");
         //开始调用提现微信接口
-        WechatRefundApiResult ret = WechatUtil.wxPayMoneyToUser(openId, amount, name, payCountId);
-        System.out.println(ret.getResult_code()+"++==="+ret.getReturn_msg());
-        logger.info(ret.getResult_code()+"==="+ret.getReturn_msg());
-        if("SUCCESS".equals(ret.getErr_code())) {
+        WechatRefundApiResult ret = WechatUtil.wxPayMoneyToMerChant(userEntity.getWeixinOpenid(), amount, userEntity.getRealName(), payCountId);
+        logger.info("WechatRefundApiResult =" + ret);
+        if("SUCCESS".equals(ret.getResult_code())) {
             RedisUtils.del("backtx"+userEntity.getMerchantId());
             return true;
         }
