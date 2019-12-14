@@ -35,6 +35,16 @@ public class ProductEntity implements Serializable {
     //商品
     private String goodsName;
     private String specificationValue;
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
+    }
+
+    private String picUrl;
     private BigDecimal groupPrice;//团购价格(元)
     
     public BigDecimal getGroupPrice() {
