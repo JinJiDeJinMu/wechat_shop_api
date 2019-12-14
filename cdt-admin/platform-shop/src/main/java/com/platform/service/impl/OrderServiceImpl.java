@@ -1,12 +1,6 @@
 package com.platform.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.platform.dao.OrderDao;
 import com.platform.dao.ShippingDao;
 import com.platform.entity.GroupBuyingEntity;
@@ -14,6 +8,12 @@ import com.platform.entity.OrderEntity;
 import com.platform.entity.ShippingEntity;
 import com.platform.service.OrderService;
 import com.platform.utils.RRException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service("orderService")
@@ -84,10 +84,16 @@ public class OrderServiceImpl implements OrderService {
             throw new RRException("此订单未付款！");
         }
 
+        order = orderDao.queryObject(order.getId());
+        if (order.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode())
+                || order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode())) {
+            throw new RRException("此订单不是普通订单不能做发货操作！");
+        }
         ShippingEntity shippingEntity = shippingDao.queryObject(order.getShippingId());
         if (null != shippingEntity) {
             order.setShippingName(shippingEntity.getName());
         }
+
         order.setOrderStatus(300);//订单已发货
         order.setShippingStatus(1);//已发货
         return orderDao.update(order);
