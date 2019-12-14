@@ -1,20 +1,20 @@
 package com.platform.interceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.MlsUserEntity2;
 import com.platform.entity.UserVo;
 import com.platform.service.ApiUserService;
 import com.platform.service.MlsUserSer;
 import com.platform.utils.ApiRRException;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 权限(Token)验证
@@ -29,22 +29,20 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     private ApiUserService userService;
     @Autowired
 	private MlsUserSer mlsUserSer;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     public static final String LOGIN_USER_KEY = "LOGIN_USER_KEY";
     public static final String LOGIN_TOKEN_KEY = "X-Nideshop-Token";
 
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         //支持跨域请求
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-
-
 
         IgnoreAuth annotation;
         if (handler instanceof HandlerMethod) {
