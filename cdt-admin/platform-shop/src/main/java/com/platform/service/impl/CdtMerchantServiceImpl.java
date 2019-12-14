@@ -3,6 +3,7 @@ package com.platform.service.impl;
 import com.platform.dao.CdtMerchantDao;
 import com.platform.entity.CdtMerchantEntity;
 import com.platform.service.CdtMerchantService;
+import com.platform.service.KeygenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ import java.util.Map;
 public class CdtMerchantServiceImpl implements CdtMerchantService {
     @Autowired
     private CdtMerchantDao cdtMerchantDao;
+
+    @Autowired
+    private KeygenService keygenService;
 
     @Override
     public CdtMerchantEntity queryObject(Long id) {
@@ -37,7 +41,7 @@ public class CdtMerchantServiceImpl implements CdtMerchantService {
 
     @Override
     public int save(CdtMerchantEntity cdtMerchant) {
-        //cdtMerchant.setId(IdUtil.createIdbyUUID());
+        cdtMerchant.setId(keygenService.genNumber().longValue());
         return cdtMerchantDao.save(cdtMerchant);
     }
 
