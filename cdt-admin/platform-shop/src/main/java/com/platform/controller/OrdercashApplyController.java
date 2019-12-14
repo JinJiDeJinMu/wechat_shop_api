@@ -80,7 +80,6 @@ public class OrdercashApplyController {
      * 保存
      */
     @RequestMapping("/save/{id}")
-    @RequiresPermissions("ordercashapply:save")
     @ResponseBody
     public R save(@PathVariable Integer id) {
 
