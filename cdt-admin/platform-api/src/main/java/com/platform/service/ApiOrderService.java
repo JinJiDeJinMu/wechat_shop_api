@@ -250,7 +250,7 @@ public class ApiOrderService {
                 GoodsVo goods = goodsService.queryObject(goodId);
                 if (goods.getExtra_price() != null) {
                     freightPrice = freightPrice
-                            .add(goods.getExtra_price().multiply(new BigDecimal(goodsVo.getNumber())));
+                            .add(goods.getExtra_price().multiply(new BigDecimal(1)));
                 }
                 //计算反润金额(返利 + 返利比例 * 商品金额 * 商品数量)
                 BigDecimal brokerage_price = goods.getRetail_price()
