@@ -3,9 +3,8 @@ $(function () {
     var payStatus = getQueryString("payStatus");
     var orderStatus = getQueryString("orderStatus");
     var goodsType = getQueryString("goodsType");
-    var d = new Date(getQueryString("addTime"));
-    var addTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-    var endTime = getQueryString("endTime");
+    var addTime = (getQueryString("addTime"));
+    var endTime= getQueryString("endTime");
     var url = '../order/list';
     if (shippingStatus) {
         url += '?shippingStatus=' + shippingStatus;
@@ -62,6 +61,8 @@ $(function () {
                         return '订单已付款';
                     } else if (value == '206') {
                         return '待使用';
+                    } else if (value == '207') {
+                        return '待XX';
                     } else if (value == '300') {
                         return '订单已发货';
                     } else if (value == '301') {
