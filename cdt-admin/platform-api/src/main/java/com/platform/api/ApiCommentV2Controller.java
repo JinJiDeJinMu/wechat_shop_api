@@ -21,10 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Api(value = "窝边生活商品评论", tags = "窝边生活商品评论")
 @RestController
@@ -121,6 +118,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
     ) {
         CommentReq commentReq = new CommentReq();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
+        commentReq.setCreateTime(new Date());
         commentReq.setUserId(userId);
         commentReq.setOrderNo(orderNo);
         commentReq.setGoodId(goodId);

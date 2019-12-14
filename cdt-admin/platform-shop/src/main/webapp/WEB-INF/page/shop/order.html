@@ -38,16 +38,14 @@
                     </i-select>
                 </i-col>
                 <i-col span="4">
-                   <date-picker  v-model="q.addTime" type="datetime" placeholder="开始时间" format="yyyy-MM-dd HH:mm:ss" style="width: 200px"></date-picker>
+                   <date-picker  v-model="q.addTime"  type="datetime" placeholder="开始时间" format="yyyy-MM-dd HH:mm:ss" style="width: 200px"></date-picker>
                 </i-col>
                 <i-col span="4">
                     <date-picker  v-model="q.endTime" type="datetime" placeholder="结束时间" format="yyyy-MM-dd HH:mm:ss" style="width: 200px"></date-picker>
                 </i-col>
 
                 <i-button @click="query">查询</i-button>
-                #if($shiro.hasPermission("order:review"))
                 <i-button @click="review">提现</i-button>
-                #end
             </div>
             <div class="buttons-group">
                 #if($shiro.hasPermission("order:sendGoods"))
