@@ -94,7 +94,6 @@
     			`apply_name`,
     			`apply_time`,
     			`end_time`,
-    			`status`,
     			`remarks`,
     			`operator`,
     			`operator_name`          )
