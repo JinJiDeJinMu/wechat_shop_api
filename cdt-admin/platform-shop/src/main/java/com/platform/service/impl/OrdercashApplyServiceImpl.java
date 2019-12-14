@@ -84,7 +84,7 @@ public class OrdercashApplyServiceImpl implements OrdercashApplyService {
     @Override
     public boolean wechatMoneyToUser(UserEntity userEntity, Double amount) {
 
-        if(userEntity == null || userEntity.getMerchantId() == null || StringUtils.isBlank(userEntity.getRealName())){
+        if(userEntity == null || userEntity.getMerchantId() == null){
             logger.info("UserEntity is null or MerchantId is null or RealName is null");
             return false;
         }
