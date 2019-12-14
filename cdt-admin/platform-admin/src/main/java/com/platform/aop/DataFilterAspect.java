@@ -83,17 +83,19 @@ public class DataFilterAspect {
             if (StringUtils.isNotEmpty(deptAlias)) {
                 //取出登录用户部门权限
                 String alias = getAliasByUser(user.getUserId());
-                filterSql.append(deptAlias);
-                filterSql.append(" in ");
-                filterSql.append(" ( ");
-                filterSql.append(alias);
-                filterSql.append(" ) ");
-                if (StringUtils.isNotBlank(userAlias)) {
-                    if (dataFilter.self()) {
-                        filterSql.append(" or ");
+                if (StringUtils.isNotEmpty(alias)) {
+                    filterSql.append(deptAlias);
+                    filterSql.append(" in ");
+                    filterSql.append(" ( ");
+                    filterSql.append(alias);
+                    filterSql.append(" ) ");
+                    if (StringUtils.isNotBlank(userAlias)) {
+                        if (dataFilter.self()) {
+                            filterSql.append(" or ");
 
-                    } else {
-                        filterSql.append(" and ");
+                        } else {
+                            filterSql.append(" and ");
+                        }
                     }
                 }
             }

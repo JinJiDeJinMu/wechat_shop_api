@@ -1,7 +1,6 @@
 package com.platform.service.impl;
 
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
-import com.platform.annotation.DataFilter;
 import com.platform.dao.GoodsAttributeDao;
 import com.platform.dao.GoodsDao;
 import com.platform.dao.GoodsGalleryDao;
@@ -49,13 +48,13 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    @DataFilter(userAlias = "nideshop_goods.create_user_id", deptAlias = "nideshop_goods.create_user_dept_id")
+    //@DataFilter(userAlias = "nideshop_goods.create_user_id", deptAlias = "nideshop_goods.create_user_dept_id")
     public List<GoodsEntity> queryList(Map<String, Object> map) {
         return goodsDao.queryList(map);
     }
 
     @Override
-    @DataFilter(userAlias = "nideshop_goods.create_user_id", deptAlias = "nideshop_goods.create_user_dept_id")
+    //@DataFilter(userAlias = "nideshop_goods.create_user_id", deptAlias = "nideshop_goods.create_user_dept_id")
     public int queryTotal(Map<String, Object> map) {
         return goodsDao.queryTotal(map);
     }
