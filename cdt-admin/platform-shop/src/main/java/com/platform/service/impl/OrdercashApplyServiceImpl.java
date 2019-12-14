@@ -97,8 +97,8 @@ public class OrdercashApplyServiceImpl implements OrdercashApplyService {
         RedisUtils.set("backtx"+userEntity.getMerchantId(), "10",180);
         String payCountId = UUID.randomUUID().toString().replaceAll("-", "");
         //开始调用提现微信接口
-        WechatRefundApiResult ret = WechatUtil.wxPayMoneyToMerChant(userEntity.getWeixinOpenid(), amount, userEntity.getRealName(), payCountId);
-        logger.info("WechatRefundApiResult =" + ret);
+        WechatRefundApiResult ret = WechatUtil.wxPayMoneyToUser(userEntity.getWeixinOpenid(), amount, userEntity.getRealName(), payCountId);
+        logger.info("WechatRefundApiResult =" + ret.getResult_code()+"=="+ret.getReturn_msg());
         if("SUCCESS".equals(ret.getResult_code())) {
             RedisUtils.del("backtx"+userEntity.getMerchantId());
             return true;
