@@ -3,7 +3,9 @@ package com.platform.api;
 import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.platform.annotation.IgnoreAuth;
+import com.platform.annotation.LoginUser;
 import com.platform.entity.OrderVo;
+import com.platform.entity.UserVo;
 import com.platform.service.ApiOrderService;
 import com.platform.util.ApiBaseAction;
 import io.swagger.annotations.Api;
@@ -42,16 +44,19 @@ public class WriteOffController extends ApiBaseAction {
     @RequestMapping("/writeOffCodeExecute")
     @ResponseBody
     @IgnoreAuth
-    public Object writeOffCodeExecute(
-            @ApiParam(name = "orderNo", value = "订单号")
+    public Object writeOffCodeExecute(@LoginUser UserVo loginUser
+            , @ApiParam(name = "orderNo", value = "订单号")
             @RequestParam String orderNo,
-            @RequestParam Integer orderId,
-            @RequestParam Integer userId,
-            Integer merchantId,
-            @ApiParam(name = "timestamp", value = "时间戳") String timestamp,
-            @ApiParam(name = "tokenSgin", value = "token秘钥") String tokenSgin
+                                      @RequestParam Integer orderId,
+                                      @RequestParam Integer userId,
+                                      Integer merchantId,
+                                      @ApiParam(name = "timestamp", value = "时间戳") String timestamp,
+                                      @ApiParam(name = "tokenSgin", value = "token秘钥") String tokenSgin
     ) {
 
+        if (!merchantId.equals(loginUser.getMerchant_id().intValue())) {
+            return toResponsSuccess("您当前不是店铺管理员");
+        }
         //todo:核销订单验证参数加密
         //todo:核销订单验证权限
         //todo:核销订单更改状态
