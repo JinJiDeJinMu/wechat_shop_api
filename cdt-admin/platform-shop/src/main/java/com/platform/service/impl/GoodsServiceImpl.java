@@ -1,6 +1,6 @@
 package com.platform.service.impl;
 
-import com.platform.annotation.DataFilter;
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.platform.dao.GoodsAttributeDao;
 import com.platform.dao.GoodsDao;
 import com.platform.dao.GoodsGalleryDao;
@@ -13,7 +13,9 @@ import com.platform.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -46,13 +48,13 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    @DataFilter(userAlias = "nideshop_goods.create_user_id", deptAlias = "nideshop_goods.create_user_dept_id")
+    //@DataFilter(userAlias = "nideshop_goods.create_user_id", deptAlias = "nideshop_goods.create_user_dept_id")
     public List<GoodsEntity> queryList(Map<String, Object> map) {
         return goodsDao.queryList(map);
     }
 
     @Override
-    @DataFilter(userAlias = "nideshop_goods.create_user_id", deptAlias = "nideshop_goods.create_user_dept_id")
+    //@DataFilter(userAlias = "nideshop_goods.create_user_id", deptAlias = "nideshop_goods.create_user_dept_id")
     public int queryTotal(Map<String, Object> map) {
         return goodsDao.queryTotal(map);
     }
@@ -83,6 +85,11 @@ public class GoodsServiceImpl implements GoodsService {
         productEntity.setGoodsNumber(goods.getGoodsNumber());
         productEntity.setRetailPrice(goods.getRetailPrice());
         productEntity.setMarketPrice(goods.getMarketPrice());
+        if (StringUtils.isEmpty(goods.getListPicUrl())) {
+            productEntity.setPicUrl(goods.getPrimaryPicUrl());
+        } else {
+            productEntity.setPicUrl(goods.getListPicUrl());
+        }
         productEntity.setGoodsSpecificationIds("");
 
         if (goods.getMerchantId() != null) {
@@ -117,6 +124,9 @@ public class GoodsServiceImpl implements GoodsService {
         goods.setCreateUserId(user.getUserId());
         goods.setUpdateUserId(user.getUserId());
         goods.setUpdateTime(new Date());
+        if (goods.getAttributeCategory().equals(GoodsTypeEnum.EXPRESS_GET.getCode()) || (goods.getAttributeCategory().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()))) {
+            goods.setExtraPrice(BigDecimal.valueOf(0));
+        }
         return goodsDao.save(goods);
     }
 

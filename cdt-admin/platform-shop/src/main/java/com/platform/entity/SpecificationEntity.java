@@ -1,7 +1,6 @@
 package com.platform.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 
 /**
@@ -21,7 +20,7 @@ public class SpecificationEntity implements Serializable {
 	//排序
 	private Integer sortOrder;
     //商户ID
-    private Integer merchant_id;
+    private Long merchant_id;
 
 	/**
 	 * 设置：主键
@@ -59,10 +58,12 @@ public class SpecificationEntity implements Serializable {
 	public Integer getSortOrder() {
 		return sortOrder;
 	}
-	public Integer getMerchant_id() {
+
+    public Long getMerchant_id() {
 		return merchant_id;
 	}
-	public void setMerchant_id(Integer merchant_id) {
+
+    public void setMerchant_id(Long merchant_id) {
 		this.merchant_id = merchant_id;
 	}
 	

@@ -72,9 +72,8 @@ public class SpecificationController extends BaseController {
     @RequestMapping("/save")
     @RequiresPermissions("specification:save")
     public R save(@RequestBody SpecificationEntity specification) {
-    	specification.setMerchant_id(ShiroUtils.getUserEntity().getMerchantId().intValue());
+        specification.setMerchant_id(ShiroUtils.getUserEntity().getMerchantId());
         specificationService.save(specification);
-
         return R.ok();
     }
 
