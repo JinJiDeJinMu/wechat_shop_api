@@ -68,7 +68,7 @@ public class WechatUtil {
         //构建请求参数
         Map<Object, Object> params = payMoneyToUser(openid, bdpayMoney, userName,payCountId);
         String mapToXml = MapUtils.convertMap2Xml(params);
-        //请求微信
+        //请求微
         String reponseXml = sendorgPay(mapToXml, WechatConfig.getSslcsf());
         WechatRefundApiResult result = (WechatRefundApiResult) XmlUtil.xmlStrToBean(reponseXml, WechatRefundApiResult.class);
         return result;
@@ -379,4 +379,27 @@ public class WechatUtil {
         return reusltObj;
 
     }
+
+    /**
+     * 方法描述：商户提现到零钱
+     * @param openid		用户openId
+     * @param payMoney		支付金额
+     * @param userName		真实姓名
+     * @param payCountId	流水号，唯一
+     * @return
+     */
+    public static WechatRefundApiResult wxPayMoneyToMerChant(String openid, Double payMoney, String userName,String payCountId) {
+        //初始化请求微信服务器的配置信息包括appid密钥等
+        //转换金钱格式
+        BigDecimal bdpayMoney = new BigDecimal(payMoney, MathContext.DECIMAL32);
+        //构建请求参数
+        Map<Object, Object> params = payMoneyToUser(openid, bdpayMoney, userName,payCountId);
+        params.put("desc", "提现账户名"+userName+"，提现金额："+bdpayMoney);//转账备注
+        String mapToXml = MapUtils.convertMap2Xml(params);
+        //请求微
+        String reponseXml = sendorgPay(mapToXml, WechatConfig.getSslcsf());
+        WechatRefundApiResult result = (WechatRefundApiResult) XmlUtil.xmlStrToBean(reponseXml, WechatRefundApiResult.class);
+        return result;
+    }
+
 }

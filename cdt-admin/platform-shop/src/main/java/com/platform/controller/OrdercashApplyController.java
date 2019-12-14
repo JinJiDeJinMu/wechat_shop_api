@@ -102,6 +102,7 @@ public class OrdercashApplyController {
         if(null==cdtMerchantEntity || cdtMerchantEntity.getCashStatus() != 1){
             return R.error(CashApplyENUM.MERCHANT_NOOPEN_CASH.getMsg());
         }
+        //提现规则
 
         if(orderEntity.getPayStatus() == 2 && orderEntity.getOrderStatus() == 402){
             OrdercashApplyEntity ordercashApplyEntity = new OrdercashApplyEntity();
@@ -185,24 +186,19 @@ public class OrdercashApplyController {
 
             //查询订单申请提现状态
             if(ordercashApplyEntity.getStatus() == 0){
-
                 ordercashApplyEntity.setEndTime(new Date());
                 ordercashApplyEntity.setStatus(1);
                 ordercashApplyEntity.setOperator(ShiroUtils.getUserEntity().getUserId());
                 ordercashApplyEntity.setOperatorName(ShiroUtils.getUserEntity().getUsername());
-                //修改提现订单申请状态
 
                 //微信转账
-                //提现账号
                 UserEntity userEntity = userService.queryObject(cdtMerchantEntity.getUserId());
                 Double money = ordercashApplyEntity.getActualPrice().doubleValue();
-                boolean flag = ordercashApplyService.wechatMoneyToUser(userEntity,money);
-                System.out.println("======="+flag);
-                if(flag){
+                if(ordercashApplyService.wechatMoneyToUser(userEntity,money)){
                     ordercashApplyService.update(ordercashApplyEntity);
-                    return R.ok(CashApplyENUM.ORDER_CASH_SUCCESS.getMsg());}
-                    return R.ok("微信转账失败");
-
+                    return R.ok(CashApplyENUM.ORDER_CASH_SUCCESS.getMsg());
+                }
+                    return R.ok(CashApplyENUM.WHAT_PAY_ERROR.getMsg());
             }
             return R.ok(CashApplyENUM.ORDER_CASH_REBACK.getMsg());
     }
