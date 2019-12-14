@@ -156,8 +156,12 @@ public class ApiOrderService {
                     Integer goodId = cartItem.getGoods_id();
                     GoodsVo goods = goodsService.queryObject(goodId);
                     if (goods.getExtra_price() != null) {
+                        //todo:运费修复
+                        //freightPrice = freightPrice
+                        //        .add(goods.getExtra_price().multiply(new BigDecimal(cartItem.getNumber())));
+
                         freightPrice = freightPrice
-                                .add(goods.getExtra_price().multiply(new BigDecimal(cartItem.getNumber())));
+                                .add(goods.getExtra_price().multiply(new BigDecimal(1)));
                     }
                     //计算反润金额(返利 + 返利比例 * 商品金额 * 商品数量)
                     brokerage_price = brokerage_price.add(new BigDecimal(goods.getBrokerage_percent())
