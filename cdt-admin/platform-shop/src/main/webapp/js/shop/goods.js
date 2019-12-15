@@ -141,7 +141,8 @@ const defaultListQuery = {
 	page: 1,
 	sidx: '',
 	order: 'asc',
-	name: ''
+    name: '',
+    goodSn: ''
 };
 var setting = {
 	data: {
@@ -226,9 +227,9 @@ var vm = new Vue({
 			keyword: null
 		},
 		operates: [{
-			label: "商品上架",
-			value: "publishOn"
-		},
+            label: "商品上架",
+            value: "publishOn"
+        },
 			{
 				label: "商品下架",
 				value: "publishOff"
@@ -241,10 +242,10 @@ var vm = new Vue({
 				label: "取消新品",
 				value: "newOff"
 			},
-			{
-				label: "转移到分类",
-				value: "transferCategory"
-			},
+            // {
+            // 	label: "转移到分类",
+            // 	value: "transferCategory"
+            // },
 			{
 				label: "移入回收站",
 				value: "recycle"
@@ -274,7 +275,7 @@ var vm = new Vue({
 			label: '未审核'
 		}]
 	},
-	created: function () {
+    created: function () {
 		this.getList();
 		this.getMerchant();
 	},
@@ -316,24 +317,26 @@ var vm = new Vue({
 				return 'PC订单';
 			}
 		},
-		formatStatus(value) {
+        formatGoodsType(value) {
 			if (value === 1) {
-				return '待发货';
+                return '普通商品';
 			} else if (value === 2) {
-				return '已发货';
+                return '秒杀';
 			} else if (value === 3) {
-				return '已完成';
+                return '团购';
 			} else if (value === 4) {
-				return '已关闭';
+                return '砍价';
 			} else if (value === 5) {
-				return '无效订单';
+                return '快递代取';
+            } else if (value === 6) {
+                return '核销商品';
 			} else {
-				return '待付款';
+                return '普通';
 			}
 		},
 	},
 	methods: {
-		dateFormat: function (time) {
+        dateFormat: function (time) {
 			var date = new Date(time.addTime);
 			var year = date.getFullYear();
 			var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
@@ -344,13 +347,13 @@ var vm = new Vue({
 			// 拼接
 			return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
 		},
-		getList: function () {
+        getList: function () {
 			this.listLoading = false;
 			Ajax.request({
 				url: "../goods/list?limit=" + this.listQuery.limit + "&page=" + this.listQuery.page + "&sidx=" + this.listQuery
-					.sidx + "&order=" + this.listQuery.order,
+                    .sidx + "&name=" + this.listQuery.name + "&order=" + this.listQuery.order,
 				async: true,
-				successCallback: function (r) {
+                successCallback: function (r) {
 					console.log(r)
 					vm.listLoading = false;
 					vm.list = r.page.list;
@@ -358,6 +361,13 @@ var vm = new Vue({
 				}
 			});
 		},
+        getSelectRowIds() {
+            let ids = [];
+            for (let i = 0; i < this.multipleSelection.length; i++) {
+                ids.push(this.multipleSelection[i].id);
+            }
+            return ids;
+        },
 		handleBatchOperate() {
 			if (this.operateType == null) {
 				this.$message({
@@ -375,10 +385,7 @@ var vm = new Vue({
 				cancelButtonText: '取消',
 				type: 'warning'
 			}).then(() => {
-				let ids = [];
-				for (let i = 0; i < this.multipleSelection.length; i++) {
-					ids.push(this.multipleSelection[i].id);
-				}
+                let ids = this.getSelectRowIds();
 				switch (this.operateType) {
 					case this.operates[0].value:
 						this.updatePublishStatus(1, ids);
@@ -430,26 +437,40 @@ var vm = new Vue({
 			let ids = [];
 			ids.push(row.id);
 			console.log(JSON.stringify(row))
+
 			this.updatePublishStatus(row.isOnSale, ids);
+
 		},
 		handleNewStatusChange(index, row) {
 			let ids = [];
 			ids.push(row.id);
 			this.updateNewStatus(row.newStatus, ids);
 		},
-		handleSelectionChange: function (val) {
+        handleSelectionChange: function (val) {
 			vm.multipleSelection = val;
 		},
-		updatePublishStatus: function (status, ids) {
+        updatePublishStatus: function (status, ids) {
 			console.log(status);
 			console.log(ids);
 			if (status == 1) {
-				ids.forEach(this.enSale)
+                this.$confirm('确定要上架选中的商品?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    ids.forEach(this.enSale)
+                });
 			} else {
-				ids.forEach(this.unSale)
+                this.$confirm('确定要下架选中的商品?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    ids.forEach(this.unSale)
+                });
 			}
 		},
-		updateNewStatus: function (status, ids) {
+        updateNewStatus: function (status, ids) {
 			console.log(status)
 			console.log(ids)
 			console.log(JSON.stringify(row))
@@ -468,31 +489,26 @@ var vm = new Vue({
 			params.append('deleteStatus', deleteStatus);
 			this.del(ids);
 		},
-		enSale: function (item, index) {
+        enSale: function (item, index) {
 			if (item == null) {
 				item = getSelectedRow("#jqGrid");
 				return;
 			}
-			this.$confirm('确定要上架选中的商品?', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning'
-			}).then(() => {
-				Ajax.request({
-					type: "POST",
-					url: "../goods/enSale",
-					params: JSON.stringify(item),
-					contentType: "application/json",
-					type: 'POST',
-					successCallback: function () {
-						alert('提交成功', function (index) {
-							vm.reload();
-						});
-					}
-				});
+
+            Ajax.request({
+                type: "POST",
+                url: "../goods/enSale",
+                params: JSON.stringify(item),
+                contentType: "application/json",
+                type: 'POST',
+                successCallback: function () {
+                    alert('提交成功', function (index) {
+                        vm.reload();
+                    });
+                }
 			});
 		},
-		openSpe: function () {
+        openSpe: function () {
 			var id = getSelectedRow("#jqGrid");
 			if (id == null) {
 				return;
@@ -503,7 +519,7 @@ var vm = new Vue({
 				content: '../shop/goodsspecification.html?goodsId=' + id
 			})
 		},
-		openPro: function () {
+        openPro: function () {
 			var id = getSelectedRow("#jqGrid");
 			if (id == null) {
 				return;
@@ -514,7 +530,7 @@ var vm = new Vue({
 				content: '../shop/product.html?goodsId=' + id
 			});
 		},
-		unSale: function (item, index) {
+        unSale: function (item, index) {
 			if (item == null) {
 				item = getSelectedRow("#jqGrid");
 				return;
@@ -529,16 +545,16 @@ var vm = new Vue({
 					url: "../goods/unSale",
 					contentType: "application/json",
 					params: JSON.stringify(item),
-					successCallback: function (r) {
-						alert('操作成功', function (index) {
-							vm.reload();
-							;
+                    successCallback: function (r) {
+                        alert('操作成功', function (index) {
+                            vm.reload();
+                            ;
 						});
 					}
 				});
 			});
 		},
-		batDel: function () {
+        batDel: function () {
 			if (!this.checkSelected()) {
 				return;
 			}
@@ -550,7 +566,7 @@ var vm = new Vue({
 			this.del(ids);
 		},
 
-		del: function (ids) {
+        del: function (ids) {
 			if (ids == null) {
 				return;
 			}
@@ -559,18 +575,18 @@ var vm = new Vue({
 				url: "../goods/delete",
 				contentType: "application/json",
 				params: JSON.stringify(ids),
-				successCallback: function (r) {
-					alert('操作成功', function (index) {
+                successCallback: function (r) {
+                    alert('操作成功', function (index) {
 						vm.reload();
 					});
 				}
 			});
 		},
-		getInfo: function (id) {
+        getInfo: function (id) {
 			Ajax.request({
 				url: "../goods/info/" + id,
 				async: true,
-				successCallback: function (r) {
+                successCallback: function (r) {
 					vm.goods = r.goods;
 					vm.goods.isSecKill = r.goods.isSecKill + "";
 					$('#goodsDesc').editable('setHTML', vm.goods.goodsDesc);
@@ -578,15 +594,15 @@ var vm = new Vue({
 				}
 			});
 		},
-		reload: function (event) {
+        reload: function (event) {
 			vm.showList = true;
 			this.getList()
 			vm.handleReset('formValidate');
 		},
-		query: function () {
+        query: function () {
 			vm.reload();
 		},
-		add: function () {
+        add: function () {
 			vm.showList = false;
 			vm.title = "新增";
 			vm.uploadList = [];
@@ -624,7 +640,7 @@ var vm = new Vue({
 			vm.getCategories();
 			// vm.getAttributes('');
 		},
-		checkSelected: function () {
+        checkSelected: function () {
 			if (this.multipleSelection == null || this.multipleSelection.length < 1) {
 				this.$message({
 					message: '请选择要操作的商品',
@@ -635,14 +651,14 @@ var vm = new Vue({
 			}
 			return true;
 		},
-		batUpdate: function (event) {
+        batUpdate: function (event) {
 			if (!this.checkSelected()) {
 				return;
 			}
 			id = this.multipleSelection[0].id;
 			this.updateFun(id);
 		},
-		updateFun: function (id) {
+        updateFun: function (id) {
 			if (id == null) {
 				return;
 			}
@@ -659,11 +675,11 @@ var vm = new Vue({
 		/**
 		 * 获取品牌
 		 */
-		getBrands: function () {
+        getBrands: function () {
 			Ajax.request({
 				url: "../brand/queryAll",
 				async: true,
-				successCallback: function (r) {
+                successCallback: function (r) {
 					vm.brands = r.list;
 				}
 			});
@@ -671,43 +687,43 @@ var vm = new Vue({
 		/**
 		 * 获取单位
 		 */
-		getMacro: function () {
+        getMacro: function () {
 			Ajax.request({
 				url: "../sys/macro/queryMacrosByValue?value=goodsUnit",
 				async: true,
-				successCallback: function (r) {
+                successCallback: function (r) {
 					vm.macros = r.list;
 				}
 			});
 		},
-		getGoodsGallery: function (id) { //获取商品顶部轮播图
+        getGoodsGallery: function (id) { //获取商品顶部轮播图
 			Ajax.request({
 				url: "../goodsgallery/queryAll?goodsId=" + id,
 				async: true,
-				successCallback: function (r) {
+                successCallback: function (r) {
 					vm.uploadList = r.list;
 				}
 			});
 		},
-		getAttributeCategories: function () {
+        getAttributeCategories: function () {
 			Ajax.request({
 				url: "../attributecategory/queryAll",
 				async: true,
-				successCallback: function (r) {
+                successCallback: function (r) {
 					vm.attributeCategories = r.list;
 				}
 			});
 		},
-		getCategories: function () {
+        getCategories: function () {
 			Ajax.request({
 				url: "../category/getCategorySelect",
 				async: true,
-				successCallback: function (r) {
+                successCallback: function (r) {
 					vm.categories = r.list;
 				}
 			});
 		},
-		saveOrUpdate: function (event) {
+        saveOrUpdate: function (event) {
 			if (vm.goods.goodsSn == '') {
 				alert('序列号不能为空');
 				return false;
@@ -732,20 +748,20 @@ var vm = new Vue({
 				url: url,
 				contentType: "application/json",
 				params: JSON.stringify(vm.goods),
-				successCallback: function (r) {
-					alert('操作成功', function (index) {
+                successCallback: function (r) {
+                    alert('操作成功', function (index) {
 						vm.reload();
 					});
 				}
 			});
 		},
 
-		getCategory: function () {
+        getCategory: function () {
 			//加载分类树
 			Ajax.request({
 				url: "../category/queryAll",
 				async: true,
-				successCallback: function (r) {
+                successCallback: function (r) {
 					ztree = $.fn.zTree.init($("#categoryTree"), setting, r.list);
 					var node = ztree.getNodeByParam("id", vm.goods.categoryId);
 					if (node) {
@@ -759,13 +775,13 @@ var vm = new Vue({
 				}
 			});
 		},
-		categoryTree: function () {
+        categoryTree: function () {
 			openWindow({
 				title: "选择类型",
 				area: ['300px', '450px'],
 				content: jQuery("#categoryLayer"),
 				btn: ['确定', '取消'],
-				btn1: function (index) {
+                btn1: function (index) {
 					var node = ztree.getSelectedNodes();
 					//选择上级菜单
 					vm.goods.categoryId = node[0].id;
@@ -801,49 +817,49 @@ var vm = new Vue({
 			}
 			return check;
 		},
-		handleSubmit: function (name) {
-			handleSubmitValidate(this, name, function () {
+        handleSubmit: function (name) {
+            handleSubmitValidate(this, name, function () {
 				vm.saveOrUpdate()
 			});
 		},
-		handleFormatError: function (file) {
+        handleFormatError: function (file) {
 			this.$Notice.warning({
 				title: '文件格式不正确',
 				desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
 			});
 		},
-		handleMaxSize: function (file) {
+        handleMaxSize: function (file) {
 			this.$Notice.warning({
 				title: '超出文件大小限制',
 				desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
 			});
 		},
-		handleReset: function (name) {
+        handleReset: function (name) {
 			handleResetForm(this, name);
 		},
-		handleSuccessPicUrl: function (res, file) {
+        handleSuccessPicUrl: function (res, file) {
 			vm.goods.primaryPicUrl = file.response.url;
 		},
-		handleSuccessListPicUrl: function (res, file) {
+        handleSuccessListPicUrl: function (res, file) {
 			vm.goods.listPicUrl = file.response.url;
 		},
-		eyeImagePicUrl: function () {
+        eyeImagePicUrl: function () {
 			var url = vm.goods.primaryPicUrl;
 			eyeImage(url);
 		},
-		eyeImageListPicUrl: function () {
+        eyeImageListPicUrl: function () {
 			var url = vm.goods.listPicUrl;
 			eyeImage(url);
 		},
-		eyeImage: function (e) {
+        eyeImage: function (e) {
 			eyeImage($(e.target).attr('src'));
 		},
-		getMerchant: function () {
+        getMerchant: function () {
 			// alert("111");
 			Ajax.request({
 				url: "../cdtmerchant/queryAll",
 				async: true,
-				successCallback: function (r) {
+                successCallback: function (r) {
 					vm.merchants = r.list;
 				}
 			});

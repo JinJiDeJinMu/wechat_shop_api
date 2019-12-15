@@ -56,7 +56,7 @@
 				/api/**=noSessionCreation
 	        	/login.html=anon
 	        	/sys/login=anon
-	        	/captcha.jpg=anon
+                /yanzhengma.do=anon
 	        	/**=authc
 	        </value>
 	    </property>

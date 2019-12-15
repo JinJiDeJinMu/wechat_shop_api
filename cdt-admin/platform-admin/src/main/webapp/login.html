@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <script src="/js/babel.min.js"></script>
     <script src="/statics/libs/vue.min.js"></script>
-    <script src="/statics/libs/iview.min.js"></script>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
@@ -26,7 +25,6 @@
             fill: currentColor;
             overflow: hidden;
         }
-
         .login-form-layout {
             position: absolute;
             left: 0;
@@ -35,11 +33,9 @@
             margin: 140px auto;
             border-top: 10px solid #409EFF;
         }
-
         .login-title {
             text-align: center;
         }
-
         .login-center-layout {
             background: #409EFF;
             width: auto;
@@ -123,7 +119,7 @@
             </el-form-item>
         </el-form>
     </el-card>
-    <div class="login-center-layout" style="height: 300px;margin-top: 1px;"></div>
+    <div class="login-center-layout" style="height: 300px;margin-top: -1px;"></div>
 </div>
 <script type="text/javascript">
     var vm = new Vue({
@@ -156,9 +152,9 @@
                 dialogVisible: false,
                 supportDialogVisible: false,
                 username: 'admin',
-                password: 'admin',
+                password: '',
                 captcha: '',
-                src: 'captcha.jpg',
+                src: 'yanzhengma.do',
                 loading: false,
             }
         },
@@ -177,19 +173,19 @@
                 }
             },
             refreshCode: function () {
-                this.src = "captcha.jpg?t=" + $.now();
+                this.src = "yanzhengma.do?t=" + $.now();
             },
             login: function (event) {
-                if (vm.username == '') {
-                    iview.Message.warning("用户名为空");
+                if (this.username == '') {
+                    iview.Message.warning("用户名不能为空");
                     return false;
                 }
-                if (vm.password == '') {
-                    iview.Message.warning("密码为空");
+                if (this.password == '') {
+                    iview.Message.warning("密码不能为空");
                     return false;
                 }
-                if (vm.captcha == '') {
-                    iview.Message.warning("验证码为空");
+                if (this.captcha == '') {
+                    iview.Message.warning("验证码不能为空");
                     return false;
                 }
                 this.loading = true;
