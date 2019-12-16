@@ -37,6 +37,9 @@ public class GoodsController extends BaseController {
     public R list(@RequestParam Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
+        if (ShiroUtils.getUserEntity().getMerchantId() == null) {
+            return R.ok().put("list", null);
+        }
         if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
             query.put("merchantId", ShiroUtils.getUserEntity().getMerchantId());
         }

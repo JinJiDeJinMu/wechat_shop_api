@@ -104,7 +104,10 @@ public class CdtMerchantController extends BaseController {
     public R queryAll(@RequestParam Map<String, Object> params) {
 
         SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
-        if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
+        if (sysUserEntity.getMerchantId() == null) {
+            return R.ok().put("list", null);
+        }
+        if (sysUserEntity.getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
             params.put("merchant_id", sysUserEntity.getMerchantId());
         }
         List<CdtMerchantEntity> list = cdtMerchantService.queryList(params);
