@@ -109,8 +109,8 @@ public class ApiCommentV2Controller extends ApiBaseAction {
     })
     @IgnoreAuth
     @GetMapping("post")
+    @ResponseBody
     public Result<Object> post(
-//                               @LoginUser UserVo loginUser,
             @RequestParam Long userId,
             @RequestParam String orderNo,
             @RequestParam Integer goodId,

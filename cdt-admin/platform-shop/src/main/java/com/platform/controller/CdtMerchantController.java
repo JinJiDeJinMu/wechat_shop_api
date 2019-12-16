@@ -1,5 +1,6 @@
 package com.platform.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.platform.constance.ShopShow;
 import com.platform.entity.CdtMerchantEntity;
 import com.platform.entity.SysUserEntity;
@@ -38,7 +39,6 @@ public class CdtMerchantController extends BaseController {
     public R list(@RequestParam Map<String, Object> params) {
         //查询列表数据
         Query query = getqCurrentQuery(params);
-        ;
         List<CdtMerchantEntity> cdtMerchantList = cdtMerchantService.queryList(query);
         int total = cdtMerchantService.queryTotal(query);
 
@@ -63,7 +63,6 @@ public class CdtMerchantController extends BaseController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("cdtmerchant:save")
     @ResponseBody
     public R save(@RequestBody CdtMerchantEntity cdtMerchant) {
         cdtMerchantService.save(cdtMerchant);
@@ -134,4 +133,11 @@ public class CdtMerchantController extends BaseController {
         return R.ok();
     }
 
+    public static void main(String[] args) {
+        CdtMerchantEntity cdt = new CdtMerchantEntity();
+        cdt.setShopName("ssas");
+        cdt.setShopType(2);
+        cdt.setCity("cdcd");
+        System.out.println(JSONObject.toJSON(cdt));
+    }
 }
