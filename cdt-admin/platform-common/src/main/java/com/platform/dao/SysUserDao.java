@@ -1,11 +1,12 @@
 package com.platform.dao;
 
-import java.util.List;
-import java.util.Map;
-
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.MlsUserEntity2;
 import com.platform.entity.SysUserEntity;
 import com.platform.entity.UserWindowDto;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 系统用户
@@ -14,7 +15,7 @@ import com.platform.entity.UserWindowDto;
  * @email 939961241@qq.com
  * @date 2016年9月18日 上午9:34:11
  */
-public interface SysUserDao extends BaseDao<SysUserEntity> {
+public interface SysUserDao extends BaseBizMapper<SysUserEntity> {
 
     /**
      * 查询用户的所有权限

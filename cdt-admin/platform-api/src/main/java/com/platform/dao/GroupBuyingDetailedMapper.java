@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.GroupBuyingDetailedVo;
 
 /**
@@ -9,6 +10,6 @@ import com.platform.entity.GroupBuyingDetailedVo;
  * @email 295640759@qq.com
  * @date 2019-06-13 22:00:13
  */
-public interface GroupBuyingDetailedMapper extends BaseDao<GroupBuyingDetailedVo> {
+public interface GroupBuyingDetailedMapper extends BaseBizMapper<GroupBuyingDetailedVo> {
 
 }

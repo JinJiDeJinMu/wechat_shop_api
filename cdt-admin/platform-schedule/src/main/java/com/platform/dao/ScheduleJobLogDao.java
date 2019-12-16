@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.ScheduleJobLogEntity;
 
 /**
@@ -9,6 +10,6 @@ import com.platform.entity.ScheduleJobLogEntity;
  * @email 939961241@qq.com
  * @date 2016年12月1日 下午10:30:02
  */
-public interface ScheduleJobLogDao extends BaseDao<ScheduleJobLogEntity> {
+public interface ScheduleJobLogDao extends BaseBizMapper<ScheduleJobLogEntity> {
 
 }

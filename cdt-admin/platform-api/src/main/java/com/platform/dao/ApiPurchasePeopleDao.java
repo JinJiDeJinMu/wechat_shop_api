@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.PurchasePeopleEntity;
 
 /**
@@ -8,6 +9,6 @@ import com.platform.entity.PurchasePeopleEntity;
  * @author lipengjun
  * @date 2019-11-25 09:39:01
  */
-public interface ApiPurchasePeopleDao extends BaseDao<PurchasePeopleEntity> {
+public interface ApiPurchasePeopleDao extends BaseBizMapper<PurchasePeopleEntity> {
 
 }

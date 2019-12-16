@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.GoodsSpecificationEntity;
 
 /**
@@ -9,6 +10,6 @@ import com.platform.entity.GoodsSpecificationEntity;
  * @email 939961241@qq.com
  * @date 2017-08-31 11:15:55
  */
-public interface GoodsSpecificationDao extends BaseDao<GoodsSpecificationEntity> {
+public interface GoodsSpecificationDao extends BaseBizMapper<GoodsSpecificationEntity> {
 
 }

@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.CdtCustomerServiceEntity;
 
 /**
@@ -8,6 +9,6 @@ import com.platform.entity.CdtCustomerServiceEntity;
  * @author lipengjun
  * @date 2019-11-25 19:27:34
  */
-public interface CdtCustomerServiceDao extends BaseDao<CdtCustomerServiceEntity> {
+public interface CdtCustomerServiceDao extends BaseBizMapper<CdtCustomerServiceEntity> {
 
 }

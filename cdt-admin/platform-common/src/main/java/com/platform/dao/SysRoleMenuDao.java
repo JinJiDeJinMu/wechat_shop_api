@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.SysRoleMenuEntity;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * @email 939961241@qq.com
  * @date 2016年9月18日 上午9:33:46
  */
-public interface SysRoleMenuDao extends BaseDao<SysRoleMenuEntity> {
+public interface SysRoleMenuDao extends BaseBizMapper<SysRoleMenuEntity> {
 
     /**
      * 根据角色ID，获取菜单ID列表

@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.GoodsGalleryEntity;
 
 import java.util.Map;
@@ -11,6 +12,6 @@ import java.util.Map;
  * @email 939961241@qq.com
  * @date 2017-08-23 14:41:43
  */
-public interface GoodsGalleryDao extends BaseDao<GoodsGalleryEntity> {
+public interface GoodsGalleryDao extends BaseBizMapper<GoodsGalleryEntity> {
     int deleteByGoodsId(Map<String, Integer> map);
 }

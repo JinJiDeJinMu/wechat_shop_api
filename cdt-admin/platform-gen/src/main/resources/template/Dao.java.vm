@@ -6,6 +6,6 @@ package ${package}.dao; ${package}.entity.${className}Entity;
  * @author ${author}
  * @date ${datetime}
  */
-public interface ${className}Dao extends BaseDao<${className}Entity> {
+public interface ${className}Dao extends BaseBizMapper<${className}Entity> {
 
 }

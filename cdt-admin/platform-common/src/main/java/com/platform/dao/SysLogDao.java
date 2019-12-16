@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.SysLogEntity;
 
 /**
@@ -9,6 +10,6 @@ import com.platform.entity.SysLogEntity;
  * @email 939961241@qq.com
  * @date 2017-03-08 10:40:56
  */
-public interface SysLogDao extends BaseDao<SysLogEntity> {
+public interface SysLogDao extends BaseBizMapper<SysLogEntity> {
 
 }

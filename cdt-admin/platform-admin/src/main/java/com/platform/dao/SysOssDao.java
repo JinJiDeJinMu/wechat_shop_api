@@ -1,8 +1,6 @@
 package com.platform.dao;
 
-import java.util.List;
-import java.util.Map;
-
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.SysOssEntity;
 
 /**
@@ -12,5 +10,5 @@ import com.platform.entity.SysOssEntity;
  * @email 939961241@qq.com
  * @date 2017-03-25 12:13:26
  */
-public interface SysOssDao extends BaseDao<SysOssEntity> {
+public interface SysOssDao extends BaseBizMapper<SysOssEntity> {
 }

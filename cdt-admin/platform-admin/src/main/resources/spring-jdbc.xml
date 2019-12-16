@@ -134,11 +134,52 @@
         <constructor-arg ref="dataSource"/>
     </bean>
 
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="configLocation" value="classpath:mybatis.xml"/>
+    <!--<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
+    <!--<property name="configLocation" value="classpath:mybatis.xml"/>-->
+    <!--<property name="dataSource" ref="dataSource"/>-->
+    <!--<property name="plugins">-->
+    <!--<array>-->
+    <!--<bean class="com.github.pagehelper.PageInterceptor">-->
+    <!--<property name="properties">-->
+    <!--<value>helperDialect=mysql-->
+    <!--reasonable=true-->
+    <!--supportMethodsArguments=true-->
+    <!--params=count=countSql-->
+    <!--autoRuntimeDialect=true-->
+    <!--</value>-->
+    <!--</property>-->
+    <!--</bean>-->
+    <!--</array>-->
+    <!--</property>-->
+    <!--</bean>-->
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.platform.dao,com.platform.*.dao"/>
+    </bean>
+
+    <!--sqlSession-->
+    <bean class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
+        <!--sql映射文件-->
+        <property name="mapperLocations" value="classpath*:com.platform.dao/*.xml"/>
+        <!--别名设置-->
+        <property name="typeAliasesPackage" value="com.platform.entity"/>
+        <!--setting配置-->
+        <property name="configuration">
+            <bean class="com.baomidou.mybatisplus.core.MybatisConfiguration">
+                <!--自动映射-->
+                <property name="autoMappingBehavior" value="FULL"/>
+                <!--驼峰命名-->
+                <property name="mapUnderscoreToCamelCase" value="true"/>
+                <!--日志打印-->
+                <property name="logImpl" value="org.apache.ibatis.logging.log4j.Log4jImpl"/>
+            </bean>
+        </property>
+
+        <!--分页插件-->
         <property name="plugins">
             <array>
+                <!--<bean class="com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor" />-->
                 <bean class="com.github.pagehelper.PageInterceptor">
                     <property name="properties">
                         <value>helperDialect=mysql
@@ -151,9 +192,7 @@
                 </bean>
             </array>
         </property>
+
     </bean>
 
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.platform.dao,com.platform.*.dao"/>
-    </bean>
 </beans>

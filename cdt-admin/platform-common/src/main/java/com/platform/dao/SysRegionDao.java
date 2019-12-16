@@ -1,6 +1,6 @@
 package com.platform.dao;
 
-
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.SysRegionEntity;
 
 /**
@@ -8,6 +8,6 @@ import com.platform.entity.SysRegionEntity;
  * @email 939961241@qq.com
  * @date 2017-11-04 11:19:31
  */
-public interface SysRegionDao extends BaseDao<SysRegionEntity> {
+public interface SysRegionDao extends BaseBizMapper<SysRegionEntity> {
 
 }

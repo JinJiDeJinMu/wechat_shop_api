@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.SysConfigEntity;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,7 +11,7 @@ import org.apache.ibatis.annotations.Param;
  * @email 939961241@qq.com
  * @date 2016年12月4日 下午6:46:16
  */
-public interface SysConfigDao extends BaseDao<SysConfigEntity> {
+public interface SysConfigDao extends BaseBizMapper<SysConfigEntity> {
 
     /**
      * 根据key，查询value

@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.FootprintEntity;
 
 /**
@@ -9,6 +10,6 @@ import com.platform.entity.FootprintEntity;
  * @email 939961241@qq.com
  * @date 2017-08-13 10:41:08
  */
-public interface FootprintDao extends BaseDao<FootprintEntity> {
+public interface FootprintDao extends BaseBizMapper<FootprintEntity> {
 	
 }

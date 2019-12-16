@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.RepCommentVo;
 
 /**
@@ -8,6 +9,6 @@ import com.platform.entity.RepCommentVo;
  * @author lipengjun
  * @date 2019-11-18 19:35:15
  */
-public interface ApiRepCommentMapper extends BaseDao<RepCommentVo> {
+public interface ApiRepCommentMapper extends BaseBizMapper<RepCommentVo> {
 
 }

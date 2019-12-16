@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.CommentV2Entity;
 
 /**
@@ -8,6 +9,6 @@ import com.platform.entity.CommentV2Entity;
  * @author lipengjun
  * @date 2019-11-26 11:27:34
  */
-public interface CommentV2Dao extends BaseDao<CommentV2Entity> {
+public interface CommentV2Dao extends BaseBizMapper<CommentV2Entity> {
 
 }

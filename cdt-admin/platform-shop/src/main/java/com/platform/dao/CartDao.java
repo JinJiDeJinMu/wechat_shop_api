@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.CartEntity;
 
 /**
@@ -9,6 +10,6 @@ import com.platform.entity.CartEntity;
  * @email 939961241@qq.com
  * @date 2017-08-13 10:41:06
  */
-public interface CartDao extends BaseDao<CartEntity> {
+public interface CartDao extends BaseBizMapper<CartEntity> {
 	
 }

@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.SysMenuEntity;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * @email 939961241@qq.com
  * @date 2016年9月18日 上午9:33:01
  */
-public interface SysMenuDao extends BaseDao<SysMenuEntity> {
+public interface SysMenuDao extends BaseBizMapper<SysMenuEntity> {
 
     /**
      * 根据父菜单，查询子菜单

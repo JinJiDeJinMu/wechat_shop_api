@@ -1,6 +1,5 @@
 package com.platform.dao;
 
-
 import com.platform.entity.ResultMap;
 
 import java.util.List;

@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.TopicEntity;
 
 /**
@@ -9,6 +10,6 @@ import com.platform.entity.TopicEntity;
  * @email 939961241@qq.com
  * @date 2017-08-20 14:10:08
  */
-public interface TopicDao extends BaseDao<TopicEntity> {
+public interface TopicDao extends BaseBizMapper<TopicEntity> {
 
 }

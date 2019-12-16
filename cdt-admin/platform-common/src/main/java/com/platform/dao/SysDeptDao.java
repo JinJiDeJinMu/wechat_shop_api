@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.SysDeptEntity;
 import com.platform.entity.UserWindowDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -14,7 +15,7 @@ import java.util.List;
  * @date 2017-09-17 23:58:47
  */
 @Mapper
-public interface SysDeptDao extends BaseDao<SysDeptEntity> {
+public interface SysDeptDao extends BaseBizMapper<SysDeptEntity> {
 
     /**
      * 查询子部门ID列表

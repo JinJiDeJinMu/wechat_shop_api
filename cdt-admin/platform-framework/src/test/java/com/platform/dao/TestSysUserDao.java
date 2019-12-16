@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.SysUserEntity;
 
 /**
@@ -9,6 +10,6 @@ import com.platform.entity.SysUserEntity;
  * @email 939961241@qq.com
  * @date 2018-07-09 10:21:36
  */
-public interface TestSysUserDao extends BaseDao<SysUserEntity> {
+public interface TestSysUserDao extends BaseBizMapper<SysUserEntity> {
 
 }

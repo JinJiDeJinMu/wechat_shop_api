@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.SysMacroEntity;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @email 939961241@qq.com
  * @date 2017-08-22 11:48:16
  */
-public interface SysMacroDao extends BaseDao<SysMacroEntity> {
+public interface SysMacroDao extends BaseBizMapper<SysMacroEntity> {
 
     /**
      * 查询数据字段

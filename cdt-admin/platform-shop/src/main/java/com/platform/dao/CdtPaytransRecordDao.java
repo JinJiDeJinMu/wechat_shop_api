@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.CdtPaytransRecordEntity;
 
 /**
@@ -8,6 +9,6 @@ import com.platform.entity.CdtPaytransRecordEntity;
  * @author
  * @date 2019-12-06 10:27:31
  */
-public interface CdtPaytransRecordDao extends BaseDao<CdtPaytransRecordEntity> {
+public interface CdtPaytransRecordDao extends BaseBizMapper<CdtPaytransRecordEntity> {
 
 }

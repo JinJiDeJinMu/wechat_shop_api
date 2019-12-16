@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.UserRecordEntity;
 
 /**
@@ -9,6 +10,6 @@ import com.platform.entity.UserRecordEntity;
  * @email 939961241@qq.com
  * @date 2017-08-16 15:02:28
  */
-public interface UserRecordDao extends BaseDao<UserRecordEntity> {
+public interface UserRecordDao extends BaseBizMapper<UserRecordEntity> {
 
 }

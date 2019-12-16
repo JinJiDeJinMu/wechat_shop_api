@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.CommentPictureEntity;
 
 /**
@@ -9,7 +10,7 @@ import com.platform.entity.CommentPictureEntity;
  * @email 939961241@qq.com
  * @date 2017-08-29 14:45:55
  */
-public interface CommentPictureDao extends BaseDao<CommentPictureEntity> {
+public interface CommentPictureDao extends BaseBizMapper<CommentPictureEntity> {
     /**
      * 根据commentId删除
      *

@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.UserCouponEntity;
 
 /**
@@ -9,6 +10,6 @@ import com.platform.entity.UserCouponEntity;
  * @email 939961241@qq.com
  * @date 2017-08-19 15:40:33
  */
-public interface UserCouponDao extends BaseDao<UserCouponEntity> {
+public interface UserCouponDao extends BaseBizMapper<UserCouponEntity> {
 
 }

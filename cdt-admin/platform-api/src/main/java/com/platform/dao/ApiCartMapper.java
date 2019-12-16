@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.CartVo;
 import com.platform.entity.MerCartVo;
 import org.apache.ibatis.annotations.Param;
@@ -12,7 +13,7 @@ import java.util.Map;
  * @email 939961241@qq.com
  * @date 2017-08-11 09:14:25
  */
-public interface ApiCartMapper extends BaseDao<CartVo> {
+public interface ApiCartMapper extends BaseBizMapper<CartVo> {
     void updateCheck(@Param("productIds") String[] productIds,
                      @Param("isChecked") Integer isChecked, @Param("userId") Long userId);
 

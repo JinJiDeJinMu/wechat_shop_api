@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.ExpressOrderEntity;
 
 /**
@@ -8,7 +9,7 @@ import com.platform.entity.ExpressOrderEntity;
  * @author lipengjun
  * @date 2019-12-05 16:43:50
  */
-public interface ExpressOrderDao extends BaseDao<ExpressOrderEntity> {
+public interface ExpressOrderDao extends BaseBizMapper<ExpressOrderEntity> {
 
     ExpressOrderEntity queryOrderId(Integer orderId);
 

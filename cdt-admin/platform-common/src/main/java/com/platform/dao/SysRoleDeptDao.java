@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.SysRoleDeptEntity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * @date 2017年9月18日 上午9:18:38
  */
 @Mapper
-public interface SysRoleDeptDao extends BaseDao<SysRoleDeptEntity> {
+public interface SysRoleDeptDao extends BaseBizMapper<SysRoleDeptEntity> {
 
     /**
      * 根据角色ID，获取部门ID列表

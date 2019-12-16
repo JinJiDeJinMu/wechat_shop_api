@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.platform.common.BaseBizMapper;
 import com.platform.entity.GoodsVo;
 import com.platform.utils.Query;
 
@@ -11,7 +12,7 @@ import java.util.Map;
  * @email 939961241@qq.com
  * @date 2017-08-11 09:16:45
  */
-public interface ApiGoodsMapper extends BaseDao<GoodsVo> {
+public interface ApiGoodsMapper extends BaseBizMapper<GoodsVo> {
 
     Integer checkBuy(Object id);
     List<GoodsVo> queryHotGoodsList(Map<String, Object> params);
