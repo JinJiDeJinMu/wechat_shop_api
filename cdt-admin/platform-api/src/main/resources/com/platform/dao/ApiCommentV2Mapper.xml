@@ -82,7 +82,7 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.CommentReq" useGeneratedKeys="true" keyProperty="id">
+    <insert id="savecom" parameterType="com.platform.entity.CommentReq" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_comment_v2(
                     			`order_no`,
                     			`good_id`,

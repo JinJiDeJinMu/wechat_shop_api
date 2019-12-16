@@ -10,5 +10,5 @@ import com.platform.entity.CommentReq;
  */
 public interface ApiCommentV2Mapper extends BaseDao<CommentReq> {
 
-    int save(CommentReq commentReq);
+    int savecom(CommentReq commentReq);
 }

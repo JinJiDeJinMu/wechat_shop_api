@@ -131,7 +131,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         }
         commentReq.setContent(content);
         commentReq.setStarLevel(starLevel);
-        apiCommentV2Service.save(commentReq);
+        apiCommentV2Service.savecom(commentReq);
         Long insertId = commentReq.getId();
         System.out.println(insertId);
         if (insertId > 0 && imageList != null) {
