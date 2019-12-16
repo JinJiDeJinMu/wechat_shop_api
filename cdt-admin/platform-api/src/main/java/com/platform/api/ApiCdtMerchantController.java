@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.CdtMerchantEntity;
 import com.platform.entity.CdtMt;
 import com.platform.service.CdtMerchantService;
@@ -19,7 +20,8 @@ public class ApiCdtMerchantController {
 
     @PostMapping("/save")
     @ResponseBody
-    public R save(@RequestBody CdtMt cdtMerchant) {
+    @IgnoreAuth
+    public String save(@RequestBody CdtMt cdtMerchant) {
 
         CdtMerchantEntity cdtMerchantEntity = new CdtMerchantEntity();
         cdtMerchantEntity.setShopType(cdtMerchant.getShoptype());
@@ -29,6 +31,6 @@ public class ApiCdtMerchantController {
         cdtMerchantEntity.setShopOwner(cdtMerchant.getShopOwner());
         log.info("CdtMerchantEntity="+cdtMerchantEntity);
         cdtMerchantService.save(cdtMerchantEntity);
-        return R.ok();
+        return "success";
     }
 }
