@@ -53,10 +53,10 @@
                 label-position="left"
         >
             <div style="text-align: center">
-                <svg-icon
+                <div
                         icon-class="login-mall"
                         style="width: 56px;height: 56px;color: #409EFF"
-                ></svg-icon>
+                ></div>
             </div>
             <h2 class="login-title color-main">未名严选</h2>
             <el-form-item prop="username">
@@ -124,14 +124,14 @@
         el: '#app',
         data() {
             const validateUsername = (rule, value, callback) => {
-                if (value.length < 1) {
+                if (value.length() < 1) {
                     callback(new Error('请输入正确的用户名'))
                 } else {
                     callback()
                 }
             };
             const validatePass = (rule, value, callback) => {
-                if (value.length < 3) {
+                if (value.length() < 3) {
                     callback(new Error('密码不能小于3位'))
                 } else {
                     callback()
@@ -170,7 +170,7 @@
                 }
             },
             refreshCode: function () {
-                this.src = "yanzhengma.do?t=" + $.now();
+                this.src = "yanzhengma.do?t=" + new Date().getTime();
             },
             login: function (event) {
                 if (this.username == '') {
