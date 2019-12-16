@@ -94,6 +94,12 @@
                 <env>test</env>
             </properties>
         </profile>
+        <profile>
+            <id>selflocal</id>
+            <properties>
+                <env>selflocal</env>
+            </properties>
+        </profile>
     </profiles>
 
     <build>
@@ -106,6 +112,7 @@
                     <exclude>dev/*</exclude>
                     <exclude>prod/*</exclude>
                     <exclude>test/*</exclude>
+                    <exclude>selflocal/*</exclude>
                 </excludes>
             </resource>
             <resource>
@@ -148,6 +155,7 @@
                                 <exclude>dev/*</exclude>
                                 <exclude>prod/*</exclude>
                                 <exclude>test/*</exclude>
+                                <exclude>selflocal/*</exclude>
                             </excludes>
                         </resource>
                     </webResources>

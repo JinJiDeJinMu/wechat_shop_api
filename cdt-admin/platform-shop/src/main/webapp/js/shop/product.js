@@ -18,6 +18,15 @@ $(function () {
                     return value.replace(row.goodsName + " ", '');
                 }
             },
+            {
+                label: '图片',
+                name: 'picUrl',
+                index: 'picUrl',
+                width: 80,
+                formatter: function (value) {
+                    return transImg(value);
+                }
+            },
             {label: '商品序列号', name: 'goodsSn', index: 'goods_sn', width: 80},
             {label: '商品库存', name: 'goodsNumber', index: 'goods_number', width: 80},
             {label: '零售价格(元)', name: 'retailPrice', index: 'retail_price', width: 80},
@@ -36,6 +45,12 @@ let vm = new Vue({
         ruleValidate: {
             name: [
                 {required: true, message: '名称不能为空', trigger: 'blur'}
+            ],
+            goodsSn: [
+                {required: true, message: '序列号不能为空', trigger: 'blur'}
+            ],
+            picUrl: [
+                {required: true, message: '规格图片不能为空', trigger: 'blur'}
             ]
         },
         q: {
@@ -227,6 +242,25 @@ let vm = new Vue({
                     vm.goodss = r.list;
                 }
             });
+        },
+        handleFormatError: function (file) {
+            this.$Notice.warning({
+                title: '文件格式不正确',
+                desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
+            });
+        },
+        handleMaxSize: function (file) {
+            this.$Notice.warning({
+                title: '超出文件大小限制',
+                desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
+            });
+        },
+        handleSuccessPicUrl: function (res, file) {
+            vm.product.picUrl = file.response.url;
+        },
+        eyeImagePicUrl: function () {
+            var url = vm.product.picUrl;
+            eyeImage(url);
         },
         changeAttributes: function(){
             Ajax.request({
