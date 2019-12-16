@@ -102,11 +102,9 @@ public class SysUserController extends AbstractController {
     @RequiresPermissions("sys:user:info")
     public R info(@PathVariable("userId") Long userId) {
         SysUserEntity user = sysUserService.queryObject(userId);
-
         //获取用户所属的角色列表
         List<Long> roleIdList = sysUserRoleService.queryRoleIdList(userId);
         user.setRoleIdList(roleIdList);
-
         return R.ok().put("user", user);
     }
 
@@ -123,6 +121,9 @@ public class SysUserController extends AbstractController {
         	return R.error("手机号已被注册");
         }
         user.setCreateUserId(getUserId());
+        if (!user.getRoleIdList().contains(Long.valueOf(5)) && user.getMerchantId() == null) {
+            return R.error("非超级管理员必须选择绑定的店铺");
+        }
         sysUserService.save(user);
         //sysUserDao.updateMerchantId(user);
         

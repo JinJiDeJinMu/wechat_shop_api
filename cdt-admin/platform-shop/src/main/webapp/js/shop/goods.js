@@ -1,121 +1,4 @@
 $(function () {
-	// $("#jqGrid").Grid({
-	// 	url: '../goods/list',
-	// 	colModel: [{
-	// 			label: 'id',
-	// 			name: 'id',
-	// 			index: 'id',
-	// 			key: true,
-	// 			hidden: false
-	// 		},
-	// 		// {label: '商品类型', name: 'categoryName', index: 'category_id', width: 80},
-	// 		{
-	// 			label: '商家名称',
-	// 			name: 'merchantName',
-	// 			index: 'merchantName',
-	// 			width: 80
-	// 		},
-	// 		{
-	// 			label: '名称',
-	// 			name: 'name',
-	// 			index: 'name',
-	// 			width: 160
-	// 		},
-	// 		{
-	// 			label: '浏览量',
-	// 			name: 'browse',
-	// 			index: 'browse',
-	// 			width: 160
-	// 		},
-	// 		{
-	// 			label: '图片',
-	// 			name: 'primaryPicUrl',
-	// 			index: 'primaryPicUrl',
-	// 			width: 80,
-	// 			formatter: function(value) {
-	// 				return transImg(value);
-	// 			}
-	// 		},
-	// 		{
-	// 			label: '品牌',
-	// 			name: 'brandName',
-	// 			index: 'brand_id',
-	// 			width: 120
-	// 		},
-	// 		{
-	// 			label: '上架',
-	// 			name: 'isOnSale',
-	// 			index: 'is_on_sale',
-	// 			width: 50,
-	// 			formatter: function(value) {
-	// 				return transIsNot(value);
-	// 			}
-	// 		},
-	// 		{
-	// 			label: '录入日期',
-	// 			name: 'addTime',
-	// 			index: 'add_time',
-	// 			width: 80,
-	// 			formatter: function(value) {
-	// 				return transDate(value, 'yyyy-MM-dd');
-	// 			}
-	// 		},
-	// 		{
-	// 			label: '属性类别',
-	// 			name: 'attributeCategoryName',
-	// 			index: 'attribute_category',
-	// 			width: 80
-	// 		},
-	// 		{
-	// 			label: '零售价格',
-	// 			name: 'retailPrice',
-	// 			index: 'retail_price',
-	// 			width: 80
-	// 		},
-	// 		{
-	// 			label: '商品库存',
-	// 			name: 'goodsNumber',
-	// 			index: 'goods_number',
-	// 			width: 80
-	// 		},
-	// 		{
-	// 			label: '销售量',
-	// 			name: 'sellVolume',
-	// 			index: 'sell_volume',
-	// 			width: 80
-	// 		},
-	// 		{
-	// 			label: '市场价',
-	// 			name: 'marketPrice',
-	// 			index: 'market_price',
-	// 			width: 80
-	// 		},
-	// 		{
-	// 			label: '热销',
-	// 			name: 'isHot',
-	// 			index: 'is_hot',
-	// 			width: 80,
-	// 			formatter: function(value) {
-	// 				return transIsNot(value);
-	// 			}
-	// 		},
-	// 		{
-	// 			label: '购买类型',
-	// 			name: 'purchaseType',
-	// 			index: 'purchaseType',
-	// 			width: 80,
-	// 			formatter: function(value) {
-	// 				if (value === 0) {
-	// 					return "核销";
-	// 				} else if (value === 1) {
-	// 					return "邮寄";
-	// 				} else {
-	// 					return "无";
-	// 				}
-	// 			}
-	// 		}
-	// 	]
-	// });
 	$('#goodsDesc').editable({
 		inlineMode: false,
 		alwaysBlank: true,
@@ -134,7 +17,6 @@ $(function () {
 		imagesLoadURL: '../sys/oss/queryAll'
 	})
 });
-
 var ztree;
 const defaultListQuery = {
 	limit: 10,
@@ -242,10 +124,6 @@ var vm = new Vue({
 				label: "取消新品",
 				value: "newOff"
 			},
-            // {
-            // 	label: "转移到分类",
-            // 	value: "transferCategory"
-            // },
 			{
 				label: "移入回收站",
 				value: "recycle"
@@ -393,15 +271,13 @@ var vm = new Vue({
 					case this.operates[1].value:
 						this.updatePublishStatus(0, ids);
 						break;
-					case this.operates[4].value:
+                    case this.operates[2].value:
 						this.updateNewStatus(1, ids);
 						break;
-					case this.operates[5].value:
+                    case this.operates[3].value:
 						this.updateNewStatus(0, ids);
 						break;
-					case this.operates[6].value:
-						break;
-					case this.operates[7].value:
+                    case this.operates[4].value:
 						this.updateDeleteStatus(1, ids);
 						break;
 					default:
@@ -474,9 +350,9 @@ var vm = new Vue({
 			console.log(status)
 			console.log(ids)
 			if (status == 1) {
-				ids.forEach(enSale)
+                ids.forEach(this.enSale)
 			} else {
-				ids.forEach(unSale)
+                ids.forEach(this.unSale)
 			}
 		},
 		handleUpdateProduct(index, row) {
@@ -632,12 +508,10 @@ var vm = new Vue({
 			vm.brands = [];
 			vm.macros = [];
 			vm.attributeCategories = [];
-			// vm.attribute = [];
 			vm.getBrands();
 			vm.getMacro();
 			vm.getAttributeCategories();
 			vm.getCategories();
-			// vm.getAttributes('');
 		},
         checkSelected: function () {
 			if (this.multipleSelection == null || this.multipleSelection.length < 1) {
@@ -799,8 +673,6 @@ var vm = new Vue({
 			const fileList = this.uploadList;
 			this.uploadList.splice(fileList.indexOf(file), 1);
 		},
-
-
 		handleSuccess(res, file) {
 			// 因为上传过程为实例，这里模拟添加 url
 			file.imgUrl = res.url;
@@ -854,7 +726,6 @@ var vm = new Vue({
 			eyeImage($(e.target).attr('src'));
 		},
         getMerchant: function () {
-			// alert("111");
 			Ajax.request({
 				url: "../cdtmerchant/queryAll",
 				async: true,
