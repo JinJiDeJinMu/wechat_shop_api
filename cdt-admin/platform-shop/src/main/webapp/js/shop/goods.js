@@ -473,7 +473,6 @@ var vm = new Vue({
         updateNewStatus: function (status, ids) {
 			console.log(status)
 			console.log(ids)
-			console.log(JSON.stringify(row))
 			if (status == 1) {
 				ids.forEach(enSale)
 			} else {
