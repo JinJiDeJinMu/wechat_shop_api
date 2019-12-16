@@ -11,5 +11,5 @@ import com.platform.entity.CommentReq;
  */
 public interface ApiCommentV2Mapper extends BaseBizMapper<CommentReq> {
 
-    int save(CommentReq commentReq);
+    int savecom(CommentReq commentReq);
 }
