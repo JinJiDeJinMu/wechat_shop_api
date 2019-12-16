@@ -124,7 +124,7 @@ public class GoodsServiceImpl implements GoodsService {
         goods.setCreateUserId(user.getUserId());
         goods.setUpdateUserId(user.getUserId());
         goods.setUpdateTime(new Date());
-        if (goods.getAttributeCategory().equals(GoodsTypeEnum.EXPRESS_GET.getCode()) || (goods.getAttributeCategory().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()))) {
+        if (goods.getIsSecKill().equals(GoodsTypeEnum.EXPRESS_GET.getCode()) || (goods.getIsSecKill().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()))) {
             goods.setExtraPrice(BigDecimal.valueOf(0));
         }
         return goodsDao.save(goods);
