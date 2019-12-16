@@ -20,7 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import java.io.File;
 import java.util.*;
 
 @Api(value = "窝边生活商品评论", tags = "窝边生活商品评论")
@@ -131,6 +133,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         commentReq.setStarLevel(starLevel);
         apiCommentV2Service.save(commentReq);
         Long insertId = commentReq.getId();
+        System.out.println(insertId);
         if (insertId > 0 && imageList != null) {
             int i = 0;
             for (MultipartFile imgLink : imageList) {
@@ -154,7 +157,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
             }
         }
         Map resultModel = new HashMap();
-        resultModel.put("comment_id", 0);
+        resultModel.put("comment_id", insertId);
         resultModel.put("mag", "发表成功");
         return Result.success(resultModel);
     }
@@ -290,4 +293,9 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         }
         return toResponsSuccess(pageUtil);
     }
+
+    public static void main(String[] args) {
+    File file = new File("        http://tmp/wxa637df01806a720c.o6zAJs2oXHh2hEZJHteHnBHXPGEQ.QWgh4rDGMTb68a539c9e723340f784f4311730d920a4.jpg");
+    }
+
 }
