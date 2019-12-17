@@ -37,8 +37,13 @@ public class CdtMerchantServiceImpl implements CdtMerchantService {
 
     @Override
     public int save(CdtMerchantEntity cdtMerchant) {
-        //cdtMerchant.setId(IdUtil.createIdbyUUID());
         return cdtMerchantDao.save(cdtMerchant);
+    }
+
+    @Override
+    public int add(CdtMerchantEntity cdtMerchant) {
+        System.out.println("===="+cdtMerchant);
+        return cdtMerchantDao.add(cdtMerchant);
     }
 
     @Override

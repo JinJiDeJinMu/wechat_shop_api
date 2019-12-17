@@ -28,25 +28,25 @@ $(function () {
         url: '../cdtpaytransrecord/list',
         colModel: [
 			{label: 'id', name: 'id', index: 'id', key: true, hidden: true},
-			{label: '', name: 'rid', index: 'rid', width: 60},
+			{label: '', name: 'rid', index: 'rid', width: 60,hidden: true},
 			{label: '名称', name: 'name', index: 'name', width: 80},
 			{label: '商品备注', name: 'memo', index: 'memo', width: 80},
-			{label: '创建者id', name: 'creator', index: 'creator', width: 80,hidden:true},
+			{label: '创建者id', name: 'creator', index: 'creator', width: 80,hidden:true,align: 'center'},
 			{label: '创建者名称', name: 'creatorName', index: 'creator_name', width: 80},
-			{label: '创建时间', name: 'createDate', index: 'create_date', width: 80,
+			{label: '创建时间', name: 'createDate', index: 'create_date', width: 80,align: 'center',
                 formatter: function (value) {
                     return transDate(value);
                 }
 			},
-			{label: '数据等级', name: 'dataLevel', index: 'data_level', width: 80},
-			{label: '订单号', name: 'orderNo', index: 'order_no', width: 100},
+			{label: '数据等级', name: 'dataLevel', index: 'data_level', width: 80,hidden:true},
+			{label: '订单号', name: 'orderNo', index: 'order_no', width: 110},
 			{label: '订单id', name: 'payOrderId', index: 'pay_order_id', width: 80,hidden:true},
-			{label: '支付商户id', name: 'mchId', index: 'mch_id', width: 80},
-			{label: '支付订单号', name: 'mchOrderNo', index: 'mch_order_no', width: 80},
-			{label: '渠道id', name: 'channelId', index: 'channel_id', width: 80},
-			{label: '总金额', name: 'amount', index: 'amount', width: 80},
-			{label: '交易金额', name: 'tradePrice', index: 'trade_price', width: 80},
-            {label: '付款状态', name: 'payState',align: 'center', index: 'pay_state', width: 80,
+			{label: '支付商户id', name: 'mchId', index: 'mch_id', width: 80,align: 'center'},
+			{label: '支付订单号', name: 'mchOrderNo', index: 'mch_order_no', width: 110},
+			{label: '渠道id', name: 'channelId', index: 'channel_id', width: 80,align: 'center'},
+			{label: '总金额', name: 'amount', index: 'amount', width: 60,align: 'center'},
+			{label: '交易金额', name: 'tradePrice', index: 'trade_price', width: 60,align: 'center'},
+            {label: '付款状态', name: 'payState',align: 'center', index: 'pay_state', width: 60,
                 formatter: function (value) {
                     if (value == '0') {
                         return '未付款';
@@ -60,9 +60,12 @@ $(function () {
                     return value;
                 }
             },
-			{label: '支付类型', name: 'payType', index: 'pay_type', width: 80},
-			{label: 'app_id', name: 'appId', index: 'app_id', width: 80},
-			{label: '更新时间', name: 'updateDate', index: 'update_date', width: 80,
+			{
+			    label: '支付类型', name: 'payType', index: 'pay_type', width: 80,hidden:true
+
+            },
+			{label: 'app_id', name: 'appId', index: 'app_id', width: 80,hidden:true},
+			{label: '更新时间', name: 'updateDate', index: 'update_date', width: 80,align: 'center',
                 formatter: function (value) {
                     return transDate(value);
                 }

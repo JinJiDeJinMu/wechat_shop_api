@@ -75,4 +75,6 @@ public interface CdtMerchantService {
      * @return
      */
     CdtMerchantEntity queryByGoodsId(Integer goodsid);
+
+    int add(CdtMerchantEntity cdtMerchantEntity);
 }

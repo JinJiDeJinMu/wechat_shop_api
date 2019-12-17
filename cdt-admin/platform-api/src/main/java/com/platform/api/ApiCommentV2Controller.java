@@ -1,6 +1,7 @@
 package com.platform.api;
 
 import com.chundengtai.base.result.Result;
+import com.chundengtai.base.weixinapi.WeixinContants;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.CommentReq;
 import com.platform.entity.CommentPictureVo;
@@ -18,10 +19,12 @@ import com.platform.utils.StringUtils;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.*;
 
@@ -116,7 +119,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
             @RequestParam Integer goodId,
             @RequestParam String content,
             @RequestParam Integer starLevel,
-            @RequestParam(required = false) MultipartFile[] imageList
+            @RequestParam(required = false) String[] imageList
     ) {
         CommentReq commentReq = new CommentReq();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
@@ -133,21 +136,15 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         commentReq.setStarLevel(starLevel);
         apiCommentV2Service.savecom(commentReq);
         Long insertId = commentReq.getId();
-        System.out.println(insertId);
         if (insertId > 0 && imageList != null) {
             int i = 0;
-            for (MultipartFile imgLink : imageList) {
+            for (String imgLink : imageList) {
                 i++;
                 if (imgLink.isEmpty()) {
                     throw new RRException("上传文件不能为空");
                 }
                 //上传文件
-                String url = null;
-                try {
-                    url = OSSFactory.build().upload(imgLink);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                String url = imageList[i];
                 CommentPictureVo pictureVo = new CommentPictureVo();
                 pictureVo.setType(0);
                 pictureVo.setComment_id(insertId);
@@ -162,6 +159,20 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         return Result.success(resultModel);
     }
 
+    @PostMapping("/up")
+    @IgnoreAuth
+    public String upload(HttpServletRequest request, @RequestParam("file")MultipartFile[] files){
+        if (files==null&&files.length==0) {
+            throw new RRException("上传文件不能为空");
+        }
+        String url = null;
+        try {
+            url = OSSFactory.build().upload(files[0],WeixinContants.GOODS_COMMENT_PATH);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return url;
+   }
 
     @ApiOperation(value = "回复评论")
     @ApiImplicitParams({

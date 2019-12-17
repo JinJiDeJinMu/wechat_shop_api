@@ -500,4 +500,37 @@ public class CdtMerchantEntity implements Serializable {
     public Integer getIsDistribution() {
         return isDistribution;
     }
+
+    @Override
+    public String toString() {
+        return "CdtMerchantEntity{" +
+                "id=" + id +
+                ", shopName='" + shopName + '\'' +
+                ", userId='" + userId + '\'' +
+                ", shopType=" + shopType +
+                ", intro='" + intro + '\'' +
+                ", shopNotice='" + shopNotice + '\'' +
+                ", shopIndustry=" + shopIndustry +
+                ", shopOwner='" + shopOwner + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", tel='" + tel + '\'' +
+                ", shopLat='" + shopLat + '\'' +
+                ", shopLng='" + shopLng + '\'' +
+                ", shopAddress='" + shopAddress + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                ", pcaCode='" + pcaCode + '\'' +
+                ", shopLogo='" + shopLogo + '\'' +
+                ", shopPhotos='" + shopPhotos + '\'' +
+                ", openTime='" + openTime + '\'' +
+                ", shopStatus=" + shopStatus +
+                ", transportType=" + transportType +
+                ", fixedFreight=" + fixedFreight +
+                ", fullFreeShipping=" + fullFreeShipping +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", isDistribution=" + isDistribution +
+                '}';
+    }
 }

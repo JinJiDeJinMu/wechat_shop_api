@@ -37,6 +37,13 @@ public class AliyunCloudStorageService extends CloudStorageService {
     }
 
     @Override
+    public String upload(MultipartFile file,String path) throws Exception {
+        String fileName = file.getOriginalFilename();
+        String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
+        return upload(file.getBytes(), path+"//"+getPath(config.getAliyunPrefix()) + "." + prefix);
+    }
+
+    @Override
     public String upload(byte[] data, String path) {
         return upload(new ByteArrayInputStream(data), path);
     }
