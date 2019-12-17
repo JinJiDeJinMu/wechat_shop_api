@@ -158,7 +158,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
     }
 
 
-    @PostMapping("up")
+    @RequestMapping("up")
     @IgnoreAuth
     public String upload(MultipartFile file){
         if (file.isEmpty()) {
