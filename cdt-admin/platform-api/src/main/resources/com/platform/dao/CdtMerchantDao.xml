@@ -121,9 +121,8 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.CdtMerchantEntity">
+    <insert id="add" parameterType="com.platform.entity.CdtMerchantEntity">
 		insert into cdt_merchant(
-			`id`,
 			`shop_name`,
 			`user_id`,
 			`shop_type`,
@@ -151,7 +150,6 @@
 			`update_time`,
 			`is_distribution`)
 		values(
-			#{id},
 			#{shopName},
 			#{userId},
 			#{shopType},

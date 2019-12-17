@@ -7,6 +7,7 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 import com.platform.utils.RRException;
 import org.apache.commons.io.IOUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -38,9 +39,21 @@ public class QiniuCloudStorageService extends CloudStorageService {
 
     @Override
     public String upload(MultipartFile file) throws Exception {
+//        String fileName = file.getOriginalFilename();
+//        String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
+//        return upload(file.getBytes(), getPath(config.getQiniuPrefix()) + "." + prefix);
+        return upload(file,"");
+    }
+
+    @Override
+    public String upload(MultipartFile file, String path) throws Exception {
+        if(!StringUtils.isEmpty(path))
+        {
+            path=path+"//";
+        }
         String fileName = file.getOriginalFilename();
         String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
-        return upload(file.getBytes(), getPath(config.getQiniuPrefix()) + "." + prefix);
+        return upload(file.getBytes(), path+getPath(config.getQiniuPrefix()) + "." + prefix);
     }
 
     @Override

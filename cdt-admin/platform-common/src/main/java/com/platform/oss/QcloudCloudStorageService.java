@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.http.entity.ContentType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.platform.utils.RRException;
@@ -51,14 +52,20 @@ public class QcloudCloudStorageService extends CloudStorageService {
 
 	@Override
 	public String upload(MultipartFile file) throws Exception {
-
-		String fileName = file.getOriginalFilename();
-		
-		String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
-		System.out.println(fileName);
-		System.out.println(prefix);
-		return upload(file.getInputStream(), getPath(config.getQcloudPrefix()) + "." + prefix);
+		return upload(file,"");
 	}
+
+	@Override
+	public String upload(MultipartFile file, String path) throws Exception {
+		if(!StringUtils.isEmpty(path))
+		{
+			path=path+"//";
+		}
+		String fileName = file.getOriginalFilename();
+		String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
+		return upload(file.getBytes(), path+getPath(config.getQiniuPrefix()) + "." + prefix);
+	}
+
 
 	@Override
 	public String upload(InputStream inputStream, String path) {

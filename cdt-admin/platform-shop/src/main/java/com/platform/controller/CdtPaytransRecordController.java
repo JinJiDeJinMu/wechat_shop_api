@@ -6,11 +6,16 @@ import com.platform.service.CdtPaytransRecordService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
+import com.platform.utils.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +36,20 @@ public class CdtPaytransRecordController {
      */
     @RequestMapping("/list")
     @ResponseBody
-    public R list(@RequestParam Map<String, Object> params) {
+    public R list(@RequestParam Map<String, Object> params) throws ParseException {
         //查询列表数据
         Query query = new Query(params);
+        System.out.println(query.containsKey("createDate"));
+        System.out.println(query.containsKey("updateDate"));
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if(query.get("createDate") !=null || StringUtils.isNotEmpty(query.get("createDate").toString())){
+            Date date = new Date(query.get("createDate").toString());
+            query.put("createDate",sdf.format(date));
+        }
+        if(query.get("updateDate") !=null || StringUtils.isNotEmpty(query.get("updateDate").toString())){
+            Date date = new Date(query.get("updateDate").toString());
+            query.put("updateDate",sdf.format(date));
+        }
 
         List<CdtPaytransRecordEntity> cdtPaytransRecordList = cdtPaytransRecordService.queryList(query);
         int total = cdtPaytransRecordService.queryTotal(query);

@@ -14,4 +14,6 @@ public interface CdtMerchantDao extends BaseDao<CdtMerchantEntity> {
 
     CdtMerchantEntity queryByGoodsId(@Param("goodsId") Integer goodsId);
 
+    int add(CdtMerchantEntity cdtMerchantEntity);
+
 }

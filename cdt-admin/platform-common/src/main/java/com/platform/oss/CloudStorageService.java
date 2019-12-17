@@ -48,6 +48,7 @@ public abstract class CloudStorageService {
      */
     public abstract String upload(MultipartFile file) throws Exception;
 
+    public abstract String upload(MultipartFile file,String path)throws Exception;
     /**
      * 文件上传
      *
