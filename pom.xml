@@ -37,6 +37,8 @@
         <module>cdt-domain/cdt-base-domain</module>
         <module>cdt-interfaces/cdt-base-facade</module>
         <module>cdt-application/cdt-application-services</module>
+        <module>cdt-infrastructure/cdt-base-bean</module>
+        <module>cdt-infrastructure/cdt-base-service</module>
     </modules>
 
     <properties>

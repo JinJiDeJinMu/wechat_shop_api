@@ -1,0 +1,51 @@
+
+package com.chundengtai.base.service;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.chundengtai.base.bean.ProdProp;
+
+import java.util.List;
+
+/**
+ * Created by lgh on 2018/07/06.
+ */
+public interface ProdPropService extends IService<ProdProp> {
+
+    /**
+     * 获取属性与属性值
+     *
+     * @param prodProp
+     * @return
+     */
+    IPage<ProdProp> pagePropAndValue(ProdProp prodProp);
+
+    /**
+     * 保存属性、属性值
+     *
+     * @param prodProp
+     */
+    void saveProdPropAndValues(ProdProp prodProp);
+
+    /**
+     * 更新属性、属性值
+     *
+     * @param prodProp
+     */
+    void updateProdPropAndValues(ProdProp prodProp);
+
+    /**
+     * 删除属性、属性值
+     * 如果propRule为2，同时删除分类与属性值之间的关联关系
+     */
+    void deleteProdPropAndValues(Long propId, Integer propRule, Long shopId);
+
+    /**
+     * 根据分类id获取分类所关联的属性
+     *
+     * @param categoryId
+     * @return
+     */
+    List<ProdProp> listByCategoryId(Long categoryId);
+
+}

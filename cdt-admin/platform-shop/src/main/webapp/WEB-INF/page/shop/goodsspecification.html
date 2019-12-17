@@ -3,9 +3,12 @@
 <head>
     <title>商品对应规格表值表</title>
     #parse("sys/header.html")
+    <!-- 引入 http-vue-loader -->
+    <script src="https://unpkg.com/http-vue-loader"></script>
 </head>
 <body>
-<div id="rrapp" v-cloak>
+<div id="app" v-cloak>
+    <my-component></my-component>
     <div v-show="showList">
         <Row :gutter="16">
             <div class="search-group">
@@ -26,6 +29,58 @@
                 #end
             </div>
         </Row>
+        <div class="mod-prod">
+            <avue-crud ref="crud"
+                       :page="page"
+                       :data="dataList"
+                       :option="tableOption"
+                       :permission="permission"
+                       @search-change="searchChange"
+                       @on-load="getDataList">
+                <template slot-scope="scope"
+                          slot="prodPropValues">
+                    <el-tag v-for="item in scope.row.prodPropValues"
+                            :key="item.valueId">{{item.propValue}}
+                    </el-tag>
+                </template>
+                <template slot="menuLeft">
+                    <el-button type="primary"
+                               icon="el-icon-plus"
+                               size="small"
+                               v-if="isAuth('shop:pickAddr:save')"
+                               @click.stop="addOrUpdateHandle()">新增
+                    </el-button>
+                </template>
+
+                <template slot-scope="scope"
+                          slot="prodPropValues">
+                    <el-tag v-for="item in scope.row.prodPropValues"
+                            :key="item.valueId">{{item.propValue}}
+                    </el-tag>
+                </template>
+
+                <template slot-scope="scope"
+                          slot="menu">
+                    <el-button type="primary"
+                               icon="el-icon-edit"
+                               size="small"
+                               v-if="isAuth('prod:spec:update')"
+                               @click.stop="addOrUpdateHandle(scope.row)">编辑
+                    </el-button>
+
+                    <el-button type="danger"
+                               icon="el-icon-delete"
+                               size="small"
+                               v-if="isAuth('prod:spec:delete')"
+                               @click.stop="deleteHandle(scope.row.propId)">删除
+                    </el-button>
+                </template>
+            </avue-crud>
+            <!-- 弹窗, 新增 / 修改 -->
+            <add-or-update v-if="addOrUpdateVisible"
+                           ref="addOrUpdate"
+                           @refreshDataList="getDataList"></add-or-update>
+        </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager" style="margin-bottom: 20px"></div>
     </div>

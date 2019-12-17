@@ -6,35 +6,117 @@ $(function () {
     }
     $("#jqGrid").Grid({
         url: url,
-        colModel: [
-            {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
-            {label: '商品', name: 'goodsName', index: 'goods_id', width: 80},
-            {label: '规格', name: 'specificationName', index: 'specification_id', width: 80},
-            {label: '规格说明', name: 'value', index: 'value', width: 80},
+        colModel: [{
+            label: 'id',
+            name: 'id',
+            index: 'id',
+            key: true,
+            hidden: true
+        },
             {
-                label: '规格图片', name: 'picUrl', index: 'pic_url', width: 80, formatter: function (value) {
+                label: '商品',
+                name: 'goodsName',
+                index: 'goods_id',
+                width: 80
+            },
+            {
+                label: '规格',
+                name: 'specificationName',
+                index: 'specification_id',
+                width: 80
+            },
+            {
+                label: '规格说明',
+                name: 'value',
+                index: 'value',
+                width: 80
+            },
+            {
+                label: '规格图片',
+                name: 'picUrl',
+                index: 'pic_url',
+                width: 80,
+                formatter: function (value) {
                     return transImg(value);
                 }
-            }]
+            }
+        ]
     });
 });
 
+Vue.use(window.AVUE);
+Vue.use(httpVueLoader);
 var vm = new Vue({
-    el: '#rrapp',
+    el: '#app',
     data: {
         showList: true,
         title: null,
         goodsSpecification: {},
         ruleValidate: {
-            name: [
-                {required: true, message: '名称不能为空', trigger: 'blur'}
-            ]
+            name: [{
+                required: true,
+                message: '名称不能为空',
+                trigger: 'blur'
+            }]
         },
         q: {
             name: ''
         },
         goodss: [],
-        specifications: []
+        specifications: [],
+
+        dataForm: {
+            prodProp: ''
+        },
+        dataList: [],
+        pageIndex: 1,
+        pageSize: 10,
+        totalPage: 0,
+        dataListLoading: false,
+        dataListSelections: [],
+        addOrUpdateVisible: false,
+
+        page: {
+            total: 0, // 总页数
+            currentPage: 1, // 当前页数
+            pageSize: 10 // 每页显示多少条
+        },
+        permission: {
+            delBtn: this.isAuth('prod:prod:delete')
+        },
+        border: true,
+        index: true,
+        indexLabel: '序号',
+        stripe: true,
+        menuAlign: 'center',
+        menuWidth: 350,
+        align: 'center',
+        refreshBtn: true,
+        searchSize: 'mini',
+        addBtn: false,
+        editBtn: false,
+        viewBtn: false,
+        delBtn: false,
+        props: {
+            label: 'label',
+            value: 'value'
+        },
+        column: [{
+            label: '属性ID',
+            prop: 'propId'
+        }, {
+            label: '属性名称',
+            prop: 'propName',
+            search: true
+        }, {
+            label: '属性值',
+            prop: 'prodPropValues',
+            slot: true
+        }]
+    },
+    components: {
+        // 将组建加入组建库
+        'my-component': 'url:../js/vue/ao.vue'
     },
     methods: {
         getSpecification: function () {
@@ -126,7 +208,9 @@ var vm = new Vue({
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
-                postData: {'name': vm.q.name},
+                postData: {
+                    'name': vm.q.name
+                },
                 page: page
             }).trigger("reloadGrid");
             vm.handleReset('formValidate');
@@ -144,7 +228,7 @@ var vm = new Vue({
             });
         },
         handleSuccess: function (res, file) {
-        	this.$set(vm.goodsSpecification,'picUrl',file.response.url)
+            this.$set(vm.goodsSpecification, 'picUrl', file.response.url)
         },
         eyeImage: function () {
             var url = vm.goodsSpecification.picUrl;
