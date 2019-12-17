@@ -19,10 +19,12 @@ import com.platform.utils.StringUtils;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.*;
 
@@ -157,16 +159,15 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         return Result.success(resultModel);
     }
 
-
-    @RequestMapping("up")
+    @PostMapping("/up")
     @IgnoreAuth
-    public String upload(MultipartFile file){
-        if (file.isEmpty()) {
+    public String upload(HttpServletRequest request, @RequestParam("file")MultipartFile[] files){
+        if (files==null&&files.length==0) {
             throw new RRException("上传文件不能为空");
         }
         String url = null;
         try {
-            url = OSSFactory.build().upload(file,WeixinContants.GOODS_COMMENT_PATH);
+            url = OSSFactory.build().upload(files[0],WeixinContants.GOODS_COMMENT_PATH);
         } catch (Exception e) {
             e.printStackTrace();
         }
