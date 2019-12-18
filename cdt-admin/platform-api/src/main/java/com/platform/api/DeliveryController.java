@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/delivery")
+@RequestMapping("/api/delivery")
 @Api(tags = "查看物流接口")
 public class DeliveryController {
 
