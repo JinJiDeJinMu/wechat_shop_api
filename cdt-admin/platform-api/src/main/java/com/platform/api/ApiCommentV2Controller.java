@@ -139,7 +139,6 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         if (insertId > 0 && imageList != null) {
             int i = 0;
             for (String imgLink : imageList) {
-                i++;
                 if (imgLink.isEmpty()) {
                     throw new RRException("上传文件不能为空");
                 }
@@ -151,6 +150,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
                 pictureVo.setPic_url(url);
                 pictureVo.setSort_order(i);
                 commentPictureService.save(pictureVo);
+                i++;
             }
         }
         Map resultModel = new HashMap();
