@@ -15,7 +15,7 @@ public class Generator {
     public final static String SYS_AHURTOR = "Royal";
 
     public static void main(String[] args) {
-        String[] tableNames = new String[]{"users", "roles"};
+        String[] tableNames = new String[]{"cdt_distribution_level", "cdt_user_distribution","cdt_rebate_log","cdt_distridetail","cdt_distrimoney"};
         String[] modules = new String[]{"service", "web"};//项目模块名，需自定义
         for (String module : modules) {
             moduleGenerator(module, tableNames);
@@ -66,7 +66,7 @@ public class Generator {
         StrategyConfig strategyConfig = new StrategyConfig();
         strategyConfig
                 .setCapitalMode(true)//驼峰命名
-                .setEntityLombokModel(false)
+                .setEntityLombokModel(true)
                 .setRestControllerStyle(false)
                 .setNaming(NamingStrategy.underline_to_camel)
                 .setInclude(tableNames);
@@ -77,13 +77,13 @@ public class Generator {
         PackageConfig packageConfig = new PackageConfig();
         String packageName = SYS_PACKAGE_NAME;
         if ("service".equals(module)) {
-            packageName += ".web";
+            //packageName += ".web";
         } else if ("web".equals(module)) {
 
         }
         packageConfig.setParent(packageName)
-                .setEntity("entity")
-                .setMapper("mapper")
+                .setEntity("bean")
+                .setMapper("dao")
                 .setService("service")
                 .setController("controller");
         return packageConfig;
