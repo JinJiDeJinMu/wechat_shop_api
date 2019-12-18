@@ -12,6 +12,7 @@ import com.platform.oss.OSSFactory;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiPageUtils;
+import com.platform.util.RedisUtils;
 import com.platform.utils.Base64;
 import com.platform.utils.Query;
 import com.platform.utils.RRException;
@@ -174,6 +175,81 @@ public class ApiCommentV2Controller extends ApiBaseAction {
 
             return url;
    }
+
+    @IgnoreAuth
+    @GetMapping("postre")
+    @ResponseBody
+    public Result<Object> postre(
+            @RequestParam Long userId,
+            @RequestParam String orderNo,
+            @RequestParam Integer goodId,
+            @RequestParam String content,
+            @RequestParam Integer starLevel,
+            @RequestParam String rkey
+    ) {
+        CommentReq commentReq = new CommentReq();
+        commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
+        commentReq.setCreateTime(new Date());
+        commentReq.setUserId(userId);
+        commentReq.setOrderNo(orderNo);
+        commentReq.setGoodId(goodId);
+
+        List<String> imageList = RedisUtils.lrange(rkey,0,4);
+        if(imageList == null){
+            commentReq.setStatus(0);
+        }else {
+            commentReq.setStatus(1);
+        }
+        commentReq.setContent(content);
+        commentReq.setStarLevel(starLevel);
+        apiCommentV2Service.savecom(commentReq);
+        Long insertId = commentReq.getId();
+        if (insertId > 0 && imageList != null) {
+            int i = 0;
+            for (String imgLink : imageList) {
+                if (imgLink.isEmpty()) {
+                    throw new RRException("上传文件不能为空");
+                }
+                //上传文件
+                String url = imageList.get(i);
+                CommentPictureVo pictureVo = new CommentPictureVo();
+                pictureVo.setType(0);
+                pictureVo.setComment_id(insertId);
+                pictureVo.setPic_url(url);
+                pictureVo.setSort_order(i+1);
+                commentPictureService.save(pictureVo);
+                i++;
+            }
+        }
+        RedisUtils.del(rkey);
+        Map resultModel = new HashMap();
+        resultModel.put("comment_id", insertId);
+        resultModel.put("mag", "发表成功");
+        return Result.success(resultModel);
+    }
+
+    @PostMapping("/upload")
+    @IgnoreAuth
+    public String uploadfile(HttpServletRequest request, @RequestParam("files")MultipartFile[] files){
+        if (files==null) {
+            throw new RRException("上传文件不能为空");
+        }
+        String url = null;
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        if(RedisUtils.exists(uuid)){
+            RedisUtils.del(uuid);
+        }
+        try {
+            for(MultipartFile file: files) {
+                url = OSSFactory.build().upload(file, WeixinContants.GOODS_COMMENT_PATH);
+                RedisUtils.lpush(uuid, url);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return uuid;
+    }
+
 
     @ApiOperation(value = "回复评论")
     @ApiImplicitParams({
