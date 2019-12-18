@@ -9,10 +9,10 @@
         <result property="goodId" column="good_id"/>
         <result property="content" column="content"/>
         <result property="commentTime" column="comment_time"/>
-        <result property="createTime" column="create_time"/>
         <result property="starLevel" column="star_level"/>
         <result property="userId" column="user_id"/>
         <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
     </resultMap>
 
     <select id="queryObject" resultType="com.platform.entity.CommentReq">
@@ -22,35 +22,32 @@
     			`good_id`,
     			`content`,
     			`comment_time`,
-    			`create_time`,
     			`star_level`,
     			`user_id`,
-    			`status`
+    			`status`,
+    			`create_time`
 		from nideshop_comment_v2
 		where id = #{id}
 	</select>
 
     <select id="queryList" resultType="com.platform.entity.CommentReq">
-        select *
+        select
+        `id`,
+        `order_no`,
+        `good_id`,
+        `content`,
+        `comment_time`,
+        `star_level`,
+        `user_id`,
+        `status`,
+        `create_time`
         from nideshop_comment_v2
         WHERE 1=1
-        <if test="goodId != null">
-            AND good_id = #{goodId}
-        </if>
-        <if test="orderNo != null">
-            AND order_no = #{orderNo}
-        </if>
-        <if test="starLevel != null">
-            AND star_level = #{starLevel}
-        </if>
-        <if test="userId != null">
-            AND user_id = #{userId}
-        </if>
-        <if test="status != null">
-            AND status = #{status}
+        <if test="name != null and name != ''">
+            AND name LIKE concat('%',#{name},'%')
         </if>
         <choose>
-            <when test="sidx != null and sidx.trim() != ''">
+            <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>
@@ -65,73 +62,51 @@
     <select id="queryTotal" resultType="int">
         select count(*) from nideshop_comment_v2
         WHERE 1=1
-        <if test="goodId != null">
-            AND good_id = #{goodId}
-        </if>
-        <if test="orderNo != null">
-            AND order_no = #{orderNo}
-        </if>
-        <if test="starLevel != null">
-            AND star_level = #{starLevel}
-        </if>
-        <if test="userId != null">
-            AND user_id = #{userId}
-        </if>
-        <if test="status != null">
-            AND status = #{status}
+        <if test="name != null and name != ''">
+            AND name LIKE concat('%',#{name},'%')
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.CommentReq" useGeneratedKeys="true" keyProperty="id">
+    <insert id="savecom" parameterType="com.platform.entity.CommentReq"            useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_comment_v2(
                     			`order_no`,
                     			`good_id`,
                     			`content`,
                     			`comment_time`,
-                    			`create_time`,
                     			`star_level`,
                     			`user_id`,
-                    			`status`
-                    			            )
+                    			`status`,
+                    			`create_time`            )
 		values(
                     			#{orderNo},
                     			#{goodId},
                     			#{content},
                     			#{commentTime},
-                    			#{createTime},
                     			#{starLevel},
                     			#{userId},
-                    			#{status}
-                    			            )
+                    			#{status},
+                    			#{createTime}            )
 	</insert>
 
     <update id="update" parameterType="com.platform.entity.CommentReq">
         update nideshop_comment_v2
         <set>
             <if test="orderNo != null">`order_no` = #{orderNo
-                        },
-            </if>
+                        }, </if>
             <if test="goodId != null">`good_id` = #{goodId
-                        },
-            </if>
+                        }, </if>
             <if test="content != null">`content` = #{content
-                        },
-            </if>
+                        }, </if>
             <if test="commentTime != null">`comment_time` = #{commentTime
-                        },
-            </if>
-            <if test="createtTime != null">`create_time` = #{createTime
-                        },
-            </if>
+                        }, </if>
             <if test="starLevel != null">`star_level` = #{starLevel
-                        },
-            </if>
+                        }, </if>
             <if test="userId != null">`user_id` = #{userId
-                        },
-            </if>
+                        }, </if>
             <if test="status != null">`status` = #{status
-                        }
-            </if>
+                        }, </if>
+            <if test="createTime != null">`create_time` = #{createTime
+                        }</if>
         </set>
         where id = #{id}
     </update>
