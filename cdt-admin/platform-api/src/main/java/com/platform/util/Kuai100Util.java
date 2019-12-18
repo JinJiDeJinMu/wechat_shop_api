@@ -1,5 +1,10 @@
 package com.platform.util;
 
+import com.platform.util.wechat.MD5;
+import com.platform.utils.DateUtils;
+import com.platform.utils.HttpUtil;
+import com.platform.utils.JsonUtil;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -8,22 +13,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.platform.utils.DateUtils;
-import com.platform.utils.JsonUtil;
-
 public class Kuai100Util {
 
-	public static void main(String[] args) throws Exception {
-		Map<String, String> map = getExpressInfo("yuantong", "804554447238426545");
-		String ischeck = map.get("ischeck");
-		System.out.println(ischeck);
-		if("1".equals(ischeck)) {
-			System.out.println(map.get("checkTime"));
-		}
-		
-		
-		
-	}
+    private static final String URL = "https://poll.kuaidi100.com/poll/query.do";
+
+    private static final String CUSTOMER = "";
+
+    private static final String KEY = "";
+
+
+    /**
+     * @param type  快递公司编码（顺风：shufeng）
+     * @param phone 寄件人电话(收、寄件人的电话号码（手机和固定电话均可，只能填写一个，顺丰单号必填，其他快递公司选填。如座机号码有分机号，分机号无需上传)
+     * @param num   快递号：1234567890
+     * @return
+     */
+    public static String getExpress(String type, String phone, String num, String from, String to) {
+
+        String param = "type:" + type + "num:" + num + "from:" + from + "to:" + to + "resultv2:1";
+        String sign = MD5.getMessageDigest(param + KEY + CUSTOMER);
+        Map<String, Object> hashmap = new HashMap<>();
+        hashmap.put("customer", CUSTOMER);
+        hashmap.put("param", param);
+        hashmap.put("sign", sign);
+        String result = HttpUtil.URLPost(URL, hashmap, "UTF-8");
+        return result;
+    }
 	
 	/**
 	 * 获取物流信息
@@ -86,4 +101,5 @@ public class Kuai100Util {
         }
         return resMap;
     }
+
 }

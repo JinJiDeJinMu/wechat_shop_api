@@ -24,7 +24,7 @@ public class PageUtils implements Serializable {
     //当前页数
     private int currPage;
     //列表数据
-    private List<?> list;
+    private List list;
 
     private BigDecimal totalOrderSum;
 
@@ -38,7 +38,7 @@ public class PageUtils implements Serializable {
      * @param pageSize   每页记录数
      * @param currPage   当前页数
      */
-    public PageUtils(List<?> list, int totalCount, int pageSize, int currPage) {
+    public PageUtils(List list, int totalCount, int pageSize, int currPage) {
         this.list = list;
         this.totalCount = totalCount;
         this.pageSize = pageSize;
@@ -46,7 +46,7 @@ public class PageUtils implements Serializable {
         this.totalPage = (int) Math.ceil((double) totalCount / pageSize);
     }
 
-    public PageUtils(int totalCount, int pageSize, int currPage, List<?> list, BigDecimal totalOrderSum, BigDecimal totalGoodsSum) {
+    public PageUtils(int totalCount, int pageSize, int currPage, List list, BigDecimal totalOrderSum, BigDecimal totalGoodsSum) {
         this.totalCount = totalCount;
         this.pageSize = pageSize;
         this.totalPage = (int) Math.ceil((double) totalCount / pageSize);
@@ -96,11 +96,11 @@ public class PageUtils implements Serializable {
         this.currPage = currPage;
     }
 
-    public List<?> getList() {
+    public List getList() {
         return list;
     }
 
-    public void setList(List<?> list) {
+    public void setList(List list) {
         this.list = list;
     }
 

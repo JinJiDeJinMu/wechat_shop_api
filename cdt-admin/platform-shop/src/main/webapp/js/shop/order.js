@@ -3,8 +3,8 @@ $(function () {
     var payStatus = getQueryString("payStatus");
     var orderStatus = getQueryString("orderStatus");
     var goodsType = getQueryString("goodsType");
-    var addTime = (getQueryString("addTime"));
-    var endTime= getQueryString("endTime");
+    let addTime = getQueryString("add_time");
+    let endTime = getQueryString("end_time");
     var url = '../order/list';
     if (shippingStatus) {
         url += '?shippingStatus=' + shippingStatus;

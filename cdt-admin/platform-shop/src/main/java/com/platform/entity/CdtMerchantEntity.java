@@ -25,6 +25,7 @@ public class CdtMerchantEntity implements Serializable {
      * 商家id
      */
     private Long id;
+    private String key;
     /**
      * 名称(数字、中文，英文(可混合，不可有特殊字符)，可修改)、不唯一
      */
@@ -135,4 +136,37 @@ public class CdtMerchantEntity implements Serializable {
      */
     private Integer isDistribution;
 
+    @Override
+    public String toString() {
+        return "CdtMerchantEntity{" +
+                "id=" + id +
+                ", shopName='" + shopName + '\'' +
+                ", userId=" + userId +
+                ", shopType=" + shopType +
+                ", intro='" + intro + '\'' +
+                ", shopNotice='" + shopNotice + '\'' +
+                ", shopIndustry=" + shopIndustry +
+                ", shopOwner='" + shopOwner + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", tel='" + tel + '\'' +
+                ", shopLat='" + shopLat + '\'' +
+                ", shopLng='" + shopLng + '\'' +
+                ", shopAddress='" + shopAddress + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                ", pcaCode='" + pcaCode + '\'' +
+                ", shopLogo='" + shopLogo + '\'' +
+                ", shopPhotos='" + shopPhotos + '\'' +
+                ", openTime='" + openTime + '\'' +
+                ", shopStatus=" + shopStatus +
+                ", cashStatus=" + cashStatus +
+                ", transportType=" + transportType +
+                ", fixedFreight=" + fixedFreight +
+                ", fullFreeShipping=" + fullFreeShipping +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", isDistribution=" + isDistribution +
+                '}';
+    }
 }
