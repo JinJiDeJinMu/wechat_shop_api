@@ -45,7 +45,6 @@ public class SpecController {
         return ResponseEntity.ok(list);
     }
 
-
     /**
      * 获取所有的规格
      */
