@@ -5,6 +5,7 @@
 
     <resultMap type="com.platform.entity.CdtMerchantEntity" id="cdtMerchantMap">
         <result property="id" column="id"/>
+        <result property="key" column="idkey"/>
         <result property="shopName" column="shop_name"/>
         <result property="userId" column="user_id"/>
         <result property="shopType" column="shop_type"/>
@@ -71,6 +72,8 @@
     <select id="queryList" resultType="com.platform.entity.CdtMerchantEntity">
         select
         `id`,
+        `id` as idkey,
+
         `shop_name`,
         `user_id`,
         `shop_type`,
@@ -104,7 +107,7 @@
             AND id=#{merchant_id}
         </if>
         <if test="name != null and name != ''">
-            AND name LIKE concat('%',#{name},'%')
+            AND shop_name LIKE concat('%',#{name},'%')
         </if>
         <choose>
             <when test="sidx != null and sidx != ''">
@@ -123,7 +126,7 @@
         select count(*) from cdt_merchant
         WHERE 1=1
         <if test="name != null and name != ''">
-            AND name LIKE concat('%',#{name},'%')
+            AND shop_name LIKE concat('%',#{name},'%')
         </if>
     </select>
 
@@ -217,7 +220,7 @@
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
             <if test="isDistribution != null">`is_distribution` = #{isDistribution}</if>
         </set>
-        where id = #{id}
+        where id = #{key}
     </update>
 
     <delete id="delete">

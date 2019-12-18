@@ -2,7 +2,7 @@ $(function () {
     $("#jqGrid").Grid({
         url: '../cdtmerchant/list',
         colModel: [
-            {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
+            {label: 'key', name: 'key', index: 'key', key: true, hidden: true},
             {label: '名称', name: 'shopName', index: 'shop_name', width: 80},
             // {label: '用户id', name: 'userId', index: 'user_id', width: 80},
             {label: '类型', name: 'shopType', index: 'shop_type', width: 50},
@@ -115,12 +115,12 @@ let vm = new Vue({
             vm.cdtMerchant = {};
         },
         open: function () {
-            var id = getSelectedRow("#jqGrid");
-            if (id == null) {
+            var key = getSelectedRow("#jqGrid");
+            if (key == null) {
                 return;
             }
             Ajax.request({
-                url: "../cdtmerchant/open/" + id +"/1",
+                url: "../cdtmerchant/open/" + key + "/1",
                 async: true,
                 successCallback: function (r) {
                     if(r.code ==0){
@@ -147,17 +147,21 @@ let vm = new Vue({
             });
         },
         update: function (event) {
-            var id = getSelectedRow("#jqGrid");
-            if (id == null) {
+            var key = getSelectedRow("#jqGrid");
+            if (key == null) {
                 return;
             }
             vm.showList = false;
             vm.title = "修改";
-
-            vm.getInfo(id)
+            console.log('更新数据----' + key)
+            vm.getInfo(key)
         },
         saveOrUpdate: function (event) {
-            var url = vm.cdtMerchant.id == null ? "../cdtmerchant/save" : "../cdtmerchant/update";
+            var url = vm.cdtMerchant.key == null ? "../cdtmerchant/save" : "../cdtmerchant/update";
+            console.log(vm.cdtMerchant.id + '数据-saveOrUpdate key2---' + vm.cdtMerchant.key)
+            if (vm.cdtMerchant.key != null) {
+                vm.cdtMerchant.id = vm.cdtMerchant.key;
+            }
             Ajax.request({
                 url: url,
                 params: JSON.stringify(vm.cdtMerchant),
@@ -196,6 +200,8 @@ let vm = new Vue({
                 async: true,
                 successCallback: function (r) {
                     vm.cdtMerchant = r.cdtMerchant;
+                    vm.cdtMerchant.key = id;
+                    console.log('数据-读取 key2---' + r.cdtMerchant.key)
                 }
             });
         },

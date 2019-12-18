@@ -476,7 +476,8 @@ Ajax = function () {
                 if (typeof data == 'string' && data.indexOf("exception") > 0 || typeof data.code != 'undefined' && data.code != '0') {
                     var result = {code: null};
                     if (typeof data == 'string') {
-                        result = eval('(' + data + ')')
+                        //result = eval('(' + data + ')')
+                        result = JSON.parse(data);
                     } else if (typeof data == 'object') {
                         result = data;
                     }

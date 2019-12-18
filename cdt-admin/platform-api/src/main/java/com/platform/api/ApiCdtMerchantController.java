@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 
 @RestController
 @RequestMapping("/api/v2/cdtMerchant")
@@ -29,6 +31,9 @@ public class ApiCdtMerchantController {
         cdtMerchantEntity.setShopAddress(cdtMerchant.getAddress());
         cdtMerchantEntity.setShopName(cdtMerchant.getShopname());
         cdtMerchantEntity.setShopOwner(cdtMerchant.getShopOwner());
+        cdtMerchantEntity.setCreateTime(new Date());
+        cdtMerchantEntity.setIsDistribution(1);
+        cdtMerchantEntity.setShopStatus(-1);
         cdtMerchantService.save(cdtMerchantEntity);
         return Result.success();
     }

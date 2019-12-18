@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 商家Controller
@@ -41,7 +42,13 @@ public class CdtMerchantController extends BaseController {
         Query query = getqCurrentQuery(params);
         List<CdtMerchantEntity> cdtMerchantList = cdtMerchantService.queryList(query);
         int total = cdtMerchantService.queryTotal(query);
-
+        System.out.println(cdtMerchantList);
+        cdtMerchantList = cdtMerchantList.stream().map(s ->
+                {
+                    s.setKey(String.valueOf(s.getId()));
+                    return s;
+                }
+        ).collect(Collectors.toList());
         PageUtils pageUtil = new PageUtils(cdtMerchantList, total, query.getLimit(), query.getPage());
 
         return R.ok().put("page", pageUtil);
@@ -78,7 +85,7 @@ public class CdtMerchantController extends BaseController {
     @ResponseBody
     public R update(@RequestBody CdtMerchantEntity cdtMerchant) {
         cdtMerchantService.update(cdtMerchant);
-
+        System.out.println(cdtMerchant);
         return R.ok();
     }
 
