@@ -29,10 +29,13 @@
                     </i-col>
                 </i-col>
                 <i-col span="4">
-                    <date-picker v-model="q.createDate" type="datetime" placeholder="开始时间"  value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm" style="height: 32px;"></date-picker>
+                    <el-date-picker v-model="q.createDate" type="datetime" placeholder="开始时间"
+                                    value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm"
+                                    style="height: 32px;"></el-date-picker>
                 </i-col>
                 <i-col span="4">
-                    <date-picker v-model="q.updateDate" type="datetime" placeholder="结束时间"  value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm"></date-picker>
+                    <el-date-picker v-model="q.updateDate" type="datetime" placeholder="结束时间"
+                                    value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm"></el-date-picker>
                 </i-col>
                 <i-button @click="query">查询</i-button>
                 <i-button @click="reloadSearch">重置</i-button>

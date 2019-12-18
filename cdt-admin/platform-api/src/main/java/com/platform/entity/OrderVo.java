@@ -471,6 +471,7 @@ public class OrderVo implements Serializable {
         handleOption.put("confirm", false);//完成订单操作
         handleOption.put("return", false); //退换货操作
         handleOption.put("buy", false); //再次购买
+        handleOption.put("logistics",false);//查看物流
 
         //订单流程：　下单成功－》支付订单－》发货－》收货－》评论
         //订单相关状态字段设计，采用单个字段表示全部的订单状态
@@ -494,6 +495,7 @@ public class OrderVo implements Serializable {
         //如果订单已付款，没有发货，则可退款操作
         if (order_status.equals(OrderStatusEnum.PAYED_ORDER.getCode())) {
             handleOption.put("cancel", true);
+            handleOption.put("logistics",true);
         }
 
         //如果订单已经发货，没有收货，则可收货操作和退款、退货操作
@@ -501,12 +503,14 @@ public class OrderVo implements Serializable {
 //            handleOption.put("cancel", true);
             handleOption.put("confirm", true);
             handleOption.put("return", true);
+            handleOption.put("logistics",true);
         }
 
         //如果订单已经支付，且已经收货，则可完成交易、评论和再次购买
         if (order_status.equals(OrderStatusEnum.CONFIRM_GOODS.getCode())) {
             handleOption.put("comment", true);
             handleOption.put("buy", true);
+            handleOption.put("logistics",true);
         }
 
         if (order_status.equals(OrderStatusEnum.NOT_USED.getCode())) {
@@ -515,6 +519,7 @@ public class OrderVo implements Serializable {
 
         if (order_status.equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
             handleOption.put("comment", true);
+            handleOption.put("logistics",true);
         }
         return handleOption;
     }

@@ -67,7 +67,7 @@
         </if>
     </select>
 
-    <insert id="savecom" parameterType="com.platform.entity.CommentReq"            useGeneratedKeys="true" keyProperty="id">
+    <insert id="savecom" parameterType="com.platform.entity.CommentReq" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_comment_v2(
                     			`order_no`,
                     			`good_id`,
@@ -92,21 +92,29 @@
         update nideshop_comment_v2
         <set>
             <if test="orderNo != null">`order_no` = #{orderNo
-                        }, </if>
+                        },
+            </if>
             <if test="goodId != null">`good_id` = #{goodId
-                        }, </if>
+                        },
+            </if>
             <if test="content != null">`content` = #{content
-                        }, </if>
+                        },
+            </if>
             <if test="commentTime != null">`comment_time` = #{commentTime
-                        }, </if>
+                        },
+            </if>
             <if test="starLevel != null">`star_level` = #{starLevel
-                        }, </if>
+                        },
+            </if>
             <if test="userId != null">`user_id` = #{userId
-                        }, </if>
+                        },
+            </if>
             <if test="status != null">`status` = #{status
-                        }, </if>
+                        },
+            </if>
             <if test="createTime != null">`create_time` = #{createTime
-                        }</if>
+                        }
+            </if>
         </set>
         where id = #{id}
     </update>

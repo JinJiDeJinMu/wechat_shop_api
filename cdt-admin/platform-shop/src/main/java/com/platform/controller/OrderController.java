@@ -11,8 +11,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +39,6 @@ public class OrderController extends BaseController {
     //@RequiresPermissions("order:list")
     public R list(@RequestParam Map<String, Object> params) {
         SysUserEntity sysUserEntity= ShiroUtils.getUserEntity();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // 查询列表数据
         Query query = new Query(params);
         if (sysUserEntity.getMerchantId() == null) {
@@ -49,14 +46,6 @@ public class OrderController extends BaseController {
         }
         if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
             query.put("merchantId", sysUserEntity.getMerchantId());
-        }
-        if(query.get("addTime") !=null){
-            Date date = new Date(query.get("addTime").toString());
-            query.put("addTime",sdf.format(date));
-        }
-        if(query.get("endTime") !=null){
-            Date date = new Date(query.get("endTime").toString());
-            query.put("endTime",sdf.format(date));
         }
         System.out.println("query="+query);
         List<OrderEntity> orderList = orderService.queryList(query);
