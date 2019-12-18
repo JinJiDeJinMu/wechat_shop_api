@@ -8,11 +8,9 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import java.sql.Driver;
 
 public class Generator {
-
     public final static String DB_CONNECTION = "jdbc:mysql://121.196.219.8:3306/cdt_test?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true";
     public final static String DB_USER_NAME = "root";
     public final static String DB_PWD = "Hadoop3!";
-
     public final static String SYS_PACKAGE_NAME = "com.chundengtai.base";
     public final static String SYS_AHURTOR = "Royal";
 
