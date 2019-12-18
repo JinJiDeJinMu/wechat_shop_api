@@ -261,6 +261,20 @@ public class RedisUtils {
         }
     }
 
+    public static List<String> lrange(String key,long start,long end){
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            return jedis.lrange(key,start,end);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new JedisException(e.getMessage(),e);
+        }
+        finally {
+            close(jedis);
+        }
+    }
+
     /**
      *
      * @param timeout 0表示永久 单位秒
