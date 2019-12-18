@@ -161,17 +161,18 @@ public class ApiCommentV2Controller extends ApiBaseAction {
 
     @PostMapping("/up")
     @IgnoreAuth
-    public String upload(HttpServletRequest request, @RequestParam("file")MultipartFile[] files){
-        if (files==null&&files.length==0) {
+    public String upload(HttpServletRequest request, @RequestParam("files")MultipartFile files){
+        if (files==null) {
             throw new RRException("上传文件不能为空");
         }
         String url = null;
         try {
-            url = OSSFactory.build().upload(files[0],WeixinContants.GOODS_COMMENT_PATH);
+            url = OSSFactory.build().upload(files,WeixinContants.GOODS_COMMENT_PATH);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return url;
+
+            return url;
    }
 
     @ApiOperation(value = "回复评论")
