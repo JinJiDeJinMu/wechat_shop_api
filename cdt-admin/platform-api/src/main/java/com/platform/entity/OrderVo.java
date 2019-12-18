@@ -519,6 +519,7 @@ public class OrderVo implements Serializable {
 
         if (order_status.equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
             handleOption.put("comment", true);
+            handleOption.put("logistics",true);
         }
         return handleOption;
     }
