@@ -46,6 +46,37 @@ $(function () {
 
 Vue.use(window.AVUE);
 Vue.use(httpVueLoader);
+const tableOption = {
+    border: true,
+    index: true,
+    indexLabel: '序号',
+    stripe: true,
+    menuAlign: 'center',
+    menuWidth: 350,
+    align: 'center',
+    refreshBtn: true,
+    searchSize: 'mini',
+    addBtn: false,
+    editBtn: false,
+    viewBtn: false,
+    delBtn: false,
+    props: {
+        label: 'label',
+        value: 'value'
+    },
+    column: [{
+        label: '属性ID',
+        prop: 'propId'
+    }, {
+        label: '属性名称',
+        prop: 'propName',
+        search: true
+    }, {
+        label: '属性值',
+        prop: 'prodPropValues',
+        slot: true
+    }]
+};
 var vm = new Vue({
     el: '#app',
     data: {
@@ -81,9 +112,7 @@ var vm = new Vue({
             currentPage: 1, // 当前页数
             pageSize: 10 // 每页显示多少条
         },
-        permission: {
-            delBtn: this.isAuth('prod:prod:delete')
-        },
+
         border: true,
         index: true,
         indexLabel: '序号',
@@ -112,13 +141,80 @@ var vm = new Vue({
             label: '属性值',
             prop: 'prodPropValues',
             slot: true
-        }]
+        }],
+        tableOption: tableOption
     },
     components: {
+        'AddOrUpdate': 'url:../js/vue/spec-add-or-update.vue',
         // 将组建加入组建库
         'my-component': 'url:../js/vue/ao.vue'
     },
     methods: {
+        // 获取数据列表
+        getDataList(page, params) {
+            this.dataListLoading = true
+            this.$http({
+                url: this.$http.adornUrl('/prod/spec/page'),
+                method: 'get',
+                params: this.$http.adornParams(
+                    Object.assign({
+                            current: page == null ? this.page.currentPage : page.currentPage,
+                            size: page == null ? this.page.pageSize : page.pageSize
+                        },
+                        params
+                    )
+                )
+            }).then(({
+                         data
+                     }) => {
+                this.dataList = data.records
+                this.page.total = data.total
+                this.dataListLoading = false
+            })
+        },
+        // 新增 / 修改
+        addOrUpdateHandle(val) {
+            this.addOrUpdateVisible = true
+            this.$nextTick(() => {
+                this.$refs.addOrUpdate.init(val)
+            })
+        },
+        // 删除
+        deleteHandle(id) {
+            var ids = id ?
+                [id] :
+                this.dataListSelections.map(item => {
+                    return item.propId
+                })
+            this.$confirm(`确定进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    this.$http({
+                        url: this.$http.adornUrl(`/prod/spec/${ids}`),
+                        method: 'delete',
+                        data: this.$http.adornData(ids, false)
+                    }).then(({
+                                 data
+                             }) => {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            duration: 1500,
+                            onClose: () => {
+                                this.getDataList(this.page)
+                            }
+                        })
+                    })
+                })
+                .catch(() => {
+                })
+        },
+        searchChange(params) {
+            this.getDataList(this.page, params)
+        },
         getSpecification: function () {
             Ajax.request({
                 url: "../specification/queryAll",

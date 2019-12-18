@@ -34,7 +34,6 @@
                        :page="page"
                        :data="dataList"
                        :option="tableOption"
-                       :permission="permission"
                        @search-change="searchChange"
                        @on-load="getDataList">
                 <template slot-scope="scope"
@@ -47,7 +46,6 @@
                     <el-button type="primary"
                                icon="el-icon-plus"
                                size="small"
-                               v-if="isAuth('shop:pickAddr:save')"
                                @click.stop="addOrUpdateHandle()">新增
                     </el-button>
                 </template>

@@ -42,11 +42,8 @@ public class ProdPropServiceImpl extends ServiceImpl<ProdPropMapper, ProdProp> i
     public void saveProdPropAndValues(@Valid ProdProp prodProp) {
         ProdProp dbProdProp = prodPropMapper.getProdPropByPropNameAndShopId(prodProp.getPropName(), prodProp.getShopId(), prodProp.getRule());
         if (dbProdProp != null) {
-            try {
                 throw new BizException("已有相同名称规格");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
         }
         prodPropMapper.insert(prodProp);
         if (CollUtil.isEmpty(prodProp.getProdPropValues())) {
