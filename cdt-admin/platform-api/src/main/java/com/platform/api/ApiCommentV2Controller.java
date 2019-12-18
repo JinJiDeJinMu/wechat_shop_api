@@ -119,7 +119,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
             @RequestParam Integer goodId,
             @RequestParam String content,
             @RequestParam Integer starLevel,
-            @RequestParam(required = false) String[] imageList
+            @RequestParam("imageList")String[] imageList
     ) {
         CommentReq commentReq = new CommentReq();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
@@ -148,7 +148,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
                 pictureVo.setType(0);
                 pictureVo.setComment_id(insertId);
                 pictureVo.setPic_url(url);
-                pictureVo.setSort_order(i);
+                pictureVo.setSort_order(i+1);
                 commentPictureService.save(pictureVo);
                 i++;
             }
