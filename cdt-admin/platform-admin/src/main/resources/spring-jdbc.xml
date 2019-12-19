@@ -173,19 +173,19 @@
                 <property name="logImpl" value="org.apache.ibatis.logging.log4j.Log4jImpl"/>
             </bean>
         </property>
-        <!--<property name="globalConfig">-->
-        <!--<bean class="com.baomidou.mybatisplus.core.config.GlobalConfig">-->
-        <!--<property name="dbConfig">-->
-        <!--<bean class="com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig">-->
-        <!--&lt;!&ndash;主键规则&ndash;&gt;-->
-        <!--<property name="idType" value="AUTO"/>-->
-        <!--&lt;!&ndash;表前缀&ndash;&gt;-->
-        <!--<property name="tablePrefix" value="tbl_"/>-->
-        <!--</bean>-->
-        <!--</property>-->
-        <!--&lt;!&ndash;<property name="sqlInjector" ref="logicalDelInjector"/>&ndash;&gt;-->
-        <!--</bean>-->
-        <!--</property>-->
+        <property name="globalConfig">
+            <bean class="com.baomidou.mybatisplus.core.config.GlobalConfig">
+                <property name="dbConfig">
+                    <bean class="com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig">
+                        <!--主键规则-->
+                        <property name="idType" value="AUTO"/>
+                        <!--表前缀-->
+                        <property name="tablePrefix" value="tbl_"/>
+                    </bean>
+                </property>
+                <!--<property name="sqlInjector" ref="logicalDelInjector"/>-->
+            </bean>
+        </property>
 
         <!--分页插件-->
         <property name="plugins">
@@ -204,11 +204,11 @@
                 <!--SQL执行分析插件-->
                 <bean class="com.baomidou.mybatisplus.extension.plugins.SqlExplainInterceptor"/>
                 <!--SQL性能分析-->
-                <bean class="com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor">
-                    <property name="maxTime" value="6000"/>
-                    <!--SQL是否格式化 默认false-->
-                    <property name="format" value="true"/>
-                </bean>
+                <!--<bean class="com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor">-->
+                <!--<property name="maxTime" value="6000"/>-->
+                <!--&lt;!&ndash;SQL是否格式化 默认false&ndash;&gt;-->
+                <!--<property name="format" value="true"/>-->
+                <!--</bean>-->
                 <!--乐观锁插件-->
                 <bean class="com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor"/>
             </array>
