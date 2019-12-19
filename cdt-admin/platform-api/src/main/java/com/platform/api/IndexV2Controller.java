@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -51,6 +53,9 @@ public class IndexV2Controller extends ApiBaseAction {
     @Autowired
     private ApiAttributeCategoryMapper attributeCategoryMapper;
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     /**
      * app首页
      */
@@ -58,57 +63,61 @@ public class IndexV2Controller extends ApiBaseAction {
     @IgnoreAuth
     @GetMapping(value = "index")
     public Result<Map<String, Object>> index() {
-        Map<String, Object> resultObj = new HashMap<String, Object>();
-        Map<String, Object> param = new HashMap<String, Object>();
-        param.put("ad_position_id", 1);
-        List<AdVo> banner = adService.queryList(param);
-        List<AdVo> hotProduct = getCollectByType(banner, BannerType.HOT.getCode());
-        List<AdVo> activity = getCollectByType(banner, BannerType.ACTIVITY.getCode());
-        resultObj.put("hotProduct", hotProduct);
-        resultObj.put("activity", activity);
+        Map<String, Object> resultObj = (Map<String, Object>) redisTemplate.opsForValue().get("indexV2");
+        if (resultObj == null) {
+            resultObj = new HashMap<String, Object>();
+            Map<String, Object> param = new HashMap<String, Object>();
+            param.put("ad_position_id", 1);
+            List<AdVo> banner = adService.queryList(param);
+            List<AdVo> hotProduct = getCollectByType(banner, BannerType.HOT.getCode());
+            List<AdVo> activity = getCollectByType(banner, BannerType.ACTIVITY.getCode());
+            resultObj.put("hotProduct", hotProduct);
+            resultObj.put("activity", activity);
 
-        //分类
-        param = new HashMap<String, Object>();
-        param.put("parent_id", 0);
-        param.put("sidx", "sort_order");
-        param.put("order", "desc");
-        param.put("showPosition", 0);
-        param.put("enabled", 1);
-        PageHelper.startPage(0, 10, false);
-        List<AttributeCategoryVo> categoryList = attributeCategoryMapper.queryList(param);
-        resultObj.put("categoryList", JsonTransfer.convertList(categoryList, AttributeCategoryDTO.class));
-
-        //分类下面模块的商品
-        param = new HashMap<String, Object>();
-        param.put("parent_id", 0);
-        param.put("sidx", "sort_order");
-        param.put("order", "desc");
-        param.put("showPosition", 1);
-        PageHelper.startPage(0, 5, false);
-        List<AttributeCategoryVo> categoryGoodsList = attributeCategoryMapper.queryList(param);
-
-        //查找其他分类下面的商品
-        List<Map<String, Object>> newCategoryList = new ArrayList<>();
-        for (AttributeCategoryVo categoryItem : categoryGoodsList) {
-            List<GoodsVo> categoryGoods = new ArrayList<>();
-            param = null;
+            //分类
             param = new HashMap<String, Object>();
-            param.put("attribute_category", categoryItem.getId());
+            param.put("parent_id", 0);
             param.put("sidx", "sort_order");
             param.put("order", "desc");
-            param.put("fields", "id as id, name as name, list_pic_url as list_pic_url,primary_pic_url,retail_price as retail_price,market_price as market_price");
-            PageHelper.startPage(0, 4, false);
-            categoryGoods = goodsService.queryList(param);
+            param.put("showPosition", 0);
+            param.put("enabled", 1);
+            PageHelper.startPage(0, 10, false);
+            List<AttributeCategoryVo> categoryList = attributeCategoryMapper.queryList(param);
+            resultObj.put("categoryList", JsonTransfer.convertList(categoryList, AttributeCategoryDTO.class));
 
-            List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(categoryGoods, GoodsDTO.class);
-            Map<String, Object> newCategory = new HashMap<String, Object>();
-            newCategory.put("id", categoryItem.getId());
-            newCategory.put("name", categoryItem.getName());
-            newCategory.put("showStyle", categoryItem.getShowStyle());
-            newCategory.put("goodsList", goodsDTOS);
-            newCategoryList.add(newCategory);
+            //分类下面模块的商品
+            param = new HashMap<String, Object>();
+            param.put("parent_id", 0);
+            param.put("sidx", "sort_order");
+            param.put("order", "desc");
+            param.put("showPosition", 1);
+            PageHelper.startPage(0, 5, false);
+            List<AttributeCategoryVo> categoryGoodsList = attributeCategoryMapper.queryList(param);
+
+            //查找其他分类下面的商品
+            List<Map<String, Object>> newCategoryList = new ArrayList<>();
+            for (AttributeCategoryVo categoryItem : categoryGoodsList) {
+                List<GoodsVo> categoryGoods = new ArrayList<>();
+                param = null;
+                param = new HashMap<String, Object>();
+                param.put("attribute_category", categoryItem.getId());
+                param.put("sidx", "sort_order");
+                param.put("order", "desc");
+                param.put("fields", "id as id, name as name, list_pic_url as list_pic_url,primary_pic_url,retail_price as retail_price,market_price as market_price");
+                PageHelper.startPage(0, 6, false);
+                categoryGoods = goodsService.queryList(param);
+
+                List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(categoryGoods, GoodsDTO.class);
+                Map<String, Object> newCategory = new HashMap<String, Object>();
+                newCategory.put("id", categoryItem.getId());
+                newCategory.put("name", categoryItem.getName());
+                newCategory.put("showStyle", categoryItem.getShowStyle());
+                newCategory.put("goodsList", goodsDTOS);
+                newCategoryList.add(newCategory);
+            }
+            resultObj.put("productList", newCategoryList);
+            redisTemplate.opsForValue().set("indexV2", resultObj, 10, TimeUnit.MINUTES);
         }
-        resultObj.put("productList", newCategoryList);
         return Result.success(resultObj);
     }
 
@@ -119,17 +128,21 @@ public class IndexV2Controller extends ApiBaseAction {
     @IgnoreAuth
     @GetMapping(value = "indexNewGoods")
     public Result<List<GoodsDTO>> indexGoods() {
-        //最新商品
-        HashMap param = new HashMap<String, Object>();
-        param.put("is_new", 1);
-        param.put("is_delete", 0);
-        param.put("is_on_sale", 1);
-        param.put("sidx", "add_time");
-        param.put("order", "desc");
-        param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price");
-        PageHelper.startPage(0, 10, false);
-        List<GoodsVo> newGoods = goodsService.queryList(param);
-        List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(newGoods, GoodsDTO.class);
+        List<GoodsDTO> goodsDTOS = (List<GoodsDTO>) redisTemplate.opsForValue().get("indexNewGoods");
+        if (goodsDTOS == null) {
+            //最新商品
+            HashMap param = new HashMap<String, Object>();
+            param.put("is_new", 1);
+            param.put("is_delete", 0);
+            param.put("is_on_sale", 1);
+            param.put("sidx", "add_time");
+            param.put("order", "desc");
+            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price");
+            PageHelper.startPage(0, 300, false);
+            List<GoodsVo> newGoods = goodsService.queryList(param);
+            goodsDTOS = JsonTransfer.convertList(newGoods, GoodsDTO.class);
+            redisTemplate.opsForValue().set("indexNewGoods", goodsDTOS, 10, TimeUnit.MINUTES);
+        }
         return Result.success(goodsDTOS);
     }
 
