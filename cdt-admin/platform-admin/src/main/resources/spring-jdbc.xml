@@ -173,19 +173,19 @@
                 <property name="logImpl" value="org.apache.ibatis.logging.log4j.Log4jImpl"/>
             </bean>
         </property>
-        <property name="globalConfig">
-            <bean class="com.baomidou.mybatisplus.core.config.GlobalConfig">
-                <property name="dbConfig">
-                    <bean class="com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig">
-                        <!--主键规则-->
-                        <property name="idType" value="AUTO"/>
-                        <!--表前缀-->
-                        <property name="tablePrefix" value="tbl_"/>
-                    </bean>
-                </property>
-                <!--<property name="sqlInjector" ref="logicalDelInjector"/>-->
-            </bean>
-        </property>
+        <!--<property name="globalConfig">-->
+        <!--<bean class="com.baomidou.mybatisplus.core.config.GlobalConfig">-->
+        <!--<property name="dbConfig">-->
+        <!--<bean class="com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig">-->
+        <!--&lt;!&ndash;主键规则&ndash;&gt;-->
+        <!--<property name="idType" value="AUTO"/>-->
+        <!--&lt;!&ndash;表前缀&ndash;&gt;-->
+        <!--<property name="tablePrefix" value="tbl_"/>-->
+        <!--</bean>-->
+        <!--</property>-->
+        <!--&lt;!&ndash;<property name="sqlInjector" ref="logicalDelInjector"/>&ndash;&gt;-->
+        <!--</bean>-->
+        <!--</property>-->
 
         <!--分页插件-->
         <property name="plugins">
