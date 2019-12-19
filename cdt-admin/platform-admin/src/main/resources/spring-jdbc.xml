@@ -183,7 +183,7 @@
                         <property name="tablePrefix" value="tbl_"/>
                     </bean>
                 </property>
-                <property name="sqlInjector" ref="logicalDelInjector"/>
+                <!--<property name="sqlInjector" ref="logicalDelInjector"/>-->
             </bean>
         </property>
 
@@ -201,12 +201,8 @@
                         </value>
                     </property>
                 </bean>
-                <!--SQL性能分析-->
-                <bean class="com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor">
-                    <property name="maxTime" value="6000"/>
-                    <!--SQL是否格式化 默认false-->
-                    <property name="format" value="true"/>
-                </bean>
+                <!--SQL执行分析插件-->
+                <bean class="com.baomidou.mybatisplus.extension.plugins.SqlExplainInterceptor"/>
                 <!--SQL性能分析-->
                 <bean class="com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor">
                     <property name="maxTime" value="6000"/>
@@ -219,7 +215,7 @@
         </property>
     </bean>
 
-    <bean id="logicalDelInjector" class="com.baomidou.mybatisplus.extension.injector.methods.LogicDeleteByIdWithFill"/>
+    <!--<bean id="logicalDelInjector" class="com.baomidou.mybatisplus.extension.injector.methods.LogicDeleteByIdWithFill"/>-->
 
     <!-- 配置事务管理 -->
     <bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
