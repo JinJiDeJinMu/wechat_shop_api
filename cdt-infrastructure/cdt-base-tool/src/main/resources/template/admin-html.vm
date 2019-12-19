@@ -32,7 +32,60 @@
                 $end
             </div>
         </Row>
-        <table id="jqGrid"></table>
+        <el-card class="filter-container" shadow="never">
+            <div>
+                <i class="el-icon-search"></i>
+                <span>筛选搜索</span>
+                <el-button
+                        style="float: right"
+                        @click="handleSearchList()"
+                        type="primary"
+                        size="small">
+                    查询结果
+                </el-button>
+                <el-button
+                        style="float: right;margin-right: 15px"
+                        @click="handleResetSearch()"
+                        size="small">
+                    重置
+                </el-button>
+            </div>
+            <div style="margin-top: 15px">
+                <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
+                    #foreach($field in ${table.fields})
+                        <el-form-item label="${field.name}：">
+                            <el-input style="width: 203px" v-model="listQuery.${field.propertyName}"
+                                      placeholder="${field.comment}"></el-input>
+                        </el-form-item>
+                    #end
+
+                    <el-form-item label="商品货号：">
+                        <el-input style="width: 203px" v-model="listQuery.goodSn" placeholder="商品货号"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="上架状态：">
+                        <el-select v-model="listQuery.publishStatus" placeholder="全部" clearable>
+                            <el-option
+                                    v-for="item in publishStatusOptions"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="审核状态：">
+                        <el-select v-model="listQuery.verifyStatus" placeholder="全部" clearable>
+                            <el-option
+                                    v-for="item in verifyStatusOptions"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </el-card>
     </div>
 
     <Card v-show="!showList">
@@ -40,7 +93,7 @@
         <i-form ref="formValidate" :model="${entity}" :rules="ruleValidate" :label-width="80">
             #foreach($field in ${table.fields})
                 <Form-item label="${field.comment}" prop="${field.name}">
-                    <i-input v-model="${entity}.${field.name}" placeholder="${field.comment}"/>
+                    <i-input v-model="${entity}.${field.propertyName}" placeholder="${field.comment}"/>
                 </Form-item>
             #end
 

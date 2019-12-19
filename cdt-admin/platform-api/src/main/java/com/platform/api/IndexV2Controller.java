@@ -116,6 +116,7 @@ public class IndexV2Controller extends ApiBaseAction {
                 newCategoryList.add(newCategory);
             }
             resultObj.put("productList", newCategoryList);
+            log.info("indexv2数据库读取数据");
             redisTemplate.opsForValue().set("indexV2", resultObj, 10, TimeUnit.MINUTES);
         }
         return Result.success(resultObj);
@@ -142,6 +143,7 @@ public class IndexV2Controller extends ApiBaseAction {
             List<GoodsVo> newGoods = goodsService.queryList(param);
             goodsDTOS = JsonTransfer.convertList(newGoods, GoodsDTO.class);
             redisTemplate.opsForValue().set("indexNewGoods", goodsDTOS, 10, TimeUnit.MINUTES);
+            log.info("indexNewGoods数据库读取数据");
         }
         return Result.success(goodsDTOS);
     }

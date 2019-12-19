@@ -4,14 +4,14 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
-import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
-import com.baomidou.mybatisplus.generator.config.rules.FileType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 
 import java.sql.Driver;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Generator {
     public final static String DB_CONNECTION = "jdbc:mysql://121.196.219.8:3306/cdt_test?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true";
@@ -48,12 +48,19 @@ public class Generator {
     }
 
     private static InjectionConfig genCustomerTemplate() {
+
+        // 注入自定义配置，可以在 VM 中使用 cfg.abc 【可无】  ${cfg.abc}
         InjectionConfig cfg = new InjectionConfig() {
             @Override
             public void initMap() {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("abc", this.getConfig().getGlobalConfig().getAuthor() + "-mp");
+                this.setMap(map);
             }
         };
-        String htmlTemplate = "/admin-html.vm";
+
+
+        String htmlTemplate = "/template/admin-html.vm";
         // 自定义输出配置
         List<FileOutConfig> focList = new ArrayList<>();
         // 自定义配置会被优先输出
@@ -65,7 +72,7 @@ public class Generator {
             }
         });
 
-        String jsTemplate = "/admin-vuejs.vm";
+        String jsTemplate = "/template/admin-vuejs.vm";
         focList.add(new FileOutConfig(jsTemplate) {
             @Override
             public String outputFile(TableInfo tableInfo) {
