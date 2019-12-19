@@ -35,12 +35,14 @@ public class Generator {
         StrategyConfig strategyConfig = getStrategyConfig(tableNames);// 策略配置
         TemplateConfig templateConfig = getTemplateConfig(module);// 配置模板
 
+        InjectionConfig cfg= genCustomerTemplate();
         new AutoGenerator()
                 .setGlobalConfig(globalConfig)
                 .setDataSource(dataSourceConfig)
                 .setPackageInfo(packageConfig)
                 .setStrategy(strategyConfig)
                 .setTemplate(templateConfig)
+                .setCfg(cfg)
                 .execute();
 
     }
@@ -72,14 +74,14 @@ public class Generator {
             }
         });
 
-        cfg.setFileCreate(new IFileCreate() {
-            @Override
-            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
-                // 判断自定义文件夹是否需要创建
-                checkDir("调用默认方法创建的目录");
-                return false;
-            }
-        });
+//        cfg.setFileCreate(new IFileCreate() {
+//            @Override
+//            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
+//                // 判断自定义文件夹是否需要创建
+//                checkDir("调用默认方法创建的目录");
+//                return false;
+//            }
+//        });
 
         cfg.setFileOutConfigList(focList);
         return cfg;
