@@ -39,6 +39,7 @@
         <module>cdt-application/cdt-application-services</module>
         <module>cdt-infrastructure/cdt-base-bean</module>
         <module>cdt-infrastructure/cdt-base-service</module>
+        <module>cdt-infrastructure/cdt-base-tool</module>
     </modules>
 
     <properties>
