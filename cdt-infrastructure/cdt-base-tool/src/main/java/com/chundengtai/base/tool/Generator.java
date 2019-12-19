@@ -2,10 +2,16 @@ package com.chundengtai.base.tool;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
+import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
+import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.baomidou.mybatisplus.generator.config.rules.FileType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 
 import java.sql.Driver;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Generator {
     public final static String DB_CONNECTION = "jdbc:mysql://121.196.219.8:3306/cdt_test?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true";
@@ -39,6 +45,46 @@ public class Generator {
 
     }
 
+    private static InjectionConfig genCustomerTemplate() {
+        InjectionConfig cfg = new InjectionConfig() {
+            @Override
+            public void initMap() {
+            }
+        };
+        String htmlTemplate = "/admin-html.vm";
+        // 自定义输出配置
+        List<FileOutConfig> focList = new ArrayList<>();
+        // 自定义配置会被优先输出
+        focList.add(new FileOutConfig(htmlTemplate) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                return System.getProperty("user.dir") + "/src/main/html/" + tableInfo.getEntityName() + ".html";
+            }
+        });
+
+        String jsTemplate = "/admin-vuejs.vm";
+        focList.add(new FileOutConfig(jsTemplate) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                return System.getProperty("user.dir") + "/src/main/js/" + tableInfo.getEntityName() + ".js";
+            }
+        });
+
+        cfg.setFileCreate(new IFileCreate() {
+            @Override
+            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
+                // 判断自定义文件夹是否需要创建
+                checkDir("调用默认方法创建的目录");
+                return false;
+            }
+        });
+
+        cfg.setFileOutConfigList(focList);
+        return cfg;
+    }
+
     private static TemplateConfig getTemplateConfig(String module) {
         TemplateConfig templateConfig = new TemplateConfig();
         if ("service".equals(module)) {
@@ -54,7 +100,7 @@ public class Generator {
                     .setXml(null)
                     .setService(null)
                     .setServiceImpl(null)
-                    .setController(new TemplateConfig().getController());
+                    .setController("/template/Controller.java.vm");
         } else {
             throw new IllegalArgumentException("参数匹配错误，请检查");
         }
