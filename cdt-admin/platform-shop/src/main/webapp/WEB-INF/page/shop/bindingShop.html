@@ -14,7 +14,7 @@
             <!--<i-input v-model="user.merchantId" placeholder="店铺"/>-->
             <Form-item label="店铺" prop="shop" style="width: 268px;">
                 <i-select v-model="user.merchantId" filterable>
-                    <i-option v-for="merchant in merchants" :value="merchant.id" :key="merchant.id">
+                    <i-option v-for="merchant in merchants" :value="merchant.key" :key="merchant.key">
                         {{merchant.shopName}}
                     </i-option>
                 </i-select>

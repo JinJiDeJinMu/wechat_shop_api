@@ -138,7 +138,7 @@
 			`register_ip`,
 			`avatar`,
 			`promoter_id`,
-			`weixin_openid`,)
+			`weixin_openid`,
 			`merchant_id`)
 		values(
 			#{username},
@@ -154,7 +154,7 @@
 			#{registerIp},
 			#{avatar},
 			#{promoterId},
-			#{weixinOpenid},)
+			#{weixinOpenid},
 			#{merchantId})
 	</insert>
 

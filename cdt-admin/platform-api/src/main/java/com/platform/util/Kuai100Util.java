@@ -1,8 +1,7 @@
 package com.platform.util;
 
-import com.platform.util.wechat.MD5;
 import com.platform.utils.DateUtils;
-import com.platform.utils.HttpUtil;
+import com.platform.utils.HttpsUtils;
 import com.platform.utils.JsonUtil;
 
 import java.io.BufferedReader;
@@ -15,31 +14,13 @@ import java.util.Map;
 
 public class Kuai100Util {
 
-    private static final String URL = "https://poll.kuaidi100.com/poll/query.do";
+    private static final String URL = "https://sp0.baidu.com/9_Q4sjW91Qh3otqbppnN2DJv/pae/channel/data/asyncqury?cb=jQuery110204759692032715892_1499865778178&appid=4001&com=&nu=";
 
-    private static final String CUSTOMER = "";
+    public static String getMessage(String postid) {
 
-    private static final String KEY = "";
-
-
-    /**
-     * @param type  快递公司编码（顺风：shufeng）
-     * @param phone 寄件人电话(收、寄件人的电话号码（手机和固定电话均可，只能填写一个，顺丰单号必填，其他快递公司选填。如座机号码有分机号，分机号无需上传)
-     * @param num   快递号：1234567890
-     * @return
-     */
-    public static String getExpress(String type, String phone, String num, String from, String to) {
-
-        String param = "type:" + type + "num:" + num + "from:" + from + "to:" + to + "resultv2:1";
-        String sign = MD5.getMessageDigest(param + KEY + CUSTOMER);
-        Map<String, Object> hashmap = new HashMap<>();
-        hashmap.put("customer", CUSTOMER);
-        hashmap.put("param", param);
-        hashmap.put("sign", sign);
-        String result = HttpUtil.URLPost(URL, hashmap, "UTF-8");
+        String result = HttpsUtils.doGet(URL + postid);
         return result;
     }
-	
 	/**
 	 * 获取物流信息
 	 * type		快递公司编码（顺风：shufeng）
@@ -52,7 +33,7 @@ public class Kuai100Util {
         BufferedReader in = null;
         Map<String, String> resMap = new HashMap<String, String>();
         try {
-            String urlNameString = url + "?" + param;
+            String urlNameString = URL + postid;
             URL realUrl = new URL(urlNameString);
             // 打开和URL之间的连接
             URLConnection connection = realUrl.openConnection();
@@ -102,4 +83,7 @@ public class Kuai100Util {
         return resMap;
     }
 
+    public static void main(String[] args) {
+
+    }
 }

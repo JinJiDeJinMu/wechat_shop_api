@@ -117,6 +117,12 @@ public class CdtMerchantController extends BaseController {
             params.put("merchant_id", sysUserEntity.getMerchantId());
         }
         List<CdtMerchantEntity> list = cdtMerchantService.queryList(params);
+        list = list.stream().map(s ->
+                {
+                    s.setKey(String.valueOf(s.getId()));
+                    return s;
+                }
+        ).collect(Collectors.toList());
 
         return R.ok().put("list", list);
     }

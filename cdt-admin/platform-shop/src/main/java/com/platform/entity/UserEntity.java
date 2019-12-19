@@ -60,7 +60,7 @@ public class UserEntity implements Serializable {
     //用户真实姓名
     private String realName;
     //店铺id
-    private Integer merchantId;
+    private Long merchantId;
 
 
     /**
@@ -267,11 +267,11 @@ public class UserEntity implements Serializable {
         return weixinOpenid;
     }
 
-    public Integer getMerchantId() {
+    public Long getMerchantId() {
         return merchantId;
     }
 
-    public void setMerchantId(Integer merchantId) {
+    public void setMerchantId(Long merchantId) {
         this.merchantId = merchantId;
     }
 
