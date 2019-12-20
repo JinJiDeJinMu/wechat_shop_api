@@ -1,4 +1,3 @@
-//iframe自适应
 $(window).on('resize', function () {
     var $content = $('#mainApp');
     $content.height($(this).height());
@@ -15,7 +14,6 @@ $.ajaxSetup({
     cache: false
 });
 
-//重写alert
 window.alert = function (msg, callback) {
     // parent.layer.alert 弹出在iframe外的页面。
     layer.alert(msg, function (index) {
@@ -214,8 +212,6 @@ function transGender(gender) {
     }
     return '未知';
 };
-
-
 
 /**
  * 维护状态

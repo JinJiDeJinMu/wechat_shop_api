@@ -18,8 +18,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -29,6 +29,7 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-core</artifactId>
@@ -43,25 +44,14 @@
 
         <dependency>
             <groupId>com.chundengtai.base</groupId>
-            <
-            <
-            <
-            <
-            <
-            <
-            < Updated upstream
             <artifactId>cdt-base-bean</artifactId>
             <version>1.0-SNAPSHOT</version>
-            =======
+        </dependency>
+
+        <dependency>
+            <groupId>com.chundengtai.base</groupId>
             <artifactId>cdt-base-tool</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-extension</artifactId>
-            <version>3.2.0</version>
-            >>>>>>> Stashed changes
             <scope>compile</scope>
         </dependency>
 
@@ -138,10 +128,6 @@
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.7.1</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.0.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>

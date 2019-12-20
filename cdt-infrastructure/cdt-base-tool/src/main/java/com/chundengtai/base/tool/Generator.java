@@ -72,7 +72,7 @@ public class Generator {
             }
         });
 
-        String jsTemplate = "/template/admin-vuejs.vm";
+        String jsTemplate = "/template/vuejs.js.vm";
         focList.add(new FileOutConfig(jsTemplate) {
             @Override
             public String outputFile(TableInfo tableInfo) {
