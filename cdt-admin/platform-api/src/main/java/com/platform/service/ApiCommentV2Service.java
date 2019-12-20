@@ -1,7 +1,7 @@
 package com.platform.service;
 
-import com.platform.entity.CommentReq;
 import com.platform.dao.ApiCommentV2Mapper;
+import com.platform.entity.CommentReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,8 +50,8 @@ public class ApiCommentV2Service {
      * @param commentReq 实体
      * @return 保存条数
      */
-    public int savecom(CommentReq commentReq) {
-        return apiCommentV2Mapper.savecom(commentReq);
+    public int save(CommentReq commentReq) {
+        return apiCommentV2Mapper.save(commentReq);
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.platform.api;
 
+import com.chundengtai.base.bean.CdtProductComment;
 import com.chundengtai.base.result.Result;
+import com.chundengtai.base.service.CdtProductCommentService;
 import com.chundengtai.base.weixinapi.WeixinContants;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.*;
@@ -8,7 +10,6 @@ import com.platform.oss.OSSFactory;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiPageUtils;
-import com.platform.util.RedisUtils;
 import com.platform.utils.Base64;
 import com.platform.utils.Query;
 import com.platform.utils.RRException;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.util.*;
 
 @Api(value = "窝边生活商品评论", tags = "窝边生活商品评论")
@@ -39,6 +39,9 @@ public class ApiCommentV2Controller extends ApiBaseAction {
     private ApiUserService userService;
     @Autowired
     private ApiCommentPictureService commentPictureService;
+
+    @Autowired
+    private CdtProductCommentService cdtProductCommentService;
 
     /**
      * 获取评价列表（在商品详情里面）
@@ -109,14 +112,14 @@ public class ApiCommentV2Controller extends ApiBaseAction {
     @GetMapping("post")
     @ResponseBody
     public Result<Object> post(
-            @RequestParam Long userId,
-            @RequestParam String orderNo,
+            @RequestParam Integer userId,
+            @RequestParam Integer orderNo,
             @RequestParam Integer goodId,
             @RequestParam String content,
             @RequestParam Integer starLevel,
             @RequestParam String[] imageList
     ) {
-        CommentReq commentReq = new CommentReq();
+        /*CommentReq commentReq = new CommentReq();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
         commentReq.setCreateTime(new Date());
         commentReq.setUserId(userId);
@@ -128,8 +131,27 @@ public class ApiCommentV2Controller extends ApiBaseAction {
             commentReq.setStatus(1);
         }
         commentReq.setContent(content);
+        commentReq.setStarLevel(starLevel);*/
+
+        for (int i = 0; i < imageList.length; i++) {
+            System.out.println();
+        }
+
+
+        CdtProductComment commentReq = new CdtProductComment();
+        commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
+        commentReq.setCreateTime(new Date());
+        commentReq.setUserId(userId);
+        commentReq.setOrderNo(orderNo);
+        commentReq.setGoodId(goodId);
+        if (imageList == null) {
+            commentReq.setStatus(0);
+        } else {
+            commentReq.setStatus(1);
+        }
+        commentReq.setContent(content);
         commentReq.setStarLevel(starLevel);
-        apiCommentV2Service.savecom(commentReq);
+        cdtProductCommentService.save(commentReq);
         Long insertId = commentReq.getId();
         if (insertId > 0 && imageList != null) {
             int i = 0;
@@ -138,7 +160,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
                     throw new RRException("上传文件不能为空");
                 }
                 //上传文件
-                String url = imageList[i];
+                String url = imageList[i].replace("[", "").replaceAll("\"", "").replace("]", "");
                 CommentPictureVo pictureVo = new CommentPictureVo();
                 pictureVo.setType(0);
                 pictureVo.setComment_id(insertId);
@@ -169,80 +191,6 @@ public class ApiCommentV2Controller extends ApiBaseAction {
 
             return url;
    }
-
-    @IgnoreAuth
-    @GetMapping("postre")
-    @ResponseBody
-    public Result<Object> postre(
-            @RequestParam Long userId,
-            @RequestParam String orderNo,
-            @RequestParam Integer goodId,
-            @RequestParam String content,
-            @RequestParam Integer starLevel,
-            @RequestParam String rkey
-    ) {
-        CommentReq commentReq = new CommentReq();
-        commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
-        commentReq.setCreateTime(new Date());
-        commentReq.setUserId(userId);
-        commentReq.setOrderNo(orderNo);
-        commentReq.setGoodId(goodId);
-
-        List<String> imageList = RedisUtils.lrange(rkey,0,4);
-        if(imageList == null){
-            commentReq.setStatus(0);
-        }else {
-            commentReq.setStatus(1);
-        }
-        commentReq.setContent(content);
-        commentReq.setStarLevel(starLevel);
-        apiCommentV2Service.savecom(commentReq);
-        Long insertId = commentReq.getId();
-        if (insertId > 0 && imageList != null) {
-            int i = 0;
-            for (String imgLink : imageList) {
-                if (imgLink.isEmpty()) {
-                    throw new RRException("上传文件不能为空");
-                }
-                //上传文件
-                String url = imageList.get(i);
-                CommentPictureVo pictureVo = new CommentPictureVo();
-                pictureVo.setType(0);
-                pictureVo.setComment_id(insertId);
-                pictureVo.setPic_url(url);
-                pictureVo.setSort_order(i+1);
-                commentPictureService.save(pictureVo);
-                i++;
-            }
-        }
-        RedisUtils.del(rkey);
-        Map resultModel = new HashMap();
-        resultModel.put("comment_id", insertId);
-        resultModel.put("mag", "发表成功");
-        return Result.success(resultModel);
-    }
-
-    @PostMapping("/upload")
-    @IgnoreAuth
-    public String uploadfile(HttpServletRequest request, @RequestParam("files")MultipartFile[] files){
-        if (files==null) {
-            throw new RRException("上传文件不能为空");
-        }
-        String url = null;
-        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        if(RedisUtils.exists(uuid)){
-            RedisUtils.del(uuid);
-        }
-        try {
-            for(MultipartFile file: files) {
-                url = OSSFactory.build().upload(file, WeixinContants.GOODS_COMMENT_PATH);
-                RedisUtils.lpush(uuid, url);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return uuid;
-    }
 
 
     @ApiOperation(value = "回复评论")
@@ -376,8 +324,5 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         return toResponsSuccess(pageUtil);
     }
 
-    public static void main(String[] args) {
-    File file = new File("        http://tmp/wxa637df01806a720c.o6zAJs2oXHh2hEZJHteHnBHXPGEQ.QWgh4rDGMTb68a539c9e723340f784f4311730d920a4.jpg");
-    }
 
 }
