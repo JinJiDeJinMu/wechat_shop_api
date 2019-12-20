@@ -21,7 +21,7 @@ public class Generator {
     public final static String SYS_AHURTOR = "Royal";
 
     public static void main(String[] args) {
-        String[] tableNames = new String[]{"cdt_distribution_level", "cdt_user_distribution","cdt_rebate_log","cdt_distridetail","cdt_distrimoney"};
+        String[] tableNames = new String[]{"cdt_product_comment"};
         String[] modules = new String[]{"service", "web"};//项目模块名，需自定义
         for (String module : modules) {
             moduleGenerator(module, tableNames);

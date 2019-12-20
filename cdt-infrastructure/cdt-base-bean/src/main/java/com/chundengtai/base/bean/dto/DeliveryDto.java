@@ -1,4 +1,4 @@
-package dto;
+package com.chundengtai.base.bean.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

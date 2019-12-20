@@ -2,11 +2,11 @@ package com.platform.api;
 
 import cn.hutool.http.HttpUtil;
 import com.chundengtai.base.bean.Delivery;
+import com.chundengtai.base.bean.dto.DeliveryDto;
 import com.chundengtai.base.common.Json;
 import com.chundengtai.base.service.DeliveryService;
 import com.platform.entity.OrderVo;
 import com.platform.service.ApiOrderService;
-import dto.DeliveryDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
