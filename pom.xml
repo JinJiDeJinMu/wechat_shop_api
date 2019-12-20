@@ -120,6 +120,12 @@
             <!--<version>${mapstruct.version}</version>-->
         <!--</dependency>-->
         <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>28.1-jre</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-core</artifactId>
             <version>${mybatis-plus-core.version}</version>

@@ -1,4 +1,4 @@
-package com.platform.config;
+package com.chundengtai.base.thread;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +33,7 @@ public class AsyncThreadPoolConfig {
      *
      * @return
      */
-    @Bean(name = "taskExecutorChujian")
+    @Bean(name = "taskExecutorCdt")
     public AsyncTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setThreadNamePrefix("Aysnc-Executor");
@@ -54,6 +54,7 @@ public class AsyncThreadPoolConfig {
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(60);
+
         return executor;
     }
 }
