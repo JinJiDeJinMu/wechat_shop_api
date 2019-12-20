@@ -114,7 +114,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
             @RequestParam Integer goodId,
             @RequestParam String content,
             @RequestParam Integer starLevel,
-            @RequestParam String imageList
+            @RequestParam String[] imageList
     ) {
         CommentReq commentReq = new CommentReq();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
@@ -131,7 +131,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         commentReq.setStarLevel(starLevel);
         apiCommentV2Service.savecom(commentReq);
         Long insertId = commentReq.getId();
-        /*if (insertId > 0 && imageList != null) {
+        if (insertId > 0 && imageList != null) {
             int i = 0;
             for (String imgLink : imageList) {
                 if (imgLink.isEmpty()) {
@@ -147,7 +147,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
                 commentPictureService.save(pictureVo);
                 i++;
             }
-        }*/
+        }
         Map resultModel = new HashMap();
         resultModel.put("comment_id", insertId);
         resultModel.put("mag", "发表成功");
