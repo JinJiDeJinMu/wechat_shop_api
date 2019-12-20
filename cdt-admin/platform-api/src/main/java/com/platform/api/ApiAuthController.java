@@ -1,24 +1,8 @@
 package com.platform.api;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.collections.MapUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.chundengtai.base.event.DistributionEvent;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.LoginInfo;
 import com.platform.entity.MlsUserEntity2;
@@ -32,9 +16,19 @@ import com.platform.utils.Base64;
 import com.platform.utils.R;
 import com.platform.validator.Assert;
 import com.qiniu.util.StringUtils;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections.MapUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * API登录授权
@@ -48,6 +42,10 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/api/auth")
 public class ApiAuthController extends ApiBaseAction {
     private Logger logger = Logger.getLogger(getClass());
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
     @Autowired
     private ApiUserService userService;
     @Autowired
@@ -106,7 +104,7 @@ public class ApiAuthController extends ApiBaseAction {
         UserVo userVo = userService.queryByOpenId(openid);
         if (null == userVo) {
         	userVo = new UserVo();
-            
+
             userVo.setUsername(Base64.encode(loginInfo.getNickName()));
             userVo.setPassword(openid);
             userVo.setRegister_time(nowTime);
@@ -182,6 +180,13 @@ public class ApiAuthController extends ApiBaseAction {
 
         if (StringUtils.isNullOrEmpty(token)) {
             return toResponsFail("登录失败");
+        }
+
+        if (!StringUtils.isNullOrEmpty(loginInfo.getReferrerId())) {
+            DistributionEvent event = new DistributionEvent();
+            event.setEncryptCode(loginInfo.getReferrerId());
+            event.setUserId(userVo.getUserId());
+            eventPublisher.publishEvent(event);
         }
         Map<String, Object> resultObj = new HashMap<String, Object>();
         //resultObj.put("openid", openid);

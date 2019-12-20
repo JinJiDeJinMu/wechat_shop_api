@@ -14,7 +14,16 @@ public class LoginInfo  {
     private String country;
 	private int promoterId;
 	private Long merchantId;	//商户id
-	
+
+	public String getReferrerId() {
+		return referrerId;
+	}
+
+	public void setReferrerId(String referrerId) {
+		this.referrerId = referrerId;
+	}
+
+	private String referrerId;
 	public Long getMerchantId() {
 		return merchantId;
 	}
