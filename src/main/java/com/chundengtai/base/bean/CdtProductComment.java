@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -25,7 +25,7 @@ public class CdtProductComment implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
 
     /**
      * 订单id
@@ -62,7 +62,7 @@ public class CdtProductComment implements Serializable {
      */
     private Integer status;
 
-    private Date createTime;
+    private LocalDateTime createTime;
 
 
 }
