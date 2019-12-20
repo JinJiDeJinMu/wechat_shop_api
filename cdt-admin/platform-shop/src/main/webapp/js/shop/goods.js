@@ -70,16 +70,20 @@ var vm = new Vue({
 			merchantId: ''
 		},
 		ruleValidate: {
-			name: [{
+            name: [
+                {
 				required: true,
 				message: '名称不能为空',
 				trigger: 'blur'
-			}],
-			goodsSn: [{
-				required: true,
-				message: '序列号不能为空',
+                },
+                {
+                    type: 'string',
+                    max: 200,
+                    message: '不能超过200个字符',
 				trigger: 'blur'
-			}],
+                }
+            ],
+
 			listPicUrl: [{
 				required: true,
 				message: '首页列表页图片不能为空',
@@ -605,6 +609,10 @@ var vm = new Vue({
 				alert('产品名称不能为空');
 				return false;
 			}
+            if (vm.goods.name.length > 200) {
+                alert('产品名称过长');
+                return false;
+            }
 			if (vm.goods.listPicUrl == '') {
 				alert('商品列表图必须上传');
 				return false;

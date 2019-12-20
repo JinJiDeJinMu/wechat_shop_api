@@ -97,8 +97,9 @@ let vm = new Vue({
             shopPhotos: ''
         },
         ruleValidate: {
-            name: [
-                {required: true, message: '名称不能为空', trigger: 'blur'}
+            shopName: [
+                {required: true, message: '名称不能为空', trigger: 'blur'},
+                {type: 'string', max: 50, message: '不能超过50个字符', trigger: 'blur'}
             ]
         },
         q: {
@@ -157,6 +158,10 @@ let vm = new Vue({
             vm.getInfo(key)
         },
         saveOrUpdate: function (event) {
+            if (vm.cdtMerchant.shopName.length > 50) {
+                alert("名称过长");
+                return false;
+            }
             var url = vm.cdtMerchant.key == null ? "../cdtmerchant/save" : "../cdtmerchant/update";
             console.log(vm.cdtMerchant.id + '数据-saveOrUpdate key2---' + vm.cdtMerchant.key)
             if (vm.cdtMerchant.key != null) {
