@@ -2,13 +2,14 @@ package com.chundengtai.base.bean;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@TableName(value = "cdt_distrimoney")
 public class CdtDistrimoney implements Serializable {
 
     private static final long serialVersionUID=1L;
@@ -74,12 +76,12 @@ public class CdtDistrimoney implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
     /**
      * 更新时间
      */
-    private LocalDateTime updatedTime;
+    private Date updatedTime;
 
     /**
      * 更新人

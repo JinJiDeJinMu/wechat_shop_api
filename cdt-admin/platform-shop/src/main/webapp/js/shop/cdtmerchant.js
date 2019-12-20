@@ -99,8 +99,7 @@ let vm = new Vue({
         ruleValidate: {
             shopName: [
                 {required: true, message: '名称不能为空', trigger: 'blur'},
-                {type: 'string', max: 50, message: '不能超过50个字符', trigger: 'blur'}
-            ]
+                {type: 'string', max: 50, message: '不能超过50个字符', trigger: 'blur'}]
         },
         q: {
             name: ''

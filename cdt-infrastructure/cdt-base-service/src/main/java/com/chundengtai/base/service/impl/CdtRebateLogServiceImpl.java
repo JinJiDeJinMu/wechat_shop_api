@@ -4,7 +4,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chundengtai.base.bean.CdtRebateLog;
 import com.chundengtai.base.dao.CdtRebateLogMapper;
 import com.chundengtai.base.service.CdtRebateLogService;
+import com.chundengtai.base.tool.ReflectUtils;
+import com.platform.page.PageHelper;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +22,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class CdtRebateLogServiceImpl extends ServiceImpl<CdtRebateLogMapper, CdtRebateLog> implements CdtRebateLogService {
 
+    @Override
+    public List<CdtRebateLog> queryList(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return this.list();
+    }
+
+    @Override
+    public Boolean addCdtRebateLog(CdtRebateLog cdtRebateLog) {
+        cdtRebateLog.setCreatedTime(new Date());
+        cdtRebateLog.setToken(ReflectUtils.getToken(cdtRebateLog));
+        return this.save(cdtRebateLog);
+    }
 }

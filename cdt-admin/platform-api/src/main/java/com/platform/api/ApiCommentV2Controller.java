@@ -3,11 +3,7 @@ package com.platform.api;
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.weixinapi.WeixinContants;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.entity.CommentReq;
-import com.platform.entity.CommentPictureVo;
-import com.platform.entity.CommentVo;
-import com.platform.entity.RepCommentVo;
-import com.platform.entity.UserVo;
+import com.platform.entity.*;
 import com.platform.oss.OSSFactory;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
@@ -20,10 +16,8 @@ import com.platform.utils.StringUtils;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -120,7 +114,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
             @RequestParam Integer goodId,
             @RequestParam String content,
             @RequestParam Integer starLevel,
-            @RequestParam("imageList")String[] imageList
+            @RequestParam String imageList
     ) {
         CommentReq commentReq = new CommentReq();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
@@ -137,7 +131,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         commentReq.setStarLevel(starLevel);
         apiCommentV2Service.savecom(commentReq);
         Long insertId = commentReq.getId();
-        if (insertId > 0 && imageList != null) {
+        /*if (insertId > 0 && imageList != null) {
             int i = 0;
             for (String imgLink : imageList) {
                 if (imgLink.isEmpty()) {
@@ -153,7 +147,7 @@ public class ApiCommentV2Controller extends ApiBaseAction {
                 commentPictureService.save(pictureVo);
                 i++;
             }
-        }
+        }*/
         Map resultModel = new HashMap();
         resultModel.put("comment_id", insertId);
         resultModel.put("mag", "发表成功");

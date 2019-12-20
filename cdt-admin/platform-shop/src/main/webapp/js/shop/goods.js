@@ -473,6 +473,7 @@ var vm = new Vue({
 				}
 			});
 		},
+
         reload: function (event) {
 			vm.showList = true;
 			this.getList()

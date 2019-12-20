@@ -1,12 +1,13 @@
 package com.chundengtai.base.bean;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@TableName(value = "cdt_rebate_log")
 public class CdtRebateLog implements Serializable {
 
     private static final long serialVersionUID=1L;
@@ -81,7 +83,7 @@ public class CdtRebateLog implements Serializable {
     /**
      * 确定分成或者取消时间
      */
-    private LocalDateTime confirmTime;
+    private Date confirmTime;
 
     /**
      * 备注
@@ -101,7 +103,7 @@ public class CdtRebateLog implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
 
 }
