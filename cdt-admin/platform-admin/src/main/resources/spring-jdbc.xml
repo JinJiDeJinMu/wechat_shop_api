@@ -180,7 +180,7 @@
                         <!--主键规则-->
                         <property name="idType" value="AUTO"/>
                         <!--表前缀-->
-                        <property name="tablePrefix" value="tbl_"/>
+                        <!--<property name="tablePrefix" value="tbl_"/>-->
                     </bean>
                 </property>
                 <!--<property name="sqlInjector" ref="logicalDelInjector"/>-->
