@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +45,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v2/index")
 @Slf4j
 public class IndexV2Controller extends ApiBaseAction {
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
     @Autowired
     private ApiAdService adService;
     @Autowired
@@ -128,7 +132,7 @@ public class IndexV2Controller extends ApiBaseAction {
     @ApiOperation(value = "首页新品")
     @IgnoreAuth
     @GetMapping(value = "indexNewGoods")
-    public Result<List<GoodsDTO>> indexGoods() {
+    public Result<List<GoodsDTO>> indexGoods(String referrerId) {
         List<GoodsDTO> goodsDTOS = (List<GoodsDTO>) redisTemplate.opsForValue().get("indexNewGoods");
         if (goodsDTOS == null) {
             //最新商品

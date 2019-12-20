@@ -9,5 +9,6 @@ public class DistributionEvent {
 
     public int userId;
     public int referrerId;
+    public String encryptCode;
 
 }
