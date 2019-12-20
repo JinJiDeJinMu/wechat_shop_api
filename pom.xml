@@ -76,6 +76,7 @@
         <jgroups.version>3.6.13.Final</jgroups.version>
         <mybatis.paginator.version>1.2.10</mybatis.paginator.version>
         <mapstruct.version>RELEASE</mapstruct.version>
+        <mybatis-plus-core.version>3.3.0</mybatis-plus-core.version>
     </properties>
 
     <!-- 阿里云maven仓库 -->
@@ -118,6 +119,33 @@
             <!--<artifactId>mapstruct-processor</artifactId>-->
             <!--<version>${mapstruct.version}</version>-->
         <!--</dependency>-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-core</artifactId>
+            <version>${mybatis-plus-core.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+            <version>${mybatis-plus-core.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>${mybatis-plus-core.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-annotation</artifactId>
+            <version>${mybatis-plus-core.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>

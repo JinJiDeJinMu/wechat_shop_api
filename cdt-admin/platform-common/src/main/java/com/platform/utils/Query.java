@@ -8,9 +8,6 @@ import java.util.Map;
 /**
  * 查询参数
  *
- * @author lipengjun
- * @email 939961241@qq.com
- * @date 2017-03-14 23:15
  */
 public class Query extends LinkedHashMap<String, Object> {
     private static final long serialVersionUID = 1L;
@@ -19,12 +16,34 @@ public class Query extends LinkedHashMap<String, Object> {
     //每页条数
     private int limit = 10;
 
+    private int pageNum;
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    private int pageSize;
+
     public Query(Map<String, Object> params) {
         this.putAll(params);
 
         //分页参数
         this.page = Integer.parseInt(params.get("page").toString());
         this.limit = Integer.parseInt(params.get("limit").toString());
+        this.pageNum = this.page;
+        this.pageSize = this.pageNum;
         this.put("offset", (page - 1) * limit);
         this.put("page", page);
         this.put("limit", limit);

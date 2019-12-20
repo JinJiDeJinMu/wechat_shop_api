@@ -91,15 +91,21 @@
         </dependency>
 
         <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>3.8.6</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus</artifactId>
-            <version>3.1.2</version>
+            <version>3.3.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
-            <version>3.5.1</version>
+            <version>3.5.3</version>
             <scope>compile</scope>
         </dependency>
 
@@ -175,6 +181,12 @@
             <artifactId>druid</artifactId>
             <version>${druid-version}</version>
         </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>com.zaxxer</groupId>-->
+        <!--<artifactId>HikariCP</artifactId>-->
+        <!--<version>3.4.1</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>commons-lang</groupId>

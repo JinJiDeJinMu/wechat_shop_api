@@ -4,23 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>综合管理平台</title>
-    <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="shortcut icon" href="statics/img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="statics/css/bootstrap.min.css">
     <link rel="stylesheet" href="statics/css/font-awesome.min.css">
     <link rel="stylesheet" href="statics/css/style.css">
     <link rel="stylesheet" href="statics/css/login.css">
     <link rel="stylesheet" href="statics/css/main.css">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <link rel="stylesheet" href="statics/css/iview.css">
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.js"></script>
     <![endif]-->
 </head>
-<!-- ADD THE CLASS layout-boxed TO GET A BOXED LAYOUT -->
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
 <div id="mainApp" v-cloak>
     <!--左侧导航开始-->
@@ -34,7 +29,7 @@
                          style="text-align: center;font-size: 18px;font-weight: 600;color: white;">
                         综合管理平台
                     </div>
-                    <div class="logo-element">大平台
+                    <div class="logo-element">左边栏
                     </div>
                 </li>
                 <menu-item :item="item" v-for="item in menuList"></menu-item>
@@ -48,23 +43,11 @@
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i
                         class="fa fa-bars"></i> </a>
-                    <form role="search" class="navbar-form-custom" method="post" action="#">
-                        <div class="form-group">
-                            <input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search"
-                                   id="top-search">
-                        </div>
-                    </form>
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
 
                     <li class="dropdown">
                         <a href="javascript:;" @click="toggleFullScreen"><i class="fa fa-arrows-alt"></i> &nbsp;全屏</a>
-                    </li>
-                    <!--<li><a href="javascript:;" @click="updatePassword"><i class="fa fa-lock"></i> &nbsp;修改密码</a></li>-->
-                    <li class="dropdown hidden-xs">
-                        <a class="right-sidebar-toggle" aria-expanded="false">
-                            <i class="fa fa-tasks"></i> 主题
-                        </a>
                     </li>
                     <li><a @click="logout"><i class="fa fa fa-sign-out"></i>退出</a></li>
                 </ul>
@@ -106,122 +89,6 @@
     <!--右侧边栏开始-->
     <div id="right-sidebar">
         <div class="sidebar-container">
-
-            <ul class="nav nav-tabs navs-3">
-
-                <li class="active">
-                    <a data-toggle="tab" href="#tab-1">
-                        <i class="fa fa-gear"></i> 主题
-                    </a>
-                </li>
-                <li class="">
-                    <a data-toggle="tab" href="#tab-2">通知</a>
-                </li>
-            </ul>
-
-            <div class="tab-content">
-                <div id="tab-1" class="tab-pane active">
-                    <div class="sidebar-title">
-                        <h3><i class="fa fa-comments-o"></i> 主题设置</h3>
-                        <small><i class="fa fa-tim"></i> 你可以从这里选择和预览主题的布局和样式，这些设置会被保存在本地，下次打开的时候会直接应用这些设置。</small>
-                    </div>
-                    <div class="skin-setttings">
-                        <div class="title">主题设置</div>
-                        <div class="setings-item">
-                            <span>收起左侧菜单</span>
-                            <div class="switch">
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox"
-                                           id="collapsemenu">
-                                    <label class="onoffswitch-label" for="collapsemenu">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="setings-item">
-                            <span>固定顶部</span>
-
-                            <div class="switch">
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="fixednavbar" class="onoffswitch-checkbox"
-                                           id="fixednavbar">
-                                    <label class="onoffswitch-label" for="fixednavbar">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="setings-item">
-                            <span>固定宽度</span>
-
-                            <div class="switch">
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="boxedlayout" class="onoffswitch-checkbox"
-                                           id="boxedlayout">
-                                    <label class="onoffswitch-label" for="boxedlayout">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="title">皮肤选择</div>
-                        <div class="setings-item default-skin nb">
-                                <span class="skin-name ">
-                         <a href="#" class="s-skin-0">
-                             默认皮肤
-                         </a>
-                    </span>
-                        </div>
-                        <div class="setings-item blue-skin nb">
-                                <span class="skin-name ">
-                        <a href="#" class="s-skin-1">
-                            蓝色主题
-                        </a>
-                    </span>
-                        </div>
-                        <div class="setings-item yellow-skin nb">
-                                <span class="skin-name ">
-                        <a href="#" class="s-skin-3">
-                            黄色/紫色主题
-                        </a>
-                    </span>
-                        </div>
-                    </div>
-                </div>
-                <div id="tab-2" class="tab-pane">
-
-                    <div class="sidebar-title">
-                        <h3><i class="fa fa-comments-o"></i> 最新通知</h3>
-                        <small><i class="fa fa-tim"></i> 您当前有1条未读信息</small>
-                    </div>
-
-                    <div>
-                        <div class="sidebar-message">
-                            <a href="#">
-                                <div class="pull-left text-center">
-
-                                    <div class="m-t-xs">
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star text-warning"></i>
-                                    </div>
-                                </div>
-                                <div class="media-body">
-
-                                    这是一条测试消息
-                                    <br>
-                                    <small class="text-muted">今天 4:21</small>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
         </div>
     </div>
     <!--右侧边栏结束-->
@@ -285,7 +152,6 @@
     });
     //注册菜单组件
     Vue.component('menuItem', menuItem);
-
     var vm = new Vue({
         el: '#mainApp',
         data: {
@@ -361,20 +227,11 @@
                 });
             },
             love: function () {
-                // setTimeout(function () {
-                //     openWindow({
-                //         type: 2,
-                //         title: '腾讯云为数百万企业和开发者提供安全、稳定的云服务器、云数据库、CDN等云服务',
-                //         closeBtn: 2,
-                //         content: ['https://cloud.tencent.com/redirect.php?redirect=1005&cps_key=30280f92fc381dfc9e1d9e0e23d25a18']
-                //     });
-                // }, 3000)
             }
         },
         created: function () {
             this.getUser();
             this.getMenuList();
-            // this.love();
         },
         updated: function () {
             // MetsiMenu

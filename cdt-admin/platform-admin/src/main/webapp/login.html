@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>电商综合管理后台</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <script src="/js/babel.min.js"></script>
     <script src="/statics/libs/vue.min.js"></script>
@@ -168,7 +167,7 @@
                 }
             },
             refreshCode: function () {
-                this.src = "yanzhengma.do?t=" + new Date().getTime();
+                this.src = "yanzhengma.do?time=" + new Date().getTime();
             },
             login: function (event) {
                 if (this.username == '') {
@@ -184,18 +183,18 @@
                     return false;
                 }
                 this.loading = true;
-                var data = "username=" + this.username + "&password=" + this.password + "&captcha=" + this.captcha;
+                let data = "username=" + this.username + "&password=" + this.password + "&captcha=" + this.captcha;
                 $.ajax({
                     type: "POST",
                     url: "sys/login",
                     data: data,
                     dataType: "json",
-                    success: function (result) {
-                        if (result.code == 0) {//登录成功
+                    success: function (res) {
+                        if (res.code == 0) {//登录成功
                             parent.location.href = 'index.html';
                         } else {
                             this.refreshCode();
-                            iview.Message.error(result.msg);
+                            iview.Message.error(res.msg);
                         }
                     }
                 });
