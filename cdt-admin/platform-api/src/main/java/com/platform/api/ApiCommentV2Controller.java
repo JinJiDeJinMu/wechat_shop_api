@@ -270,7 +270,6 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         return Result.success(resultObj);
     }
 
-
     /**
      * @param typeId
      * @param valueId
