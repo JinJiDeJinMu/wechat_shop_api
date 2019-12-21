@@ -1,8 +1,8 @@
 package com.platform.service.impl;
+
 import com.platform.dao.CdtCustomerServiceDao;
 import com.platform.entity.CdtCustomerServiceEntity;
 import com.platform.service.CdtCustomerServiceService;
-import com.platform.utils.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,6 @@ import java.util.Map;
 /**
  * 客服管理表Service实现类
  *
- * @author lipengjun
  * @date 2019-11-25 19:27:34
  */
 @Service("cdtCustomerServiceService")

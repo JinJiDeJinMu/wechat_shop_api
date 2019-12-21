@@ -6,7 +6,6 @@ import java.io.Serializable;
  * 回复评论表实体
  * 表名 rep_comment
  *
- * @author lipengjun
  * @date 2019-11-18 19:35:15
  */
 public class RepCommentVo implements Serializable {

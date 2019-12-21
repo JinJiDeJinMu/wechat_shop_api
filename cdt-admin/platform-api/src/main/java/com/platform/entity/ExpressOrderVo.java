@@ -8,7 +8,6 @@ import java.io.Serializable;
  * 实体
  * 表名 nideshop_express_order
  *
- * @author lipengjun
  * @date 2019-11-29 10:44:41
  */
 @NoArgsConstructor

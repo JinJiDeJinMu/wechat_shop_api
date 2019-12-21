@@ -5,7 +5,6 @@ import java.io.Serializable;
  * 存放地址表实体
  * 表名 storage_address
  *
- * @author lipengjun
  * @date 2019-11-22 14:40:12
  */
 public class StorageAddressEntity implements Serializable {

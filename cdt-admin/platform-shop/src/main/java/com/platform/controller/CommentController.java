@@ -7,7 +7,6 @@ import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
 import com.platform.utils.ShiroUtils;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +17,6 @@ import java.util.Map;
 /**
  * Controller
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-08-28 17:03:40
  */
 @RestController

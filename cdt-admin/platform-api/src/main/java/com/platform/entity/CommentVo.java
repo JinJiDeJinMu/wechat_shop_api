@@ -6,13 +6,10 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 
 /**
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-08-15 08:03:40
  */
 @ApiModel(value = "评论实体")

@@ -11,8 +11,6 @@ import java.util.Map;
 /**
  * 系统用户
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2016年9月18日 上午9:34:11
  */
 public interface SysUserDao extends BaseBizMapper<SysUserEntity> {

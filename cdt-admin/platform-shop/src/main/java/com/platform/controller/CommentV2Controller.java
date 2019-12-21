@@ -1,4 +1,5 @@
 package com.platform.controller;
+
 import com.platform.entity.CommentPictureEntity;
 import com.platform.entity.CommentV2Entity;
 import com.platform.service.CommentPictureService;
@@ -6,7 +7,6 @@ import com.platform.service.CommentV2Service;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +18,6 @@ import java.util.Map;
 /**
  * 评价表Controller
  *
- * @author lipengjun
  * @date 2019-11-26 11:27:34
  */
 @RestController

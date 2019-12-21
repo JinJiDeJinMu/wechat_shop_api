@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * 系统页面视图Controller
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2016年11月24日 下午11:05:27
  */
 @Controller

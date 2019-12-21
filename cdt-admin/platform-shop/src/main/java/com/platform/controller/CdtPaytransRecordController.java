@@ -18,7 +18,6 @@ import java.util.Map;
 /**
  * 系统流水日志Controller
  *
- * @author lipengjun
  * @date 2019-12-12 17:45:18
  */
 @Controller

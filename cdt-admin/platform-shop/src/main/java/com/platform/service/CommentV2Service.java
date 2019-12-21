@@ -10,7 +10,6 @@ import java.util.Map;
 /**
  * 评价表Service接口
  *
- * @author lipengjun
  * @date 2019-11-26 11:27:34
  */
 public interface CommentV2Service {

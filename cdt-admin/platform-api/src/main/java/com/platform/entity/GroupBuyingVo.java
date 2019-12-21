@@ -8,8 +8,6 @@ import java.util.List;
  * 实体
  * 表名 group_buying
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2019-06-13 22:00:12
  */
 public class GroupBuyingVo implements Serializable {

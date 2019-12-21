@@ -3,7 +3,6 @@ package com.platform.service;
 
 import com.platform.entity.OrdercashApplyEntity;
 import com.platform.entity.UserEntity;
-import com.platform.entity.UserVo;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ import java.util.Map;
 /**
  * Service接口
  *
- * @author lipengjun
  * @date 2019-12-11 11:29:38
  */
 public interface OrdercashApplyService {

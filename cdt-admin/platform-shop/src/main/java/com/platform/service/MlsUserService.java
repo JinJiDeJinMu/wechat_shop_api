@@ -1,15 +1,13 @@
 package com.platform.service;
 
+import com.platform.entity.MlsUserEntity2;
+
 import java.util.List;
 import java.util.Map;
-
-import com.platform.entity.MlsUserEntity2;
 
 /**
  * Service接口
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-08-16 15:02:28
  */
 public interface MlsUserService {

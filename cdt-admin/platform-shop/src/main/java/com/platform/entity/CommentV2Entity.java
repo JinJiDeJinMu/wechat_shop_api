@@ -7,7 +7,6 @@ import java.util.List;
  * 评价表实体
  * 表名 nideshop_comment_v2
  *
- * @author lipengjun
  * @date 2019-11-26 11:27:34
  */
 public class CommentV2Entity implements Serializable {

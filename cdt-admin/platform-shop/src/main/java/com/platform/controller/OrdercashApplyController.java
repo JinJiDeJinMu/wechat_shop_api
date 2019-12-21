@@ -11,9 +11,10 @@ import com.platform.service.CdtMerchantService;
 import com.platform.service.OrderService;
 import com.platform.service.OrdercashApplyService;
 import com.platform.service.UserService;
-import com.platform.util.wechat.WechatUtil;
-import com.platform.utils.*;
-import org.apache.log4j.Logger;
+import com.platform.utils.PageUtils;
+import com.platform.utils.Query;
+import com.platform.utils.R;
+import com.platform.utils.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,6 @@ import java.util.Map;
 /**
  * Controller
  *
- * @author lipengjun
  * @date 2019-12-11 11:29:38
  */
 @RestController

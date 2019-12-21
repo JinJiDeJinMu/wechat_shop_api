@@ -1,14 +1,11 @@
 package com.platform.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 
 /**
  * 热闹关键词表
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-08-15 08:03:39
  */
 public class KeywordsVo implements Serializable {

@@ -6,7 +6,6 @@ import java.io.Serializable;
  * 客服管理表实体
  * 表名 cdt_customer_service
  *
- * @author lipengjun
  * @date 2019-11-25 19:27:34
  */
 public class CdtCustomerServiceVo implements Serializable {

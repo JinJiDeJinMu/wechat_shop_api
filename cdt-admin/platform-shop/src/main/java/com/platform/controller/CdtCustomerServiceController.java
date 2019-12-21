@@ -1,10 +1,10 @@
 package com.platform.controller;
+
 import com.platform.entity.CdtCustomerServiceEntity;
 import com.platform.service.CdtCustomerServiceService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,6 @@ import java.util.Map;
 /**
  * 客服管理表Controller
  *
- * @author lipengjun
  * @date 2019-11-25 19:27:34
  */
 @RestController

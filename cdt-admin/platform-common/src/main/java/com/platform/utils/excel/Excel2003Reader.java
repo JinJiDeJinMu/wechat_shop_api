@@ -1,8 +1,8 @@
 package com.platform.utils.excel;
 
 
-import org.apache.poi.hssf.eventusermodel.*;
 import org.apache.poi.hssf.eventusermodel.EventWorkbookBuilder.SheetRecordCollectingListener;
+import org.apache.poi.hssf.eventusermodel.*;
 import org.apache.poi.hssf.eventusermodel.dummyrecord.LastCellOfRowDummyRecord;
 import org.apache.poi.hssf.eventusermodel.dummyrecord.MissingCellDummyRecord;
 import org.apache.poi.hssf.model.HSSFFormulaParser;
@@ -20,8 +20,6 @@ import java.util.Map;
 /**
  * Excel2003格式解析
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017年10月28日 13:11:27
  */
 public class Excel2003Reader implements HSSFListener {

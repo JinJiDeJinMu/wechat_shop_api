@@ -1,16 +1,5 @@
 package com.platform.oss;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.channels.FileChannel;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import org.apache.http.entity.ContentType;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.platform.utils.RRException;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
@@ -24,12 +13,18 @@ import com.qcloud.cos.model.UploadResult;
 import com.qcloud.cos.region.Region;
 import com.qcloud.cos.transfer.TransferManager;
 import com.qcloud.cos.transfer.Upload;
+import org.apache.http.entity.ContentType;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * 腾讯云存储
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-03-26 20:51
  */
 public class QcloudCloudStorageService extends CloudStorageService {

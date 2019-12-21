@@ -1,16 +1,11 @@
 package com.platform.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 
 /**
  * 商品对应规格表值表
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-08-15 08:03:40
  */
 public class GoodsSpecificationVo implements Serializable {

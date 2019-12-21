@@ -5,8 +5,6 @@ import com.chundengtai.base.result.Result;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.CdtNewsBulletinEntity;
 import com.platform.service.ApiCdtNewsBulletinService;
-import com.platform.utils.PageUtils;
-import com.platform.utils.Query;
 import com.platform.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,6 @@ import java.util.Map;
 /**
  * 消息公告Controller
  *
- * @author lipengjun
  * @date 2019-11-25 11:38:00
  */
 @Controller

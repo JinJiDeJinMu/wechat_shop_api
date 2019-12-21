@@ -1,10 +1,7 @@
 package com.platform.service;
 
 
-import com.platform.dao.CdtNewsBulletinMapper;
 import com.platform.entity.CdtNewsBulletinEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +9,6 @@ import java.util.Map;
 /**
  * 消息公告Service接口
  *
- * @author lipengjun
  * @date 2019-11-25 11:38:00
  */
 public interface CdtNewsBulletinService {

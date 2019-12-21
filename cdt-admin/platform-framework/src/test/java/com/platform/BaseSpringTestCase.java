@@ -8,8 +8,6 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 /**
  * 基于spring的单元测试基类
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2018-07-09 10:06:23
  */
 @ContextConfiguration(locations = {

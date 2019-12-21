@@ -23,8 +23,6 @@ import java.util.Map;
 /**
  * 角色
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2016年9月18日 上午9:45:12
  */
 @Service("sysRoleService")

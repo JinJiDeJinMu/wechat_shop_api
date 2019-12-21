@@ -25,7 +25,6 @@ import java.util.Map;
 /**
  * 代码生成器
  *
- * @author lipengjun
  * @date 2017年11月20日 下午19:29:40
  */
 @Controller

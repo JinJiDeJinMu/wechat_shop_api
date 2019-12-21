@@ -1,20 +1,17 @@
 package com.platform.service.impl;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.platform.dao.MlsUserDao;
 import com.platform.entity.MlsUserEntity2;
 import com.platform.service.MlsUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Service实现类
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-08-16 15:02:28
  */
 @Service("mlsUserService")

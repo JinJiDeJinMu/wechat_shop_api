@@ -1,7 +1,6 @@
 package com.platform.controller;
 
 import com.platform.entity.AddressEntity;
-import com.platform.entity.CollectEntity;
 import com.platform.service.AddressService;
 import com.platform.utils.Base64;
 import com.platform.utils.PageUtils;
@@ -17,8 +16,6 @@ import java.util.Map;
 /**
  * Controller
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-08-16 17:22:46
  */
 @RestController

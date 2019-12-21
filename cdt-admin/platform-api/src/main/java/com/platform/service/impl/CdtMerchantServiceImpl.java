@@ -13,7 +13,6 @@ import java.util.Map;
 /**
  * 商家Service实现类
  *
- * @author lipengjun
  * @date 2019-11-15 17:08:05
  */
 @Service("cdtMerchantService")

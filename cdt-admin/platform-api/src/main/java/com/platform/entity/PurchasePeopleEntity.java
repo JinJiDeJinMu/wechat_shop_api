@@ -5,7 +5,6 @@ import java.io.Serializable;
  * 实体
  * 表名 nideshop_purchase_people
  *
- * @author lipengjun
  * @date 2019-11-25 09:39:01
  */
 public class PurchasePeopleEntity implements Serializable {

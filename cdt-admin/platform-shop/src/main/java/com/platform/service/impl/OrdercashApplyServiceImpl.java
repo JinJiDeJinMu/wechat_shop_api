@@ -6,8 +6,6 @@ import com.alibaba.druid.support.logging.LogFactory;
 import com.platform.dao.OrdercashApplyDao;
 import com.platform.entity.OrdercashApplyEntity;
 import com.platform.entity.UserEntity;
-import com.platform.entity.UserRecord;
-import com.platform.entity.UserVo;
 import com.platform.service.OrdercashApplyService;
 import com.platform.util.RedisUtils;
 import com.platform.util.wechat.WechatRefundApiResult;
@@ -23,7 +21,6 @@ import java.util.UUID;
 /**
  * Service实现类
  *
- * @author lipengjun
  * @date 2019-12-11 11:29:38
  */
 @Service("ordercashApplyService")

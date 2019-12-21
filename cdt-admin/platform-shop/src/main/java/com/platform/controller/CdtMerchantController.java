@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 /**
  * 商家Controller
  *
- * @author lipengjun
  * @date 2019-11-15 17:08:05
  */
 @Controller

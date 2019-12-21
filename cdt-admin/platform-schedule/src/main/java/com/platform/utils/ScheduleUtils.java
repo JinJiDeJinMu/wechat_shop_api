@@ -7,8 +7,6 @@ import org.quartz.*;
 /**
  * 定时任务工具类
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2016年11月30日 下午12:44:59
  */
 public class ScheduleUtils {

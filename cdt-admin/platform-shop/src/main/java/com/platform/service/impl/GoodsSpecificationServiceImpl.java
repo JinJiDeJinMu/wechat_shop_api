@@ -1,20 +1,17 @@
 package com.platform.service.impl;
 
+import com.platform.dao.GoodsSpecificationDao;
+import com.platform.entity.GoodsSpecificationEntity;
+import com.platform.service.GoodsSpecificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-import com.platform.dao.GoodsSpecificationDao;
-import com.platform.entity.GoodsSpecificationEntity;
-import com.platform.service.GoodsSpecificationService;
-
 /**
  * 商品对应规格表值表Service实现类
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-08-31 11:15:55
  */
 @Service("goodsSpecificationService")

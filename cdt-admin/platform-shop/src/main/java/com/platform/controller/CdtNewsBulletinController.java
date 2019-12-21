@@ -6,7 +6,6 @@ import com.platform.service.CdtNewsBulletinService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,6 @@ import java.util.Map;
 /**
  * 消息公告Controller
  *
- * @author lipengjun
  * @date 2019-11-25 11:38:00
  */
 @Controller

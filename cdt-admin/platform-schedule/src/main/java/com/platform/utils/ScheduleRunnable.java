@@ -9,8 +9,6 @@ import java.lang.reflect.Method;
 /**
  * 执行定时任务
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2016年11月30日 下午12:49:33
  */
 public class ScheduleRunnable implements Runnable {

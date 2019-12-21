@@ -12,7 +12,6 @@ import java.util.Map;
 /**
  * 评价表Service实现类
  *
- * @author lipengjun
  * @date 2019-11-26 11:27:34
  */
 @Service("nideshopCommentV2Service")

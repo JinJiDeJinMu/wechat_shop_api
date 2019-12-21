@@ -4,7 +4,6 @@ package com.platform.service.impl;
 import com.platform.dao.ExpressOrderDao;
 import com.platform.entity.ExpressOrderEntity;
 import com.platform.service.ExpressOrderService;
-import com.platform.utils.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,6 @@ import java.util.Map;
 /**
  * Service实现类
  *
- * @author lipengjun
  * @date 2019-12-05 16:43:50
  */
 @Service(" ExpressOrderService")

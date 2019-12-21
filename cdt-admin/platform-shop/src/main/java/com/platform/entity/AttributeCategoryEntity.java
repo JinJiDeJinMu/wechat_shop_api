@@ -7,8 +7,6 @@ import java.io.Serializable;
  * 实体
  * 表名 nideshop_attribute_category
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-08-17 16:13:27
  */
 public class AttributeCategoryEntity implements Serializable {

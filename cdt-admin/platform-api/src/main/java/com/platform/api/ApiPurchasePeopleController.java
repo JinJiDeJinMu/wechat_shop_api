@@ -8,7 +8,6 @@ import com.platform.service.ApiPurchasePeopleService;
 import com.platform.utils.R;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import java.util.Map;
 /**
  * Controller
  *
- * @author lipengjun
  * @date 2019-11-25 09:39:01
  */
 @Api(value = "未名严选详情购买用户", tags = "购买人群列表")

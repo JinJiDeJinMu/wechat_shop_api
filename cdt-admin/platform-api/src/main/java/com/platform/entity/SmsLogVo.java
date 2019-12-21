@@ -1,14 +1,11 @@
 package com.platform.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 
 /**
  * 实体表名 nideshop_sms_log
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-08-25 10:04:52
  */
 public class SmsLogVo implements Serializable {

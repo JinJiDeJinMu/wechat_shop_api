@@ -21,8 +21,6 @@ import java.util.Map;
  * <p>
  * testTask为spring bean的名称
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2016年11月30日 下午1:34:24
  */
 @Component("test2Task")

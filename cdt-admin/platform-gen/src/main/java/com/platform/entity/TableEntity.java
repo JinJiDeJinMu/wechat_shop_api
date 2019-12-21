@@ -5,7 +5,6 @@ import java.util.List;
 /**
  * 表数据
  *
- * @author lipengjun
  * @date 2017年11月20日 下午19:29:40
  */
 public class TableEntity {

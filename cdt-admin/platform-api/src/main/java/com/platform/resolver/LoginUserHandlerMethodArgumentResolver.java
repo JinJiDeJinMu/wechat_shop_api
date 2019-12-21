@@ -14,8 +14,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 /**
  * 有@LoginUser注解的方法参数，注入当前登录用户
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-03-23 22:02
  */
 public class LoginUserHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {

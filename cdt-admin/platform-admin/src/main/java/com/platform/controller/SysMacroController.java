@@ -16,8 +16,6 @@ import java.util.Map;
 /**
  * 通用字典表Controller
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-08-22 11:48:16
  */
 @RestController

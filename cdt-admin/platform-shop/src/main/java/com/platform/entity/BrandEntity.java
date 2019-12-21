@@ -1,15 +1,12 @@
 package com.platform.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 
 /**
  * 实体
  * 表名 nideshop_brand
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-08-19 17:59:15
  */
 public class BrandEntity implements Serializable {

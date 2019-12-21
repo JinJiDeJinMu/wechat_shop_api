@@ -3,7 +3,6 @@ package com.platform.entity;
 /**
  * 列的属性
  *
- * @author lipengjun
  * @date 2017年11月20日 下午19:29:40
  */
 public class ColumnEntity {

@@ -9,7 +9,6 @@ import java.util.Date;
  * 实体
  * 表名 ordercash_apply
  *
- * @author lipengjun
  * @date 2019-12-11 11:29:38
  */
 public class OrdercashApplyEntity implements Serializable {

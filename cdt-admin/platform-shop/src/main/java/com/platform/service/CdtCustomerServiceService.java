@@ -8,7 +8,6 @@ import java.util.Map;
 /**
  * 客服管理表Service接口
  *
- * @author lipengjun
  * @date 2019-11-25 19:27:34
  */
 public interface CdtCustomerServiceService {

@@ -7,8 +7,6 @@ import java.util.Date;
  * 实体
  * 表名 group_buying_detailed
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2019-06-13 22:00:13
  */
 public class GroupBuyingDetailedVo implements Serializable {

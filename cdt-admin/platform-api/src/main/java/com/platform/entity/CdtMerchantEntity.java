@@ -8,7 +8,6 @@ import java.util.Date;
  * 商家实体
  * 表名 cdt_merchant
  *
- * @author lipengjun
  * @date 2019-11-15 17:08:05
  */
 public class CdtMerchantEntity implements Serializable {

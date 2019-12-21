@@ -4,8 +4,6 @@ package com.platform.entity;
  * 实体
  * 表名 nideshop_category
  *
- * @author lipengjun
- * @email 939961241@qq.com
  * @date 2017-08-21 15:32:31
  */
 public class CategoryEntity extends Tree<CategoryEntity> {

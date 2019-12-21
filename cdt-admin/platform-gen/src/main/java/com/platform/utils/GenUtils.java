@@ -22,7 +22,6 @@ import java.util.zip.ZipOutputStream;
 /**
  * 代码生成器   工具类
  *
- * @author lipengjun
  * @date 2017年11月20日 下午19:29:40
  */
 public class GenUtils {
