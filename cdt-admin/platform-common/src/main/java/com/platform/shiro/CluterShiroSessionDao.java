@@ -1,19 +1,23 @@
 package com.platform.shiro;
 
-import com.platform.cache.J2CacheUtils;
 import com.platform.utils.Constant;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 分布式session管理
- *
- * @author lipengjun
- * @date 2018年07月31日 上午14:50
  */
+@Component
 public class CluterShiroSessionDao extends EnterpriseCacheSessionDAO {
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     protected Serializable doCreate(Session session) {
@@ -45,15 +49,14 @@ public class CluterShiroSessionDao extends EnterpriseCacheSessionDAO {
     protected void doDelete(Session session) {
         super.doDelete(session);
         final String key = Constant.SESSION_KEY + session.getId().toString();
-
-        J2CacheUtils.remove(key);
+        redisTemplate.delete(key);
     }
 
     private Session getShiroSession(String key) {
-        return (Session) J2CacheUtils.get(key);
+        return (Session) redisTemplate.opsForValue().get(key);
     }
 
     private void setShiroSession(String key, Session session) {
-        J2CacheUtils.put(key, session);
+        redisTemplate.opsForValue().set(key, session, 1, TimeUnit.DAYS);
     }
 }

@@ -1,31 +1,30 @@
 package com.platform.cache;
 
-import com.chundengtai.base.common.SpringContextUtils;
 import com.platform.dao.SysMacroDao;
 import com.platform.entity.SysMacroEntity;
 import com.platform.utils.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-/**
- * 作者: @author Harmon <br>
- * 时间: 2017-08-16 10:14<br>
- * 描述: CacheUtil <br>
- */
-public class CacheUtil implements InitializingBean {
+@Component
+public class CacheUtil {
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
-    public  void init() {
-        SysMacroDao macroDao = SpringContextUtils.getBean(SysMacroDao.class);
+    @Autowired
+    SysMacroDao macroDao;
+
+    @PostConstruct
+    public void init() {
         if (null != macroDao) {
-            J2CacheUtils.put("macroList", macroDao.queryList(new HashMap<String, Object>()));
+            redisTemplate.opsForValue().set("macroList", macroDao.queryList(new HashMap<String, Object>()), 5, TimeUnit.DAYS);
         }
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        init();
     }
 
     /**
@@ -35,10 +34,10 @@ public class CacheUtil implements InitializingBean {
      * @param value   字典value
      * @return
      */
-    public static String getCodeName(String preName, String value) {
+    public String getCodeName(String preName, String value) {
         String name = "";
         Long parentId = 0L;
-        List<SysMacroEntity> sysMacroEntityList = (List<SysMacroEntity>) J2CacheUtils.get("macroList");
+        List<SysMacroEntity> sysMacroEntityList = (List<SysMacroEntity>) redisTemplate.opsForValue().get("macroList");
 
         if (!StringUtils.isNullOrEmpty(sysMacroEntityList)) {
             for (SysMacroEntity macroEntity : sysMacroEntityList) {

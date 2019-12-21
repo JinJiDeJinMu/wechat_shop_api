@@ -8,7 +8,7 @@
 	<!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的UserRealm.java -->  
 	<bean id="userRealm" class="com.platform.shiro.UserRealm"/>
 
-    <bean id="cluterShiroSessionDao" class="com.platform.shiro.CluterShiroSessionDao"/>
+<!--    <bean id="cluterShiroSessionDao" class="com.platform.shiro.CluterShiroSessionDao"/>-->
 
     <!--<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">-->
     <bean id="sessionManager" class="com.platform.config.CustomSessionManager">

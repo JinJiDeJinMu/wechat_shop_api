@@ -121,6 +121,7 @@
         el: '#app',
         data() {
             const validateUsername = (rule, value, callback) => {
+                console.log(value);
                 if (value.length() < 1) {
                     callback(new Error('请输入正确的用户名'))
                 } else {
@@ -128,6 +129,7 @@
                 }
             };
             const validatePass = (rule, value, callback) => {
+                console.log(value);
                 if (value.length() < 3) {
                     callback(new Error('密码不能小于3位'))
                 } else {

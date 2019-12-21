@@ -1,26 +1,26 @@
 package com.platform.cache;
 
-import com.chundengtai.base.common.SpringContextUtils;
 import com.platform.dao.SysRegionDao;
 import com.platform.entity.SysRegionEntity;
 import com.platform.utils.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * @author lipengjun
- * @email 939961241@qq.com
- * @date 2017-11-04 11:19:31
- */
-public class RegionCacheUtil implements InitializingBean {
+@Component
+public class RegionCacheUtil {
 
     public static List<SysRegionEntity> sysRegionEntityList;
 
-    public static void init() {
-        SysRegionDao regionDao = SpringContextUtils.getBean(SysRegionDao.class);
+    @Autowired
+    SysRegionDao regionDao;
+
+    @PostConstruct
+    public void init() {
         if (null != regionDao) {
             sysRegionEntityList = regionDao.queryList(new HashMap<String, Object>());
         }
@@ -385,11 +385,6 @@ public class RegionCacheUtil implements InitializingBean {
             }
         }
         return resultObj;
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        init();
     }
 
 }

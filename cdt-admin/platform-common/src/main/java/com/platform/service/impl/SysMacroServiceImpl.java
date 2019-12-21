@@ -1,23 +1,20 @@
 package com.platform.service.impl;
 
-import com.platform.cache.J2CacheUtils;
 import com.platform.dao.SysMacroDao;
 import com.platform.entity.SysMacroEntity;
 import com.platform.service.SysMacroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
- * 通用字典表Service实现类
- *
- * @author lipengjun
- * @email 939961241@qq.com
- * @date 2017-08-22 11:48:16
+ * 通用字典表实现类
  */
 @Service("sysMacroService")
 public class SysMacroServiceImpl implements SysMacroService {
@@ -39,11 +36,14 @@ public class SysMacroServiceImpl implements SysMacroService {
         return sysMacroDao.queryTotal(map);
     }
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     @Override
     public int save(SysMacroEntity sysMacro) {
         sysMacro.setGmtCreate(new Date());
         sysMacroDao.save(sysMacro);
-        J2CacheUtils.put("macroList", queryList(new HashMap<>()));
+        redisTemplate.opsForValue().set("macroList", queryList(new HashMap<>()), 5, TimeUnit.DAYS);
         return 1;
     }
 
@@ -51,21 +51,21 @@ public class SysMacroServiceImpl implements SysMacroService {
     public int update(SysMacroEntity sysMacro) {
         sysMacro.setGmtModified(new Date());
         sysMacroDao.update(sysMacro);
-        J2CacheUtils.put("macroList", queryList(new HashMap<>()));
+        redisTemplate.opsForValue().set("macroList", queryList(new HashMap<>()), 5, TimeUnit.DAYS);
         return 1;
     }
 
     @Override
     public int delete(Long macroId) {
         sysMacroDao.delete(macroId);
-        J2CacheUtils.put("macroList", queryList(new HashMap<>()));
+        redisTemplate.opsForValue().set("macroList", queryList(new HashMap<>()), 5, TimeUnit.DAYS);
         return 1;
     }
 
     @Override
     public int deleteBatch(Long[] macroIds) {
         sysMacroDao.deleteBatch(macroIds);
-        J2CacheUtils.put("macroList", queryList(new HashMap<>()));
+        redisTemplate.opsForValue().set("macroList", queryList(new HashMap<>()), 5, TimeUnit.DAYS);
         return 1;
     }
 
