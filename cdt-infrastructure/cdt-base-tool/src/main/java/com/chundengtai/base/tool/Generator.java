@@ -21,7 +21,7 @@ public class Generator {
     public final static String SYS_AHURTOR = "Royal";
 
     public static void main(String[] args) {
-        String[] tableNames = new String[]{"cdt_product_comment"};
+        String[] tableNames = new String[]{"nideshop_order"};
         String[] modules = new String[]{"service", "web"};//项目模块名，需自定义
         for (String module : modules) {
             moduleGenerator(module, tableNames);
@@ -123,6 +123,7 @@ public class Generator {
                 .setCapitalMode(true)//驼峰命名
                 .setEntityLombokModel(true)
                 .setRestControllerStyle(false)
+                .setTablePrefix("nideshop_")
                 .setNaming(NamingStrategy.underline_to_camel)
                 .setInclude(tableNames);
         return strategyConfig;

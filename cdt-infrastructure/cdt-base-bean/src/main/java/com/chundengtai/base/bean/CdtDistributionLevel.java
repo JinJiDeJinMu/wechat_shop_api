@@ -35,12 +35,12 @@ public class CdtDistributionLevel implements Serializable {
     /**
      * 用户id
      */
-    private Integer userId;
+    private Long userId;
 
     /**
      * 推荐人id
      */
-    private Integer parentId;
+    private Long parentId;
 
     /**
      * 分销层级
@@ -50,7 +50,7 @@ public class CdtDistributionLevel implements Serializable {
     /**
      * 发起人id
      */
-    private Integer sponsorId;
+    private Long sponsorId;
 
     /**
      * 创建时间

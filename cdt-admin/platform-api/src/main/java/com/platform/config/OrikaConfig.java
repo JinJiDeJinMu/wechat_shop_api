@@ -1,12 +1,3 @@
-/*
- * Copyright (c) 2018-2999 广州亚米信息科技有限公司 All rights reserved.
- *
- * https://www.gz-yami.com/
- *
- * 未经允许，不可做商业用途！
- *
- * 版权所有，侵权必究！
- */
 
 package com.platform.config;
 
@@ -18,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * MapperFacade 用于dto ->entity的转换
- * @author lgh
  */
 @Configuration
 public class OrikaConfig {

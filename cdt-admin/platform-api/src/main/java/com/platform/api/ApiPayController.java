@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 作者: @author Harmon <br>
@@ -153,7 +154,7 @@ public class ApiPayController extends ApiBaseAction {
                     orderService.update(orderInfo);
 
                     //redis设置订单状态
-                    redisTemplate.opsForValue().set(orderInfo.getOrder_sn(), "51", 60 * 60 * 24);
+                    redisTemplate.opsForValue().set(orderInfo.getOrder_sn(), "51", 2, TimeUnit.DAYS);
                     try {
                         //FIXME:支付成功后入账
                         CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
@@ -297,7 +298,7 @@ public class ApiPayController extends ApiBaseAction {
                     orderService.updateStatus(newOrder);
 
                     //redis设置订单状态
-                    redisTemplate.opsForValue().set(allOrderId.toString(), "51", 60 * 60 * 24);
+                    redisTemplate.opsForValue().set(allOrderId.toString(), "51", 2, TimeUnit.DAYS);
                     return toResponsObject(0, "微信统一订单下单成功", resultObj);
                 }
             }
@@ -433,20 +434,16 @@ public class ApiPayController extends ApiBaseAction {
                 gbd.setUserImg(loginUser.getAvatar());
                 groupBuyingDetailedService.save(gbd);
             }
-            //感觉没用
-            //mlsUserSer.upUserProfit(order);
             return toResponsMsgSuccess("支付成功");
         } else if ("USERPAYING".equals(trade_state)) {
-            Integer num = (Integer) redisTemplate.opsForValue().get(CacheConstant.SHOP_CACHE_NAME + "queryRepeatNum" + order.getAll_order_id());
-            // 重新查询 正在支付中
-            //Integer num = (Integer) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + order.getAll_order_id() + "");
+            String queryRepeatNum = CacheConstant.SHOP_CACHE_NAME + "queryRepeatNum" + order.getAll_order_id();
+            Integer num = (Integer) redisTemplate.opsForValue().get(queryRepeatNum);
             if (num == null) {
-                //J2CacheUtils.put(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId + "", 1);
-                redisTemplate.opsForValue().set(CacheConstant.SHOP_CACHE_NAME + "queryRepeatNum" + orderId, 1);
+                redisTemplate.opsForValue().increment(queryRepeatNum, 1);
+                redisTemplate.expire(queryRepeatNum, 2, TimeUnit.DAYS);
                 this.orderQuery(loginUser, orderId);
             } else if (num <= 3) {
-                redisTemplate.delete(CacheConstant.SHOP_CACHE_NAME + "queryRepeatNum" + orderId);
-                //J2CacheUtils.remove(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId);
+                redisTemplate.delete(queryRepeatNum);
                 this.orderQuery(loginUser, orderId);
             } else {
                 return toResponsFail("查询失败,error=" + trade_state);
@@ -722,7 +719,6 @@ public class ApiPayController extends ApiBaseAction {
      *
      * @param userId      用户Id
      * @param fx_money    分销的分润金额
-     * @param order_price 订单金额
      * @param orderId     订单ID
      */
     @ApiOperation(value = "微信订单回调接口")

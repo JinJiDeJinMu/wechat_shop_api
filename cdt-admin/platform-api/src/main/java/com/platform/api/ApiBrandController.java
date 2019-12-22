@@ -21,11 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 作者: @author Harmon <br>
- * 时间: 2017-08-11 08:32<br>
- * 描述: ApiIndexController <br>
- */
 @Api(tags = "品牌")
 @RestController
 @RequestMapping("/api/brand")
