@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chundengtai.base.bean.CdtRebateLog;
 import com.chundengtai.base.dao.CdtRebateLogMapper;
 import com.chundengtai.base.service.CdtRebateLogService;
-import com.chundengtai.base.tool.ReflectUtils;
+import com.chundengtai.base.utils.ReflectUtils;
 import com.platform.page.PageHelper;
 import org.springframework.stereotype.Service;
 

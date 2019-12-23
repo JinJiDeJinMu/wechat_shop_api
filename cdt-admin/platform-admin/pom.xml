@@ -37,11 +37,6 @@
             <artifactId>platform-common</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.platform</groupId>
-            <artifactId>platform-shop</artifactId>
-            <version>1.0.0</version>
-        </dependency>
 
         <!--验证码生成工具 -->
         <dependency>
@@ -64,10 +59,12 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
-            <version>1.6.2</version>
+            <groupId>com.chundengtai.base</groupId>
+            <artifactId>cdt-base-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-pay</artifactId>
@@ -86,13 +83,6 @@
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.chundengtai.base</groupId>
-            <artifactId>cdt-base-bean</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
     </dependencies>
 
     <profiles>

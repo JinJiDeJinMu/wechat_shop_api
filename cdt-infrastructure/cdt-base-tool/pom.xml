@@ -49,12 +49,7 @@
             <artifactId>mybatis-plus-generator</artifactId>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.platform</groupId>
-            <artifactId>platform-common</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
+
     </dependencies>
 
     <build>

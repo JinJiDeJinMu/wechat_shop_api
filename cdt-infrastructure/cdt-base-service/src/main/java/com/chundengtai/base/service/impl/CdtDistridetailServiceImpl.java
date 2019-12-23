@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.dao.CdtDistridetailMapper;
 import com.chundengtai.base.service.CdtDistridetailService;
-import com.chundengtai.base.tool.ReflectUtils;
+import com.chundengtai.base.utils.ReflectUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 

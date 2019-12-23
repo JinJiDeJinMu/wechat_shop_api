@@ -1,4 +1,4 @@
-package com.chundengtai.base.tool;
+package com.chundengtai.base.utils;
 
 import com.platform.utils.Base64;
 

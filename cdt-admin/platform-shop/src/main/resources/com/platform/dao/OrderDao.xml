@@ -173,7 +173,7 @@
     </select>
     
     <select id="getTotalSum" resultType="map">
-        select sum(order_price) order_sum,sum(goods_price) goods_sum from nideshop_order WHERE 1=1
+        select IFNULL(sum(order_price),0) order_sum,IFNULL(sum(goods_price),0) goods_sum from nideshop_order WHERE 1=1
         <if test="orderSn != null and orderSn != ''">
             AND order_sn LIKE concat('%',#{orderSn},'%')
         </if>
