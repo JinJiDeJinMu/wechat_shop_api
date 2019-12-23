@@ -11,7 +11,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -206,10 +205,4 @@ public class OrderController extends BaseController {
         return R.ok().put("expressOrder",expressOrderEntity);
     }
 
-    public static void main(String[] args) {
-        BigDecimal freightPrice = new BigDecimal(0);
-        freightPrice = freightPrice
-                .add(new BigDecimal(0.01).multiply(new BigDecimal(1)));
-        System.out.println(freightPrice);
-    }
 }
