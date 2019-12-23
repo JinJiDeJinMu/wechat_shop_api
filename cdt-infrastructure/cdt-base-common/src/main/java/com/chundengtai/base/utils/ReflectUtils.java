@@ -1,7 +1,5 @@
 package com.chundengtai.base.utils;
 
-import com.platform.utils.Base64;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

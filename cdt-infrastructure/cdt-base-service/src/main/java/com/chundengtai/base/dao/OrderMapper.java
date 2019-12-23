@@ -13,4 +13,5 @@ import com.chundengtai.base.bean.Order;
  */
 public interface OrderMapper extends BaseMapper<Order> {
 
+    void autoCancelOrder();
 }

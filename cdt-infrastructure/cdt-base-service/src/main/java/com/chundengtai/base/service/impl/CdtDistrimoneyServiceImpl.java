@@ -6,11 +6,12 @@ import com.chundengtai.base.dao.CdtDistrimoneyMapper;
 import com.chundengtai.base.service.CdtDistrimoneyService;
 import com.chundengtai.base.utils.ReflectUtils;
 import com.github.pagehelper.PageHelper;
-import com.platform.utils.ShiroUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+
+//import com.platform.utils.ShiroUtils;
 
 /**
  * <p>
@@ -32,14 +33,14 @@ public class CdtDistrimoneyServiceImpl extends ServiceImpl<CdtDistrimoneyMapper,
     @Override
     public Boolean addCdtDistrimoney(CdtDistrimoney cdtDistrimoney) {
         cdtDistrimoney.setCreatedTime(new Date());
-        cdtDistrimoney.setCreatedBy(String.valueOf(ShiroUtils.getUserEntity().getUserId()));
+        //cdtDistrimoney.setCreatedBy(String.valueOf(ShiroUtils.getUserEntity().getUserId()));
         cdtDistrimoney.setToken(ReflectUtils.getToken(cdtDistrimoney));
         return this.save(cdtDistrimoney);
     }
 
     @Override
     public Boolean updateDistrimoney(CdtDistrimoney cdtDistrimoney) {
-        cdtDistrimoney.setUpdatedBy(String.valueOf(ShiroUtils.getUserEntity().getUserId()));
+        //cdtDistrimoney.setUpdatedBy(String.valueOf(ShiroUtils.getUserEntity().getUserId()));
         cdtDistrimoney.setUpdatedTime(new Date());
         cdtDistrimoney.setToken(ReflectUtils.getToken(cdtDistrimoney));
         return this.updateById(cdtDistrimoney);

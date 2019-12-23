@@ -58,7 +58,7 @@ public class ProdPropServiceImpl extends ServiceImpl<ProdPropMapper, ProdProp> i
     public void updateProdPropAndValues(ProdProp prodProp) {
         ProdProp dbProdProp = prodPropMapper.getProdPropByPropNameAndShopId(prodProp.getPropName(), prodProp.getShopId(), prodProp.getRule());
         if (dbProdProp != null && !Objects.equals(prodProp.getPropId(), dbProdProp.getPropId())) {
-            //throw new YamiShopBindException("已有相同名称规格");
+            //throw new BindException("已有相同名称规格");
         }
         prodPropMapper.updateById(prodProp);
         // 先删除原有的属性值，再添加新的属性值

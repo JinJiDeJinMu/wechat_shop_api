@@ -5,8 +5,7 @@ import com.chundengtai.base.bean.CdtUserDistribution;
 import com.chundengtai.base.dao.CdtUserDistributionMapper;
 import com.chundengtai.base.service.CdtUserDistributionService;
 import com.chundengtai.base.utils.ReflectUtils;
-import com.platform.page.PageHelper;
-import com.platform.utils.ShiroUtils;
+import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -32,7 +31,7 @@ public class CdtUserDistributionServiceImpl extends ServiceImpl<CdtUserDistribut
     @Override
     public Boolean addCdtUserDistribution(CdtUserDistribution cdtUserDistribution) {
         cdtUserDistribution.setCreatedTime(new Date());
-        cdtUserDistribution.setCreatedBy(String.valueOf(ShiroUtils.getUserEntity().getUserId()));
+        //cdtUserDistribution.setCreatedBy(String.valueOf(ShiroUtils.getUserEntity().getUserId()));
         cdtUserDistribution.setToken(ReflectUtils.getToken(cdtUserDistribution));
         return this.save(cdtUserDistribution);
     }

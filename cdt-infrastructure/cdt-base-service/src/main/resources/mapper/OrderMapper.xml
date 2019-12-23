@@ -57,4 +57,11 @@
         id, order_sn, user_id, order_status, shipping_status, pay_status, evaluate_status, consignee, country, province, city, district, address, mobile, postscript, shipping_id, shipping_name, pay_id, pay_name, shipping_fee, actual_price, integral, integral_money, order_price, goods_price, add_time, confirm_time, pay_time, freight_price, coupon_id, parent_id, coupon_price, callback_status, shipping_no, full_cut_price, order_type, brand_id, settlement_total_fee, all_price, all_order_id, promoter_id, brokerage, merchant_id, group_buying_id, goods_type, goods_num
     </sql>
 
+    <update id="autoCancelOrder">
+        update nideshop_order set order_status=103 WHERE
+        <![CDATA[`add_time` <= DATE_ADD(now(),INTERVAL -25 minute ) AND `order_status` =0
+
+        ]]>
+    </update>
+
 </mapper>

@@ -1,4 +1,4 @@
-package com.platform.utils;
+package com.chundengtai.base.utils;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -9,11 +9,11 @@ import java.io.UnsupportedEncodingException;
  * 描述: Base64 <br>
  */
 public class Base64 {
-	public static void main(String[] args) {
-		System.out.println(decode("6buE5YGl5a6J"));
-	}
-	
-	
+    public static void main(String[] args) {
+        System.out.println(decode("6buE5YGl5a6J"));
+    }
+
+
     // 加密
     public static String encode(String str) {
         byte[] b = null;

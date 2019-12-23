@@ -61,15 +61,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.chundengtai.base</groupId>
-            <artifactId>cdt-base-service</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.chundengtai.base</groupId>
-            <artifactId>cdt-base-bean</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.platform</groupId>
             <artifactId>platform-common</artifactId>
             <version>1.0.0</version>

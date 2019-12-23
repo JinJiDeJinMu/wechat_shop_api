@@ -18,4 +18,6 @@ public interface OrderService extends IService<Order> {
 
     List<Order> queryList(HashMap<String, Object> hashMap);
 
+    void autoCancelOrder();
+
 }
