@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.chundengtai.base.bean.CdtProductComment;
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.CdtProductCommentService;
@@ -117,27 +118,9 @@ public class ApiCommentV2Controller extends ApiBaseAction {
             @RequestParam Integer goodId,
             @RequestParam String content,
             @RequestParam Integer starLevel,
-            @RequestParam String[] imageList
+            @RequestParam String imageList
     ) {
-        /*CommentReq commentReq = new CommentReq();
-        commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
-        commentReq.setCreateTime(new Date());
-        commentReq.setUserId(userId);
-        commentReq.setOrderNo(orderNo);
-        commentReq.setGoodId(goodId);
-        if(imageList==null){
-            commentReq.setStatus(0);
-        }else {
-            commentReq.setStatus(1);
-        }
-        commentReq.setContent(content);
-        commentReq.setStarLevel(starLevel);*/
-
-        for (int i = 0; i < imageList.length; i++) {
-            System.out.println();
-        }
-
-
+        List<String> list = JSONObject.parseArray(imageList, String.class);
         CdtProductComment commentReq = new CdtProductComment();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
         commentReq.setCreateTime(new Date());
@@ -154,20 +137,17 @@ public class ApiCommentV2Controller extends ApiBaseAction {
         cdtProductCommentService.save(commentReq);
         Long insertId = commentReq.getId();
         if (insertId > 0 && imageList != null) {
-            int i = 0;
-            for (String imgLink : imageList) {
-                if (imgLink.isEmpty()) {
+            for (int j = 0; j < list.size(); j++) {
+                if (list.get(j) == null) {
                     throw new RRException("上传文件不能为空");
                 }
                 //上传文件
-                String url = imageList[i].replace("[", "").replaceAll("\"", "").replace("]", "");
                 CommentPictureVo pictureVo = new CommentPictureVo();
                 pictureVo.setType(0);
                 pictureVo.setComment_id(insertId);
-                pictureVo.setPic_url(url);
-                pictureVo.setSort_order(i+1);
+                pictureVo.setPic_url(list.get(j));
+                pictureVo.setSort_order(j + 1);
                 commentPictureService.save(pictureVo);
-                i++;
             }
         }
         Map resultModel = new HashMap();

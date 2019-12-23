@@ -1,6 +1,7 @@
 package com.platform.service;
 
-import com.platform.entity.SysOssEntity;
+
+import com.chundengtai.base.bean.SysOssEntity;
 
 import java.util.List;
 import java.util.Map;
