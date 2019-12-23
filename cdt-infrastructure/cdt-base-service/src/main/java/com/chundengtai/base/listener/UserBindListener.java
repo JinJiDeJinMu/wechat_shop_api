@@ -1,12 +1,14 @@
 package com.chundengtai.base.listener;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.chundengtai.base.bean.CdtDistributionLevel;
 import com.chundengtai.base.bean.User;
 import com.chundengtai.base.event.DistributionEvent;
 import com.chundengtai.base.service.CdtDistributionLevelService;
 import com.chundengtai.base.service.UserService;
+import com.chundengtai.base.weixinapi.TrueOrFalseEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -41,6 +43,9 @@ public class UserBindListener {
                 return;
             }
 
+            //查询推荐人的上级
+            CdtDistributionLevel parentModel = service.getOne(new QueryWrapper<CdtDistributionLevel>().lambda().eq(CdtDistributionLevel::getUserId, parentId));
+
             CdtDistributionLevel model = new CdtDistributionLevel();
             model.setUserId(event.getUserId());
             model.setParentId(parentId);
@@ -48,10 +53,18 @@ public class UserBindListener {
             boolean result = service.save(model);
 
             //绑定user表层架关系
-
             LambdaUpdateWrapper<User> condition = new LambdaUpdateWrapper<>();
             condition.set(User::getFirstLeader, parentId);
+            condition.set(User::getIsDistribut, TrueOrFalseEnum.TRUE.getCode());
             condition.eq(User::getId, event.getUserId());
+            condition.ne(User::getFirstLeader, 0);
+            condition.ne(User::getSecondLeader, 0);
+
+            if(parentModel!=null){
+                condition.eq(User::getId, event.getUserId());
+                condition.eq(User::getSecondLeader, parentModel.getParentId());
+            }
+
 //            UpdateWrapper<User> uw = new UpdateWrapper<>();
 //            uw.set("email", null);
 //            uw.eq("id", 4);

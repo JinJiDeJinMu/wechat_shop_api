@@ -34,7 +34,7 @@ public class User implements Serializable {
 
     private String password;
 
-    private Boolean gender;
+    private Integer gender;
 
     private LocalDateTime birthday;
 

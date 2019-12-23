@@ -59,12 +59,12 @@ public class SysOssServiceImpl implements SysOssService {
         sysOssDao.deleteBatch(ids);
     }
 
-    @Autowired
-    private JavaMailSender javaMailSender;
-    @Autowired
-    private SimpleMailMessage simpleMailMessage;
-    @Autowired
-    private FreeMarkerConfigurer freeMarkerConfigurer;
+//    @Autowired
+//    private JavaMailSender javaMailSender;
+//    @Autowired
+//    private SimpleMailMessage simpleMailMessage;
+//    @Autowired
+//    private FreeMarkerConfigurer freeMarkerConfigurer;
     
 //    /**
 //     *
