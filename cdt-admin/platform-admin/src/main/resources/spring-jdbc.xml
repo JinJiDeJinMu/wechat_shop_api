@@ -246,7 +246,8 @@
 
     <!-- 配置切面 -->
     <aop:config>
-        <aop:pointcut id="transactionPointcut" expression="execution(* com.platform.service..*.*(..))"/>
+        <aop:pointcut id="transactionPointcut"
+                      expression="(execution(* com.platform.service..*.*(..)))or (execution(* com.chundengtai.base.service..*.*(..)))"/>
         <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
     </aop:config>
 

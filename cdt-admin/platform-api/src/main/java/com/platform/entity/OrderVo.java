@@ -138,14 +138,39 @@ public class OrderVo implements Serializable {
 
     private Integer goods_num;
 
+    /**
+     * 第一个上级
+     */
+    private Integer firstLeader;
+
+    /**
+     * 第二个上级
+     */
+    private Integer secondLeader;
+
+    public Integer getFirstLeader() {
+        return firstLeader;
+    }
+
+    public void setFirstLeader(Integer firstLeader) {
+        this.firstLeader = firstLeader;
+    }
+
+    public Integer getSecondLeader() {
+        return secondLeader;
+    }
+
+    public void setSecondLeader(Integer secondLeader) {
+        this.secondLeader = secondLeader;
+    }
 
     public String getFull_region() {
-    //    return full_region;
-        if (StringUtils.isNotEmpty(this.full_region)){
+        //    return full_region;
+        if (StringUtils.isNotEmpty(this.full_region)) {
             return full_region;
-        } else{
+        } else {
             StringBuffer strBuff = new StringBuffer();
-            if (StringUtils.isNotEmpty(this.country)){
+            if (StringUtils.isNotEmpty(this.country)) {
                 strBuff.append(this.country).append(" ");
             }
             if(StringUtils.isNotEmpty(this.province)){

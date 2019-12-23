@@ -51,6 +51,8 @@
         <result property="order_type" column="order_type"/>
         <result property="goods_type" column="goods_type"/>
         <result property="goods_num" column="goods_num"/>
+        <result column="first_leader" property="firstLeader"/>
+        <result column="second_leader" property="secondLeader"/>
     </resultMap>
 
     <select id="queryObject" resultMap="orderMap">
@@ -193,7 +195,6 @@
             </if>
         </where>
 	</select>
-
     <insert id="save" parameterType="com.platform.entity.OrderVo" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_order
 		(
@@ -238,7 +239,9 @@
 			`merchant_id`,
 			`group_buying_id`,
 			`goods_type`,
-			`goods_num`
+			`goods_num`,
+			`first_leader`,
+			`second_leader`
 		)
 		values
 		(
@@ -283,7 +286,9 @@
 			#{merchant_id},
 			#{group_buying_id},
 			#{goods_type},
-			#{goods_num}
+			#{goods_num},
+			#{firstLeader},
+			#{secondLeader}
 		)
 	</insert>
 

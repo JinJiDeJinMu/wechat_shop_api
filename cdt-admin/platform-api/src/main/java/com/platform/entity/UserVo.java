@@ -55,5 +55,15 @@ public class UserVo implements Serializable {
     //真实姓名
     private String realName;
     private Long merchant_id;
-    
+
+    /**
+     * 第一个上级
+     */
+    private Integer firstLeader;
+
+    /**
+     * 第二个上级
+     */
+    private Integer secondLeader;
+
 }
