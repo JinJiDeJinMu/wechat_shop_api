@@ -1,6 +1,6 @@
 package com.chundengtai.base.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.dao.OrderMapper;
@@ -28,10 +28,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Override
     public List<Order> queryList(HashMap<String, Object> hashMap) {
-        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("order_status", hashMap.get("order_status"));
-        queryWrapper.in("pay_status", 0, 1);
-        return baseMapper.selectList(queryWrapper);
+        List<Order> orderList = this.list(new LambdaQueryWrapper<Order>()
+                .eq(Order::getOrderStatus, hashMap.get("order_status"))
+                .in(Order::getPayStatus, 0, 1)
+        );
+        return orderList;
     }
 
     @Override
