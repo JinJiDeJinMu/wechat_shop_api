@@ -1,4 +1,4 @@
-package com.chundengtai.base.bean;
+package com.platform.entity;
 
 import java.io.Serializable;
 import java.util.Date;

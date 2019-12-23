@@ -80,22 +80,20 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper</artifactId>
 			<version>5.1.4</version>
 		</dependency>
+
 		<!-- POI依赖 ，处理EXCEL WORD PDF -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>${poi.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>${poi.version}</version>
-		</dependency>
+
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml-schemas</artifactId>
@@ -107,11 +105,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>${poi.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.apache.xmlbeans</groupId>
 			<artifactId>xmlbeans</artifactId>
@@ -123,32 +123,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
 		<!-- POI依赖 ，处理EXCEL WORD PDF -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>${org-json-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.oschina.j2cache</groupId>
-			<artifactId>j2cache-core</artifactId>
-			<version>${j2cache.version}</version>
-		</dependency>
-		<dependency><!-- Ehcache 2.x // -->
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache</artifactId>
-			<version>${ehcache.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jgroups</groupId>
-			<artifactId>jgroups</artifactId>
-			<version>${jgroups.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.github.miemiedev</groupId>
-			<artifactId>mybatis-paginator</artifactId>
-			<version>${mybatis.paginator.version}</version>
 		</dependency>
 
 		<dependency>
@@ -156,6 +136,7 @@
 			<artifactId>pinyin4j</artifactId>
 			<version>2.5.0</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.chundengtai.base</groupId>
 			<artifactId>cdt-base-common</artifactId>
