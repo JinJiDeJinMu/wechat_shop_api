@@ -244,13 +244,22 @@
                     <!--placeholder="商品类型"/>-->
                     <!--</Form-item>-->
                     <Form-item label="商品序列号" prop="goodsSn">
-                        <i-input v-model="goods.goodsSn" placeholder="商品序列号"/>
+                        <i-input v-model="goods.goodsSn" placeholder="商品序列号,必须填写"/>
                     </Form-item>
 
                     <Form-item label="名称" prop="name">
-                        <i-input v-model="goods.name" placeholder="名称"/>
+                        <i-input v-model="goods.name" placeholder="名称,字段长度不能超过200"/>
                     </Form-item>
 
+                    <Form-item label="推广描述" prop="promotionDesc">
+                        <i-input v-model="goods.promotionDesc" placeholder="推广描述,字段长度不能超过255"/>
+                    </Form-item>
+                    <Form-item label="关键字" prop="keywords">
+                        <i-input v-model="goods.keywords" placeholder="关键字,字段长度不能超过255"/>
+                    </Form-item>
+                    <Form-item label="简明介绍" prop="goodsBrief">
+                        <i-input v-model="goods.goodsBrief" placeholder="简明介绍,字段长度不能超过255"/>
+                    </Form-item>
                     <!--<Form-item label="品牌" prop="brandId" style="width: 268px;">-->
                     <!--<i-select v-model="goods.brandId" filterable>-->
                     <!--<i-option v-for="brand in brands" :value="brand.id" :key="brand.id">{{brand.name}}-->
@@ -472,15 +481,7 @@
                             </Radio>
                         </Radio-group>
                     </Form-item>
-                    <Form-item label="推广描述" prop="promotionDesc">
-                        <i-input v-model="goods.promotionDesc" placeholder="推广描述"/>
-                    </Form-item>
-                    <Form-item label="关键字" prop="keywords">
-                        <i-input v-model="goods.keywords" placeholder="关键字"/>
-                    </Form-item>
-                    <Form-item label="简明介绍" prop="goodsBrief">
-                        <i-input v-model="goods.goodsBrief" placeholder="简明介绍"/>
-                    </Form-item>
+
                 </i-form>
             </Tab-Pane>
         </Tabs>

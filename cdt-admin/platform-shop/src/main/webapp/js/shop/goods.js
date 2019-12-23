@@ -70,11 +70,16 @@ var vm = new Vue({
 			merchantId: ''
 		},
 		ruleValidate: {
+            goodsSn: [{
+                required: true,
+                message: '序列号不能为空',
+                trigger: 'blur'
+            }],
             name: [
                 {
-				required: true,
-				message: '名称不能为空',
-				trigger: 'blur'
+                    required: true,
+                    message: '名称不能为空',
+                    trigger: 'blur'
                 },
                 {
                     type: 'string',
