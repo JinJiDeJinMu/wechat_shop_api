@@ -47,8 +47,6 @@
 
     <!-- 为了加载拦截器 需要 日志拦截器 （登录拦截和权限拦截已在shiro实现，看实现 情况处理） -->
     <mvc:interceptors>
-        <!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
-        <!--<bean class="com.platform.interceptor.LogInterceptor"/>-->
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/statics/**"/>
@@ -111,43 +109,6 @@
         <property name="maxUploadSize" value="1000000000"/>
     </bean>
 
-    <!-- Kaptcha验证码生成器 -->
-    <!--<bean name="producer" class="com.google.code.kaptcha.impl.DefaultKaptcha" scope="singleton">-->
-    <!--<property name="config">-->
-    <!--<bean class="com.google.code.kaptcha.util.Config">-->
-    <!--<constructor-arg>-->
-    <!--<props>-->
-    <!--<prop key="kaptcha.border">no</prop>-->
-    <!--<prop key="kaptcha.textproducer.font.color">black</prop>-->
-    <!--<prop key="kaptcha.textproducer.char.space">4</prop>-->
-    <!--<prop key="kaptcha.textproducer.char.length">4</prop>-->
-    <!--<prop key="kaptcha.textproducer.char.string">123456789</prop>-->
-    <!--</props>-->
-    <!--</constructor-arg>-->
-    <!--</bean>-->
-    <!--</property>-->
-    <!--</bean>-->
-
-    <!-- 使用qq邮箱 -->
-<!--    <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">-->
-<!--        &lt;!&ndash;         <property name="host" value="smtp.qq.com"/> &ndash;&gt;-->
-<!--        <property name="host" value="smtp.139.com"/>-->
-<!--        <property name="port" value="25"/>-->
-<!--        &lt;!&ndash;         <property name="username" value="xxxxx@qq.com"/> &ndash;&gt;-->
-<!--        <property name="username" value="15821698254"/>-->
-<!--        &lt;!&ndash;         <property name="password" value="xxxxxxxxxxxxxxx"/> &ndash;&gt;-->
-<!--        <property name="password" value="yaohui"/>-->
-<!--        &lt;!&ndash;         <property name="password" value="omdgpbxxhatacafi"/> &ndash;&gt;-->
-<!--        <property name="javaMailProperties">-->
-<!--            <props >-->
-<!--                <prop key="mail.smtp.auth">true</prop>-->
-<!--            </props>-->
-<!--        </property>-->
-<!--    </bean>-->
-<!--    <bean id="simpleMailMessage" class="org.springframework.mail.SimpleMailMessage">-->
-<!--        <property name="from" value="303687320@qq.com"/>-->
-<!--        <property name="subject" value="今天日代运维列表" />-->
-<!--    </bean>-->
     <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
         <property name="templateLoaderPath" value="classpath:freemarker"/>
         <property name="freemarkerSettings">

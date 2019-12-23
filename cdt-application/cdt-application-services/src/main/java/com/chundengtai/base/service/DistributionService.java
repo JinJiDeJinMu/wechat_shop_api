@@ -1,16 +1,17 @@
-package com.chundengtai.base.application;
+package com.chundengtai.base.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.chundengtai.base.bean.CdtDistributionLevel;
 import com.chundengtai.base.bean.User;
 import com.chundengtai.base.event.DistributionEvent;
-import com.chundengtai.base.service.*;
 import com.chundengtai.base.weixinapi.TrueOrFalseEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
@@ -23,6 +24,7 @@ public class DistributionService {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
+    //用户层级服务
     @Autowired
     private CdtDistributionLevelService distributionLevelService;
 
@@ -50,7 +52,10 @@ public class DistributionService {
     @Autowired
     private CdtUserDistributionService userDistributionService;
 
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
     public void distributionLogic(DistributionEvent event) {
+        log.info(" testAsync 当前线程id:" + Thread.currentThread().getId() + ", 当前线程名称:" + Thread.currentThread().getName());
         //todo:对推荐信息解密
         if (StringUtils.isEmpty(event.getEncryptCode())) {
             return;

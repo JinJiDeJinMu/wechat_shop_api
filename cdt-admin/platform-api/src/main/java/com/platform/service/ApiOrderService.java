@@ -464,6 +464,10 @@ public class ApiOrderService {
         orderInfo.setShipping_fee(freightPrice);
         orderInfo.setIntegral(0);
         orderInfo.setIntegral_money(new BigDecimal(0));
+
+        //todo:绑定一二级分销
+        orderInfo.setFirstLeader(loginUser.getFirstLeader());
+        orderInfo.setSecondLeader(loginUser.getSecondLeader());
         return orderInfo;
     }
 

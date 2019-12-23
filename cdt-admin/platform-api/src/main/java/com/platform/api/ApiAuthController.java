@@ -2,7 +2,7 @@ package com.platform.api;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.chundengtai.base.application.DistributionService;
+import com.chundengtai.base.service.DistributionService;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.LoginInfo;
 import com.platform.entity.MlsUserEntity2;
