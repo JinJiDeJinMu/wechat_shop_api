@@ -119,24 +119,6 @@ public class ApiCommentV2Controller extends ApiBaseAction {
             @RequestParam Integer starLevel,
             @RequestParam String[] imageList
     ) {
-        /*CommentReq commentReq = new CommentReq();
-        commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
-        commentReq.setCreateTime(new Date());
-        commentReq.setUserId(userId);
-        commentReq.setOrderNo(orderNo);
-        commentReq.setGoodId(goodId);
-        if(imageList==null){
-            commentReq.setStatus(0);
-        }else {
-            commentReq.setStatus(1);
-        }
-        commentReq.setContent(content);
-        commentReq.setStarLevel(starLevel);*/
-
-        for (int i = 0; i < imageList.length; i++) {
-            System.out.println();
-        }
-
 
         CdtProductComment commentReq = new CdtProductComment();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
