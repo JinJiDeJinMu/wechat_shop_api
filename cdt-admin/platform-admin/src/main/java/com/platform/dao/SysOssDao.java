@@ -1,8 +1,7 @@
 package com.platform.dao;
 
-
-import com.chundengtai.base.bean.SysOssEntity;
 import com.platform.common.BaseBizMapper;
+import com.platform.entity.SysOssEntity;
 
 /**
  * 文件上传Dao

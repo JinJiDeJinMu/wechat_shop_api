@@ -1,8 +1,8 @@
 package com.platform.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.chundengtai.base.bean.SysOssEntity;
 import com.platform.annotation.SysLog;
+import com.platform.entity.SysOssEntity;
 import com.platform.oss.CloudStorageConfig;
 import com.platform.oss.OSSFactory;
 import com.platform.service.SysConfigService;

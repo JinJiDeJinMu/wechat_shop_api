@@ -129,25 +129,25 @@
     <!--</bean>-->
 
     <!-- 使用qq邮箱 -->
-    <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <!--         <property name="host" value="smtp.qq.com"/> -->
-        <property name="host" value="smtp.139.com"/>
-        <property name="port" value="25"/>
-        <!--         <property name="username" value="xxxxx@qq.com"/> -->
-        <property name="username" value="15821698254"/>
-        <!--         <property name="password" value="xxxxxxxxxxxxxxx"/> -->
-        <property name="password" value="yaohui"/>
-        <!--         <property name="password" value="omdgpbxxhatacafi"/> -->
-        <property name="javaMailProperties">
-            <props >
-                <prop key="mail.smtp.auth">true</prop>
-            </props>
-        </property>
-    </bean>
-    <bean id="simpleMailMessage" class="org.springframework.mail.SimpleMailMessage">
-        <property name="from" value="303687320@qq.com"/>
-        <property name="subject" value="今天日代运维列表" />
-    </bean>
+<!--    <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">-->
+<!--        &lt;!&ndash;         <property name="host" value="smtp.qq.com"/> &ndash;&gt;-->
+<!--        <property name="host" value="smtp.139.com"/>-->
+<!--        <property name="port" value="25"/>-->
+<!--        &lt;!&ndash;         <property name="username" value="xxxxx@qq.com"/> &ndash;&gt;-->
+<!--        <property name="username" value="15821698254"/>-->
+<!--        &lt;!&ndash;         <property name="password" value="xxxxxxxxxxxxxxx"/> &ndash;&gt;-->
+<!--        <property name="password" value="yaohui"/>-->
+<!--        &lt;!&ndash;         <property name="password" value="omdgpbxxhatacafi"/> &ndash;&gt;-->
+<!--        <property name="javaMailProperties">-->
+<!--            <props >-->
+<!--                <prop key="mail.smtp.auth">true</prop>-->
+<!--            </props>-->
+<!--        </property>-->
+<!--    </bean>-->
+<!--    <bean id="simpleMailMessage" class="org.springframework.mail.SimpleMailMessage">-->
+<!--        <property name="from" value="303687320@qq.com"/>-->
+<!--        <property name="subject" value="今天日代运维列表" />-->
+<!--    </bean>-->
     <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
         <property name="templateLoaderPath" value="classpath:freemarker"/>
         <property name="freemarkerSettings">
