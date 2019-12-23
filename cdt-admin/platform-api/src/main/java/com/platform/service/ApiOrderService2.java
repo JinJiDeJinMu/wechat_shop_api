@@ -178,7 +178,7 @@ public class ApiOrderService2 {
 				orderInfo.setOrder_price(orderTotalPrice);
 				orderInfo.setActual_price(actualPrice);
 				orderInfo.setAll_price(actualPrice);
-				orderInfo.setFreight_price(freightPrice.intValue());
+				orderInfo.setFreight_price(freightPrice);
 				// 待付款
 				orderInfo.setOrder_status(0);
 				orderInfo.setShipping_status(0);
@@ -318,7 +318,7 @@ public class ApiOrderService2 {
 			orderInfo.setDistrict(addressVo.getCountyName());
 			orderInfo.setAddress(addressVo.getDetailInfo());
 			//
-			orderInfo.setFreight_price(freightPrice.intValue());
+			orderInfo.setFreight_price(freightPrice);
 			// 留言
 			orderInfo.setPostscript(postscript);
 			// 使用的优惠券
@@ -329,7 +329,7 @@ public class ApiOrderService2 {
 			orderInfo.setOrder_price(orderTotalPrice);
 			orderInfo.setActual_price(actualPrice);
 			orderInfo.setAll_price(actualPrice);
-			orderInfo.setFreight_price(actualPrice.subtract(goodsTotalPrice).intValue());
+			orderInfo.setFreight_price(actualPrice.subtract(goodsTotalPrice));
 			// 待付款
 			orderInfo.setOrder_status(0);
 			orderInfo.setShipping_status(0);

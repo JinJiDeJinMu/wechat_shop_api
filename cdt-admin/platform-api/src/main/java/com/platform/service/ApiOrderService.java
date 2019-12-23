@@ -455,7 +455,7 @@ public class ApiOrderService {
         orderInfo.setOrder_price(orderTotalPrice);
         orderInfo.setActual_price(actualPrice);
         orderInfo.setAll_price(actualPrice);
-        orderInfo.setFreight_price(freightPrice.intValue());
+        orderInfo.setFreight_price(freightPrice);
         // 设置为待付款状态
         orderInfo.setOrder_status(OrderStatusEnum.WAIT_PAY.getCode());
         orderInfo.setShipping_status(0);

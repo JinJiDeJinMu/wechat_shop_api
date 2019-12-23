@@ -1,11 +1,11 @@
 package com.platform.controller;
 
+import com.platform.constance.ShopShow;
+import com.platform.entity.SysUserEntity;
 import com.platform.entity.UserEntity;
 import com.platform.service.UserService;
 import com.platform.utils.Base64;
-import com.platform.utils.PageUtils;
-import com.platform.utils.Query;
-import com.platform.utils.R;
+import com.platform.utils.*;
 import com.platform.utils.excel.ExcelExport;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,13 @@ public class UserController {
     @RequestMapping("/list")
     @RequiresPermissions("user:list")
     public R list(@RequestParam Map<String, Object> params) {
+        SysUserEntity sysUserEntity = ShiroUtils.getUserEntity();
+        System.out.println("merchantId" + sysUserEntity.getMerchantId());
         //查询列表数据
         Query query = new Query(params);
+        if (sysUserEntity.getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
+            query.put("merchantId", sysUserEntity.getMerchantId());
+        }
         if(query.containsKey("username")){
             query.put("username",Base64.encode(query.get("username").toString()));
         }

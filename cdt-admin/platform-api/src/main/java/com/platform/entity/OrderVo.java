@@ -84,7 +84,7 @@ public class OrderVo implements Serializable {
     //付款时间
     private Date pay_time;
     //配送费用
-    private Integer freight_price;
+    private BigDecimal freight_price;
     //使用的优惠券id
     private Integer coupon_id;
     //
@@ -401,11 +401,11 @@ public class OrderVo implements Serializable {
         this.pay_time = pay_time;
     }
 
-    public Integer getFreight_price() {
+    public BigDecimal getFreight_price() {
         return freight_price;
     }
 
-    public void setFreight_price(Integer freight_price) {
+    public void setFreight_price(BigDecimal freight_price) {
         this.freight_price = freight_price;
     }
 
