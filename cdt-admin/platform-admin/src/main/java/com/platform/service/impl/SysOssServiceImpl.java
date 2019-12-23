@@ -1,15 +1,10 @@
 package com.platform.service.impl;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
+import com.chundengtai.base.bean.SysOssEntity;
+import com.platform.dao.SysOssDao;
+import com.platform.service.SysOssService;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,12 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
-import com.platform.dao.SysOssDao;
-import com.platform.entity.SysOssEntity;
-import com.platform.service.SysOssService;
-
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @Service("sysOssService")
 public class SysOssServiceImpl implements SysOssService {
