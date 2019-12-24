@@ -3,8 +3,8 @@ $(function () {
     var payStatus = getQueryString("payStatus");
     var orderStatus = getQueryString("orderStatus");
     var goodsType = getQueryString("goodsType");
-    let addTime = getQueryString("add_time");
-    let endTime = getQueryString("end_time");
+    /*let addTime = getQueryString("addTime");
+    let endTime = getQueryString("endTime");*/
     var url = '../order/list';
     if (shippingStatus) {
         url += '?shippingStatus=' + shippingStatus;
@@ -18,12 +18,12 @@ $(function () {
     if (goodsType) {
         url += '?goodsType=' + goodsType;
     }
-    if (addTime) {
-        url += '?addTime=' + addTime;
-    }
-    if (endTime) {
-        url += '?endTime=' + endTime;
-    }
+    /* if (addTime) {
+         url += '?addTime=' + addTime;
+     }
+     if (endTime) {
+         url += '?endTime=' + endTime;
+     }*/
     $("#jqGrid").Grid({
         url: url,
         datatype: "json",
