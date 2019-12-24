@@ -2,7 +2,9 @@ package com.platform.api;
 
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.constant.CacheConstant;
+import com.chundengtai.base.facade.DistributionFacade;
 import com.chundengtai.base.service.OrderService;
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
 import com.platform.annotation.IgnoreAuth;
@@ -32,6 +34,9 @@ public class WxwriteOffController extends ApiBaseAction {
 
     @Autowired
     private OrderService cdtOrderService;
+
+    @Autowired
+    private DistributionFacade distributionFacade;
 
     @ApiOperation(value = "获得核销码基础信息", httpMethod = "POST")
     @RequestMapping("/getWriteOffCodeInfo")
@@ -70,6 +75,7 @@ public class WxwriteOffController extends ApiBaseAction {
             redisTemplate.opsForValue().set(CacheConstant.ORDER_HEXIAO_CACHE + merchantId + ":" + orderNo + ":" + userId, "true", 180, TimeUnit.MINUTES);
             log.info("核销====》" + orderNo);
             if (rows) {
+                distributionFacade.notifyOrderStatus(userId, orderVo, GoodsTypeEnum.getEnumByKey(orderVo.getGoodsType()));
                 return toResponsSuccess("核销成功");
             }
         } else {

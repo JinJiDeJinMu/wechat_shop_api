@@ -1,6 +1,5 @@
 package com.chundengtai.base.bean;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -15,12 +14,11 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author Royal
- * @since 2019-12-18
+ * @since 2019-12-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName(value = "cdt_rebate_log")
 public class CdtRebateLog implements Serializable {
 
     private static final long serialVersionUID=1L;
@@ -73,12 +71,12 @@ public class CdtRebateLog implements Serializable {
     /**
      * 完成时间
      */
-    private String completeTime;
+    private LocalDateTime completeTime;
 
     /**
      * 该订单的状态
      */
-    private String status;
+    private Integer status;
 
     /**
      * 确定分成或者取消时间

@@ -2,7 +2,9 @@ package com.platform.api;
 
 import com.alibaba.fastjson.JSON;
 import com.chundengtai.base.bean.Order;
+import com.chundengtai.base.facade.DistributionFacade;
 import com.chundengtai.base.service.OrderService;
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
 import com.chundengtai.base.weixinapi.ShippingTypeEnum;
@@ -47,6 +49,9 @@ public class WxOrderController extends ApiBaseAction {
 
     @Autowired
     private OrderService cdtOrderService;
+
+    @Autowired
+    private DistributionFacade distributionFacade;
 
     @Autowired
     private ApiOrderService orderService;
@@ -212,27 +217,24 @@ public class WxOrderController extends ApiBaseAction {
      */
     @ApiOperation(value = "取消订单")
     @RequestMapping("cancelOrder")
-    public Object cancelOrder(Integer orderId) {
-        OrderVo orderVo = orderService.queryObject(orderId);
-        List<OrderVo> orders = orderService.queryByAllOrderId(orderVo.getAll_order_id());
+    public Object cancelOrder(@LoginUser UserVo loginUser, Integer orderId) {
+        Order orderVo = cdtOrderService.getById(orderId);
         BigDecimal allPrice = BigDecimal.ZERO;
-        for (OrderVo o : orders) {
-            allPrice = allPrice.add(o.getAll_price());
-        }
+        allPrice = orderVo.getAllPrice();
 
-        if (orderVo.getOrder_status().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
+        if (orderVo.getOrderStatus().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
             return toResponsFail("已发货，不能取消");
-        } else if (orderVo.getOrder_status().equals(OrderStatusEnum.CONFIRM_GOODS.getCode())) {
+        } else if (orderVo.getOrderStatus().equals(OrderStatusEnum.CONFIRM_GOODS.getCode())) {
             return toResponsFail("已收货，不能取消");
         }
         try {
-            return returnMoney(orderVo, allPrice, orderVo.getOrder_sn());
+            return returnMoney(loginUser.getUserId().intValue(), orderVo, allPrice, orderVo.getOrderSn());
         } catch (WxPayException e) {
             logger.error(e.getXmlString());
             returnAllMoney(orderVo, e);
             if (e.getErrCodeDes().contains("订单不存在")) {
                 try {
-                    return returnMoney(orderVo, allPrice, orderVo.getAll_order_id());
+                    return returnMoney(loginUser.getUserId().intValue(), orderVo, allPrice, orderVo.getAllOrderId());
                 } catch (WxPayException ex) {
                     returnAllMoney(orderVo, e);
                 }
@@ -244,19 +246,19 @@ public class WxOrderController extends ApiBaseAction {
         return toResponsSuccess("提交失败");
     }
 
-    private void returnAllMoney(OrderVo orderVo, WxPayException e) {
+    private void returnAllMoney(Order orderVo, WxPayException e) {
         if (e.getErrCodeDes().contains("订单已全额退款")) {
-            orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
-            orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
-            orderService.update(orderVo);
+            orderVo.setOrderStatus(OrderStatusEnum.REFUND_ORDER.getCode());
+            orderVo.setPayStatus(PayTypeEnum.REFUND.getCode());
+            cdtOrderService.updateById(orderVo);
 
             try {
                 //FIXME:支付成功后入账
                 CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
-                payrecord.setMchOrderNo(orderVo.getOrder_sn());
-                payrecord.setOrderNo(orderVo.getOrder_sn());
-                payrecord.setAmount(orderVo.getActual_price());
-                payrecord.setTradePrice(orderVo.getActual_price());
+                payrecord.setMchOrderNo(orderVo.getOrderSn());
+                payrecord.setOrderNo(orderVo.getOrderSn());
+                payrecord.setAmount(orderVo.getActualPrice());
+                payrecord.setTradePrice(orderVo.getActualPrice());
                 payrecord.setAppId("");
                 payrecord.setCreateDate(new Date());
                 //payrecord.setPayOrderId("");
@@ -270,9 +272,9 @@ public class WxOrderController extends ApiBaseAction {
         }
     }
 
-    private Object returnMoney(OrderVo orderVo, BigDecimal allPrice, String outTradeNo) throws WxPayException {
+    private Object returnMoney(Integer userId, Order orderVo, BigDecimal allPrice, String outTradeNo) throws WxPayException {
         // 需要退款
-        if (orderVo.getPay_status().equals(PayTypeEnum.PAYED.getCode())) {
+        if (orderVo.getPayStatus().equals(PayTypeEnum.PAYED.getCode())) {
             WxPayRefundRequest request = new WxPayRefundRequest();
             request.setNonceStr(CharUtil.getRandomString(16));
             request.setOutTradeNo(outTradeNo);
@@ -281,24 +283,26 @@ public class WxOrderController extends ApiBaseAction {
 
             long id = kengenService.genNumber().longValue();
             request.setOutRefundNo(String.valueOf(id));
-            request.setOpUserId(orderVo.getUser_id().toString());
+            request.setOpUserId(orderVo.getUserId().toString());
             WxPayRefundResult wxResult = wxPayService.refund(request);
 
             if (wxResult.getResultCode().equals("SUCCESS")) {
-                if (orderVo.getOrder_status().equals(OrderStatusEnum.PAYED_ORDER.getCode())) {
-                    orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
-                } else if (orderVo.getOrder_status().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
-                    orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
+                if (orderVo.getOrderStatus().equals(OrderStatusEnum.PAYED_ORDER.getCode())) {
+                    orderVo.setOrderStatus(OrderStatusEnum.REFUND_ORDER.getCode());
                 } else {
-                    orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
+                    orderVo.setOrderStatus(OrderStatusEnum.REFUND_ORDER.getCode());
                 }
-                orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
+                orderVo.setPayStatus(PayTypeEnum.REFUND.getCode());
                 logger.warn("=====退款回调成功=====" + JSON.toJSONString(wxResult));
-                orderService.update(orderVo);
+                boolean result = cdtOrderService.updateById(orderVo);
+
+                if (result) {
+                    distributionFacade.notifyOrderStatus(userId, orderVo, GoodsTypeEnum.getEnumByKey(orderVo.getGoodsType()));
+                }
 
                 try {
                     CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
-                    payrecord.setMchOrderNo(orderVo.getOrder_sn());
+                    payrecord.setMchOrderNo(orderVo.getOrderSn());
                     payrecord.setAmount(BigDecimal.valueOf(request.getTotalFee()));
                     payrecord.setTradePrice(BigDecimal.valueOf(request.getRefundFee()));
                     payrecord.setAppId("");
@@ -320,8 +324,8 @@ public class WxOrderController extends ApiBaseAction {
                 return toResponsObject(400, "取消成失败", "取消成失败");
             }
         } else {
-            orderVo.setOrder_status(OrderStatusEnum.CANCEL_ORDER.getCode());
-            orderService.update(orderVo);
+            orderVo.setOrderStatus(OrderStatusEnum.CANCEL_ORDER.getCode());
+            cdtOrderService.updateById(orderVo);
             return toResponsSuccess("取消成功");
         }
     }
@@ -331,7 +335,7 @@ public class WxOrderController extends ApiBaseAction {
      */
     @ApiOperation(value = "确认收货")
     @RequestMapping("confirmOrder")
-    public Object confirmOrder(Integer orderId) {
+    public Object confirmOrder(@LoginUser UserVo loginUser, Integer orderId) {
         try {
             Order orderVo = cdtOrderService.getById(orderId);
 
@@ -341,7 +345,10 @@ public class WxOrderController extends ApiBaseAction {
                 orderVo.setOrderStatus(OrderStatusEnum.COMPLETED_ORDER.getCode());
                 orderVo.setShippingStatus(ShippingTypeEnum.GETEDGOODS.getCode());
                 orderVo.setConfirmTime(LocalDateTime.now());
-                cdtOrderService.updateById(orderVo);
+                boolean result = cdtOrderService.updateById(orderVo);
+                if (result) {
+                    distributionFacade.notifyOrderStatus(loginUser.getUserId().intValue(), orderVo, GoodsTypeEnum.getEnumByKey(orderVo.getGoodsType()));
+                }
                 return toResponsSuccess("确认收货成功");
             } else {
                 return toResponsSuccess("订单状态不对,请核实后在操作");

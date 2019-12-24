@@ -41,6 +41,16 @@ public class BizException extends RuntimeException {
      *
      * @param detailedMessage 详细描述
      */
+    public BizException(final BizErrorCodeEnum bizErrorCodeEnum, final String detailedMessage) {
+        super(detailedMessage);
+        this.errorCode = bizErrorCodeEnum;
+    }
+
+    /**
+     * 指定详细描述构造通用异常
+     *
+     * @param detailedMessage 详细描述
+     */
     public BizException(final String detailedMessage) {
         super(detailedMessage);
         this.errorCode = BizErrorCodeEnum.UNSPECIFIED;

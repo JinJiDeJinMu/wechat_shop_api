@@ -35,7 +35,6 @@ public class DateTimeConvert {
         ZoneId zoneId = ZoneId.systemDefault();
         ZonedDateTime zdt = localDateTime.atZone(zoneId);//Combines this date-time with a time-zone to create a  ZonedDateTime.
         Date date = Date.from(zdt.toInstant());
-        //System.out.println(date.toString());//Tue Mar 27 14:17:17 CST 2018
         return date;
     }
 

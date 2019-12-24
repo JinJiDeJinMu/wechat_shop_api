@@ -18,6 +18,7 @@ package com.chundengtai.base.weixinapi;
  */
 public enum DistributionStatus {
 
+    NOT_SERVEN_ORDER(398, "未满七天"),
     REFUND_ORDER(399, "已退订"),
     NON_COMPLETE_ORDER(400, "未完成"),
     COMPLETED_ORDER(402, "已完成");
