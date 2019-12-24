@@ -25,10 +25,9 @@ public class OrderCancelTask {
     @Autowired
     private OrderService orderService;
 
-    @Scheduled(cron = "0 0/1 * * * ? ")
+    @Scheduled(cron = "0 0/20 * * * ? ")
     public void orderCancel() {
 
-        System.out.println("11111111111111");
         HashMap<String, Object> hashMap = new HashMap<>(3);
         hashMap.put("order_status", OrderStatusEnum.WAIT_PAY.getCode());
         List<Order> orderList = orderService.queryList(hashMap);
@@ -37,7 +36,7 @@ public class OrderCancelTask {
             orderList.forEach(order -> {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(order.getAddTime());
-                cal.add(Calendar.MINUTE, 30);
+                cal.add(Calendar.MINUTE, 60);
                 if (new Date().after(cal.getTime())) {
                     order.setOrderStatus(OrderStatusEnum.CANCEL_ORDER.getCode());
                     orderService.updateById(order);
