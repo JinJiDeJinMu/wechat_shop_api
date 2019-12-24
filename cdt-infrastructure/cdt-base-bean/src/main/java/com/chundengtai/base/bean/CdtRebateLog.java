@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -83,7 +83,7 @@ public class CdtRebateLog implements Serializable {
     /**
      * 确定分成或者取消时间
      */
-    private Date confirmTime;
+    private LocalDateTime confirmTime;
 
     /**
      * 备注
@@ -103,7 +103,7 @@ public class CdtRebateLog implements Serializable {
     /**
      * 创建时间
      */
-    private Date createdTime;
+    private LocalDateTime createdTime;
 
 
 }

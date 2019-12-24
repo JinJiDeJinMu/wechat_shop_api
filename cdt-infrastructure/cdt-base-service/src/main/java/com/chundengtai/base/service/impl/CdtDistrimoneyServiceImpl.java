@@ -8,7 +8,6 @@ import com.chundengtai.base.utils.ReflectUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 /**
  * <p>
@@ -29,14 +28,12 @@ public class CdtDistrimoneyServiceImpl extends ServiceImpl<CdtDistrimoneyMapper,
 
     @Override
     public Boolean addCdtDistrimoney(CdtDistrimoney cdtDistrimoney) {
-        cdtDistrimoney.setCreatedTime(LocalDateTime.now());
         cdtDistrimoney.setToken(ReflectUtils.getToken(cdtDistrimoney));
         return this.save(cdtDistrimoney);
     }
 
     @Override
     public Boolean updateDistrimoney(CdtDistrimoney cdtDistrimoney) {
-        cdtDistrimoney.setUpdatedTime(LocalDateTime.now());
         cdtDistrimoney.setToken(ReflectUtils.getToken(cdtDistrimoney));
         return this.updateById(cdtDistrimoney);
     }
