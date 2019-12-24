@@ -353,7 +353,7 @@
                     <!--<Input-number :min="0" :step="1" v-model="goods.brokerage_percent" placeholder="分佣比例"-->
                     <!--style="width: 188px;"/>-->
                     <!--</Form-item>-->
-                    <Form-item label="邮费价格" prop="extraPrice">
+                    <Form-item label="邮费价格" prop="extraPrice" v-if="goods.isSecKill!=6">
                         <Input-number :min="0" :step="1" v-model="goods.extraPrice" placeholder="邮费价格"
                                       style="width: 188px;"/>
                     </Form-item>

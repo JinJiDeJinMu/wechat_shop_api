@@ -234,6 +234,7 @@ var vm = new Vue({
 			// 拼接
 			return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
 		},
+
         getList: function () {
 			this.listLoading = false;
 			Ajax.request({

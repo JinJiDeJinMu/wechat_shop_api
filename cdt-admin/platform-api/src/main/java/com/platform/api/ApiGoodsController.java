@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 作者: @author Harmon <br>
@@ -625,6 +626,7 @@ public class ApiGoodsController extends ApiBaseAction {
             paramRelated.put("fields", "id, name, list_pic_url,primary_pic_url,retail_price");
             relatedGoods = goodsService.queryList(paramRelated);
         }
+        relatedGoods = relatedGoods.stream().limit(20).collect(Collectors.toList());
         resultObj.put("goodsList", relatedGoods);
         return toResponsSuccess(resultObj);
     }
