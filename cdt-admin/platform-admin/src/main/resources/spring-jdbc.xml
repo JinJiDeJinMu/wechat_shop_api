@@ -58,6 +58,25 @@
         <property name="enableTransactionSupport" value="false"></property>
     </bean>
 
+    <bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory"></property>
+        <property name="keySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"></bean>
+        </property>
+        <property name="valueSerializer">
+            <bean class="com.chundengtai.base.serializer.GenericFastJson2JsonRedisSerializer"></bean>
+        </property>
+        <property name="hashKeySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="hashValueSerializer">
+            <bean class="com.chundengtai.base.serializer.GenericFastJson2JsonRedisSerializer"/>
+        </property>
+        <property name="stringSerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+    </bean>
+
     <!--启用spring的一些annotation -->
     <context:annotation-config/>
 

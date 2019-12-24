@@ -9,10 +9,10 @@
         <result column="user_name" property="userName" />
         <result column="goods_id" property="goodsId" />
         <result column="goods_name" property="goodsName" />
-        <result column="cart_id" property="cartId" />
+        <result column="spec_id" property="specId"/>
         <result column="share_num" property="shareNum" />
         <result column="sales_num" property="salesNum" />
-        <result column="store_id" property="storeId" />
+        <result column="mechant_id" property="mechantId"/>
         <result column="created_by" property="createdBy" />
         <result column="created_time" property="createdTime" />
         <result column="token" property="token" />
@@ -20,7 +20,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, user_name, goods_id, goods_name, cart_id, share_num, sales_num, store_id, created_by, created_time, token
+        id, user_id, user_name, goods_id, goods_name, spec_id, share_num, sales_num, mechant_id, created_by, created_time, token
     </sql>
 
 </mapper>

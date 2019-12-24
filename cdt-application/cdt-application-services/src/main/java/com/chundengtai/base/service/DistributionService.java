@@ -3,6 +3,7 @@ package com.chundengtai.base.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.chundengtai.base.bean.*;
+import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.event.DistributionEvent;
 import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.utils.BeanJwtUtil;
@@ -13,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +31,6 @@ import java.util.concurrent.TimeUnit;
 @Service
 @Slf4j
 public class DistributionService {
-
-    public static final String SERVICE_CDT_DISTRIMONEY = "DistributionService:CdtDistrimoney";
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -78,25 +76,25 @@ public class DistributionService {
     }
 //功能方法
 
-    private void encryt(CdtRebateLog logModel) {
+    private String encryt(Object logModel) {
         try {
             Map chain = BeanJwtUtil.javabean2map(logModel);
-            logModel.setToken(JavaWebToken.createJavaWebToken(chain));
+            return JavaWebToken.createJavaWebToken(chain);
         } catch (Exception e) {
             log.error("jwt加密异常========");
             e.printStackTrace();
         }
+        return "";
     }
 
-    //
     //返佣比例配置信息获取
     public CdtDistrimoney getDistrimoney() {
-        CdtDistrimoney model = (CdtDistrimoney) redisTemplate.opsForValue().get(SERVICE_CDT_DISTRIMONEY);
+        CdtDistrimoney model = (CdtDistrimoney) redisTemplate.opsForValue().get(CacheConstant.SERVICE_CDT_DISTRIMONEY);
         if (model == null) {
             model = distrimoneyService.getOne(new QueryWrapper<CdtDistrimoney>()
                     .lambda().eq(CdtDistrimoney::getStatus, OnOffEnum.OFF.getCode()).orderByDesc(CdtDistrimoney::getId));
             if (model != null) {
-                redisTemplate.opsForValue().set(SERVICE_CDT_DISTRIMONEY, model, 30, TimeUnit.DAYS);
+                redisTemplate.opsForValue().set(CacheConstant.SERVICE_CDT_DISTRIMONEY, model, 30, TimeUnit.DAYS);
             }
         }
         return model;
@@ -177,22 +175,24 @@ public class DistributionService {
     /**
      * 记录用户所挣钱
      */
-    public void recordEarning(int userId, int goldUserId, BigDecimal money, String orderSn) {
+    public boolean recordEarning(int userId, int goldUserId, BigDecimal money, String orderSn) {
         CdtDistridetail distridetail = new CdtDistridetail();
         distridetail.setUserId(userId);
         distridetail.setGoldUserId(goldUserId);
         distridetail.setMoney(money);
         distridetail.setOrderSn(orderSn);
         distridetail.setCreatedTime(LocalDateTime.now());
-        distridetail.setToken("");
-
+        distridetail.setToken(encryt(distridetail));
         boolean result = distridetailService.save(distridetail);
+
+        return result;
+        //更新用户分销参数信息
     }
 
     /**
      * 记录分销日志
      */
-    @Async
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
     public void recordDistributeLog(Integer userId, Integer orderId) {
         User user = userService.getById(userId);
         Order order = orderService.getById(orderId);
@@ -209,26 +209,30 @@ public class DistributionService {
         logModel.setStatus(OrderStatusEnum.getEnumByKey(order.getOrderStatus()).getDesc());
         logModel.setLevel(1);
         logModel.setRemark("一级返佣结算");
-        logModel.setMoney(computeFirstMoney(order.getAllPrice()));
-        logModel.setCreatedTime(LocalDateTime.now());
+        BigDecimal earnMoney = computeFirstMoney(order.getAllPrice());
+        logModel.setMoney(earnMoney);
 
-        encryt(logModel);
+        logModel.setToken(encryt(logModel));
         boolean result = rebateLogService.save(logModel);
+        recordEarning(user.getId(), user.getFirstLeader(), earnMoney, order.getOrderSn());
 
         if (!user.getSecondLeader().equals(0)) {
             logModel.setId(null);
             logModel.setToken(null);
             logModel.setGoldUserId(user.getSecondLeader());
             logModel.setLevel(2);
-            logModel.setMoney(computeSecondMoney(order.getAllPrice()));
-            encryt(logModel);
+            logModel.setRemark("二级返佣结算");
+            BigDecimal secondMoney = computeSecondMoney(order.getAllPrice());
+            logModel.setMoney(secondMoney);
+            logModel.setToken(encryt(logModel));
             boolean secondResult = rebateLogService.save(logModel);
+            recordEarning(user.getId(), user.getSecondLeader(), secondMoney, order.getOrderSn());
         }
     }
 
 
     /**
-     * 更新用户分销参数信息
+     * 更新用户分销参数信息-下一版本迭代
      */
     public void updateUserConfigInfo() {
 

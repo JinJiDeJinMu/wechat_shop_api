@@ -35,9 +35,13 @@ public class CacheConstant {
 
     public static final String SHOP_GOODS_CACHE = SHOP_CACHE_NAME + ":" + GOODS_NAME + ":";
 
-    public static final String EXPRESS_GOODS_CACHE =  "expressGoodsCache";
+    public static final String EXPRESS_GOODS_CACHE = "expressGoodsCache";
 
 
     public static final String ORDER_HEXIAO_CACHE = "checkHexiao:";
+
+    public static final String QRCODE_CACHE = "qrcode:";
+
+    public static final String SERVICE_CDT_DISTRIMONEY = "DistributionService:CdtDistrimoney";
 
 }

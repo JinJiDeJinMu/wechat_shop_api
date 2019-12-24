@@ -86,9 +86,9 @@
             </span>
                 </el-input>
             </el-form-item>
-            <el-form-item label="" prop="captcha_code">
+            <el-form-item label="" prop="captchacode">
                 <el-input
-                        v-model="captcha"
+                        v-model="loginForm.captcha"
                         placeholder="验证码"
                         autocomplete="off"
                         autocapitalize="off"
@@ -124,19 +124,18 @@
                 loginForm: {
                     username: 'admin',
                     password: '',
+                    captcha: '',
                 },
                 loginRules: {
                     username: [{required: true, message: '请输入正确的用户名', trigger: 'blur'},
                         {min: 3, max: 200, message: '请输入正确的用户名', trigger: 'blur'}],
                     password: [{required: true, message: '请输入密码', trigger: 'blur'},
-                        {min: 3, max: 200, message: '密码不能小于3位', trigger: 'blur'}]
+                        {min: 3, max: 200, message: '密码不能小于3位', trigger: 'blur'}],
+                    captcha: [{required: true, message: '请输入验证码', trigger: 'blur'}]
                 },
                 pwdType: 'password',
                 dialogVisible: false,
                 supportDialogVisible: false,
-                // username: 'admin',
-                // password: '',
-                captcha: '',
                 src: 'yanzhengma.do',
                 loading: false,
             }
@@ -171,7 +170,7 @@
                     return false;
                 }
                 this.loading = true;
-                let data = "username=" + this.loginForm.username + "&password=" + this.loginForm.password + "&captcha=" + this.captcha;
+                let data = "username=" + this.loginForm.username + "&password=" + this.loginForm.password + "&captcha=" + this.loginForm.captcha;
                 $.ajax({
                     type: "POST",
                     url: "sys/login",

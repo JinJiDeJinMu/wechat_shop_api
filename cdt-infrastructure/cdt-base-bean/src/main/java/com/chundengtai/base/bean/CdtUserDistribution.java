@@ -1,8 +1,5 @@
 package com.chundengtai.base.bean;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -12,80 +9,78 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 用户分布
+ * 用户分布 用户分布
  * </p>
  *
  * @author Royal
- * @since 2019-12-18
+ * @since 2019-12-24
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName(value = "cdt_user_distribution")
 public class CdtUserDistribution implements Serializable {
 
     private static final long serialVersionUID=1L;
 
-    /**
-     * id
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+  /**
+   * id
+   */
+  private Integer id;
 
-    /**
-     * 分销会员id
-     */
-    private Integer userId;
+  /**
+   * 分销会员id
+   */
+  private Integer userId;
 
-    /**
-     * user_name
-     */
-    private String userName;
+  /**
+   * user_name
+   */
+  private String userName;
 
-    /**
-     * 商品id
-     */
-    private Integer goodsId;
+  /**
+   * 商品id
+   */
+  private Integer goodsId;
 
-    /**
-     * 商品名称
-     */
-    private String goodsName;
+  /**
+   * 商品名称
+   */
+  private String goodsName;
 
-    /**
-     * 购物车id
-     */
-    private Integer cartId;
+  /**
+   * 规格id
+   */
+  private Integer specId;
 
-    /**
-     * 分享次数
-     */
-    private Integer shareNum;
+  /**
+   * 分享次数
+   */
+  private Integer shareNum;
 
-    /**
-     * 分销销量
-     */
-    private Integer salesNum;
+  /**
+   * 分销销量
+   */
+  private Integer salesNum;
 
-    /**
-     * store_id
-     */
-    private Long storeId;
+  /**
+   * 商家id
+   */
+  private Long mechantId;
 
-    /**
-     * 创建人
-     */
-    private String createdBy;
+  /**
+   * 创建人
+   */
+  private String createdBy;
 
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createdTime;
+  /**
+   * 创建时间
+   */
+  private LocalDateTime createdTime;
 
-    /**
-     * 校验
-     */
-    private String token;
+  /**
+   * 校验
+   */
+  private String token;
 
 
 }
