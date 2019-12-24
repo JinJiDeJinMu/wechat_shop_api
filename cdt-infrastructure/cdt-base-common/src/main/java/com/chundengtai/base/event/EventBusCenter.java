@@ -1,12 +1,10 @@
 package com.chundengtai.base.event;
 
-import com.chundengtai.base.common.SpringContextUtils;
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 import java.util.concurrent.Executors;
 
 @Component
@@ -31,10 +29,10 @@ public class EventBusCenter {
     public void init() {
 
         // 获取所有带有 @EventBusListener 的 bean，将他们注册为监听者
-        List<Object> listeners = SpringContextUtils.getBeansWithAnnotation(EventBusListener.class);
-        for (Object listener : listeners) {
-            asyncEventBus.register(listener);
-            syncEventBus.register(listener);
-        }
+//        List<Object> listeners = SpringContextUtils.getBeansWithAnnotation(EventBusListener.class);
+//        for (Object listener : listeners) {
+//            asyncEventBus.register(listener);
+//            syncEventBus.register(listener);
+//        }
     }
 }

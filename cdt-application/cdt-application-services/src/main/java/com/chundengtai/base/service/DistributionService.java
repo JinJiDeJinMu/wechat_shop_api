@@ -121,12 +121,14 @@ public class DistributionService {
      */
     public void recordEarning() {
 
+
     }
 
     /**
      * 记录分销日志
      */
     public void recordDistributeLog() {
+
 
     }
 
@@ -136,6 +138,7 @@ public class DistributionService {
      */
     public void updateUserConfigInfo() {
 
+
     }
 
 
@@ -143,6 +146,7 @@ public class DistributionService {
      * 分佣计算返佣金+合伙人计算分成
      */
     public void computeCommission() {
+
 
     }
 
