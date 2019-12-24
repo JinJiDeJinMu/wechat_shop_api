@@ -8,11 +8,8 @@ import com.chundengtai.base.utils.ReflectUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
-
-//import com.platform.utils.ShiroUtils;
-
 /**
  * <p>
  * 分销比例 服务实现类
@@ -32,16 +29,14 @@ public class CdtDistrimoneyServiceImpl extends ServiceImpl<CdtDistrimoneyMapper,
 
     @Override
     public Boolean addCdtDistrimoney(CdtDistrimoney cdtDistrimoney) {
-        cdtDistrimoney.setCreatedTime(new Date());
-        //cdtDistrimoney.setCreatedBy(String.valueOf(ShiroUtils.getUserEntity().getUserId()));
+        cdtDistrimoney.setCreatedTime(LocalDateTime.now());
         cdtDistrimoney.setToken(ReflectUtils.getToken(cdtDistrimoney));
         return this.save(cdtDistrimoney);
     }
 
     @Override
     public Boolean updateDistrimoney(CdtDistrimoney cdtDistrimoney) {
-        //cdtDistrimoney.setUpdatedBy(String.valueOf(ShiroUtils.getUserEntity().getUserId()));
-        cdtDistrimoney.setUpdatedTime(new Date());
+        cdtDistrimoney.setUpdatedTime(LocalDateTime.now());
         cdtDistrimoney.setToken(ReflectUtils.getToken(cdtDistrimoney));
         return this.updateById(cdtDistrimoney);
     }

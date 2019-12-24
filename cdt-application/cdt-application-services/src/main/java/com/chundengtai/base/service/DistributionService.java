@@ -2,17 +2,28 @@ package com.chundengtai.base.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.chundengtai.base.bean.CdtDistributionLevel;
-import com.chundengtai.base.bean.User;
+import com.chundengtai.base.bean.*;
 import com.chundengtai.base.event.DistributionEvent;
+import com.chundengtai.base.jwt.JavaWebToken;
+import com.chundengtai.base.utils.BeanJwtUtil;
+import com.chundengtai.base.weixinapi.OnOffEnum;
+import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.TrueOrFalseEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 分销系统应用服务
@@ -21,8 +32,13 @@ import org.springframework.util.StringUtils;
 @Slf4j
 public class DistributionService {
 
+    public static final String SERVICE_CDT_DISTRIMONEY = "DistributionService:CdtDistrimoney";
+
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     //用户层级服务
     @Autowired
@@ -52,6 +68,48 @@ public class DistributionService {
     @Autowired
     private CdtUserDistributionService userDistributionService;
 
+    private CdtDistrimoney distrimoney;
+
+    @PostConstruct
+    public void initialize() {
+        if (distrimoney == null) {
+            distrimoney = getDistrimoney();
+        }
+    }
+//功能方法
+
+    private void encryt(CdtRebateLog logModel) {
+        try {
+            Map chain = BeanJwtUtil.javabean2map(logModel);
+            logModel.setToken(JavaWebToken.createJavaWebToken(chain));
+        } catch (Exception e) {
+            log.error("jwt加密异常========");
+            e.printStackTrace();
+        }
+    }
+
+    //
+    //返佣比例配置信息获取
+    public CdtDistrimoney getDistrimoney() {
+        CdtDistrimoney model = (CdtDistrimoney) redisTemplate.opsForValue().get(SERVICE_CDT_DISTRIMONEY);
+        if (model == null) {
+            model = distrimoneyService.getOne(new QueryWrapper<CdtDistrimoney>()
+                    .lambda().eq(CdtDistrimoney::getStatus, OnOffEnum.OFF.getCode()).orderByDesc(CdtDistrimoney::getId));
+            if (model != null) {
+                redisTemplate.opsForValue().set(SERVICE_CDT_DISTRIMONEY, model, 30, TimeUnit.DAYS);
+            }
+        }
+        return model;
+    }
+
+    private BigDecimal computeFirstMoney(BigDecimal totalMoney) {
+        return totalMoney.multiply(distrimoney.getFirstPartner());
+    }
+
+    private BigDecimal computeSecondMoney(BigDecimal totalMoney) {
+        return totalMoney.multiply(distrimoney.getSecondPercent());
+    }
+    //返佣比例配置结束
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
     public void distributionLogic(DistributionEvent event) {
@@ -119,17 +177,52 @@ public class DistributionService {
     /**
      * 记录用户所挣钱
      */
-    public void recordEarning() {
+    public void recordEarning(int userId, int goldUserId, BigDecimal money, String orderSn) {
+        CdtDistridetail distridetail = new CdtDistridetail();
+        distridetail.setUserId(userId);
+        distridetail.setGoldUserId(goldUserId);
+        distridetail.setMoney(money);
+        distridetail.setOrderSn(orderSn);
+        distridetail.setCreatedTime(new Date());
+        distridetail.setToken("");
 
-
+        boolean result = distridetailService.save(distridetail);
     }
 
     /**
      * 记录分销日志
      */
-    public void recordDistributeLog() {
+    @Async
+    public void recordDistributeLog(Integer userId, Integer orderId) {
+        User user = userService.getById(userId);
+        Order order = orderService.getById(orderId);
 
+        CdtRebateLog logModel = new CdtRebateLog();
+        logModel.setBuyUserId(user.getId());
+        logModel.setOrderId(order.getId());
+        logModel.setOrderSn(order.getOrderSn());
 
+        logModel.setGoldUserId(user.getFirstLeader());
+        logModel.setGoodsPrice(order.getAllPrice());
+        logModel.setMechantId(order.getMerchantId());
+        logModel.setNickname(user.getNickname());
+        logModel.setStatus(OrderStatusEnum.getEnumByKey(order.getOrderStatus()).getDesc());
+        logModel.setLevel(1);
+        logModel.setRemark("一级返佣结算");
+        logModel.setMoney(computeFirstMoney(order.getAllPrice()));
+
+        encryt(logModel);
+        boolean result = rebateLogService.save(logModel);
+
+        if (!user.getSecondLeader().equals(0)) {
+            logModel.setId(null);
+            logModel.setToken(null);
+            logModel.setGoldUserId(user.getSecondLeader());
+            logModel.setLevel(2);
+            logModel.setMoney(computeSecondMoney(order.getAllPrice()));
+            encryt(logModel);
+            boolean secondResult = rebateLogService.save(logModel);
+        }
     }
 
 

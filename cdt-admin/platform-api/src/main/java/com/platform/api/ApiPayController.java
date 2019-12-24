@@ -737,7 +737,6 @@ public class ApiPayController extends ApiBaseAction {
             return;
         }
         Integer order_price = orderPrice.multiply(new BigDecimal("100")).intValue();
-        //MlsUserEntity2 user = mlsUserSer.queryObject(userId);
         MlsUserEntity2 user = mlsUserSer.getEntityMapper().getById(userId);
         if (user == null) {
             System.out.println("==============分销报错：" + userId + "=====没有找到用户");

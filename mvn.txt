@@ -1,0 +1,18 @@
+maven打包命令
+mvn clean package -Dmaven.test.skip=true
+
+maven模块仓库安装命令
+mvn clean install -Dmaven.test.skip=true
+mvn package -Dmaven.skip.test=true
+
+maven依赖查看
+
+maven mybatis生成命令
+mvn mybatis-generator:generate
+
+maven依赖jar包出现问题的时候,按下面的步骤执行
+mvn dependency:purge-local-repository
+If you receive build successful message, means the error has been resolved.
+If error is still there, delete your (~/.m2/repository/org/springframework) folder and run
+
+mvn package
