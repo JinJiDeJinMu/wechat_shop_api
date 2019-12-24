@@ -3,6 +3,7 @@ package com.platform.api;
 import cn.binarywang.wx.miniapp.api.WxMaQrcodeService;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.api.impl.WxMaQrcodeServiceImpl;
+import com.chundengtai.base.constant.CacheConstant;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.UserVo;
@@ -54,17 +55,17 @@ public class QRCodeController extends ApiBaseAction {
     ) throws WxErrorException, IOException {
         Long shopUserId = loginUser.getUserId();
         params = shopUserId + "_" + params;
-        Object imageName = redisTemplate.opsForValue().get(params);
+
+        Object imageName = redisTemplate.opsForValue().get(CacheConstant.QRCODE_CACHE + params);
         if (imageName != null) {
             return toResponsSuccess(imageName.toString());
         }
         WxMaQrcodeService service1 = new WxMaQrcodeServiceImpl(wxMaService);
         File image = service1.createWxaCodeUnlimit(params, page, 100, true, null, false);
         String resource = "/data/wwwroot/school.chundengtai.com/qrcode";
-//        String qrImag = "public/jpg/";
         // 将源文件拷贝到目标目录中，如果目标目录不存在，则创建
         FileUtils.copyFileToDirectory(image, new File(resource));
-        redisTemplate.opsForValue().set(params, image.getName(), 15, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set(CacheConstant.QRCODE_CACHE + params, image.getName(), 15, TimeUnit.DAYS);
         return toResponsSuccess(image.getName());
     }
 
