@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -17,7 +17,7 @@ import java.util.Date;
  * </p>
  *
  * @author Royal
- * @since 2019-12-22
+ * @since 2019-12-24
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -42,12 +42,12 @@ public class Order implements Serializable {
     /**
      * 发货状态 商品配送情况;0未发货,1已发货,2已收货,4退货
      */
-    private Boolean shippingStatus;
+    private Integer shippingStatus;
 
     /**
      * 付款状态 支付状态;0未付款;1付款中;2已付款;4退款
      */
-    private Boolean payStatus;
+    private Integer payStatus;
 
     /**
      * 评价状态（0是未评价，1是评价）
@@ -144,22 +144,22 @@ public class Order implements Serializable {
     /**
      * 新增时间
      */
-    private Date addTime;
+    private LocalDateTime addTime;
 
     /**
      * 确认时间
      */
-    private Date confirmTime;
+    private LocalDateTime confirmTime;
 
     /**
      * 付款时间
      */
-    private Date payTime;
+    private LocalDateTime payTime;
 
     /**
      * 配送费用
      */
-    private Integer freightPrice;
+    private BigDecimal freightPrice;
 
     /**
      * 使用的优惠券id
@@ -242,6 +242,16 @@ public class Order implements Serializable {
      * 商品数量
      */
     private Integer goodsNum;
+
+    /**
+     * 第一个上级
+     */
+    private Integer firstLeader;
+
+    /**
+     * 第二个上级
+     */
+    private Integer secondLeader;
 
 
 }

@@ -67,14 +67,6 @@ public class ApiPayController extends ApiBaseAction {
 
     @Autowired
     private CdtPaytransRecordService paytransRecordService;
-    /**
-     *
-     */
-    @ApiOperation(value = "跳转")
-    @GetMapping("index")
-    public Object index() {
-        return toResponsSuccess("");
-    }
 
     /**
      * 获取支付的请求参数
@@ -98,7 +90,10 @@ public class ApiPayController extends ApiBaseAction {
         String detail = "未名严选商城-";
         if (null != orderGoods) {
             for (OrderGoodsVo goodsVo : orderGoods) {
-                detail = detail + goodsVo.getGoods_name() + "-" + goodsVo.getGoods_specifition_name_value() + goodsVo.getNumber() + "件,";
+                String goodsSpecifitionNameValue = goodsVo.getGoods_specifition_name_value();
+                if (org.springframework.util.StringUtils.isEmpty(goodsSpecifitionNameValue))
+                    goodsSpecifitionNameValue = "";
+                detail = detail + goodsVo.getGoods_name() + "-" + goodsSpecifitionNameValue + goodsVo.getNumber() + "件,";
             }
             if (detail.length() > 0) {
                 detail = detail.substring(0, detail.length() - 1);
@@ -153,7 +148,7 @@ public class ApiPayController extends ApiBaseAction {
                     orderService.update(orderInfo);
 
                     //redis设置订单状态
-                    redisTemplate.opsForValue().set(orderInfo.getOrder_sn(), "51", 2, TimeUnit.DAYS);
+                    redisTemplate.opsForValue().set(orderInfo.getOrder_sn(), "51", 1, TimeUnit.DAYS);
                     try {
                         //FIXME:支付成功后入账
                         CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();

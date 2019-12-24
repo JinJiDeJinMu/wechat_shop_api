@@ -1,5 +1,6 @@
 package com.chundengtai.base.facade;
 
+import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.service.DistributionService;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,8 @@ public class DistributionFacade {
     }
 
     @Async
-    public void notifyOrderStatus(Integer userId, Integer orderId, String orderNo, GoodsTypeEnum goodsTypeEnum) {
-        distributionService.recordDistributeLog(userId, orderId);
+    public void notifyOrderStatus(Integer userId, Order order, GoodsTypeEnum goodsTypeEnum) {
+        boolean result = distributionService.notifyOrderStatus(userId, order, goodsTypeEnum);
+
     }
 }

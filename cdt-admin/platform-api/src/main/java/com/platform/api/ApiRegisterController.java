@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 注册
  *
- * @date 2017-03-26 17:27
  */
 @Api(tags = "注册")
 @RestController

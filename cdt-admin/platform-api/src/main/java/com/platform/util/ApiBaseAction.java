@@ -24,12 +24,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
- * @author harmon
  * @ClassName: ApiBaseAction
  * @Description: 基础控制类
- * @date 2016年9月2日
  */
 public class ApiBaseAction {
     protected Logger logger = Logger.getLogger(getClass());
@@ -64,13 +61,9 @@ public class ApiBaseAction {
 
     /**
      * @param requestCode
-     * @param msg
-     * @param data
      * @return Map<String,Object>
      * @throws
      * @Description:构建统一格式返回对象
-     * @date 2016年9月2日
-     * @author zhuliyun
      */
     public Map<String, Object> toResponsObject(int requestCode, String msg, Object data) {
         Map<String, Object> obj = new HashMap<String, Object>();

@@ -42,7 +42,7 @@ import java.util.Map;
 public class ApiAuthController extends ApiBaseAction {
 
     @Autowired
-    DistributionService distributionService;
+    private DistributionService distributionService;
     @Autowired
     private ApiUserService userService;
     @Autowired

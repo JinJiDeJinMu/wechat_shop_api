@@ -37,11 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * 作者: @author Harmon <br>
- * 时间: 2017-08-11 08:32<br>
- * 描述: ApiIndexController <br>
- */
 @Api(tags = "商品管理")
 @RestController
 @RequestMapping("/api/goods")

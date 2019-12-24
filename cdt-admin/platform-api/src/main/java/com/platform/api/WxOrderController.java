@@ -1,6 +1,8 @@
 package com.platform.api;
 
 import com.alibaba.fastjson.JSON;
+import com.chundengtai.base.bean.Order;
+import com.chundengtai.base.service.OrderService;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
 import com.chundengtai.base.weixinapi.ShippingTypeEnum;
@@ -29,18 +31,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Api(tags = "订单相关")
+@Api(tags = "v2订单相关")
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/apis/v2/order")
 @Slf4j
-public class ApiOrderController extends ApiBaseAction {
+public class WxOrderController extends ApiBaseAction {
     @Autowired
     private WxPayService wxPayService;
+
+    @Autowired
+    private OrderService cdtOrderService;
 
     @Autowired
     private ApiOrderService orderService;
@@ -50,9 +56,6 @@ public class ApiOrderController extends ApiBaseAction {
 
     @Autowired
     private UserRecordSer userRecordSer;
-
-    @Autowired
-    private MlsUserSer mlsUserSer;
 
     @Autowired
     private ApiUserCouponService userCouponService;
@@ -119,42 +122,6 @@ public class ApiOrderController extends ApiBaseAction {
         }
         return toResponsFail("无数据显示");
     }
-
-    /**
-     * 获取订单列表（开发）
-     */
-//    @ApiOperation(value = "获取订单列表")
-//    @IgnoreAuth
-//    @RequestMapping("list")
-//    public Object list(Integer userId, Integer order_status,
-//                       @RequestParam(value = "page", defaultValue = "1") Integer page,
-//                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
-//        Map params = new HashMap();
-//        params.put("user_id", userId);
-//        params.put("page", page);
-//        params.put("limit", size);
-//        params.put("sidx", "id");
-//        params.put("order", "desc");
-//        params.put("order_status", order_status);
-//        //查询列表数据
-//        Query query = new Query(params);
-//        List<OrderVo> orderEntityList = orderService.queryList(query);
-//        int total = orderService.queryTotal(query);
-//        ApiPageUtils pageUtil = new ApiPageUtils(orderEntityList, total, query.getLimit(), query.getPage());
-//        //
-//        for (OrderVo item : orderEntityList) {
-//            Map orderGoodsParam = new HashMap();
-//            orderGoodsParam.put("order_id", item.getId());
-//            //订单的商品
-//            List<OrderGoodsVo> goodsList = orderGoodsService.queryList(orderGoodsParam);
-//            Integer goodsCount = 0;
-//            for (OrderGoodsVo orderGoodsEntity : goodsList) {
-//                goodsCount += orderGoodsEntity.getNumber();
-//                item.setGoodsCount(goodsCount);
-//            }
-//        }
-//        return toResponsSuccess(pageUtil);
-//    }
 
     /**
      * 获取订单详情
@@ -308,9 +275,7 @@ public class ApiOrderController extends ApiBaseAction {
         if (orderVo.getPay_status().equals(PayTypeEnum.PAYED.getCode())) {
             WxPayRefundRequest request = new WxPayRefundRequest();
             request.setNonceStr(CharUtil.getRandomString(16));
-            //request.setOutTradeNo(orderVo.getAll_order_id());
             request.setOutTradeNo(outTradeNo);
-            //request.setRefundFee(orderVo.getActual_price().multiply(new BigDecimal(100)).intValue());
             request.setRefundFee(allPrice.multiply(new BigDecimal(100)).intValue());
             request.setTotalFee(allPrice.multiply(new BigDecimal(100)).intValue());
 
@@ -368,16 +333,22 @@ public class ApiOrderController extends ApiBaseAction {
     @RequestMapping("confirmOrder")
     public Object confirmOrder(Integer orderId) {
         try {
-            OrderVo orderVo = orderService.queryObject(orderId);
-            orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
-            orderVo.setOrder_status_text(OrderStatusEnum.COMPLETED_ORDER.getDesc());
-            orderVo.setShipping_status(ShippingTypeEnum.GETEDGOODS.getCode());
-            orderVo.setConfirm_time(new Date());
-            orderService.update(orderVo);
-            return toResponsSuccess("确认收货成功");
+            Order orderVo = cdtOrderService.getById(orderId);
+
+            if (orderVo.getOrderStatus().equals(OrderStatusEnum.SHIPPED_ORDER.getCode()) ||
+                    orderVo.getOrderStatus().equals(OrderStatusEnum.WAIT_SHIPPED.getCode())
+            ) {
+                orderVo.setOrderStatus(OrderStatusEnum.COMPLETED_ORDER.getCode());
+                orderVo.setShippingStatus(ShippingTypeEnum.GETEDGOODS.getCode());
+                orderVo.setConfirmTime(LocalDateTime.now());
+                cdtOrderService.updateById(orderVo);
+                return toResponsSuccess("确认收货成功");
+            } else {
+                return toResponsSuccess("订单状态不对,请核实后在操作");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return toResponsFail("提交失败");
+        return toResponsFail("操作失败,请联系客服");
     }
 }

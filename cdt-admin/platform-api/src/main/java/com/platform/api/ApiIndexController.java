@@ -47,14 +47,6 @@ public class ApiIndexController extends ApiBaseAction {
     private ApiCartService cartService;
     @Autowired
     private LifeServiceSer lifeServiceSer;
-    /**
-     * 测试
-     */
-    @IgnoreAuth
-    @GetMapping(value = "test")
-    public Object test() {
-        return toResponsMsgSuccess("请求成功yyy");
-    }
 
     /**
      * app首页

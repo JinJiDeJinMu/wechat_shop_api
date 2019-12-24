@@ -7,6 +7,7 @@ import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.event.DistributionEvent;
 import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.utils.BeanJwtUtil;
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OnOffEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.TrueOrFalseEnum;
@@ -230,12 +231,18 @@ public class DistributionService {
         }
     }
 
+    /**
+     * 更新订单状态
+     */
+    public boolean notifyOrderStatus(Integer userId, Order order, GoodsTypeEnum goodsTypeEnum) {
+
+        return false;
+    }
 
     /**
      * 更新用户分销参数信息-下一版本迭代
      */
     public void updateUserConfigInfo() {
-
 
     }
 
@@ -244,7 +251,6 @@ public class DistributionService {
      * 分佣计算返佣金+合伙人计算分成
      */
     public void computeCommission() {
-
 
     }
 
