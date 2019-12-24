@@ -17,7 +17,6 @@ import com.platform.annotation.LoginUser;
 import com.platform.entity.*;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
-import com.platform.util.RedisUtils;
 import com.platform.util.wechat.WechatUtil;
 import com.platform.utils.*;
 import io.swagger.annotations.Api;
@@ -320,9 +319,9 @@ public class ApiPayController extends ApiBaseAction {
         }
         OrderVo order = orderService.queryObject(orderId);
         //处理订单的redis状态
-        String value = RedisUtils.get(order.getOrder_sn());
+        String value = (String) redisTemplate.opsForValue().get(order.getOrder_sn());
         if (value != null && "51".equals(value)) {
-            RedisUtils.del(orderId.toString());
+            redisTemplate.delete(orderId.toString());
         } else {
             //异步回调已结操作过
             return toResponsMsgSuccess("已完成");
