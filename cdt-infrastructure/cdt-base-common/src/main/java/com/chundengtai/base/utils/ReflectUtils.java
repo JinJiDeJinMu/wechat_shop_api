@@ -5,6 +5,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -29,6 +31,8 @@ public class ReflectUtils {
         StringBuffer stringBuffer = new StringBuffer();
         Class<?> clazz = object.getClass();
         Field[] fields = clazz.getDeclaredFields();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         for (Field field : fields) {
             String type = field.getGenericType().toString();
             String name = field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
@@ -66,10 +70,15 @@ public class ReflectUtils {
                 }
             }
             if (("class java.util.Date").equals(type)) {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date value = (Date) val;
                 if (value != null) {
                     str = formatter.format(value);
+                }
+            }
+            if (("class java.time.LocalDateTime").equals(type)) {
+                LocalDateTime value = (LocalDateTime) val;
+                if (value != null) {
+                    str = df.format(value);
                 }
             }
             if (("calss java.lang.Boolean").equals(type)) {

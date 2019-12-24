@@ -8,7 +8,6 @@ import com.chundengtai.base.utils.ReflectUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,7 +29,6 @@ public class CdtDistridetailServiceImpl extends ServiceImpl<CdtDistridetailMappe
      */
     @Override
     public Boolean saveCdtDistridetail(CdtDistridetail cdtDistridetail) {
-        cdtDistridetail.setCreatedTime(new Date());
         cdtDistridetail.setToken(ReflectUtils.getToken(cdtDistridetail));
         return this.save(cdtDistridetail);
     }

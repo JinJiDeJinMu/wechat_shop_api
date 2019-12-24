@@ -8,7 +8,6 @@ import com.chundengtai.base.utils.ReflectUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,7 +29,6 @@ public class CdtRebateLogServiceImpl extends ServiceImpl<CdtRebateLogMapper, Cdt
 
     @Override
     public Boolean addCdtRebateLog(CdtRebateLog cdtRebateLog) {
-        cdtRebateLog.setCreatedTime(new Date());
         cdtRebateLog.setToken(ReflectUtils.getToken(cdtRebateLog));
         return this.save(cdtRebateLog);
     }

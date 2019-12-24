@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -183,7 +183,7 @@ public class DistributionService {
         distridetail.setGoldUserId(goldUserId);
         distridetail.setMoney(money);
         distridetail.setOrderSn(orderSn);
-        distridetail.setCreatedTime(new Date());
+        distridetail.setCreatedTime(LocalDateTime.now());
         distridetail.setToken("");
 
         boolean result = distridetailService.save(distridetail);
@@ -210,6 +210,7 @@ public class DistributionService {
         logModel.setLevel(1);
         logModel.setRemark("一级返佣结算");
         logModel.setMoney(computeFirstMoney(order.getAllPrice()));
+        logModel.setCreatedTime(LocalDateTime.now());
 
         encryt(logModel);
         boolean result = rebateLogService.save(logModel);
