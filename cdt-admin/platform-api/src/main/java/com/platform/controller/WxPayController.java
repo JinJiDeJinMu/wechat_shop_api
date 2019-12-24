@@ -20,7 +20,6 @@ import com.platform.entity.OrderVo;
 import com.platform.entity.UserVo;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
-import com.platform.util.RedisUtils;
 import com.platform.util.wechat.WechatUtil;
 import com.platform.utils.*;
 import io.swagger.annotations.Api;
@@ -28,11 +27,13 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -46,8 +47,12 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/apis/v2/wxpay")
 public class WxPayController extends ApiBaseAction {
 
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
     @Autowired
     private ApiOrderService orderService;
     @Autowired
@@ -313,9 +318,9 @@ public class WxPayController extends ApiBaseAction {
         }
         OrderVo order = orderService.queryObject(orderId);
         //处理订单的redis状态
-        String value = RedisUtils.get(order.getOrder_sn());
+        String value = stringRedisTemplate.opsForValue().get(order.getOrder_sn());
         if (value != null && "51".equals(value)) {
-            RedisUtils.del(orderId.toString());
+            stringRedisTemplate.delete(orderId.toString());
         } else {
             //异步回调已结操作过
             return toResponsMsgSuccess("已完成");

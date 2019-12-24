@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -181,7 +181,7 @@ public class DistributionService {
         distridetail.setGoldUserId(goldUserId);
         distridetail.setMoney(money);
         distridetail.setOrderSn(orderSn);
-        distridetail.setCreatedTime(new Date());
+        distridetail.setCreatedTime(LocalDateTime.now());
         distridetail.setToken(encryt(distridetail));
         boolean result = distridetailService.save(distridetail);
 

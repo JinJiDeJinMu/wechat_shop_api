@@ -10,7 +10,6 @@ import com.platform.service.ApiUserService;
 import com.platform.service.MlsUserSer;
 import com.platform.service.UserRecordSer;
 import com.platform.util.ApiBaseAction;
-import com.platform.util.RedisUtils;
 import com.platform.util.SmsUtils;
 import com.platform.util.wechat.WechatRefundApiResult;
 import com.platform.util.wechat.WechatUtil;
@@ -21,31 +20,31 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
-/**
- * 作者: @author Harmon <br>
- * 时间: 2017-08-11 08:32<br>
- * 描述: ApiIndexController <br>
- */
 @Api(tags = "会员验证")
 @RestController
 @RequestMapping("/api/user")
 public class ApiUserController extends ApiBaseAction {
-	@Autowired
-	private ApiUserService userService;
-	@Autowired
-	private MlsUserSer mlsUserSer;
-	@Autowired
-	private UserRecordSer userRecordSer;
-	@Autowired
-	private SmsUtils smsUtils;
-	@Value("${happyMall.sms.regTemplate}")
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private ApiUserService userService;
+    @Autowired
+    private MlsUserSer mlsUserSer;
+    @Autowired
+    private UserRecordSer userRecordSer;
+    @Autowired
+    private SmsUtils smsUtils;
+    @Value("${happyMall.sms.regTemplate}")
 	private String regTemplate;
 
 	/**
@@ -126,27 +125,27 @@ public class ApiUserController extends ApiBaseAction {
 	}
 
 	public void sendCode(String mobile) {
-		String random = CharUtil.getRandomNum(6);
-		Map<String, String> paramMap = new HashMap<>(1);
-		paramMap.put("code", random);
-		try {
-			smsUtils.sendSMS(mobile, regTemplate, paramMap);
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-		RedisUtils.set("sms" + mobile, random, 60 * 5);
-	}
+        String random = CharUtil.getRandomNum(6);
+        Map<String, String> paramMap = new HashMap<>(1);
+        paramMap.put("code", random);
+        try {
+            smsUtils.sendSMS(mobile, regTemplate, paramMap);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        redisTemplate.opsForValue().set("sms" + mobile, random, 5, TimeUnit.MINUTES);
+    }
 
 	public Boolean verificationCode(String mobile, String verificationCode) {
-		if (StringUtils.isBlank(verificationCode)) {
-			return false;
-		}
-		if ("303303".equals(verificationCode)) {
-			return true;
-		}
-		String code = RedisUtils.get("sms" + mobile);
-		return verificationCode.equals(code);
-	}
+        if (StringUtils.isBlank(verificationCode)) {
+            return false;
+        }
+        if ("303303".equals(verificationCode)) {
+            return true;
+        }
+        String code = (String) redisTemplate.opsForValue().get("sms" + mobile);
+        return verificationCode.equals(code);
+    }
 
 	/**
 	 * 我的推荐人
@@ -262,40 +261,40 @@ public class ApiUserController extends ApiBaseAction {
 			int min = new Integer(txMin);
 			if(min > amount) {
 				return toResponsFail("最小提现金额为"+min);
-			}
-		}
-		if(mlsuser.getGetProfit().intValue() < new Double(amount*100).intValue()) {
-			return toResponsFail("超出提现金额");
-		}
-		//去公众号用户表获取openId		
-		String openId = null;
-		UserVo user = userService.queryObject(loginUser.getUserId());
-		openId = user.getWeixin_openid();
-		//设置提现redis锁，当成功删除key
-		String txKey = RedisUtils.get("tx"+mlsuser.getMlsUserId());
-		if(StringUtils.isNotBlank(txKey)) {
-			return toResponsFail("当前提现没有完成，也可以联系管理员。");
-		}
-		//设置redisKsy
-		RedisUtils.set("tx"+mlsuser.getMlsUserId(), "10");
-		String payCountId = UUID.randomUUID().toString().replaceAll("-", "");
-		//开始调用提现微信接口
-		WechatRefundApiResult ret = WechatUtil.wxPayMoneyToUser(openId, amount, name, payCountId);
-		if("SUCCESS".equals(ret.getErr_code())) {
-			//插入提现记录表
-			UserRecord newur = new UserRecord();
-    		newur.setMlsUserId(mlsuser.getMlsUserId());
-    		newur.setTypes(1);
-    		newur.setTypesStr("提现");
-    		newur.setPrice(new Double(amount*100).intValue());
-    		newur.setRemarks("分润:"+newur.getPrice());
-        	userRecordSer.save(newur);
-        	//更新可提现金额
-        	mlsuser.setGetProfit(new Double(amount*100).intValue());
-        	mlsUserSer.getEntityMapper().tx(mlsuser);
-        	
-        	RedisUtils.del("tx"+mlsuser.getMlsUserId());
-		}else {
+            }
+        }
+        if (mlsuser.getGetProfit().intValue() < new Double(amount * 100).intValue()) {
+            return toResponsFail("超出提现金额");
+        }
+        //去公众号用户表获取openId
+        String openId = null;
+        UserVo user = userService.queryObject(loginUser.getUserId());
+        openId = user.getWeixin_openid();
+        //设置提现redis锁，当成功删除key
+        String txKey = (String) redisTemplate.opsForValue().get("tx" + mlsuser.getMlsUserId());
+        if (StringUtils.isNotBlank(txKey)) {
+            return toResponsFail("当前提现没有完成，也可以联系管理员。");
+        }
+        //设置redisKsy
+        redisTemplate.opsForValue().set("tx" + mlsuser.getMlsUserId(), "10", 7, TimeUnit.DAYS);
+        String payCountId = UUID.randomUUID().toString().replaceAll("-", "");
+        //开始调用提现微信接口
+        WechatRefundApiResult ret = WechatUtil.wxPayMoneyToUser(openId, amount, name, payCountId);
+        if ("SUCCESS".equals(ret.getErr_code())) {
+            //插入提现记录表
+            UserRecord newur = new UserRecord();
+            newur.setMlsUserId(mlsuser.getMlsUserId());
+            newur.setTypes(1);
+            newur.setTypesStr("提现");
+            newur.setPrice(new Double(amount * 100).intValue());
+            newur.setRemarks("分润:" + newur.getPrice());
+            userRecordSer.save(newur);
+            //更新可提现金额
+            mlsuser.setGetProfit(new Double(amount * 100).intValue());
+            mlsUserSer.getEntityMapper().tx(mlsuser);
+
+            redisTemplate.delete("tx" + mlsuser.getMlsUserId());
+        }else {
 			return toResponsFail(ret.getErr_code_des()); 
 		}
 		return toResponsSuccess(ret);

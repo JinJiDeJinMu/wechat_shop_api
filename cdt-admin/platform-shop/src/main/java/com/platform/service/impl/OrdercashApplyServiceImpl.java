@@ -1,22 +1,21 @@
 package com.platform.service.impl;
 
-
-import com.alibaba.druid.support.logging.Log;
-import com.alibaba.druid.support.logging.LogFactory;
 import com.platform.dao.OrdercashApplyDao;
 import com.platform.entity.OrdercashApplyEntity;
 import com.platform.entity.UserEntity;
 import com.platform.service.OrdercashApplyService;
-import com.platform.util.RedisUtils;
 import com.platform.util.wechat.WechatRefundApiResult;
 import com.platform.util.wechat.WechatUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Service实现类
@@ -24,10 +23,14 @@ import java.util.UUID;
  * @date 2019-12-11 11:29:38
  */
 @Service("ordercashApplyService")
+@Slf4j
 public class OrdercashApplyServiceImpl implements OrdercashApplyService {
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     @Autowired
     private OrdercashApplyDao ordercashApplyDao;
-    private static Log logger = LogFactory.getLog(OrdercashApplyServiceImpl.class);
 
     @Override
     public OrdercashApplyEntity queryObject(Integer id) {
@@ -82,22 +85,22 @@ public class OrdercashApplyServiceImpl implements OrdercashApplyService {
     public boolean wechatMoneyToUser(UserEntity userEntity, Double amount) {
 
         if(userEntity == null || userEntity.getMerchantId() == null){
-            logger.info("UserEntity is null or MerchantId is null or RealName is null");
+            log.info("UserEntity is null or MerchantId is null or RealName is null");
             return false;
         }
-        String txKey = RedisUtils.get("backtx"+userEntity.getMerchantId());
+        String txKey = (String) redisTemplate.opsForValue().get("backtx" + userEntity.getMerchantId());
         if(StringUtils.isNotBlank(txKey)) {
-            logger.info("redis key "+ "backtx"+userEntity.getMerchantId() +" exists");
+            log.info("redis key " + "backtx" + userEntity.getMerchantId() + " exists");
             return false;
         }
         //设置redisKsy
-        RedisUtils.set("backtx"+userEntity.getMerchantId(), "10",180);
+        redisTemplate.opsForValue().set("backtx" + userEntity.getMerchantId(), "10", 180, TimeUnit.MINUTES);
         String payCountId = UUID.randomUUID().toString().replaceAll("-", "");
         //开始调用提现微信接口
         WechatRefundApiResult ret = WechatUtil.wxPayMoneyToUser(userEntity.getWeixinOpenid(), amount, userEntity.getRealName(), payCountId);
-        logger.info("WechatRefundApiResult =" + ret.getResult_code()+"=="+ret.getReturn_msg());
+        log.info("WechatRefundApiResult =" + ret.getResult_code() + "==" + ret.getReturn_msg());
         if("SUCCESS".equals(ret.getResult_code())) {
-            RedisUtils.del("backtx"+userEntity.getMerchantId());
+            redisTemplate.delete("backtx" + userEntity.getMerchantId());
             return true;
         }
         return false;

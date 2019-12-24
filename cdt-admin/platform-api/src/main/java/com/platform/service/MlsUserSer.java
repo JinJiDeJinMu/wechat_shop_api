@@ -6,29 +6,30 @@ import com.platform.entity.MlsUserEntity2;
 import com.platform.entity.OrderVo;
 import com.platform.entity.UserGoods;
 import com.platform.entity.UserRecord;
-import com.platform.util.RedisUtils;
 import com.platform.util.SmsUtils;
 import com.platform.utils.CharUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.concurrent.TimeUnit;
 
 
 /**
  * 分销用户<br>
  */
 @Service
-public class MlsUserSer  {
-
-	 private Logger logger = LoggerFactory.getLogger(getClass());	
+@Slf4j
+public class MlsUserSer {
+	@Resource
+	private StringRedisTemplate stringRedisTemplate;
 
 	@Autowired
 	private MlsUserMapper mlsUserDao;
@@ -54,9 +55,9 @@ public class MlsUserSer  {
 		try {
 			smsUtils.sendSMS(mobile, regTemplate, paramMap);
 		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
+			log.error(e.getMessage(), e);
 		}
-		RedisUtils.set("sms" + mobile, random, 60 * 5);
+		stringRedisTemplate.opsForValue().set("sms" + mobile, random, 5, TimeUnit.MINUTES);
 	}
 
 	public Boolean verificationCode(String mobile, String verificationCode) {
@@ -66,7 +67,7 @@ public class MlsUserSer  {
 		if ("303303".equals(verificationCode)) {
 			return true;
 		}
-		String code = RedisUtils.get("sms" + mobile);
+		String code = stringRedisTemplate.opsForValue().get("sms" + mobile);
 		return verificationCode.equals(code);
 	}
 	
