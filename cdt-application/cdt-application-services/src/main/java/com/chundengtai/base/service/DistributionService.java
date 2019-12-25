@@ -221,9 +221,8 @@ public class DistributionService {
      * 记录分销日志
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
-    public void recordDistributeLog(Integer userId, Integer orderId) {
+    public void recordDistributeLog(Integer userId, Order order) {
         User user = userService.getById(userId);
-        Order order = orderService.getById(orderId);
 
         CdtRebateLog logModel = new CdtRebateLog();
         logModel.setBuyUserId(user.getId());

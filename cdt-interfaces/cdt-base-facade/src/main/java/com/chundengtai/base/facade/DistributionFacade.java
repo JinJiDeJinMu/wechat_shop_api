@@ -14,8 +14,8 @@ public class DistributionFacade {
     private DistributionService distributionService;
 
     @Async
-    public void recordDistributeLog(Integer userId, Integer orderId) {
-        distributionService.recordDistributeLog(userId, orderId);
+    public void recordDistributeLog(Integer userId, Order order) {
+        distributionService.recordDistributeLog(userId, order);
     }
 
     @Async

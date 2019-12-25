@@ -33,11 +33,6 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 作者: @author Harmon <br>
- * 时间: 2017-08-11 08:32<br>
- * 描述: ApiIndexController <br>
- */
 @Api(tags = "商户支付")
 @RestController
 @Slf4j
