@@ -26,7 +26,7 @@ public ${table.serviceName} ${table.entityPath}Service;
  * 列表
  */
 @PostMapping("/list.json")
-@RequiresPermissions("${entity}:list")
+@RequiresPermissions("${entity.toLowerCase()}:list")
 public R list(@RequestBody BaseForm<${entity}> params){
         QueryWrapper<${entity}> conditon=new QueryWrapper<>();
         if(!StringUtils.isEmpty(params.getSortField())&&!StringUtils.isEmpty(params.getOrder())){
@@ -48,7 +48,7 @@ public R list(@RequestBody BaseForm<${entity}> params){
  * 信息
  */
 @GetMapping("/getModel/{id}.json")
-@RequiresPermissions("${entity}:getModel")
+@RequiresPermissions("${entity.toLowerCase()}:getModel")
 public R info(@PathVariable("id") Integer id){
     ${entity} model= ${table.entityPath}Service.getById(id);
         return R.ok(model);
@@ -58,7 +58,7 @@ public R info(@PathVariable("id") Integer id){
  * 保存
  */
 @PostMapping("/saveModel.json")
-@RequiresPermissions("${entity}:saveModel")
+@RequiresPermissions("${entity.toLowerCase()}:saveModel")
 public R save(@RequestBody ${entity} paramModel){
         boolean result= ${table.entityPath}Service.save(paramModel);
         return R.ok(result);
@@ -68,7 +68,7 @@ public R save(@RequestBody ${entity} paramModel){
  * 修改
  */
 @PostMapping("/updateModel.json")
-@RequiresPermissions("${entity}:updateModel")
+@RequiresPermissions("${entity.toLowerCase()}:updateModel")
 public R update(@RequestBody ${entity} paramModel){
         boolean result= ${table.entityPath}Service.updateById(paramModel);
         return R.ok(result);
@@ -78,7 +78,7 @@ public R update(@RequestBody ${entity} paramModel){
  * 删除
  */
 @PostMapping("/deleteModel.json")
-@RequiresPermissions("${entity}:deleteModel")
+@RequiresPermissions("${entity.toLowerCase()}:deleteModel")
 public R delete(@RequestBody Integer[]ids){
         boolean result= ${table.entityPath}Service.removeByIds(Arrays.asList(ids));
         return R.ok(result);

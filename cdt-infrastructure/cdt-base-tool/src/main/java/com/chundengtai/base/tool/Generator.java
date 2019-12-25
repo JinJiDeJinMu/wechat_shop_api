@@ -85,7 +85,16 @@ public class Generator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return System.getProperty("user.dir") + "/src/main/html/" + tableInfo.getControllerName() + ".java";
+                return System.getProperty("user.dir") + "/src/main/admin/" + tableInfo.getControllerName() + ".java";
+            }
+        });
+
+        String sqlTemplate = "/template/menu.sql.vm";
+        focList.add(new FileOutConfig(sqlTemplate) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                return System.getProperty("user.dir") + "/src/main/sql/" + tableInfo.getEntityName() + ".sql";
             }
         });
 //        cfg.setFileCreate(new IFileCreate() {
