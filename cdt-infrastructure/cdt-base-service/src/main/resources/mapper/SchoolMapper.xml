@@ -4,7 +4,6 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.chundengtai.base.bean.School">
-        <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="longitude" property="longitude"/>
         <result column="latitude" property="latitude"/>
@@ -16,7 +15,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, longitude, latitude, address, province,city,area
+        name, longitude, latitude, address, province,city,area
     </sql>
 
 </mapper>

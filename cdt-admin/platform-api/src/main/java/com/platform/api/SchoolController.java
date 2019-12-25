@@ -46,16 +46,8 @@ public class SchoolController {
     @GetMapping("/batch")
     @IgnoreAuth
     public Result saveBatch(@RequestParam String schoolLists) {
-        System.out.println("schoolLists=" + schoolLists);
         List<School> list1 = JSONObject.parseArray(schoolLists, School.class);
         System.out.println(list1);
-        List<School> list2 = schoolService.list();
-        for (School school : list1) {
-            if (list2.contains(school)) {
-                list1.remove(school);
-                break;
-            }
-        }
         schoolService.saveBatch(list1);
         return Result.success();
     }

@@ -1,6 +1,5 @@
 package com.chundengtai.base.bean;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -11,11 +10,11 @@ import java.io.Serializable;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author Royal
- * @since 2019-12-24
+ * @since 2019-12-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -25,9 +24,7 @@ public class School implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-
+    @TableId(value = "name")
     private String name;
 
     /**
