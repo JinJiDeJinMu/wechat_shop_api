@@ -6,7 +6,10 @@ import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.SchoolService;
 import com.platform.annotation.IgnoreAuth;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -40,7 +43,7 @@ public class SchoolController {
      * @param schoolLists
      * @return
      */
-    @PostMapping("/batch")
+    @GetMapping("/batch")
     @IgnoreAuth
     public Result saveBatch(@RequestParam String schoolLists) {
         System.out.println("schoolLists=" + schoolLists);
