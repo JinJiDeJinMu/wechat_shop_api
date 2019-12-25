@@ -42,6 +42,7 @@ public class SchoolController {
     @PostMapping("/batch")
     public Result saveBatch(String schoolLists) {
         System.out.println("schoolLists=" + schoolLists);
+        System.out.println(JSONObject.parseArray(schoolLists, School.class));
         schoolService.saveBatch(JSONObject.parseArray(schoolLists, School.class));
         return Result.success();
     }
