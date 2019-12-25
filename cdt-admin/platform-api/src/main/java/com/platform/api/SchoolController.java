@@ -1,13 +1,17 @@
-package com.platform.controller;
+package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chundengtai.base.bean.School;
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.SchoolService;
+import com.platform.annotation.IgnoreAuth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Description 学校信息
@@ -15,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date 2019年12月24日 0024 下午 07:42:15
  * @Version 1.0
  **/
-@RestController("/school")
+@RestController
+@RequestMapping("/api/school")
 public class SchoolController {
 
     @Autowired
@@ -27,6 +32,7 @@ public class SchoolController {
      * @return
      */
     @GetMapping("/list")
+    @IgnoreAuth
     public Result queryList() {
         return Result.success(schoolService.list());
     }
@@ -37,9 +43,13 @@ public class SchoolController {
      * @param schoolLists
      * @return
      */
-    @PostMapping("/batch")
-    public Result saveBatch(String schoolLists) {
-        schoolService.saveBatch(JSONObject.parseArray(schoolLists, School.class));
+    @GetMapping("/batch")
+    @IgnoreAuth
+    public Result saveBatch(@RequestParam String schoolLists) {
+        List<School> list1 = JSONObject.parseArray(schoolLists, School.class);
+        System.out.println(list1);
+        schoolService.saveBatch(list1);
         return Result.success();
     }
+
 }
