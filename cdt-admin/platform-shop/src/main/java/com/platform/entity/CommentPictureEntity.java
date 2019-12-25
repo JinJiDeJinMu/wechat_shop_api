@@ -20,6 +20,8 @@ public class CommentPictureEntity implements Serializable {
     //排序
     private Integer sortOrder;
 
+    private Integer status;
+
     /**
      * 设置：主键
      */
@@ -71,5 +73,13 @@ public class CommentPictureEntity implements Serializable {
      */
     public Integer getSortOrder() {
         return sortOrder;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

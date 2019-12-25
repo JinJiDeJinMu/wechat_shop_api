@@ -24,7 +24,7 @@
     			`star_level`,
     			`user_id`,
     			`status`
-		from nideshop_comment_v2
+		from cdt_product_comment
 		where id = #{id}
 	</select>
 
@@ -38,7 +38,7 @@
         `star_level`,
         `user_id`,
         `status`
-        from nideshop_comment_v2
+        from cdt_product_comment
         WHERE 1=1
         <if test="name != null and name != ''">
             AND name LIKE concat('%',#{name},'%')
@@ -57,7 +57,7 @@
     </select>
 
     <select id="queryTotal" resultType="int">
-        select count(*) from nideshop_comment_v2
+        select count(*) from cdt_product_comment
         WHERE 1=1
         <if test="name != null and name != ''">
             AND name LIKE concat('%',#{name},'%')
@@ -65,7 +65,7 @@
     </select>
 
     <insert id="save" parameterType="com.platform.entity.CommentV2Entity">
-		insert into nideshop_comment_v2(
+		insert into cdt_product_comment(
         			`id`,
                     			`order_no`,
                     			`good_id`,
@@ -88,7 +88,7 @@
 	</insert>
 
     <update id="update" parameterType="com.platform.entity.CommentV2Entity">
-        update nideshop_comment_v2
+        update cdt_product_comment
         <set>
             <if test="orderNo != null">`order_no` = #{orderNo},
             </if>
@@ -109,11 +109,11 @@
     </update>
 
     <delete id="delete">
-		delete from nideshop_comment_v2 where id = #{value}
+		delete from cdt_product_comment where id = #{value}
 	</delete>
 
     <delete id="deleteBatch">
-        delete from nideshop_comment_v2 where id in
+        delete from cdt_product_comment where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
