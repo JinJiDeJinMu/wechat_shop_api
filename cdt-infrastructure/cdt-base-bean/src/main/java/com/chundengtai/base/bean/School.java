@@ -42,7 +42,11 @@ public class School implements Serializable {
 
     private String address;
 
-    private String tel;
+    private String province;
+
+    private String city;
+
+    private String area;
 
 
 }
