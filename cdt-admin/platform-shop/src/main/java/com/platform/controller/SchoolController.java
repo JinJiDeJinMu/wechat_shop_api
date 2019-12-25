@@ -7,6 +7,7 @@ import com.chundengtai.base.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -15,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date 2019年12月24日 0024 下午 07:42:15
  * @Version 1.0
  **/
-@RestController("/school")
+@RestController
+@RequestMapping("/school")
 public class SchoolController {
 
     @Autowired
@@ -39,6 +41,7 @@ public class SchoolController {
      */
     @PostMapping("/batch")
     public Result saveBatch(String schoolLists) {
+        System.out.println("schoolLists=" + schoolLists);
         schoolService.saveBatch(JSONObject.parseArray(schoolLists, School.class));
         return Result.success();
     }
