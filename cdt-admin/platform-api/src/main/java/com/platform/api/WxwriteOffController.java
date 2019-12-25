@@ -1,12 +1,15 @@
 package com.platform.api;
 
+import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.constant.CacheConstant;
+import com.chundengtai.base.facade.DistributionFacade;
+import com.chundengtai.base.service.OrderService;
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
+import com.chundengtai.base.weixinapi.PayTypeEnum;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
-import com.platform.entity.OrderVo;
 import com.platform.entity.UserVo;
-import com.platform.service.ApiOrderService;
 import com.platform.util.ApiBaseAction;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,18 +28,20 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/api/v2/writeoff")
 @Slf4j
-public class WriteOffController extends ApiBaseAction {
+public class WxwriteOffController extends ApiBaseAction {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
-    private ApiOrderService orderService;
+    private OrderService cdtOrderService;
+
+    @Autowired
+    private DistributionFacade distributionFacade;
 
     @ApiOperation(value = "获得核销码基础信息", httpMethod = "POST")
     @RequestMapping("/getWriteOffCodeInfo")
     @ResponseBody
     public Object getWriteOffCodeInfo(@ApiParam(name = "orderNo", value = "订单号") @RequestParam String orderNo) {
-
         return toResponsSuccess("发送成功");
     }
 
@@ -60,16 +65,21 @@ public class WriteOffController extends ApiBaseAction {
         //todo:核销订单验证参数加密
         //todo:核销订单验证权限
         //todo:核销订单更改状态
-        OrderVo orderVo = new OrderVo();
-        orderVo.setId(orderId);
-        orderVo.setOrder_sn(orderNo);
-        orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
-        orderVo.setOrder_status_text(OrderStatusEnum.COMPLETED_ORDER.getDesc());
-        int rows = orderService.update(orderVo);
-        redisTemplate.opsForValue().set(CacheConstant.ORDER_HEXIAO_CACHE + merchantId + ":" + orderNo + ":" + userId, "true", 180, TimeUnit.MINUTES);
-        log.info("核销====》" + orderNo);
-        if (rows > 0) {
-            return toResponsSuccess("核销成功");
+        Order orderVo = cdtOrderService.getById(orderId);
+        if (orderVo.getOrderStatus().equals(OrderStatusEnum.NOT_USED.getCode()) &&
+                orderVo.getPayStatus().equals(PayTypeEnum.PAYED.getCode())
+        ) {
+            orderVo.setOrderSn(orderNo);
+            orderVo.setOrderStatus(OrderStatusEnum.COMPLETED_ORDER.getCode());
+            boolean rows = cdtOrderService.updateById(orderVo);
+            redisTemplate.opsForValue().set(CacheConstant.ORDER_HEXIAO_CACHE + merchantId + ":" + orderNo + ":" + userId, "true", 180, TimeUnit.MINUTES);
+            log.info("核销====》" + orderNo);
+            if (rows) {
+                distributionFacade.notifyOrderStatus(userId, orderVo, GoodsTypeEnum.getEnumByKey(orderVo.getGoodsType()));
+                return toResponsSuccess("核销成功");
+            }
+        } else {
+            return toResponsSuccess("订单状态不对,请联系客服管理员咨询");
         }
         return toResponsSuccess("核销失败");
     }

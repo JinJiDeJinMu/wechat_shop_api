@@ -8,6 +8,8 @@ public enum BizErrorCodeEnum implements ErrorCode {
     /**
      * 未指明的异常
      */
+    SYSTEM_EXCEPTION("10001", "系统异常，请稍后再试"),
+    SAFE_EXCEPTION("10002", "安全校验异常，请核实数据"),
     UNSPECIFIED("500", "网络异常，请稍后再试"),
     NO_SERVICE("404", "网络异常, 服务器熔断"),
 

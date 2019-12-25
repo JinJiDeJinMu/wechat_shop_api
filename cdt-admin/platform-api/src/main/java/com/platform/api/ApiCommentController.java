@@ -19,11 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-/**
- * 作者: @author Harmon <br>
- * 时间: 2017-08-11 08:32<br>
- * 描述: ApiIndexController <br>
- */
 @Api(tags = "评论")
 @RestController
 @RequestMapping("/api/comment")

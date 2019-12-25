@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
-
-
 /**
  * @date 2017-08-15 08:03:41
  */

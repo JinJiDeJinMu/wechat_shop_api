@@ -4,10 +4,8 @@ import com.platform.annotation.IgnoreAuth;
 import com.platform.oss.OSSFactory;
 import com.platform.util.ApiBaseAction;
 import com.platform.utils.RRException;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 作者: @author Harmon <br>
- * 时间: 2017-09-08 13:20<br>
  * 描述: ApiUploadController <br>
  */
 @Api(tags = "上传")

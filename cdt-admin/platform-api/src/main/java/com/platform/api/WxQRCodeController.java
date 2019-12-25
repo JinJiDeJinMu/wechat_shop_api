@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @Slf4j
 @RequestMapping("/api")
-public class QRCodeController extends ApiBaseAction {
+public class WxQRCodeController extends ApiBaseAction {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;

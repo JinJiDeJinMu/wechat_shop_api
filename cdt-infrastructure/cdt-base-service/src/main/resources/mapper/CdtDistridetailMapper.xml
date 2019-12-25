@@ -9,13 +9,15 @@
         <result column="gold_user_id" property="goldUserId" />
         <result column="order_sn" property="orderSn" />
         <result column="money" property="money" />
+        <result column="status" property="status"/>
         <result column="token" property="token" />
         <result column="created_time" property="createdTime" />
+        <result column="update_time" property="updateTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, gold_user_id, order_sn, money, token, created_time
+        id, user_id, gold_user_id, order_sn, money, status, token, created_time, update_time
     </sql>
 
 </mapper>

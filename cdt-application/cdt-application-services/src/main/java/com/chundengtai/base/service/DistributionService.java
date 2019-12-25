@@ -1,15 +1,16 @@
 package com.chundengtai.base.service;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.chundengtai.base.bean.*;
 import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.event.DistributionEvent;
+import com.chundengtai.base.exception.BizErrorCodeEnum;
+import com.chundengtai.base.exception.BizException;
 import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.utils.BeanJwtUtil;
-import com.chundengtai.base.weixinapi.OnOffEnum;
-import com.chundengtai.base.weixinapi.OrderStatusEnum;
-import com.chundengtai.base.weixinapi.TrueOrFalseEnum;
+import com.chundengtai.base.weixinapi.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -22,6 +23,9 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -85,6 +89,28 @@ public class DistributionService {
             e.printStackTrace();
         }
         return "";
+    }
+
+    private void changeDistridetailStatus(Order order, CdtDistridetail distridetail) {
+        if (!order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
+            distridetail.setStatus(DistributionStatus.NON_COMPLETE_ORDER.getCode());
+        } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
+                order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())
+        ) {
+            int daysNum = Period.between(LocalDateTime.now().toLocalDate(), order.getConfirmTime().toLocalDate()).getDays();
+            if (daysNum < 7) {
+                distridetail.setStatus(DistributionStatus.NOT_SERVEN_ORDER.getCode());
+            } else {
+                distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
+            }
+        } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
+                (order.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
+                        order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode()
+                        ))) {
+            distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
+        } else if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
+            distridetail.setStatus(DistributionStatus.REFUND_ORDER.getCode());
+        }
     }
 
     //返佣比例配置信息获取
@@ -175,13 +201,15 @@ public class DistributionService {
     /**
      * 记录用户所挣钱
      */
-    public boolean recordEarning(int userId, int goldUserId, BigDecimal money, String orderSn) {
+    public boolean recordEarning(int userId, int goldUserId, BigDecimal money, Order order) {
         CdtDistridetail distridetail = new CdtDistridetail();
         distridetail.setUserId(userId);
         distridetail.setGoldUserId(goldUserId);
         distridetail.setMoney(money);
-        distridetail.setOrderSn(orderSn);
+        distridetail.setOrderSn(order.getOrderSn());
         distridetail.setCreatedTime(LocalDateTime.now());
+        changeDistridetailStatus(order, distridetail);
+
         distridetail.setToken(encryt(distridetail));
         boolean result = distridetailService.save(distridetail);
 
@@ -193,9 +221,8 @@ public class DistributionService {
      * 记录分销日志
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
-    public void recordDistributeLog(Integer userId, Integer orderId) {
+    public void recordDistributeLog(Integer userId, Order order) {
         User user = userService.getById(userId);
-        Order order = orderService.getById(orderId);
 
         CdtRebateLog logModel = new CdtRebateLog();
         logModel.setBuyUserId(user.getId());
@@ -206,15 +233,16 @@ public class DistributionService {
         logModel.setGoodsPrice(order.getAllPrice());
         logModel.setMechantId(order.getMerchantId());
         logModel.setNickname(user.getNickname());
-        logModel.setStatus(OrderStatusEnum.getEnumByKey(order.getOrderStatus()).getDesc());
+        logModel.setStatus(order.getOrderStatus());
+        logModel.setMechantId(order.getMerchantId());
         logModel.setLevel(1);
         logModel.setRemark("一级返佣结算");
         BigDecimal earnMoney = computeFirstMoney(order.getAllPrice());
         logModel.setMoney(earnMoney);
-
+        logModel.setCreatedTime(LocalDateTime.now());
         logModel.setToken(encryt(logModel));
         boolean result = rebateLogService.save(logModel);
-        recordEarning(user.getId(), user.getFirstLeader(), earnMoney, order.getOrderSn());
+        recordEarning(user.getId(), user.getFirstLeader(), earnMoney, order);
 
         if (!user.getSecondLeader().equals(0)) {
             logModel.setId(null);
@@ -224,18 +252,84 @@ public class DistributionService {
             logModel.setRemark("二级返佣结算");
             BigDecimal secondMoney = computeSecondMoney(order.getAllPrice());
             logModel.setMoney(secondMoney);
+            logModel.setCreatedTime(LocalDateTime.now());
             logModel.setToken(encryt(logModel));
             boolean secondResult = rebateLogService.save(logModel);
-            recordEarning(user.getId(), user.getSecondLeader(), secondMoney, order.getOrderSn());
+            recordEarning(user.getId(), user.getSecondLeader(), secondMoney, order);
         }
     }
 
+    /**
+     * 更新订单状态
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {BizException.class})
+    public boolean notifyOrderStatus(Integer userId, Order order, GoodsTypeEnum goodsTypeEnum) {
+        //更新日志记录状态
+        List<CdtRebateLog> listLogModel = rebateLogService.list(new QueryWrapper<CdtRebateLog>()
+                .lambda().eq(CdtRebateLog::getBuyUserId, userId).eq(CdtRebateLog::getOrderSn, order.getOrderSn()));
+        List<CdtRebateLog> batListLog = new ArrayList<>();
+        for (CdtRebateLog item : listLogModel) {
+            String token = item.getToken();
+            Integer id = item.getId();
+            item.setId(null);
+            item.setToken(null);
+            String dynamicToken = encryt(item);
+            if (dynamicToken.equalsIgnoreCase(token)) {
+                item.setId(id);
+                if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
+                    item.setCompleteTime(LocalDateTime.now());
+                } else {
+                    item.setConfirmTime(LocalDateTime.now());
+                }
+
+                item.setStatus(order.getOrderStatus());
+                item.setToken(encryt(item));
+                batListLog.add(item);
+            } else {
+                log.warn("分销安全校验失败==========》" + JSON.toJSONString(item));
+                throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
+            }
+        }
+        if (batListLog.size() > 0) {
+            boolean result = rebateLogService.updateBatchById(batListLog);
+        }
+
+        //更新用户所得的钱记录状态
+        List<CdtDistridetail> distridetail = distridetailService.list(new QueryWrapper<CdtDistridetail>().lambda()
+                .eq(CdtDistridetail::getUserId, userId).eq(CdtDistridetail::getOrderSn, order.getOrderSn())
+                .ne(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER.getCode())
+        );
+
+        List<CdtDistridetail> batListDetail = new ArrayList<>();
+        for (CdtDistridetail detail : batListDetail) {
+            String token = detail.getToken();
+            Long id = detail.getId();
+            detail.setId(null);
+            detail.setToken(null);
+            String dynamicToken = encryt(detail);
+            if (dynamicToken.equalsIgnoreCase(token)) {
+                detail.setId(id);
+                detail.setUpdateTime(LocalDateTime.now());
+                changeDistridetailStatus(order, detail);
+                detail.setToken(encryt(detail));
+                batListDetail.add(detail);
+            } else {
+                log.warn("分销安全校验失败==========》" + JSON.toJSONString(detail));
+                throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
+            }
+        }
+        if (batListDetail.size() > 0) {
+            boolean result = distridetailService.updateBatchById(batListDetail);
+
+        }
+
+        return true;
+    }
 
     /**
      * 更新用户分销参数信息-下一版本迭代
      */
     public void updateUserConfigInfo() {
-
 
     }
 
@@ -244,7 +338,6 @@ public class DistributionService {
      * 分佣计算返佣金+合伙人计算分成
      */
     public void computeCommission() {
-
 
     }
 

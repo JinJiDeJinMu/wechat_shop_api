@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/api/expressOrder")
-public class ApiExpressOrderController {
+public class WxExpressOrderController {
     @Autowired
     private ApiExpressOrderService apiExpressOrderService;
 

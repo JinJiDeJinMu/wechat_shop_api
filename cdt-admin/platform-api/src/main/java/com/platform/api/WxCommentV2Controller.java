@@ -28,7 +28,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/v2/comment")
 @Slf4j
-public class ApiCommentV2Controller extends ApiBaseAction {
+public class WxCommentV2Controller extends ApiBaseAction {
 
     @Autowired
     private ApiCommentService commentService;

@@ -1,6 +1,10 @@
 package com.platform.api;
 
 import com.alibaba.fastjson.JSON;
+import com.chundengtai.base.bean.Order;
+import com.chundengtai.base.facade.DistributionFacade;
+import com.chundengtai.base.service.OrderService;
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
 import com.chundengtai.base.weixinapi.ShippingTypeEnum;
@@ -29,18 +33,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Api(tags = "订单相关")
+@Api(tags = "v2订单相关")
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/apis/v2/order")
 @Slf4j
-public class ApiOrderController extends ApiBaseAction {
+public class WxOrderController extends ApiBaseAction {
     @Autowired
     private WxPayService wxPayService;
+
+    @Autowired
+    private OrderService cdtOrderService;
+
+    @Autowired
+    private DistributionFacade distributionFacade;
 
     @Autowired
     private ApiOrderService orderService;
@@ -50,9 +61,6 @@ public class ApiOrderController extends ApiBaseAction {
 
     @Autowired
     private UserRecordSer userRecordSer;
-
-    @Autowired
-    private MlsUserSer mlsUserSer;
 
     @Autowired
     private ApiUserCouponService userCouponService;
@@ -119,42 +127,6 @@ public class ApiOrderController extends ApiBaseAction {
         }
         return toResponsFail("无数据显示");
     }
-
-    /**
-     * 获取订单列表（开发）
-     */
-//    @ApiOperation(value = "获取订单列表")
-//    @IgnoreAuth
-//    @RequestMapping("list")
-//    public Object list(Integer userId, Integer order_status,
-//                       @RequestParam(value = "page", defaultValue = "1") Integer page,
-//                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
-//        Map params = new HashMap();
-//        params.put("user_id", userId);
-//        params.put("page", page);
-//        params.put("limit", size);
-//        params.put("sidx", "id");
-//        params.put("order", "desc");
-//        params.put("order_status", order_status);
-//        //查询列表数据
-//        Query query = new Query(params);
-//        List<OrderVo> orderEntityList = orderService.queryList(query);
-//        int total = orderService.queryTotal(query);
-//        ApiPageUtils pageUtil = new ApiPageUtils(orderEntityList, total, query.getLimit(), query.getPage());
-//        //
-//        for (OrderVo item : orderEntityList) {
-//            Map orderGoodsParam = new HashMap();
-//            orderGoodsParam.put("order_id", item.getId());
-//            //订单的商品
-//            List<OrderGoodsVo> goodsList = orderGoodsService.queryList(orderGoodsParam);
-//            Integer goodsCount = 0;
-//            for (OrderGoodsVo orderGoodsEntity : goodsList) {
-//                goodsCount += orderGoodsEntity.getNumber();
-//                item.setGoodsCount(goodsCount);
-//            }
-//        }
-//        return toResponsSuccess(pageUtil);
-//    }
 
     /**
      * 获取订单详情
@@ -245,27 +217,24 @@ public class ApiOrderController extends ApiBaseAction {
      */
     @ApiOperation(value = "取消订单")
     @RequestMapping("cancelOrder")
-    public Object cancelOrder(Integer orderId) {
-        OrderVo orderVo = orderService.queryObject(orderId);
-        List<OrderVo> orders = orderService.queryByAllOrderId(orderVo.getAll_order_id());
+    public Object cancelOrder(@LoginUser UserVo loginUser, Integer orderId) {
+        Order orderVo = cdtOrderService.getById(orderId);
         BigDecimal allPrice = BigDecimal.ZERO;
-        for (OrderVo o : orders) {
-            allPrice = allPrice.add(o.getAll_price());
-        }
+        allPrice = orderVo.getAllPrice();
 
-        if (orderVo.getOrder_status().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
+        if (orderVo.getOrderStatus().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
             return toResponsFail("已发货，不能取消");
-        } else if (orderVo.getOrder_status().equals(OrderStatusEnum.CONFIRM_GOODS.getCode())) {
+        } else if (orderVo.getOrderStatus().equals(OrderStatusEnum.CONFIRM_GOODS.getCode())) {
             return toResponsFail("已收货，不能取消");
         }
         try {
-            return returnMoney(orderVo, allPrice, orderVo.getOrder_sn());
+            return returnMoney(loginUser.getUserId().intValue(), orderVo, allPrice, orderVo.getOrderSn());
         } catch (WxPayException e) {
             logger.error(e.getXmlString());
             returnAllMoney(orderVo, e);
             if (e.getErrCodeDes().contains("订单不存在")) {
                 try {
-                    return returnMoney(orderVo, allPrice, orderVo.getAll_order_id());
+                    return returnMoney(loginUser.getUserId().intValue(), orderVo, allPrice, orderVo.getAllOrderId());
                 } catch (WxPayException ex) {
                     returnAllMoney(orderVo, e);
                 }
@@ -277,19 +246,19 @@ public class ApiOrderController extends ApiBaseAction {
         return toResponsSuccess("提交失败");
     }
 
-    private void returnAllMoney(OrderVo orderVo, WxPayException e) {
+    private void returnAllMoney(Order orderVo, WxPayException e) {
         if (e.getErrCodeDes().contains("订单已全额退款")) {
-            orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
-            orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
-            orderService.update(orderVo);
+            orderVo.setOrderStatus(OrderStatusEnum.REFUND_ORDER.getCode());
+            orderVo.setPayStatus(PayTypeEnum.REFUND.getCode());
+            cdtOrderService.updateById(orderVo);
 
             try {
                 //FIXME:支付成功后入账
                 CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
-                payrecord.setMchOrderNo(orderVo.getOrder_sn());
-                payrecord.setOrderNo(orderVo.getOrder_sn());
-                payrecord.setAmount(orderVo.getActual_price());
-                payrecord.setTradePrice(orderVo.getActual_price());
+                payrecord.setMchOrderNo(orderVo.getOrderSn());
+                payrecord.setOrderNo(orderVo.getOrderSn());
+                payrecord.setAmount(orderVo.getActualPrice());
+                payrecord.setTradePrice(orderVo.getActualPrice());
                 payrecord.setAppId("");
                 payrecord.setCreateDate(new Date());
                 //payrecord.setPayOrderId("");
@@ -303,37 +272,37 @@ public class ApiOrderController extends ApiBaseAction {
         }
     }
 
-    private Object returnMoney(OrderVo orderVo, BigDecimal allPrice, String outTradeNo) throws WxPayException {
+    private Object returnMoney(Integer userId, Order orderVo, BigDecimal allPrice, String outTradeNo) throws WxPayException {
         // 需要退款
-        if (orderVo.getPay_status().equals(PayTypeEnum.PAYED.getCode())) {
+        if (orderVo.getPayStatus().equals(PayTypeEnum.PAYED.getCode())) {
             WxPayRefundRequest request = new WxPayRefundRequest();
             request.setNonceStr(CharUtil.getRandomString(16));
-            //request.setOutTradeNo(orderVo.getAll_order_id());
             request.setOutTradeNo(outTradeNo);
-            //request.setRefundFee(orderVo.getActual_price().multiply(new BigDecimal(100)).intValue());
             request.setRefundFee(allPrice.multiply(new BigDecimal(100)).intValue());
             request.setTotalFee(allPrice.multiply(new BigDecimal(100)).intValue());
 
             long id = kengenService.genNumber().longValue();
             request.setOutRefundNo(String.valueOf(id));
-            request.setOpUserId(orderVo.getUser_id().toString());
+            request.setOpUserId(orderVo.getUserId().toString());
             WxPayRefundResult wxResult = wxPayService.refund(request);
 
             if (wxResult.getResultCode().equals("SUCCESS")) {
-                if (orderVo.getOrder_status().equals(OrderStatusEnum.PAYED_ORDER.getCode())) {
-                    orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
-                } else if (orderVo.getOrder_status().equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
-                    orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
+                if (orderVo.getOrderStatus().equals(OrderStatusEnum.PAYED_ORDER.getCode())) {
+                    orderVo.setOrderStatus(OrderStatusEnum.REFUND_ORDER.getCode());
                 } else {
-                    orderVo.setOrder_status(OrderStatusEnum.REFUND_ORDER.getCode());
+                    orderVo.setOrderStatus(OrderStatusEnum.REFUND_ORDER.getCode());
                 }
-                orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
+                orderVo.setPayStatus(PayTypeEnum.REFUND.getCode());
                 logger.warn("=====退款回调成功=====" + JSON.toJSONString(wxResult));
-                orderService.update(orderVo);
+                boolean result = cdtOrderService.updateById(orderVo);
+
+                if (result) {
+                    distributionFacade.notifyOrderStatus(userId, orderVo, GoodsTypeEnum.getEnumByKey(orderVo.getGoodsType()));
+                }
 
                 try {
                     CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
-                    payrecord.setMchOrderNo(orderVo.getOrder_sn());
+                    payrecord.setMchOrderNo(orderVo.getOrderSn());
                     payrecord.setAmount(BigDecimal.valueOf(request.getTotalFee()));
                     payrecord.setTradePrice(BigDecimal.valueOf(request.getRefundFee()));
                     payrecord.setAppId("");
@@ -355,8 +324,8 @@ public class ApiOrderController extends ApiBaseAction {
                 return toResponsObject(400, "取消成失败", "取消成失败");
             }
         } else {
-            orderVo.setOrder_status(OrderStatusEnum.CANCEL_ORDER.getCode());
-            orderService.update(orderVo);
+            orderVo.setOrderStatus(OrderStatusEnum.CANCEL_ORDER.getCode());
+            cdtOrderService.updateById(orderVo);
             return toResponsSuccess("取消成功");
         }
     }
@@ -366,18 +335,27 @@ public class ApiOrderController extends ApiBaseAction {
      */
     @ApiOperation(value = "确认收货")
     @RequestMapping("confirmOrder")
-    public Object confirmOrder(Integer orderId) {
+    public Object confirmOrder(@LoginUser UserVo loginUser, Integer orderId) {
         try {
-            OrderVo orderVo = orderService.queryObject(orderId);
-            orderVo.setOrder_status(OrderStatusEnum.COMPLETED_ORDER.getCode());
-            orderVo.setOrder_status_text(OrderStatusEnum.COMPLETED_ORDER.getDesc());
-            orderVo.setShipping_status(ShippingTypeEnum.GETEDGOODS.getCode());
-            orderVo.setConfirm_time(new Date());
-            orderService.update(orderVo);
-            return toResponsSuccess("确认收货成功");
+            Order orderVo = cdtOrderService.getById(orderId);
+
+            if (orderVo.getOrderStatus().equals(OrderStatusEnum.SHIPPED_ORDER.getCode()) ||
+                    orderVo.getOrderStatus().equals(OrderStatusEnum.WAIT_SHIPPED.getCode())
+            ) {
+                orderVo.setOrderStatus(OrderStatusEnum.COMPLETED_ORDER.getCode());
+                orderVo.setShippingStatus(ShippingTypeEnum.GETEDGOODS.getCode());
+                orderVo.setConfirmTime(LocalDateTime.now());
+                boolean result = cdtOrderService.updateById(orderVo);
+                if (result) {
+                    distributionFacade.notifyOrderStatus(loginUser.getUserId().intValue(), orderVo, GoodsTypeEnum.getEnumByKey(orderVo.getGoodsType()));
+                }
+                return toResponsSuccess("确认收货成功");
+            } else {
+                return toResponsSuccess("订单状态不对,请核实后在操作");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return toResponsFail("提交失败");
+        return toResponsFail("操作失败,请联系客服");
     }
 }

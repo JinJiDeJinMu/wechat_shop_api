@@ -2,6 +2,7 @@ package com.platform.task;
 
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.service.OrderService;
+import com.chundengtai.base.utils.DateTimeConvert;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,7 +36,7 @@ public class OrderCancelTask {
         if (orderList != null) {
             orderList.forEach(order -> {
                 Calendar cal = Calendar.getInstance();
-                cal.setTime(order.getAddTime());
+                cal.setTime(DateTimeConvert.localDateTime2Date(order.getAddTime()));
                 cal.add(Calendar.MINUTE, 60);
                 if (new Date().after(cal.getTime())) {
                     order.setOrderStatus(OrderStatusEnum.CANCEL_ORDER.getCode());

@@ -10,7 +10,6 @@ import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.LoginInfo;
 import com.platform.entity.UserVo;
 import com.platform.service.ApiUserService;
-import com.platform.service.MlsUserSer;
 import com.platform.service.TokenService;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiUserUtils;
@@ -48,9 +47,6 @@ public class WxUserController extends ApiBaseAction {
 
     @Autowired
     private RestTemplate restTemplate;
-
-    @Autowired
-    private MlsUserSer mlsUserSer;
 
     @Autowired
     UserService newUserService;
