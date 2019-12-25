@@ -37,7 +37,14 @@ public R list(@RequestBody BaseForm<${entity}> params){
         conditon.orderByDesc(params.getSortField());
         }
         }
-
+#foreach($field in ${table.fields})
+        //${field.propertyType}=====${field.name}
+    #if(!${field.propertyType.equals("Date")})
+            if(params.data.${getprefix}${field.capitalName}!=null){
+            conditon.eq("${field.name}",params.data.${getprefix}${field.capitalName});
+            }
+    #end
+#end
         PageHelper.startPage(params.getPageIndex(),params.getPageSize());
         List<${entity}> collectList=${table.entityPath}Service.list(conditon);
         PageInfo pageInfo=new PageInfo(collectList);

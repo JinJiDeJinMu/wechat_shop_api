@@ -13,23 +13,23 @@
 <div id="app" v-cloak>
     <div v-show="showList">
         <Row :gutter="16">
-        <el-card class="filter-container" shadow="never">
-            <div>
-                <i class="el-icon-search"></i>
-                <span>筛选搜索</span>
-                <el-button
-                        style="float: right"
-                        @click="handleSearchList()"
-                        type="primary"
-                        size="small">
-                    查询结果
-                </el-button>
-                <el-button
-                        style="float: right;margin-right: 15px"
-                        @click="handleResetSearch()"
-                        size="small">
-                    重置
-                </el-button>
+            <el-card class="filter-container" shadow="never">
+                <div>
+                    <i class="el-icon-search"></i>
+                    <span>筛选搜索</span>
+                    <el-button
+                            style="float: right"
+                            @click="getList()"
+                            type="primary"
+                            size="small">
+                        查询结果
+                    </el-button>
+                    <el-button
+                            style="float: right;margin-right: 15px"
+                            @click="handleResetSearch()"
+                            size="small">
+                        重置
+                    </el-button>
                 <el-button
                         style="float: right;margin-right: 15px"
                         @click="add()"
@@ -65,9 +65,15 @@
                       border>
                 <el-table-column type="selection" width="60" align="center"></el-table-column>
                 #foreach($field in ${table.fields})
-                    <el-table-column label="${field.comment}" width="100" align="center">
-                        <template slot-scope="scope">{{scope.row.${field.propertyName}}}</template>
-                    </el-table-column>
+                    #if(!${field.propertyType.equals("Date")})
+                        <el-table-column label="${field.comment}" width="100" align="center">
+                            <template slot-scope="scope">{{scope.row.${field.propertyName}}}</template>
+                        </el-table-column>
+                    #else
+                        <el-table-column label="${field.comment}" width="100" align="center">
+                            <template slot-scope="scope">{{scope.row.${field.propertyName}|formatDate}}</template>
+                        </el-table-column>
+                    #end
                 #end
                 ##                <el-table-column label="商品图片" width="120" align="center">
                 ##                    <template slot-scope="scope"><img style="height: 80px" :src="scope.row.primaryPicUrl"></template>
@@ -80,9 +86,9 @@
                 ##                </el-table-column>
                 ##                <el-table-column label="价格/货号" width="120" align="left">
                 ##                    <template slot-scope="scope">
-                ##                        <p>零售：￥{{scope.row.retailPrice}}</p>
-                ##                        <p>市场：￥{{scope.row.marketPrice}}</p>
-                ##                        <p>货号：{{scope.row.productSn}}</p>
+                #foreach($field in ${table.fields})
+                    ##                        <p>${field.comment}：{{scope.row.${field.propertyName}}}</p>
+                #end
                 ##                    </template>
                 ##                </el-table-column>
                 ##                <el-table-column label="标签" width="140" align="center">
@@ -107,19 +113,10 @@
                 ##                        </p>
                 ##                    </template>
                 ##                </el-table-column>
-                ##                <el-table-column label="浏览量" width="100" align="center">
-                ##                    <template slot-scope="scope">{{scope.row.browse}}</template>
-                ##                </el-table-column>
                 ##                <el-table-column label="SKU库存" width="100" align="center">
                 ##                    <template slot-scope="scope">
                 ##                        <el-button type="primary" icon="el-icon-edit"
                 ##                                   @click="handleShowSkuEditDialog(scope.$index, scope.row)" circle></el-button>
-                ##                    </template>
-                ##                </el-table-column>
-                ##                <el-table-column label="库存/销量" width="100" align="left">
-                ##                    <template slot-scope="scope">
-                ##                        <p>库存：{{scope.row.goodsNumber}}</p>
-                ##                        <p>销量：{{scope.row.sellVolume}}</p>
                 ##                    </template>
                 ##                </el-table-column>
                 ##                <el-table-column label="商品类型" width="100" align="center">

@@ -134,7 +134,7 @@ let vue = new Vue({
                     that.listLoading = false;
                     console.log(res);
                     that.list = res.data.list;
-                    that.total = res.data.totalCount;
+                    that.total = res.data.total;
                 }
             });
         },
@@ -201,7 +201,7 @@ let vue = new Vue({
             this.getList();
         },
         handleCurrentChange(val) {
-            this.baseForm.pageSize = val;
+            this.baseForm.pageIndex = val;
             this.getList();
         },
         handleSelectionChange(val) {
