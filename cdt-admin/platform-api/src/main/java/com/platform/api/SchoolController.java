@@ -6,12 +6,8 @@ import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.SchoolService;
 import com.platform.annotation.IgnoreAuth;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,29 +42,19 @@ public class SchoolController {
      */
     @PostMapping("/batch")
     @IgnoreAuth
-    public Result saveBatch(String schoolLists) {
+    public Result saveBatch(@RequestParam String schoolLists) {
         System.out.println("schoolLists=" + schoolLists);
         List<School> list1 = JSONObject.parseArray(schoolLists, School.class);
+        System.out.println(list1);
         List<School> list2 = schoolService.list();
-        System.out.println(JSONObject.parseArray(schoolLists, School.class));
-        schoolService.saveBatch(JSONObject.parseArray(schoolLists, School.class));
+        for (School school : list1) {
+            if (list2.contains(school)) {
+                list1.remove(school);
+                break;
+            }
+        }
+        schoolService.saveBatch(list1);
         return Result.success();
     }
 
-    public static void main(String[] args) {
-        List<Integer> list1 = new ArrayList<>();
-        List<Integer> list2 = new ArrayList<>();
-        list1.add(1);
-        list1.add(3);
-        list1.add(4);
-        list2.add(2);
-        list2.add(3);
-        for (Integer a : list1) {
-            if (list2.contains(a)) {
-                list2.remove(a);
-            }
-        }
-        System.out.println(list2);
-
-    }
 }
