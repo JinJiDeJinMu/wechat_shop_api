@@ -1,97 +1,86 @@
 package com.platform.controller;
 
-import com.platform.entity.CommentPictureEntity;
-import com.platform.service.CommentPictureService;
-import com.platform.utils.PageUtils;
-import com.platform.utils.Query;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.chundengtai.base.bean.CommentPicture;
+import com.chundengtai.base.service.CommentPictureService;
+import com.chundengtai.base.transfer.BaseForm;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.platform.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-/**
- * 评价图片Controller
- *
- * @date 2017-08-29 14:45:55
- */
 @RestController
-@RequestMapping("commentpicture")
+@RequestMapping("/commentPicture")
 public class CommentPictureController {
-    @Autowired
-    private CommentPictureService commentPictureService;
+        @Autowired
+        public CommentPictureService commentPictureService;
 
-    /**
-     * 查看列表
-     */
-    @RequestMapping("/list")
-    @RequiresPermissions("commentpicture:list")
-    public R list(@RequestParam Map<String, Object> params) {
-        //查询列表数据
-        Query query = new Query(params);
+        /**
+         * 列表
+         */
+        @PostMapping("/list.json")
+//@RequiresPermissions("commentpicture:list")
+        public R list(@RequestBody BaseForm<CommentPicture> params) {
+                System.out.println("++++" + params);
+                QueryWrapper<CommentPicture> conditon = new QueryWrapper<>();
+                if (!StringUtils.isEmpty(params.getSortField()) && !StringUtils.isEmpty(params.getOrder())) {
+                        if (params.getOrder().equalsIgnoreCase("asc")) {
+                                conditon.orderByAsc(params.getSortField());
+                        } else {
+                                conditon.orderByDesc(params.getSortField());
+                        }
+                }
 
-        List<CommentPictureEntity> commentPictureList = commentPictureService.queryList(query);
-        int total = commentPictureService.queryTotal(query);
+                PageHelper.startPage(params.getPageIndex(), params.getPageSize());
+                List<CommentPicture> collectList = commentPictureService.list(conditon);
+                PageInfo pageInfo = new PageInfo(collectList);
+                System.out.println("===" + pageInfo);
+                return R.ok(pageInfo);
+        }
 
-        PageUtils pageUtil = new PageUtils(commentPictureList, total, query.getLimit(), query.getPage());
+        /**
+         * 信息
+         */
+        @GetMapping("/getModel/{id}.json")
+//@RequiresPermissions("commentpicture:getModel")
+        public R info(@PathVariable("id") Integer id) {
+                CommentPicture model = commentPictureService.getById(id);
+                return R.ok(model);
+        }
 
-        return R.ok().put("page", pageUtil);
-    }
+        /**
+         * 保存
+         */
+        @PostMapping("/saveModel.json")
+        @RequiresPermissions("commentpicture:saveModel")
+        public R save(@RequestBody CommentPicture paramModel) {
+                boolean result = commentPictureService.save(paramModel);
+                return R.ok(result);
+        }
 
-    /**
-     * 查看信息
-     */
-    @RequestMapping("/info/{id}")
-    @RequiresPermissions("commentpicture:info")
-    public R info(@PathVariable("id") Integer id) {
-        CommentPictureEntity commentPicture = commentPictureService.queryObject(id);
+        /**
+         * 修改
+         */
+        @PostMapping("/updateModel.json")
+//@RequiresPermissions("commentpicture:updateModel")
+        public R update(@RequestBody CommentPicture paramModel) {
+                boolean result = commentPictureService.updateById(paramModel);
+                return R.ok(result);
+        }
 
-        return R.ok().put("commentPicture", commentPicture);
-    }
-
-    /**
-     * 保存
-     */
-    @RequestMapping("/save")
-    @RequiresPermissions("commentpicture:save")
-    public R save(@RequestBody CommentPictureEntity commentPicture) {
-        commentPictureService.save(commentPicture);
-
-        return R.ok();
-    }
-
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    @RequiresPermissions("commentpicture:update")
-    public R update(@RequestBody CommentPictureEntity commentPicture) {
-        commentPictureService.update(commentPicture);
-
-        return R.ok();
-    }
-
-    /**
-     * 删除
-     */
-    @RequestMapping("/delete")
-    @RequiresPermissions("commentpicture:delete")
-    public R delete(@RequestBody Integer[] ids) {
-        commentPictureService.deleteBatch(ids);
-
-        return R.ok();
-    }
-
-    /**
-     * 查看所有列表
-     */
-    @RequestMapping("/queryAll")
-    public R queryAll(@RequestParam Map<String, Object> params) {
-
-        List<CommentPictureEntity> list = commentPictureService.queryList(params);
-
-        return R.ok().put("list", list);
-    }
+        /**
+         * 删除
+         */
+        @PostMapping("/deleteModel.json")
+//@RequiresPermissions("commentpicture:deleteModel")
+        public R delete(@RequestBody Integer[] ids) {
+                boolean result = commentPictureService.removeByIds(Arrays.asList(ids));
+                return R.ok(result);
+        }
 }
