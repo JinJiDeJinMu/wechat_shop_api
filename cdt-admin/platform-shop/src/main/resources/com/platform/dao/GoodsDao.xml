@@ -49,6 +49,7 @@
          <result property="successPeople" column="success_people"/>
         <result property="groupPrice" column="group_price"/>
         <result property="purchaseType" column="purchase_type"/>
+        <result property="schoolName" column="school_name"/>
     </resultMap>
 
     <select id="queryObject" resultMap="goodsMap">
@@ -101,6 +102,7 @@
         nideshop_goods.success_time,
         nideshop_goods.success_people,
         nideshop_goods.group_price,
+        nideshop_goods.school_name,
         nideshop_category.name category_name,
         nideshop_attribute_category.name attribute_category_name,
         nideshop_brand.name brand_name,
@@ -119,6 +121,9 @@
         </if>
         <if test="merchantId != null and merchantId != ''">
             AND nideshop_goods.merchant_id =#{merchantId}
+        </if>
+        <if test="schoolName != null and schoolName != ''">
+            AND nideshop_goods.school_name =#{schoolName}
         </if>
         AND nideshop_goods.is_Delete = #{isDelete}
         <choose>
@@ -143,6 +148,9 @@
         </if>
         <if test="merchantId != null and merchantId != ''">
             AND nideshop_goods.merchant_id =#{merchantId}
+        </if>
+        <if test="schoolName != null and schoolName != ''">
+            AND nideshop_goods.school_name =#{schoolName}
         </if>
         AND nideshop_goods.is_Delete = #{isDelete}
     </select>
@@ -194,7 +202,8 @@
         `success_time`,
         `success_people`,
         `group_price`,
-        `purchase_type`
+        `purchase_type`,
+        `school_name`
         )
         values
         (
@@ -242,7 +251,8 @@
         #{successTime},
         #{successPeople},
         #{groupPrice},
-        #{purchaseType}
+        #{purchaseType},
+        #{schoolName}
         )
     </insert>
 
@@ -293,6 +303,7 @@
             <if test="groupPrice != null">`group_price` = #{groupPrice},</if>
             <if test="purchaseType != null">`purchase_type` = #{purchaseType},</if>
             <if test="merchantId != null">`merchant_id` = #{merchantId},</if>
+            <if test="schoolName != null">`school_name` = #{schoolName},</if>
         </set>
         where id = #{id}
     </update>

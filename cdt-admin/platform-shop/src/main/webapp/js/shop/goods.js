@@ -43,7 +43,6 @@ var vm = new Vue({
 	el: '#rrapp',
 	data: {
 		merchants: [],
-        schools:[],
 		showList: true,
 		title: null,
 		uploadList: [],
@@ -69,7 +68,7 @@ var vm = new Vue({
 			categoryName: '',
 			purchaseType: 1,
 			merchantId: '',
-            schoolId:''
+            schoolName: ''
 		},
 		ruleValidate: {
             goodsSn: [{
@@ -109,6 +108,7 @@ var vm = new Vue({
 		macros: [], //商品单位
 		attributeCategories: [], //属性类别
 		categories: [],
+        schools: [],
 
 		editSkuInfo: {
 			dialogVisible: false,
@@ -167,7 +167,6 @@ var vm = new Vue({
     created: function () {
 		this.getList();
 		this.getMerchant();
-		this.getschools();
 	},
 	filters: {
 		//时间戳格式化
@@ -515,17 +514,20 @@ var vm = new Vue({
 				groupPrice: 1,
 				categoryName: '',
 				purchaseType: 1,
-				extraPrice: 0
+                extraPrice: 0,
+                schoolName: ''
 			};
 			$('#goodsDesc').editable('setHTML', '');
 			vm.getCategory();
 			vm.brands = [];
 			vm.macros = [];
 			vm.attributeCategories = [];
+            vm.getschools();
 			vm.getBrands();
 			vm.getMacro();
 			vm.getAttributeCategories();
 			vm.getCategories();
+
 		},
         checkSelected: function () {
 			if (this.multipleSelection == null || this.multipleSelection.length < 1) {
@@ -555,6 +557,7 @@ var vm = new Vue({
 			vm.getInfo(id);
 			vm.getBrands();
 			vm.getMacro();
+            vm.getschools();
 			vm.getAttributeCategories();
 			vm.getCategories();
 			vm.getGoodsGallery(id);
@@ -597,10 +600,21 @@ var vm = new Vue({
 				url: "../attributecategory/queryAll",
 				async: true,
                 successCallback: function (r) {
+                    console.log("11" + r);
 					vm.attributeCategories = r.list;
 				}
 			});
 		},
+        getschools: function () {
+            console.log("getschools1");
+            Ajax.request({
+                url: "../goods/schoollist",
+                async: true,
+                successCallback: function (r) {
+                    vm.schools = r.list;
+                }
+            });
+        },
         getCategories: function () {
 			Ajax.request({
 				url: "../category/getCategorySelect",
@@ -609,16 +623,6 @@ var vm = new Vue({
 					vm.categories = r.list;
 				}
 			});
-		},
-		getschools:function(){
-            Ajax.request({
-                url: "../school/list",
-                async: true,
-                successCallback: function (r) {
-                    alert(r.data);
-                    vm.schools = r.data;
-                }
-            });
 		},
         saveOrUpdate: function (event) {
 			if (vm.goods.goodsSn == '') {
@@ -763,7 +767,7 @@ var vm = new Vue({
 			});
 		}
 	},
-	mounted() {
-		this.uploadList = this.$refs.upload.fileList;
-	}
+    mounted() {
+        this.uploadList = this.$refs.upload.fileList;
+    }
 });
