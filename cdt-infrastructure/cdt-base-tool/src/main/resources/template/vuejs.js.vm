@@ -23,15 +23,6 @@ ${entity}: {
     #end
 },
 ruleValidate: {
-    ${entity}: [{
-    #foreach($field in ${table.fields})
-        required: true,
-        ${field.propertyName}:
-        '${field.comment}不能为空',
-            trigger
-    :
-        'blur'
-    #end
 }]
 },
 
@@ -85,26 +76,6 @@ filters: {
             return '未支付';
         }
     }
-,
-    formatGoodsType(value)
-    {
-        if (value === 1) {
-            return '普通商品';
-        } else if (value === 2) {
-            return '秒杀';
-        } else if (value === 3) {
-            return '团购';
-        } else if (value === 4) {
-            return '砍价';
-        } else if (value === 5) {
-            return '快递代取';
-        } else if (value === 6) {
-            return '核销商品';
-        } else {
-            return '普通';
-        }
-    }
-,
 },
 methods: {
     dateFormat: function (time) {
@@ -133,8 +104,7 @@ methods: {
         });
     }
 ,
-    getSelectRowIds()
-    {
+    getSelectRowIds:function () {
         let ids = [];
         for (let i = 0; i < this.multipleSelection.length; i++) {
             ids.push(this.multipleSelection[i].id);

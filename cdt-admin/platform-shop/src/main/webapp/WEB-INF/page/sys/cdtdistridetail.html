@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>${comments}</title>
+    <title>用户购买分销得钱记录 用户购买分销得钱</title>
     #parse("sys/header.html")
 </head>
 <body>
@@ -25,55 +25,28 @@
                             size="small">
                         重置
                     </el-button>
+                    <el-button
+                            style="float: right;margin-right: 15px"
+                            @click="add()"
+                            size="small">
+                        新建
+                    </el-button>
                 </div>
                 <div style="margin-top: 15px">
-                    <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
-                        <el-form-item label="id：">
-                            <el-input style="width: 203px" v-model="listQuery.id"
-                                      placeholder="id"></el-input>
-                        </el-form-item>
-                        <el-form-item label="user_id：">
-                            <el-input style="width: 203px" v-model="listQuery.userId"
+                    <el-form :inline="true" :model="baseForm.data" size="small" label-width="140px">
+                        <el-form-item label="用户的id">
+                            <el-input style="width: 203px" v-model="baseForm.data.userId"
                                       placeholder="用户的id"></el-input>
                         </el-form-item>
-                        <el-form-item label="gold_user_id：">
-                            <el-input style="width: 203px" v-model="listQuery.goldUserId"
+                        <el-form-item label="得钱的用户id">
+                            <el-input style="width: 203px" v-model="baseForm.data.goldUserId"
                                       placeholder="得钱的用户id"></el-input>
                         </el-form-item>
-                        <el-form-item label="order_sn：">
-                            <el-input style="width: 203px" v-model="listQuery.orderSn"
+                        <el-form-item label="订单号">
+                            <el-input style="width: 203px" v-model="baseForm.data.orderSn"
                                       placeholder="订单号"></el-input>
                         </el-form-item>
-                        <el-form-item label="money：">
-                            <el-input style="width: 203px" v-model="listQuery.money"
-                                      placeholder="得到的钱"></el-input>
-                        </el-form-item>
-                        <el-form-item label="status：">
-                            <el-input style="width: 203px" v-model="listQuery.status"
-                                      placeholder="状态"></el-input>
-                        </el-form-item>
-                        <el-form-item label="token：">
-                            <el-input style="width: 203px" v-model="listQuery.token"
-                                      placeholder="校验token"></el-input>
-                        </el-form-item>
-                        <el-form-item label="created_time：">
-                            <el-input style="width: 203px" v-model="listQuery.createdTime"
-                                      placeholder="创建时间"></el-input>
-                        </el-form-item>
-                        <el-form-item label="update_time：">
-                            <el-input style="width: 203px" v-model="listQuery.updateTime"
-                                      placeholder="更新时间"></el-input>
-                        </el-form-item>
-                        <el-form-item label="审核状态：">
-                            <el-select v-model="listQuery.verifyStatus" placeholder="全部" clearable>
-                                <el-option
-                                        v-for="item in verifyStatusOptions"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
+
                     </el-form>
                 </div>
             </el-card>
@@ -83,59 +56,44 @@
                       v-loading="listLoading"
                       border>
                 <el-table-column type="selection" width="60" align="center"></el-table-column>
-                <el-table-column label="编号" width="100" align="center">
+                <el-table-column label="id" width="100" align="center">
                     <template slot-scope="scope">{{scope.row.id}}</template>
                 </el-table-column>
-
-
-                <el-table-column label="商品图片" width="120" align="center">
-                    <template slot-scope="scope"><img style="height: 80px" :src="scope.row.primaryPicUrl"></template>
+                <el-table-column label="用户的id" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.userId}}</template>
                 </el-table-column>
-                <el-table-column label="商品名称" align="left">
-                    <template slot-scope="scope">
-                        <p>名称:{{scope.row.name}}</p>
-                        <p>属性类别:{{scope.row.attributeCategoryName}}</p>
-                    </template>
+                <el-table-column label="得钱的用户id" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.goldUserId}}</template>
                 </el-table-column>
-                <el-table-column label="价格/货号" width="120" align="left">
-                    <template slot-scope="scope">
-                        <p>零售：￥{{scope.row.retailPrice}}</p>
-                        <p>市场：￥{{scope.row.marketPrice}}</p>
-                        <p>货号：{{scope.row.productSn}}</p>
-                    </template>
+                <el-table-column label="订单号" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.orderSn}}</template>
                 </el-table-column>
-                <el-table-column label="浏览量" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.browse}}</template>
+                <el-table-column label="得到的钱" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.money}}</template>
                 </el-table-column>
-                <el-table-column label="SKU库存" width="100" align="center">
-                    <template slot-scope="scope">
-                        <el-button type="primary" icon="el-icon-edit"
-                                   @click="handleShowSkuEditDialog(scope.$index, scope.row)" circle></el-button>
-                    </template>
+                <el-table-column label="状态" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.status}}</template>
                 </el-table-column>
-                <el-table-column label="库存/销量" width="100" align="left">
-                    <template slot-scope="scope">
-                        <p>库存：{{scope.row.goodsNumber}}</p>
-                        <p>销量：{{scope.row.sellVolume}}</p>
-                    </template>
+                <el-table-column label="校验token" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.token}}</template>
                 </el-table-column>
-                <el-table-column label="商品类型" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.isSecKill|formatGoodsType}}</template>
+                <el-table-column label="创建时间" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.createdTime}}</template>
                 </el-table-column>
-                <el-table-column prop="addTime" label="录入日期" width="100" align="center" :formatter="dateFormat">
-                    <!-- <template slot-scope="scope">{{scope.row.addTime|formatDate}}</template> -->
+                <el-table-column label="更新时间" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.updateTime}}</template>
                 </el-table-column>
                 <!-- <el-table-column label="审核状态" width="100" align="center">
-             <template slot-scope="scope">
-                 <p>{{scope.row.verifyStatus | verifyStatusFilter}}</p>
-                 <p>
-                     <el-button
-                             type="text"
-                             @click="handleShowVerifyDetail(scope.$index, scope.row)">审核详情
-                     </el-button>
-                 </p>
-             </template>
-         </el-table-column> -->
+<template slot-scope="scope">
+<p>{{scope.row.verifyStatus | verifyStatusFilter}}</p>
+<p>
+<el-button
+type="text"
+@click="handleShowVerifyDetail(scope.index, scope.row)">审核详情
+</el-button>
+</p>
+</template>
+</el-table-column> -->
                 <el-table-column label="操作" width="160" align="center">
                     <template slot-scope="scope">
                         <p>
@@ -153,135 +111,91 @@
             </el-table>
         </div>
         <div class="batch-operate-container">
+            #if($shiro.hasPermission("cdtDistridetail:delete"))
+            <el-select size="small" v-model="operateType" placeholder="批量操作">
+                <el-option v-for="item in operates" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+            </el-select>
             <el-button style="margin-left: 20px" class="search-button" @click="handleBatchOperate()" type="primary"
                        size="small">
                 确定
             </el-button>
+            #end
         </div>
         <div class="pagination-container">
             <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
                            layout="total, sizes,prev, pager, next,jumper"
-                           :page-size="listQuery.limit" :page-sizes="[10,20,30,50,100]"
-                           :current-page.sync="listQuery.page" :total="total">
+                           :page-size="baseForm.pageSize" :page-sizes="[10,20,30,50,100]"
+                           :current-page.sync="baseForm.pageIndex" :total="total">
             </el-pagination>
         </div>
     </div>
 
     <Card v-show="!showList">
         <p slot="title">{{title}}</p>
-        <el-dialog :title="!CdtDistridetail.id ? '新增' : '修改'"
-                   :close-on-click-modal="false"
-                   :visible.sync="showList">
-            <el-form :model="CdtDistridetail"
-                     :rules="dataRule"
-                     ref="formValidate"
-                     @keyup.enter.native="dataFormSubmit('formValidate')"
-                     label-width="80px">
-                <el-form-item label="用户头像"
-                              prop="pic">
-                    <img :src="dataForm.pic"
-                         class="image">
-                </el-form-item>
-                <el-form-item label="id：" prop="id" :rules=" [
-            { required: true, message: '请输入id', trigger: 'blur' },
-            { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
-          ]">
-                    <el-input style="width: 203px" v-model="CdtDistridetail.id"
-                              placeholder="id"></el-input>
-                </el-form-item>
-                <el-form-item label="user_id：" prop="userId" :rules=" [
+        <el-form :model="baseForm.data"
+                 ref="formValidate"
+                 @keyup.enter.native="dataFormSubmit('formValidate')"
+                 label-width="80px">
+
+            <el-form-item label="用户的id" prop="userId" :rules=" [
             { required: true, message: '请输入用户的id', trigger: 'blur' },
             { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
           ]">
-                    <el-input style="width: 203px" v-model="CdtDistridetail.userId"
-                              placeholder="用户的id"></el-input>
-                </el-form-item>
-                <el-form-item label="gold_user_id：" prop="goldUserId" :rules=" [
+                <el-input style="width: 203px" v-model="baseForm.data.userId"
+                          placeholder="用户的id"></el-input>
+            </el-form-item>
+            <el-form-item label="得钱的用户id" prop="goldUserId" :rules=" [
             { required: true, message: '请输入得钱的用户id', trigger: 'blur' },
-            { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
+            { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'change' }
           ]">
-                    <el-input style="width: 203px" v-model="CdtDistridetail.goldUserId"
-                              placeholder="得钱的用户id"></el-input>
-                </el-form-item>
-                <el-form-item label="order_sn：" prop="orderSn" :rules=" [
+                <el-input style="width: 203px" v-model="baseForm.data.goldUserId"
+                          placeholder="得钱的用户id"></el-input>
+            </el-form-item>
+            <el-form-item label="订单号" prop="orderSn" :rules=" [
             { required: true, message: '请输入订单号', trigger: 'blur' },
-            { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
+            { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'change' }
           ]">
-                    <el-input style="width: 203px" v-model="CdtDistridetail.orderSn"
-                              placeholder="订单号"></el-input>
-                </el-form-item>
-                <el-form-item label="money：" prop="money" :rules=" [
+                <el-input style="width: 203px" v-model="baseForm.data.orderSn"
+                          placeholder="订单号"></el-input>
+            </el-form-item>
+            <el-form-item label="得到的钱" prop="money" :rules=" [
             { required: true, message: '请输入得到的钱', trigger: 'blur' },
             { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
           ]">
-                    <el-input style="width: 203px" v-model="CdtDistridetail.money"
-                              placeholder="得到的钱"></el-input>
-                </el-form-item>
-                <el-form-item label="status：" prop="status" :rules=" [
+                <el-input style="width: 203px" v-model="baseForm.data.money"
+                          placeholder="得到的钱"></el-input>
+            </el-form-item>
+            <el-form-item label="状态" prop="status" :rules=" [
             { required: true, message: '请输入状态', trigger: 'blur' },
             { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
           ]">
-                    <el-input style="width: 203px" v-model="CdtDistridetail.status"
-                              placeholder="状态"></el-input>
-                </el-form-item>
-                <el-form-item label="token：" prop="token" :rules=" [
-            { required: true, message: '请输入校验token', trigger: 'blur' },
-            { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
-          ]">
-                    <el-input style="width: 203px" v-model="CdtDistridetail.token"
-                              placeholder="校验token"></el-input>
-                </el-form-item>
-                <el-form-item label="created_time：" prop="createdTime" :rules=" [
+                <el-input style="width: 203px" v-model="baseForm.data.status"
+                          placeholder="状态"></el-input>
+            </el-form-item>
+            <el-form-item label="创建时间" prop="createdTime" :rules=" [
             { required: true, message: '请输入创建时间', trigger: 'blur' },
             { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
           ]">
-                    <el-input style="width: 203px" v-model="CdtDistridetail.createdTime"
-                              placeholder="创建时间"></el-input>
-                </el-form-item>
-                <el-form-item label="update_time：" prop="updateTime" :rules=" [
+                <el-input style="width: 203px" v-model="baseForm.data.createdTime"
+                          placeholder="创建时间"></el-input>
+            </el-form-item>
+            <el-form-item label="更新时间" prop="updateTime" :rules=" [
             { required: true, message: '请输入更新时间', trigger: 'blur' },
             { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
           ]">
-                    <el-input style="width: 203px" v-model="CdtDistridetail.updateTime"
-                              placeholder="更新时间"></el-input>
-                </el-form-item>
-                <el-form-item label="用户昵称"
-                              prop="nickName">
-                    <el-input v-model="dataForm.nickName"
-                              :disabled="true"
-                              placeholder="用户昵称"></el-input>
-                </el-form-item>
+                <el-input style="width: 203px" v-model="baseForm.data.updateTime"
+                          placeholder="更新时间"></el-input>
+            </el-form-item>
 
-                <el-form-item label="状态"
-                              size="mini"
-                              prop="status">
-                    <el-radio-group v-model="dataForm.status">
-                        <el-radio :label="0">禁用</el-radio>
-                        <el-radio :label="1">正常</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-
-                <el-form-item label="审核状态：">
-                    <el-select v-model="listQuery.verifyStatus" placeholder="全部" clearable>
-                        <el-option
-                                v-for="item in verifyStatusOptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <span slot="footer"
-                  class="dialog-footer">
-      <el-button @click="showList = true">取消</el-button>
-      <el-button type="primary"
-                 @click="dataFormSubmit('formValidate')">确定</el-button>
-    </span>
-        </el-dialog>
+            <el-form-item style="text-align: center">
+                <el-button size="medium" @click="showList = true">取消</el-button>
+                <el-button type="primary" size="medium" @click="dataFormSubmit('formValidate')">确定</el-button>
+            </el-form-item>
+        </el-form>
     </Card>
 </div>
 
-<script src="${rc.contextPath}/js/sys/cdtdistridetail.js?time=${date.systemTime}"></script>
+<script src="${rc.contextPath}/js/module/CdtDistridetail.js?time=${date.systemTime}"></script>
 </body>
 </html>

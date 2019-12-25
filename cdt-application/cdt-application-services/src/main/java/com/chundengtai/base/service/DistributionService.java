@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -207,7 +208,7 @@ public class DistributionService {
         distridetail.setGoldUserId(goldUserId);
         distridetail.setMoney(money);
         distridetail.setOrderSn(order.getOrderSn());
-        distridetail.setCreatedTime(LocalDateTime.now());
+        distridetail.setCreatedTime(new Date());
         changeDistridetailStatus(order, distridetail);
 
         distridetail.setToken(encryt(distridetail));
@@ -309,7 +310,7 @@ public class DistributionService {
             String dynamicToken = encryt(detail);
             if (dynamicToken.equalsIgnoreCase(token)) {
                 detail.setId(id);
-                detail.setUpdateTime(LocalDateTime.now());
+                detail.setUpdateTime(new Date());
                 changeDistridetailStatus(order, detail);
                 detail.setToken(encryt(detail));
                 batListDetail.add(detail);

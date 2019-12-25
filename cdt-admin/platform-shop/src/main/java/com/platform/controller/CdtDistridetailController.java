@@ -1,39 +1,84 @@
 package com.platform.controller;
 
-
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtDistridetail;
-import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.CdtDistridetailService;
+import com.chundengtai.base.transfer.BaseForm;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.platform.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * @Description 用户购买分销得钱处理类
- * @Author hujinbiao
- * @Date 2019年12月19日 0019 下午 03:13:18
- * @Version 1.0
- **/
+import java.util.Arrays;
+import java.util.List;
+
 @RestController
-@RequestMapping("/cdt")
+@RequestMapping("/cdtDistridetail")
 public class CdtDistridetailController {
-
     @Autowired
-    private CdtDistridetailService cdtDistridetailService;
+    public CdtDistridetailService cdtDistridetailService;
 
-    @GetMapping("/Distridetails")
-    public Result queryList(Integer pageNum, Integer pageSize) {
-        return Result.success(cdtDistridetailService.queryList(pageNum, pageSize));
+    /**
+     * 列表
+     */
+    @PostMapping("/list.json")
+    //@RequiresPermissions("CdtDistridetail:list")
+    public R list(@RequestBody BaseForm<CdtDistridetail> params) {
+        QueryWrapper<CdtDistridetail> conditon = new QueryWrapper<>();
+        if (!StringUtils.isEmpty(params.getSortField()) && !StringUtils.isEmpty(params.getOrder())) {
+            if (params.getOrder().equalsIgnoreCase("asc")) {
+                conditon.orderByAsc(params.getSortField());
+            } else {
+                conditon.orderByDesc(params.getSortField());
+            }
+        }
+
+        PageHelper.startPage(params.getPageIndex(), params.getPageSize());
+        List<CdtDistridetail> collectList = cdtDistridetailService.list(conditon);
+        PageInfo pageInfo = new PageInfo(collectList);
+        return R.ok(pageInfo);
     }
 
-    @GetMapping("/Distridetail/{id}")
-    public Result query(@PathVariable("id") Long id) {
-        return Result.success(cdtDistridetailService.getById(id));
+    /**
+     * 信息
+     */
+    @GetMapping("/getModel/{id}.json")
+    //@RequiresPermissions("CdtDistridetail:getModel")
+    public R info(@PathVariable("id") Integer id) {
+        CdtDistridetail model = cdtDistridetailService.getById(id);
+        return R.ok(model);
     }
 
-    @PostMapping("/Distridetail")
-    public Result saveCdtDistridetail(@RequestBody CdtDistridetail cdtDistridetail) {
-        cdtDistridetailService.saveCdtDistridetail(cdtDistridetail);
-        return Result.success();
+    /**
+     * 保存
+     */
+    @PostMapping("/saveModel.json")
+    //@RequiresPermissions("CdtDistridetail:saveModel")
+    public R save(@RequestBody CdtDistridetail paramModel) {
+        boolean result = cdtDistridetailService.save(paramModel);
+        return R.ok(result);
     }
 
+    /**
+     * 修改
+     */
+    @PostMapping("/updateModel.json")
+    //@RequiresPermissions("CdtDistridetail:updateModel")
+    public R update(@RequestBody CdtDistridetail paramModel) {
+        boolean result = cdtDistridetailService.updateById(paramModel);
+        return R.ok(result);
+    }
+
+    /**
+     * 删除
+     */
+    @PostMapping("/deleteModel.json")
+    //@RequiresPermissions("CdtDistridetail:deleteModel")
+    public R delete(@RequestBody Integer[] ids) {
+        boolean result = cdtDistridetailService.removeByIds(Arrays.asList(ids));
+        return R.ok(result);
+    }
 }
+

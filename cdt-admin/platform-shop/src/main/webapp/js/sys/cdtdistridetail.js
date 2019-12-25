@@ -1,34 +1,27 @@
-$(function () {
-});
-
-const defaultListQuery = {
-	limit: 10,
-	page: 1,
-	sidx: '',
-	order: 'asc',
-	name: '',
-	goodSn: ''
+const defaultModel = {
+	id: null,
+	userId: null,
+	goldUserId: null,
+	orderSn: null,
+	money: null,
+	status: null,
+	token: null,
+	createdTime: null,
+	updateTime: null,
 };
-
-var vm = new Vue({
+var vue = new Vue({
 	el: '#app',
 	data: {
 		showList: true,
 		title: null,
-
-		CdtDistridetail: {
-			id: '',
-			userId: '',
-			goldUserId: '',
-			orderSn: '',
-			money: '',
-			status: '',
-			token: '',
-			createdTime: '',
-			updateTime: '',
+		baseForm: {
+			pageIndex: 1,
+			pageSize: 10,
+			sortField: 'id',
+			order: 'desc',
+			data: Object.assign({}, defaultModel),
 		},
 		ruleValidate: {},
-
 		operates: [{
 			label: "商品上架",
 			value: "publishOn"
@@ -43,13 +36,11 @@ var vm = new Vue({
 			}
 		],
 		operateType: null,
-		listQuery: Object.assign({}, defaultListQuery),
 		list: null,
 		total: null,
 		listLoading: false,
 		selectProductCateValue: null,
 		multipleSelection: [],
-
 		publishStatusOptions: [{
 			value: 1,
 			label: '上架'
@@ -90,18 +81,66 @@ var vm = new Vue({
 			var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
 			return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
 		},
-		getList: function () {
-			this.listLoading = false;
+		saveOrUpdate: function (event) {
+			var url = this.baseForm.data.id == null ? "../cdtDistridetail/save.json" : "../cdtDistridetail/update.json";
+			var params = JSON.stringify(this.baseForm.data);
+			let that = this;
 			Ajax.request({
-				url: "../cdtDistridetail/list?limit=" + this.listQuery.limit + "&page=" + this.listQuery.page + "&sidx=" +
-					this.listQuery
-						.sidx + "&name=" + this.listQuery.name + "&order=" + this.listQuery.order,
+				type: "POST",
+				url: url,
+				contentType: "application/json",
+				params: params,
+				successCallback: function (res) {
+					if (res.data) {
+						alert('操作成功', function (index) {
+							that.reload();
+						});
+					}
+				}
+			});
+		},
+		del: function (ids) {
+			if (ids == null) {
+				return;
+			}
+			let that = this;
+			Ajax.request({
+				type: "POST",
+				url: "../cdtDistridetail/delete.json",
+				contentType: "application/json",
+				params: JSON.stringify(ids),
+				successCallback: function (res) {
+					alert('操作成功', function (index) {
+						that.reload();
+					});
+				}
+			});
+		},
+		getInfo: function (id) {
+			let that = this;
+			Ajax.request({
+				url: "../cdtDistridetail/info/" + id + ".json",
 				async: true,
 				successCallback: function (res) {
-					vm.listLoading = false;
+					that.baseForm.data = res.data;
+				}
+			});
+		},
+		getList: function () {
+			this.listLoading = false;
+			var params = this.baseForm;
+			let that = this;
+			Ajax.request({
+				type: "POST",
+				url: "../cdtDistridetail/list.json",
+				contentType: "application/json",
+				params: JSON.stringify(params),
+				async: true,
+				successCallback: function (res) {
+					that.listLoading = false;
 					console.log(res);
-					vm.list = res.page.list;
-					vm.total = res.page.totalCount;
+					that.list = res.data.list;
+					that.total = res.data.totalCount;
 				}
 			});
 		},
@@ -115,7 +154,7 @@ var vm = new Vue({
 		checkSelected: function () {
 			if (this.multipleSelection == null || this.multipleSelection.length < 1) {
 				this.$message({
-					message: '请选择要操作的商品',
+					message: '请选择要操作的数据',
 					type: 'warning',
 					duration: 1000
 				});
@@ -138,12 +177,12 @@ var vm = new Vue({
 
 		},
 		handleSizeChange(val) {
-			this.listQuery.page = 1;
-			this.listQuery.limit = val;
+			this.baseForm.pageIndex = 1;
+			this.listQuery.pageSize = val;
 			this.getList();
 		},
 		handleCurrentChange(val) {
-			this.listQuery.page = val;
+			this.listQuery.pageSize = val;
 			this.getList();
 		},
 		handleSelectionChange(val) {
@@ -155,22 +194,12 @@ var vm = new Vue({
 		handlePublishStatusChange(index, row) {
 			let ids = [];
 			ids.push(row.id);
-			console.log(JSON.stringify(row))
-
+			console.log(JSON.stringify(row));
 			this.updatePublishStatus(row.isOnSale, ids);
+		},
 
-		},
-		handleNewStatusChange(index, row) {
-			let ids = [];
-			ids.push(row.id);
-			this.updateNewStatus(row.newStatus, ids);
-		},
-		handleSelectionChange: function (val) {
-			vm.multipleSelection = val;
-		},
 		updatePublishStatus: function (status, ids) {
 			console.log(status);
-
 		},
 		handleUpdateProduct(index, row) {
 			this.updateFun(row.id);
@@ -181,68 +210,25 @@ var vm = new Vue({
 			params.append('deleteStatus', deleteStatus);
 			this.del(ids);
 		},
-		del: function (ids) {
-			if (ids == null) {
-				return;
-			}
-			Ajax.request({
-				type: "POST",
-				url: "../cdtDistridetail/delete",
-				contentType: "application/json",
-				params: JSON.stringify(ids),
-				successCallback: function (r) {
-					alert('操作成功', function (index) {
-						vm.reload();
-					});
-				}
-			});
-		},
-		getInfo: function (id) {
-			Ajax.request({
-				url: "../cdtDistridetail/info/" + id,
-				async: true,
-				successCallback: function (res) {
-					vm.CdtDistridetail = res.CdtDistridetail;
-				}
-			});
-		},
 		reload: function (event) {
-			vm.showList = true;
+			this.showList = true;
 			this.getList()
-			vm.handleReset('formValidate');
+			this.handleReset('formValidate');
 		},
 		add: function () {
-			vm.showList = false;
-			vm.title = "新增";
-
+			this.showList = false;
+			this.title = "新增";
 		},
-
 		updateFun: function (id) {
 			if (id == null) {
 				return;
 			}
-			vm.showList = false;
-			vm.title = "修改";
+			this.showList = false;
+			this.title = "修改";
 		},
-
-		saveOrUpdate: function (event) {
-			var url = vm.CdtDistridetail.id == null ? "../cdtDistridetail/save" : "../cdtDistridetail/update";
-			Ajax.request({
-				type: "POST",
-				url: url,
-				contentType: "application/json",
-				params: JSON.stringify(vm.CdtDistridetail),
-				successCallback: function (r) {
-					alert('操作成功', function (index) {
-						vm.reload();
-					});
-				}
-			});
-		},
-
 		dataFormSubmit: function (name) {
 			handleSubmitValidate(this, name, function () {
-				vm.saveOrUpdate()
+				vue.saveOrUpdate()
 			});
 		},
 	},

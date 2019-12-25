@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 
 import java.sql.Driver;
@@ -21,7 +22,7 @@ public class Generator {
     public final static String SYS_AHURTOR = "Royal";
 
     public static void main(String[] args) {
-        String[] tableNames = new String[]{"cdt_rebate_log"};
+        String[] tableNames = new String[]{"cdt_rebate_log", "cdt_distridetail", "cdt_distrimoney", "cdt_distribution_level", "cdt_rebate_log"};
         String[] modules = new String[]{"service", "web"};//项目模块名，需自定义
         for (String module : modules) {
             moduleGenerator(module, tableNames);
@@ -48,7 +49,6 @@ public class Generator {
     }
 
     private static InjectionConfig genCustomerTemplate() {
-
         // 注入自定义配置，可以在 VM 中使用 cfg.abc 【可无】  ${cfg.abc}
         InjectionConfig cfg = new InjectionConfig() {
             @Override
@@ -58,7 +58,6 @@ public class Generator {
                 this.setMap(map);
             }
         };
-
 
         String htmlTemplate = "/template/admin-html.vm";
         // 自定义输出配置
@@ -72,7 +71,7 @@ public class Generator {
             }
         });
 
-        String jsTemplate = "/template/vuejs.js.vm";
+        String jsTemplate = "/template/elementui.js.vm";
         focList.add(new FileOutConfig(jsTemplate) {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -81,6 +80,14 @@ public class Generator {
             }
         });
 
+        String adminTemplate = "/template/adminController.java.vm";
+        focList.add(new FileOutConfig(adminTemplate) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                return System.getProperty("user.dir") + "/src/main/html/" + tableInfo.getControllerName() + ".java";
+            }
+        });
 //        cfg.setFileCreate(new IFileCreate() {
 //            @Override
 //            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
@@ -166,7 +173,7 @@ public class Generator {
                 .setFileOverride(true)//是否覆盖已有文件
                 .setBaseResultMap(true)
                 .setBaseColumnList(true)
-                .setActiveRecord(false)
+                .setActiveRecord(false).setDateType(DateType.ONLY_DATE)
                 .setAuthor(SYS_AHURTOR)
                 .setServiceName("%sService");
         return globalConfig;

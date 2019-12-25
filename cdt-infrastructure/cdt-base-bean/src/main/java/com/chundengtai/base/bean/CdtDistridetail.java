@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -64,12 +64,12 @@ public class CdtDistridetail implements Serializable {
   /**
    * 创建时间
    */
-  private LocalDateTime createdTime;
+  private Date createdTime;
 
   /**
    * 更新时间
    */
-  private LocalDateTime updateTime;
+  private Date updateTime;
 
 
 }
