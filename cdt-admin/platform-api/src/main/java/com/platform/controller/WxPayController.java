@@ -42,7 +42,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -363,7 +362,7 @@ public class WxPayController extends ApiBaseAction {
         log.info("微信回调Json=====>:" + JSON.toJSONString(orderItem));
 
         orderSetPayedStatus(orderItem);
-        orderItem.setPayTime(LocalDateTime.now());
+        orderItem.setPayTime(new Date());
         boolean rows = cdtOrderService.updateById(orderItem);
         log.warn("=====此次更新影响===行数====" + rows);
         try {

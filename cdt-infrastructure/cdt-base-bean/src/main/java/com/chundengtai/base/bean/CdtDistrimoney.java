@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -16,14 +16,14 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author Royal
- * @since 2019-12-24
+ * @since 2019-12-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class CdtDistrimoney implements Serializable {
 
-    private static final long serialVersionUID=1L;
+  private static final long serialVersionUID = 1L;
 
   /**
    * id
@@ -89,12 +89,12 @@ public class CdtDistrimoney implements Serializable {
   /**
    * 创建时间
    */
-  private LocalDateTime createdTime;
+  private Date createdTime;
 
   /**
    * 更新时间
    */
-  private LocalDateTime updatedTime;
+  private Date updatedTime;
 
   /**
    * 更新人

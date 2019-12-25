@@ -8,7 +8,6 @@ import com.chundengtai.base.utils.ReflectUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -43,7 +42,7 @@ public class CdtDistributionLevelServiceImpl extends ServiceImpl<CdtDistribution
      */
     @Override
     public Boolean addDistributionLevel(CdtDistributionLevel cdtDistributionLevel) {
-        cdtDistributionLevel.setCreatedTime(LocalDateTime.now());
+        //cdtDistributionLevel.setCreatedTime(LocalDateTime.now());
         cdtDistributionLevel.setToken(ReflectUtils.getToken(cdtDistributionLevel));
         return this.save(cdtDistributionLevel);
     }
@@ -56,8 +55,8 @@ public class CdtDistributionLevelServiceImpl extends ServiceImpl<CdtDistribution
      */
     @Override
     public Boolean updateDistributionLevel(CdtDistributionLevel cdtDistributionLevel) {
-        LocalDateTime date = this.getById(cdtDistributionLevel.getId()).getCreatedTime();
-        cdtDistributionLevel.setCreatedTime(date);
+        //LocalDateTime date = this.getById(cdtDistributionLevel.getId()).getCreatedTime();
+        //cdtDistributionLevel.setCreatedTime(date);
         cdtDistributionLevel.setToken(ReflectUtils.getToken(cdtDistributionLevel));
         return this.updateById(cdtDistributionLevel);
     }

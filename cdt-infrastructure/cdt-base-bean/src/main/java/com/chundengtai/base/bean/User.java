@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -36,11 +36,11 @@ public class User implements Serializable {
 
     private Integer gender;
 
-    private LocalDateTime birthday;
+    private Date birthday;
 
-    private LocalDateTime registerTime;
+    private Date registerTime;
 
-    private LocalDateTime lastLoginTime;
+    private Date lastLoginTime;
 
     private String lastLoginIp;
 

@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -144,17 +144,17 @@ public class Order implements Serializable {
     /**
      * 新增时间
      */
-    private LocalDateTime addTime;
+    private Date addTime;
 
     /**
      * 确认时间
      */
-    private LocalDateTime confirmTime;
+    private Date confirmTime;
 
     /**
      * 付款时间
      */
-    private LocalDateTime payTime;
+    private Date payTime;
 
     /**
      * 配送费用

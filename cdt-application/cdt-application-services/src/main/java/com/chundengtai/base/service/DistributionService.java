@@ -10,6 +10,7 @@ import com.chundengtai.base.exception.BizErrorCodeEnum;
 import com.chundengtai.base.exception.BizException;
 import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.utils.BeanJwtUtil;
+import com.chundengtai.base.utils.DateTimeConvert;
 import com.chundengtai.base.weixinapi.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +99,7 @@ public class DistributionService {
         } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
                 order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())
         ) {
-            int daysNum = Period.between(LocalDateTime.now().toLocalDate(), order.getConfirmTime().toLocalDate()).getDays();
+            int daysNum = Period.between(LocalDateTime.now().toLocalDate(), DateTimeConvert.date2LocalDateTime(order.getConfirmTime()).toLocalDate()).getDays();
             if (daysNum < 7) {
                 distridetail.setStatus(DistributionStatus.NOT_SERVEN_ORDER.getCode());
             } else {
@@ -164,9 +165,9 @@ public class DistributionService {
             //查询推荐人的上级
             CdtDistributionLevel parentModel = distributionLevelService.getOne(new QueryWrapper<CdtDistributionLevel>().lambda().eq(CdtDistributionLevel::getUserId, parentId));
             CdtDistributionLevel model = new CdtDistributionLevel();
-            model.setUserId(event.getUserId());
-            model.setParentId(parentId);
-            model.setSponsorId(parentId);
+            model.setUserId(event.getUserId().intValue());
+            model.setParentId(parentId.intValue());
+            model.setSponsorId(parentId.intValue());
 
             //绑定user表层架关系
             LambdaUpdateWrapper<User> condition = new LambdaUpdateWrapper<>();
@@ -240,7 +241,7 @@ public class DistributionService {
         logModel.setRemark("一级返佣结算");
         BigDecimal earnMoney = computeFirstMoney(order.getAllPrice());
         logModel.setMoney(earnMoney);
-        logModel.setCreatedTime(LocalDateTime.now());
+        logModel.setCreatedTime(new Date());
         logModel.setToken(encryt(logModel));
         boolean result = rebateLogService.save(logModel);
         recordEarning(user.getId(), user.getFirstLeader(), earnMoney, order);
@@ -253,7 +254,7 @@ public class DistributionService {
             logModel.setRemark("二级返佣结算");
             BigDecimal secondMoney = computeSecondMoney(order.getAllPrice());
             logModel.setMoney(secondMoney);
-            logModel.setCreatedTime(LocalDateTime.now());
+            logModel.setCreatedTime(new Date());
             logModel.setToken(encryt(logModel));
             boolean secondResult = rebateLogService.save(logModel);
             recordEarning(user.getId(), user.getSecondLeader(), secondMoney, order);
@@ -278,9 +279,9 @@ public class DistributionService {
             if (dynamicToken.equalsIgnoreCase(token)) {
                 item.setId(id);
                 if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
-                    item.setCompleteTime(LocalDateTime.now());
+                    item.setCompleteTime(new Date());
                 } else {
-                    item.setConfirmTime(LocalDateTime.now());
+                    item.setConfirmTime(new Date());
                 }
 
                 item.setStatus(order.getOrderStatus());

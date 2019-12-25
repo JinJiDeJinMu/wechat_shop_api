@@ -23,53 +23,53 @@ import java.util.Date;
 @Accessors(chain = true)
 public class CdtDistridetail implements Serializable {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * id
-   */
-  @TableId(value = "id", type = IdType.AUTO)
-  private Long id;
+    /**
+     * id
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
-  /**
-   * 用户的id
-   */
-  private Integer userId;
+    /**
+     * 用户的id
+     */
+    private Integer userId;
 
-  /**
-   * 得钱的用户id
-   */
-  private Integer goldUserId;
+    /**
+     * 得钱的用户id
+     */
+    private Integer goldUserId;
 
-  /**
-   * 订单号
-   */
-  private String orderSn;
+    /**
+     * 订单号
+     */
+    private String orderSn;
 
-  /**
-   * 得到的钱
-   */
-  private BigDecimal money;
+    /**
+     * 得到的钱
+     */
+    private BigDecimal money;
 
-  /**
-   * 状态
-   */
-  private Integer status;
+    /**
+     * 状态
+     */
+    private Integer status;
 
-  /**
-   * 校验token
-   */
-  private String token;
+    /**
+     * 校验token
+     */
+    private String token;
 
-  /**
-   * 创建时间
-   */
-  private Date createdTime;
+    /**
+     * 创建时间
+     */
+    private Date createdTime;
 
-  /**
-   * 更新时间
-   */
-  private Date updateTime;
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 
 
 }

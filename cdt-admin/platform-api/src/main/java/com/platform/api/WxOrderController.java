@@ -33,7 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -344,7 +343,7 @@ public class WxOrderController extends ApiBaseAction {
             ) {
                 orderVo.setOrderStatus(OrderStatusEnum.COMPLETED_ORDER.getCode());
                 orderVo.setShippingStatus(ShippingTypeEnum.GETEDGOODS.getCode());
-                orderVo.setConfirmTime(LocalDateTime.now());
+                orderVo.setConfirmTime(new Date());
                 boolean result = cdtOrderService.updateById(orderVo);
                 if (result) {
                     distributionFacade.notifyOrderStatus(loginUser.getUserId().intValue(), orderVo, GoodsTypeEnum.getEnumByKey(orderVo.getGoodsType()));

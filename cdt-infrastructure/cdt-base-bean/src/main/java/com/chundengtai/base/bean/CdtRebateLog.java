@@ -6,11 +6,11 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
- * 分销记录表
+ * 分销记录表 分销记录表
  * </p>
  *
  * @author Royal
@@ -71,7 +71,7 @@ public class CdtRebateLog implements Serializable {
     /**
      * 完成时间
      */
-    private LocalDateTime completeTime;
+    private Date completeTime;
 
     /**
      * 该订单的状态
@@ -81,7 +81,7 @@ public class CdtRebateLog implements Serializable {
     /**
      * 确定分成或者取消时间
      */
-    private LocalDateTime confirmTime;
+    private Date confirmTime;
 
     /**
      * 备注
@@ -101,7 +101,7 @@ public class CdtRebateLog implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
 
 }

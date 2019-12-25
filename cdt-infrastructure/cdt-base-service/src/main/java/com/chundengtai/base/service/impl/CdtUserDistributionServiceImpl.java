@@ -8,7 +8,6 @@ import com.chundengtai.base.utils.ReflectUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -30,7 +29,7 @@ public class CdtUserDistributionServiceImpl extends ServiceImpl<CdtUserDistribut
 
     @Override
     public Boolean addCdtUserDistribution(CdtUserDistribution cdtUserDistribution) {
-        cdtUserDistribution.setCreatedTime(LocalDateTime.now());
+        //cdtUserDistribution.setCreatedTime(LocalDateTime.now());
         //cdtUserDistribution.setCreatedBy(String.valueOf(ShiroUtils.getUserEntity().getUserId()));
         cdtUserDistribution.setToken(ReflectUtils.getToken(cdtUserDistribution));
         return this.save(cdtUserDistribution);

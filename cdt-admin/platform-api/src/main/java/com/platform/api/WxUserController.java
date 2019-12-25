@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,7 +82,7 @@ public class WxUserController extends ApiBaseAction {
             userVo = new User();
             userVo.setUsername(Base64.encode(loginInfo.getNickName()));
             userVo.setPassword(openid);
-            userVo.setRegisterTime(LocalDateTime.now());
+            userVo.setRegisterTime(new Date());
             userVo.setRegisterIp(this.getClientIp());
             userVo.setLastLoginIp(userVo.getRegisterIp());
             userVo.setLastLoginTime(userVo.getRegisterTime());
