@@ -190,9 +190,11 @@ let vue = new Vue({
             this.getList();
         })
             ;
-
         },
-
+        handleResetSearch: function () {
+            this.baseForm.data = Object.assign({}, defaultModel);
+            this.getList();
+        },
         handleSizeChange(val) {
             this.baseForm.pageIndex = 1;
             this.baseForm.pageSize = val;
