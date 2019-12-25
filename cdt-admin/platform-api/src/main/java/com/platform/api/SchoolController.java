@@ -21,7 +21,7 @@ import java.util.List;
  * @Version 1.0
  **/
 @RestController
-@RequestMapping("/school")
+@RequestMapping("/api/school")
 public class SchoolController {
 
     @Autowired
@@ -33,6 +33,7 @@ public class SchoolController {
      * @return
      */
     @GetMapping("/list")
+    @IgnoreAuth
     public Result queryList() {
         return Result.success(schoolService.list());
     }
@@ -62,6 +63,12 @@ public class SchoolController {
         list1.add(4);
         list2.add(2);
         list2.add(3);
+        for (Integer a : list1) {
+            if (list2.contains(a)) {
+                list2.remove(a);
+            }
+        }
+        System.out.println(list2);
 
     }
 }
