@@ -309,14 +309,13 @@
                         </i-select>
                     </Form-item>
 
-                    <Form-item label="学校名称" prop="schoolId" style="width: 268px;">
-                        <i-select v-model="goods.school" filterable label-in-value>
-                            <i-option v-for="school in schools" :value="school.id"
-                                      :key="school.id">{{school.name}}
+                    <Form-item label="学校名称" prop="schoolName" style="width: 268px;">
+                        <i-select v-model="goods.schoolName" filterable label-in-value>
+                            <i-option v-for="item in schools" :value="item.name"
+                                      :key="item.name">{{item.name}}
                             </i-option>
                         </i-select>
                     </Form-item>
-
                     <Form-item label="店铺" prop="merchantId" style="width: 268px;">
                         <i-select v-model="goods.merchantId" filterable label-in-value>
                             <i-option v-for="merchant in merchants" :value="merchant.id" :key="merchant.id">

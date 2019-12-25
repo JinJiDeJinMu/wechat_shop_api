@@ -1,5 +1,7 @@
 package com.platform.controller;
 
+import com.chundengtai.base.bean.School;
+import com.chundengtai.base.service.SchoolService;
 import com.platform.constance.ShopShow;
 import com.platform.entity.GoodsEntity;
 import com.platform.entity.SysUserEntity;
@@ -26,6 +28,9 @@ public class GoodsController extends BaseController {
 
     @Autowired
     private GoodsService goodsService;
+
+    @Autowired
+    private SchoolService schoolService;
 
     /**
      * 查看列表
@@ -70,6 +75,7 @@ public class GoodsController extends BaseController {
             goods.setMerchantId(sysUserEntity.getMerchantId());
         }
         goods.setBrowse(1);
+        System.out.println("1111" + goods);
         goodsService.save(goods);
         return R.ok();
     }
@@ -173,5 +179,16 @@ public class GoodsController extends BaseController {
         goodsService.unSale(id);
 
         return R.ok();
+    }
+
+    /**
+     * 查询所有学校信息
+     *
+     * @return
+     */
+    @GetMapping("/schoollist")
+    public R queryList() {
+        List<School> list = schoolService.list();
+        return R.ok().put("list", list);
     }
 }

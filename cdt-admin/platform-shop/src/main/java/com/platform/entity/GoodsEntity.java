@@ -85,6 +85,8 @@ public class GoodsEntity implements Serializable {
 	//购买类型
     private Integer purchaseType;
 
+    private String schoolName;
+
     /**
      * 翻译字段
      */
@@ -707,5 +709,71 @@ public class GoodsEntity implements Serializable {
 
     public void setMerchantName(String merchantName) {
         this.merchantName = merchantName;
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
+    @Override
+    public String toString() {
+        return "GoodsEntity{" +
+                "id=" + id +
+                ", categoryId=" + categoryId +
+                ", goodsSn='" + goodsSn + '\'' +
+                ", name='" + name + '\'' +
+                ", browse=" + browse +
+                ", brandId=" + brandId +
+                ", goodsNumber=" + goodsNumber +
+                ", keywords='" + keywords + '\'' +
+                ", goodsBrief='" + goodsBrief + '\'' +
+                ", goodsDesc='" + goodsDesc + '\'' +
+                ", isOnSale=" + isOnSale +
+                ", addTime=" + addTime +
+                ", updateTime=" + updateTime +
+                ", sortOrder=" + sortOrder +
+                ", isDelete=" + isDelete +
+                ", attributeCategory=" + attributeCategory +
+                ", counterPrice=" + counterPrice +
+                ", extraPrice=" + extraPrice +
+                ", isNew=" + isNew +
+                ", goodsUnit='" + goodsUnit + '\'' +
+                ", primaryPicUrl='" + primaryPicUrl + '\'' +
+                ", listPicUrl='" + listPicUrl + '\'' +
+                ", retailPrice=" + retailPrice +
+                ", sellVolume=" + sellVolume +
+                ", primaryProductId=" + primaryProductId +
+                ", unitPrice=" + unitPrice +
+                ", promotionDesc='" + promotionDesc + '\'' +
+                ", promotionTag='" + promotionTag + '\'' +
+                ", appExclusivePrice=" + appExclusivePrice +
+                ", isAppExclusive=" + isAppExclusive +
+                ", isLimited=" + isLimited +
+                ", isHot=" + isHot +
+                ", marketPrice=" + marketPrice +
+                ", isSecKill=" + isSecKill +
+                ", startTime=" + startTime +
+                ", purchaseType=" + purchaseType +
+                ", schoolName='" + schoolName + '\'' +
+                ", merchantName='" + merchantName + '\'' +
+                ", createUserId=" + createUserId +
+                ", createUserDeptId=" + createUserDeptId +
+                ", brokerage_percent='" + brokerage_percent + '\'' +
+                ", updateUserId=" + updateUserId +
+                ", attributeEntityList=" + attributeEntityList +
+                ", goodsImgList=" + goodsImgList +
+                ", categoryName='" + categoryName + '\'' +
+                ", attributeCategoryName='" + attributeCategoryName + '\'' +
+                ", brandName='" + brandName + '\'' +
+                ", merchantId=" + merchantId +
+                ", endTime=" + endTime +
+                ", successTime=" + successTime +
+                ", successPeople=" + successPeople +
+                ", groupPrice=" + groupPrice +
+                '}';
     }
 }
