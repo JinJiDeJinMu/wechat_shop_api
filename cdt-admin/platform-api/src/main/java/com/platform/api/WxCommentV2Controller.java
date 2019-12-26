@@ -21,6 +21,7 @@ import com.platform.service.ApiCommentV2Service;
 import com.platform.service.ApiRepCommentService;
 import com.platform.service.ApiUserService;
 import com.platform.util.ApiBaseAction;
+import com.platform.utils.Base64;
 import com.platform.utils.RRException;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -90,10 +91,10 @@ public class WxCommentV2Controller extends ApiBaseAction {
             }
             cdtProductComment.setCommentPictureList(commentPictureList);
             UserVo userVo = userService.queryObject(cdtProductComment.getUserId());
-            userVo.setNickname(com.platform.utils.Base64.decode(userVo.getNickname()));
+            userVo.setNickname(Base64.decode(userVo.getNickname()));
             cdtProductComment.setUserInfo(userVo);
         }
-        // commentReqList = commentReqList.stream().sorted(Comparator.comparing(CommentReq::getCreateTime).reversed()).collect(Collectors.toList());
+        commentReqList = commentReqList.stream().sorted(Comparator.comparing(CommentReq::getCreateTime).reversed()).collect(Collectors.toList());
         PageInfo pageInfo = new PageInfo(commentReqList);
         return Result.success(pageInfo);
     }
