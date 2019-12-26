@@ -1,20 +1,27 @@
 package com.platform.api;
 
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chundengtai.base.bean.CdtProductComment;
+import com.chundengtai.base.bean.CommentPicture;
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.CdtProductCommentService;
+import com.chundengtai.base.service.CommentPictureService;
 import com.chundengtai.base.weixinapi.WeixinContants;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.entity.*;
+import com.platform.entity.CommentReq;
+import com.platform.entity.RepCommentVo;
+import com.platform.entity.UserVo;
 import com.platform.oss.OSSFactory;
-import com.platform.service.*;
+import com.platform.service.ApiCommentService;
+import com.platform.service.ApiCommentV2Service;
+import com.platform.service.ApiRepCommentService;
+import com.platform.service.ApiUserService;
 import com.platform.util.ApiBaseAction;
-import com.platform.util.ApiPageUtils;
-import com.platform.utils.Base64;
-import com.platform.utils.Query;
 import com.platform.utils.RRException;
-import com.platform.utils.StringUtils;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Api(value = "窝边生活商品评论", tags = "窝边生活商品评论")
 @RestController
@@ -38,11 +46,12 @@ public class WxCommentV2Controller extends ApiBaseAction {
     private ApiCommentV2Service apiCommentV2Service;
     @Autowired
     private ApiUserService userService;
-    @Autowired
-    private ApiCommentPictureService commentPictureService;
 
     @Autowired
     private CdtProductCommentService cdtProductCommentService;
+
+    @Autowired
+    private CommentPictureService commentPictureService;
 
     /**
      * 获取评价列表（在商品详情里面）
@@ -64,36 +73,29 @@ public class WxCommentV2Controller extends ApiBaseAction {
                                @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
                                @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize
     ) {
-
-        Map<String, Object> resultObj = new HashMap();
-        List<CommentReq> commentList = new ArrayList();
-        Map param = new HashMap();
-        param.put("page", pageIndex);
-        param.put("limit", pagesize);
-        param.put("goodId", goodId);
-        param.put("status", 0);
-        param.put("order", "desc");
-        param.put("sidx", "id");
-        //查询列表数据
-        Query query = new Query(param);
-        System.out.println("---------"+query);
-        commentList = apiCommentV2Service.queryList(query);
-        int total = apiCommentV2Service.queryTotal(query);
-        ApiPageUtils pageUtil = new ApiPageUtils(commentList, total, query.getLimit(), query.getPage());
-        //
-        for (CommentReq commentItem : commentList) {
-//            commentItem.setContent(Base64.decode(commentItem.getContent()));
-            commentItem.setContent(commentItem.getContent());
-            UserVo userVo = userService.queryObject(commentItem.getUserId());
-            userVo.setNickname(Base64.decode(userVo.getNickname()));
-            commentItem.setUserInfo(userVo);
-
-            Map paramPicture = new HashMap();
-            paramPicture.put("comment_id", commentItem.getId());
-            List<CommentPictureVo> commentPictureEntities = commentPictureService.queryList(paramPicture);
-            commentItem.setCommentPictureList(commentPictureEntities);
+        PageHelper.startPage(pageIndex, pagesize);
+        List<CdtProductComment> list = cdtProductCommentService.list(new LambdaQueryWrapper<CdtProductComment>()
+                .eq(CdtProductComment::getGoodId, goodId));
+        List<CommentReq> commentReqList = list.stream()
+                .map(e -> JSONUtil.toBean(JSONUtil.toJsonStr(e), CommentReq.class))
+                .collect(Collectors.toList());
+        for (CommentReq cdtProductComment : commentReqList) {
+            List<CommentPicture> commentPictureList = commentPictureService.list(new LambdaQueryWrapper<CommentPicture>()
+                    .eq(CommentPicture::getStatus, 1)
+                    .eq(CommentPicture::getCommentId, cdtProductComment.getId()));
+            if (commentPictureList != null) {
+                commentPictureList = commentPictureList.stream()
+                        .sorted(Comparator.comparing(CommentPicture::getSortOrder))
+                        .collect(Collectors.toList());
+            }
+            cdtProductComment.setCommentPictureList(commentPictureList);
+            UserVo userVo = userService.queryObject(cdtProductComment.getUserId());
+            userVo.setNickname(com.platform.utils.Base64.decode(userVo.getNickname()));
+            cdtProductComment.setUserInfo(userVo);
         }
-        return Result.success(pageUtil);
+        commentReqList = commentReqList.stream().sorted(Comparator.comparing(CommentReq::getCreateTime).reversed()).collect(Collectors.toList());
+        PageInfo pageInfo = new PageInfo(commentReqList);
+        return Result.success(pageInfo);
     }
 
 
@@ -142,11 +144,11 @@ public class WxCommentV2Controller extends ApiBaseAction {
                     throw new RRException("上传文件不能为空");
                 }
                 //上传文件
-                CommentPictureVo pictureVo = new CommentPictureVo();
+                CommentPicture pictureVo = new CommentPicture();
                 pictureVo.setType(0);
-                pictureVo.setComment_id(insertId);
-                pictureVo.setPic_url(list.get(j));
-                pictureVo.setSort_order(j + 1);
+                pictureVo.setCommentId(insertId);
+                pictureVo.setPicUrl(list.get(j));
+                pictureVo.setSortOrder(j + 1);
                 commentPictureService.save(pictureVo);
             }
         }
@@ -265,7 +267,7 @@ public class WxCommentV2Controller extends ApiBaseAction {
                         @RequestParam(value = "page", defaultValue = "1") Integer page,
                         @RequestParam(value = "size", defaultValue = "10") Integer size,
                         String sort, String order) {
-        Map<String, Object> resultObj = new HashMap();
+        /*Map<String, Object> resultObj = new HashMap();
         List<CommentVo> commentList = new ArrayList();
         Map param = new HashMap();
         param.put("type_id", typeId);
@@ -297,10 +299,11 @@ public class WxCommentV2Controller extends ApiBaseAction {
 
             Map paramPicture = new HashMap();
             paramPicture.put("comment_id", commentItem.getId());
-            List<CommentPictureVo> commentPictureEntities = commentPictureService.queryList(paramPicture);
+            List<CommentPictureVo> commentPictureEntities = commentPictureService.(paramPicture);
             commentItem.setPic_list(commentPictureEntities);
         }
-        return toResponsSuccess(pageUtil);
+        return toResponsSuccess(pageUtil);*/
+        return null;
     }
 
 

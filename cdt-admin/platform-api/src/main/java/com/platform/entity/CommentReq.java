@@ -1,5 +1,6 @@
 package com.platform.entity;
 
+import com.chundengtai.base.bean.CommentPicture;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -47,7 +48,7 @@ public class CommentReq implements Serializable {
     private UserVo userInfo;
 
     @ApiModelProperty(value = "评论图片列表")
-    private List<CommentPictureVo> commentPictureList;
+    private List<CommentPicture> commentPictureList;
 
 
 }

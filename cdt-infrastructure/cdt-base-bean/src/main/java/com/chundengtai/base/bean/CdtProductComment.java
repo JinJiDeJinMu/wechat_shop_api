@@ -64,5 +64,4 @@ public class CdtProductComment implements Serializable {
 
     private Date createTime;
 
-
 }

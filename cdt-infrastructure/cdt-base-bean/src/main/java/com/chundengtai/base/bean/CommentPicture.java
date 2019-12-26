@@ -39,7 +39,7 @@ public class CommentPicture implements Serializable {
     /**
      * 评价Id
      */
-    private Integer commentId;
+    private Long commentId;
 
     /**
      * 评价图片
