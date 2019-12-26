@@ -93,7 +93,7 @@ public class WxCommentV2Controller extends ApiBaseAction {
             userVo.setNickname(com.platform.utils.Base64.decode(userVo.getNickname()));
             cdtProductComment.setUserInfo(userVo);
         }
-        commentReqList = commentReqList.stream().sorted(Comparator.comparing(CommentReq::getCreateTime).reversed()).collect(Collectors.toList());
+        // commentReqList = commentReqList.stream().sorted(Comparator.comparing(CommentReq::getCreateTime).reversed()).collect(Collectors.toList());
         PageInfo pageInfo = new PageInfo(commentReqList);
         return Result.success(pageInfo);
     }
