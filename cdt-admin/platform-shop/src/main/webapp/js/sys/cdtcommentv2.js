@@ -15,7 +15,12 @@ $(function () {
                     return pic;
                 }
             },
-            {label: '添加时间', name: 'commentTime', index: 'comment_time', width: 80},
+            {
+                label: '添加时间', name: 'createTime', index: 'create_time',
+                width: 80, formatter: function (value) {
+                    return transDate(value);
+                }
+            },
             {label: '等级', name: 'starLevel', index: 'star_level', width: 80},
             {label: '评论人', name: 'userId', index: 'user_id', width: 80},
             {

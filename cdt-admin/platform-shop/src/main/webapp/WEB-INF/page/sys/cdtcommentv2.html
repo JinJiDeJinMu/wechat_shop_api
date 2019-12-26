@@ -31,7 +31,7 @@
     <Card v-show="!showList">
         <p slot="title">{{title}}</p>
 		<i-form ref="formValidate" :model="nideshopCommentV2" :rules="ruleValidate" :label-width="80">
-            <Form-item label="订单id" prop="orderNo">
+            <Form-item label="评论id" prop="orderNo">
                 <i-input v-model="nideshopCommentV2.orderNo" placeholder="订单id"/>
             </Form-item>
             <Form-item label="商品id" prop="goodId">

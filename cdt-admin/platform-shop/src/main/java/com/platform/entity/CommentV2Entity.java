@@ -1,6 +1,7 @@
 package com.platform.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,6 +41,8 @@ public class CommentV2Entity implements Serializable {
      * 评论人
      */
     private Integer userId;
+
+    private Date createTime;
 
     /**
      * 状态
@@ -159,5 +162,13 @@ public class CommentV2Entity implements Serializable {
 
     public void setCommentPictureEntities(List<CommentPictureEntity> commentPictureEntities) {
         this.commentPictureEntities = commentPictureEntities;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

@@ -12,6 +12,7 @@
         <result property="starLevel" column="star_level"/>
         <result property="userId" column="user_id"/>
         <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
     </resultMap>
 
     <select id="queryObject" resultType="com.platform.entity.CommentV2Entity">
@@ -23,7 +24,8 @@
     			`comment_time`,
     			`star_level`,
     			`user_id`,
-    			`status`
+    			`status`,
+    			`create_time`
 		from cdt_product_comment
 		where id = #{id}
 	</select>
@@ -37,7 +39,8 @@
         `comment_time`,
         `star_level`,
         `user_id`,
-        `status`
+        `status`,
+        `create_time`
         from cdt_product_comment
         WHERE 1=1
         <if test="name != null and name != ''">

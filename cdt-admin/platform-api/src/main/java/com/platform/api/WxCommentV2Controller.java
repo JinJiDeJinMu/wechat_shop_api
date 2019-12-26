@@ -17,7 +17,6 @@ import com.platform.entity.RepCommentVo;
 import com.platform.entity.UserVo;
 import com.platform.oss.OSSFactory;
 import com.platform.service.ApiCommentService;
-import com.platform.service.ApiCommentV2Service;
 import com.platform.service.ApiRepCommentService;
 import com.platform.service.ApiUserService;
 import com.platform.util.ApiBaseAction;
@@ -43,8 +42,7 @@ public class WxCommentV2Controller extends ApiBaseAction {
     private ApiCommentService commentService;
     @Autowired
     private ApiRepCommentService apiRepCommentService;
-    @Autowired
-    private ApiCommentV2Service apiCommentV2Service;
+
     @Autowired
     private ApiUserService userService;
 
@@ -76,7 +74,7 @@ public class WxCommentV2Controller extends ApiBaseAction {
     ) {
         PageHelper.startPage(pageIndex, pagesize);
         List<CdtProductComment> list = cdtProductCommentService.list(new LambdaQueryWrapper<CdtProductComment>()
-                .eq(CdtProductComment::getGoodId, goodId));
+                .eq(CdtProductComment::getGoodId, goodId).eq(CdtProductComment::getStatus, 0));
         List<CommentReq> commentReqList = list.stream()
                 .map(e -> JSONUtil.toBean(JSONUtil.toJsonStr(e), CommentReq.class))
                 .collect(Collectors.toList());
