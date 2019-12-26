@@ -34,7 +34,15 @@ public class CdtDistridetailController {
                 conditon.orderByDesc(params.getSortField());
             }
         }
-
+        if (params.getData().getUserId() != null) {
+            conditon.eq("user_id", params.getData().getUserId());
+        }
+        if (params.getData().getGoldUserId() != null) {
+            conditon.eq("gold_user_id", params.getData().getGoldUserId());
+        }
+        if (params.getData().getOrderSn() != null) {
+            conditon.eq("order_sn", params.getData().getOrderSn());
+        }
         PageHelper.startPage(params.getPageIndex(), params.getPageSize());
         List<CdtDistridetail> collectList = cdtDistridetailService.list(conditon);
         PageInfo pageInfo = new PageInfo(collectList);

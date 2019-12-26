@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>用户购买分销得钱记录 用户购买分销得钱</title>
+    <title>分销层级表 分销层级表-绑定用户关系</title>
     #parse("sys/header.html")
 </head>
 <body>
@@ -34,19 +34,27 @@
                 </div>
                 <div style="margin-top: 15px">
                     <el-form :inline="true" :model="baseForm.data" size="small" label-width="140px">
-                        <el-form-item label="用户的id">
-                            <el-input style="width: 203px" v-model="baseForm.data.usgetListerId"
-                                      placeholder="用户的id"></el-input>
-                        </el-form-item>
-                        <el-form-item label="得钱的用户id">
-                            <el-input style="width: 203px" v-model="baseForm.data.goldUserId"
-                                      placeholder="得钱的用户id"></el-input>
-                        </el-form-item>
-                        <el-form-item label="订单号">
-                            <el-input style="width: 203px" v-model="baseForm.data.orderSn"
-                                      placeholder="订单号"></el-input>
-                        </el-form-item>
 
+                        <el-form-item label="用户id">
+                            <el-input style="width: 203px" v-model="baseForm.data.userId"
+                                      placeholder="用户id"></el-input>
+                        </el-form-item>
+                        <el-form-item label="推荐人id">
+                            <el-input style="width: 203px" v-model="baseForm.data.parentId"
+                                      placeholder="推荐人id"></el-input>
+                        </el-form-item>
+                        <el-form-item label="分销层级">
+                            <el-input style="width: 203px" v-model="baseForm.data.fxLevel"
+                                      placeholder="分销层级"></el-input>
+                        </el-form-item>
+                        <el-form-item label="发起人id">
+                            <el-input style="width: 203px" v-model="baseForm.data.sponsorId"
+                                      placeholder="发起人id"></el-input>
+                        </el-form-item>
+                        <el-form-item label="创建时间">
+                            <el-input style="width: 203px" v-model="baseForm.data.createdTime"
+                                      placeholder="创建时间"></el-input>
+                        </el-form-item>
                     </el-form>
                 </div>
             </el-card>
@@ -59,29 +67,23 @@
                 <el-table-column label="id" width="100" align="center">
                     <template slot-scope="scope">{{scope.row.id}}</template>
                 </el-table-column>
-                <el-table-column label="用户的id" width="100" align="center">
+                <el-table-column label="用户id" width="100" align="center">
                     <template slot-scope="scope">{{scope.row.userId}}</template>
                 </el-table-column>
-                <el-table-column label="得钱的用户id" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.goldUserId}}</template>
+                <el-table-column label="推荐人id" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.parentId}}</template>
                 </el-table-column>
-                <el-table-column label="订单号" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.orderSn}}</template>
+                <el-table-column label="分销层级" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.fxLevel}}</template>
                 </el-table-column>
-                <el-table-column label="得到的钱" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.money}}</template>
-                </el-table-column>
-                <el-table-column label="状态" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.status}}</template>
-                </el-table-column>
-                <el-table-column label="校验token" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.token}}</template>
+                <el-table-column label="发起人id" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.sponsorId}}</template>
                 </el-table-column>
                 <el-table-column label="创建时间" width="100" align="center">
                     <template slot-scope="scope">{{scope.row.createdTime|formatDate}}</template>
                 </el-table-column>
-                <el-table-column label="更新时间" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.updateTime|formatDate}}</template>
+                <el-table-column label="校验token" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.token}}</template>
                 </el-table-column>
                 <!-- <el-table-column label="审核状态" width="100" align="center">
 <template slot-scope="scope">
@@ -97,11 +99,11 @@ type="text"
                 <el-table-column label="操作" width="160" align="center">
                     <template slot-scope="scope">
                         <p>
-                            #if($shiro.hasPermission("CdtDistridetail:update"))
+                            #if($shiro.hasPermission("CdtDistributionLevel:update"))
                             <el-button size="mini" @click="handleUpdateProduct(scope.$index, scope.row)">编辑
                             </el-button>
                             #end
-                            #if($shiro.hasPermission("CdtDistridetail:update"))
+                            #if($shiro.hasPermission("CdtDistributionLevel:update"))
                             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
                             </el-button>
                             #end
@@ -111,7 +113,7 @@ type="text"
             </el-table>
         </div>
         <div class="batch-operate-container">
-            #if($shiro.hasPermission("cdtDistridetail:delete"))
+            #if($shiro.hasPermission("cdtDistributionLevel:delete"))
             <el-select size="small" v-model="operateType" placeholder="批量操作">
                 <el-option v-for="item in operates" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
@@ -134,58 +136,51 @@ type="text"
     <Card v-show="!showList">
         <p slot="title">{{title}}</p>
         <el-form :model="baseForm.data"
+                 :rules="ruleValidate"
                  ref="formValidate"
                  @keyup.enter.native="dataFormSubmit('formValidate')"
                  label-width="80px">
-
-            <el-form-item label="用户的id" prop="userId" :rules=" [
-            { required: true, message: '请输入用户的id', trigger: 'blur' },
-            { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
+            <el-form-item label="id" prop="id" :rules=" [
+            { required: true, message: '请输入id', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.id"
+                          placeholder="id"></el-input>
+            </el-form-item>
+            <el-form-item label="用户id" prop="userId" :rules=" [
+            { required: true, message: '请输入用户id', trigger: 'blur' }
           ]">
                 <el-input style="width: 203px" v-model="baseForm.data.userId"
-                          placeholder="用户的id"></el-input>
+                          placeholder="用户id"></el-input>
             </el-form-item>
-            <el-form-item label="得钱的用户id" prop="goldUserId" :rules=" [
-            { required: true, message: '请输入得钱的用户id', trigger: 'blur' },
-            { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'change' }
+            <el-form-item label="推荐人id" prop="parentId" :rules=" [
+            { required: true, message: '请输入推荐人id', trigger: 'blur' }
           ]">
-                <el-input style="width: 203px" v-model="baseForm.data.goldUserId"
-                          placeholder="得钱的用户id"></el-input>
+                <el-input style="width: 203px" v-model="baseForm.data.parentId"
+                          placeholder="推荐人id"></el-input>
             </el-form-item>
-            <el-form-item label="订单号" prop="orderSn" :rules=" [
-            { required: true, message: '请输入订单号', trigger: 'blur' },
-            { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'change' }
+            <el-form-item label="分销层级" prop="fxLevel" :rules=" [
+            { required: true, message: '请输入分销层级', trigger: 'blur' }
           ]">
-                <el-input style="width: 203px" v-model="baseForm.data.orderSn"
-                          placeholder="订单号"></el-input>
+                <el-input style="width: 203px" v-model="baseForm.data.fxLevel"
+                          placeholder="分销层级"></el-input>
             </el-form-item>
-            <el-form-item label="得到的钱" prop="money" :rules=" [
-            { required: true, message: '请输入得到的钱', trigger: 'blur' },
-            { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
+            <el-form-item label="发起人id" prop="sponsorId" :rules=" [
+            { required: true, message: '请输入发起人id', trigger: 'blur' }
           ]">
-                <el-input style="width: 203px" v-model="baseForm.data.money"
-                          placeholder="得到的钱"></el-input>
-            </el-form-item>
-            <el-form-item label="状态" prop="status" :rules=" [
-            { required: true, message: '请输入状态', trigger: 'blur' },
-            { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
-          ]">
-                <el-input style="width: 203px" v-model="baseForm.data.status"
-                          placeholder="状态"></el-input>
+                <el-input style="width: 203px" v-model="baseForm.data.sponsorId"
+                          placeholder="发起人id"></el-input>
             </el-form-item>
             <el-form-item label="创建时间" prop="createdTime" :rules=" [
-            { required: true, message: '请输入创建时间', trigger: 'blur' },
-            { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
+            { required: true, message: '请输入创建时间', trigger: 'blur' }
           ]">
                 <el-input style="width: 203px" v-model="baseForm.data.createdTime"
                           placeholder="创建时间"></el-input>
             </el-form-item>
-            <el-form-item label="更新时间" prop="updateTime" :rules=" [
-            { required: true, message: '请输入更新时间', trigger: 'blur' },
-            { min: 3, max: 200, message: '长度在 3 到 200 个字符', trigger: 'blur' }
+            <el-form-item label="校验token" prop="token" :rules=" [
+            { required: true, message: '请输入校验token', trigger: 'blur' }
           ]">
-                <el-input style="width: 203px" v-model="baseForm.data.updateTime"
-                          placeholder="更新时间"></el-input>
+                <el-input style="width: 203px" v-model="baseForm.data.token"
+                          placeholder="校验token"></el-input>
             </el-form-item>
 
             <el-form-item style="text-align: center">
@@ -196,6 +191,6 @@ type="text"
     </Card>
 </div>
 
-<script src="${rc.contextPath}/js/sys/cdtdistridetail.js?time=${date.systemTime}"></script>
+<script src="${rc.contextPath}/js/sys/cdtdistributionlevel.js?time=${date.systemTime}"></script>
 </body>
 </html>

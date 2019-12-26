@@ -1,13 +1,11 @@
 const defaultModel = {
     id: null,
     userId: null,
-    goldUserId: null,
-    orderSn: null,
-    money: null,
-    status: null,
-    token: null,
+    parentId: null,
+    fxLevel: null,
+    sponsorId: null,
     createdTime: null,
-    updateTime: null,
+    token: null,
 };
 let vue = new Vue({
     el: '#app',
@@ -82,7 +80,7 @@ let vue = new Vue({
             return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
         },
         saveOrUpdate: function (event) {
-            var url = this.baseForm.data.id == null ? "../cdtDistridetail/saveModel.json" : "../cdtDistridetail/updateModel.json";
+            var url = this.baseForm.data.id == null ? "../cdtDistributionLevel/saveModel.json" : "../cdtDistributionLevel/updateModel.json";
             var params = JSON.stringify(this.baseForm.data);
             let that = this;
             Ajax.request({
@@ -106,7 +104,7 @@ let vue = new Vue({
             let that = this;
             Ajax.request({
                 type: "POST",
-                url: "../cdtDistridetail/deleteModel.json",
+                url: "../cdtDistributionLevel/deleteModel.json",
                 contentType: "application/json",
                 params: JSON.stringify(ids),
                 successCallback: function (res) {
@@ -119,7 +117,7 @@ let vue = new Vue({
         getModel: function (id) {
             let that = this;
             Ajax.request({
-                url: "../cdtDistridetail/getModel/" + id + ".json",
+                url: "../cdtDistributionLevel/getModel/" + id + ".json",
                 async: true,
                 successCallback: function (res) {
                     that.baseForm.data = res.data;
@@ -132,7 +130,7 @@ let vue = new Vue({
             let that = this;
             Ajax.request({
                 type: "POST",
-                url: "../cdtDistridetail/list.json",
+                url: "../cdtDistributionLevel/list.json",
                 contentType: "application/json",
                 params: JSON.stringify(params),
                 async: true,
@@ -140,9 +138,16 @@ let vue = new Vue({
                     that.listLoading = false;
                     console.log(res);
                     that.list = res.data.list;
-                    that.total = res.data.totalCount;
+                    that.total = res.data.total;
                 }
             });
+        },
+        handleResetSearch: function () {
+            this.baseForm.data = Object.assign({}, defaultModel);
+            this.getList();
+        },
+        handleSearchList: function () {
+            this.getList();
         },
         getSelectRowIds() {
             let ids = [];
@@ -174,37 +179,40 @@ let vue = new Vue({
             if (!this.checkSelected()) {
                 return;
             }
-            this.$confirm('是否要进行该批量操作?', '提示', {
+            /*this.$confirm('是否要进行该批量操作?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            }).then(() => {
+            }).then(() = > {
                 let ids = this.getSelectRowIds();
-                switch (this.operateType) {
-                    case this.operates[0].value:
-                        this.updatePublishStatus(1, ids);
-                        break;
-                    case this.operates[1].value:
-                        this.updatePublishStatus(0, ids);
-                        break;
-                    case this.operates[2].value:
-                        this.updateDeleteStatus(1, ids);
-                        break;
-                    default:
-                        break;
-                }
-                this.getList();
-            });
-
+            switch (this.operateType) {
+                case this.operates[0].value:
+                    this.updatePublishStatus(1, ids);
+                    break;
+                case this.operates[1].value:
+                    this.updatePublishStatus(0, ids);
+                    break;
+                case this.operates[2].value:
+                    this.updateDeleteStatus(1, ids);
+                    break;
+                default:
+                    break;
+            }
+            this.getList();
+        })
+            ;*/
         },
-
+        handleResetSearch: function () {
+            this.baseForm.data = Object.assign({}, defaultModel);
+            this.getList();
+        },
         handleSizeChange(val) {
             this.baseForm.pageIndex = 1;
             this.baseForm.pageSize = val;
             this.getList();
         },
         handleCurrentChange(val) {
-            this.baseForm.pageSize = val;
+            this.baseForm.pageIndex = val;
             this.getList();
         },
         handleSelectionChange(val) {
@@ -240,14 +248,14 @@ let vue = new Vue({
         },
         add: function () {
             this.showList = false;
-            this.title = "新增用户购买分销得钱记录 用户购买分销得钱";
+            this.title = "新增分销层级表 分销层级表-绑定用户关系";
         },
         updateFun: function (id) {
             if (id == null) {
                 return;
             }
             this.showList = false;
-            this.title = "修改用户购买分销得钱记录 用户购买分销得钱";
+            this.title = "修改分销层级表 分销层级表-绑定用户关系";
             this.getModel(id);
         },
         dataFormSubmit: function (name) {

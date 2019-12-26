@@ -1,9 +1,6 @@
-package ${package.Controller};
+package
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.chundengtai.base.bean.${entity};
 import com.chundengtai.base.result.Result;
-import com.chundengtai.base.service.${table.serviceName};
 import com.chundengtai.base.transfer.BaseForm;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -11,10 +8,13 @@ import com.platform.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
+    ${package.Controller}
+;
+    ${entity}
+;
+    ${table.serviceName}
+;
 
 @RestController
 @RequestMapping("/${table.entityPath}")
@@ -41,8 +41,8 @@ public R list(@RequestBody BaseForm<${entity}> params){
             //${field.propertyType}=====
         #set($getprefix="get")
         #if(!${field.propertyType.equals("Date")})
-                if(params.data.${getprefix}${field.capitalName}!=null){
-                conditon.eq("${field.name}",params.data.${getprefix}${field.capitalName});
+                if(params.${getprefix}Data().${getprefix}${field.capitalName}()!=null){
+                conditon.eq("${field.name}",params.${getprefix}Data().${getprefix}${field.capitalName}());
                 }
         #end
     #end

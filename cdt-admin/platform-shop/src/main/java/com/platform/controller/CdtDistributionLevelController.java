@@ -1,49 +1,101 @@
 package com.platform.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtDistributionLevel;
-import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.CdtDistributionLevelService;
+import com.chundengtai.base.transfer.BaseForm;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.platform.utils.R;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
 
-/**
- * @Description 分销层级处理类
- * @Author hujinbiao
- * @Date 2019年12月19日 0019 上午 10:23:53
- * @Version 1.0
- **/
 @RestController
-@RequestMapping("/cdt")
+@RequestMapping("/cdtDistributionLevel")
 public class CdtDistributionLevelController {
-
     @Autowired
-    private CdtDistributionLevelService cdtDistributionLevelService;
+    public CdtDistributionLevelService cdtDistributionLevelService;
 
-
-    @GetMapping("/DistributionLevels")
-    public Result queryList(Integer pageNum, Integer pageSize) {
-        return Result.success(cdtDistributionLevelService.queryList(pageNum, pageSize));
+    /**
+     * 列表
+     */
+    @PostMapping("/list.json")
+//@RequiresPermissions("cdtdistributionlevel:list")
+    public R list(@RequestBody BaseForm<CdtDistributionLevel> params) {
+        QueryWrapper<CdtDistributionLevel> conditon = new QueryWrapper<>();
+        if (!StringUtils.isEmpty(params.getSortField()) && !StringUtils.isEmpty(params.getOrder())) {
+            if (params.getOrder().equalsIgnoreCase("asc")) {
+                conditon.orderByAsc(params.getSortField());
+            } else {
+                conditon.orderByDesc(params.getSortField());
+            }
+        }
+        if (params.getData().getId() != null) {
+            conditon.eq("id", params.getData().getId());
+        }
+        if (params.getData().getUserId() != null) {
+            conditon.eq("user_id", params.getData().getUserId());
+        }
+        if (params.getData().getParentId() != null) {
+            conditon.eq("parent_id", params.getData().getParentId());
+        }
+        if (params.getData().getFxLevel() != null) {
+            conditon.eq("fx_level", params.getData().getFxLevel());
+        }
+        if (params.getData().getSponsorId() != null) {
+            conditon.eq("sponsor_id", params.getData().getSponsorId());
+        }
+        if (params.getData().getToken() != null) {
+            conditon.eq("token", params.getData().getToken());
+        }
+        PageHelper.startPage(params.getPageIndex(), params.getPageSize());
+        List<CdtDistributionLevel> collectList = cdtDistributionLevelService.list(conditon);
+        PageInfo pageInfo = new PageInfo(collectList);
+        return R.ok(pageInfo);
     }
 
-    @GetMapping("/DistributionLevel/{id}")
-    public Result query(@PathVariable Long id) {
-        return Result.success(cdtDistributionLevelService.getById(id));
+    /**
+     * 信息
+     */
+    @GetMapping("/getModel/{id}.json")
+//@RequiresPermissions("cdtdistributionlevel:getModel")
+    public R info(@PathVariable("id") Integer id) {
+        CdtDistributionLevel model = cdtDistributionLevelService.getById(id);
+        return R.ok(model);
     }
 
-    @PostMapping("/DistributionLevel")
-    public Result save(@RequestBody CdtDistributionLevel cdtDistributionLevel) {
-        return Result.success(cdtDistributionLevelService.addDistributionLevel(cdtDistributionLevel));
+    /**
+     * 保存
+     */
+    @PostMapping("/saveModel.json")
+//@RequiresPermissions("cdtdistributionlevel:saveModel")
+    public R save(@RequestBody CdtDistributionLevel paramModel) {
+        boolean result = cdtDistributionLevelService.save(paramModel);
+        return R.ok(result);
     }
 
-    @DeleteMapping("/DistributionLevel/{id}")
-    public Result delete(@PathVariable("id") Long id) {
-        return Result.success(cdtDistributionLevelService.removeById(id));
+    /**
+     * 修改
+     */
+    @PostMapping("/updateModel.json")
+    @RequiresPermissions("cdtdistributionlevel:updateModel")
+    public R update(@RequestBody CdtDistributionLevel paramModel) {
+        boolean result = cdtDistributionLevelService.updateById(paramModel);
+        return R.ok(result);
     }
 
-    @PutMapping("/DistributionLevel")
-    public Result update(@RequestBody CdtDistributionLevel cdtDistributionLevel) {
-        return Result.success(cdtDistributionLevelService.updateDistributionLevel(cdtDistributionLevel));
+    /**
+     * 删除
+     */
+    @PostMapping("/deleteModel.json")
+//@RequiresPermissions("cdtdistributionlevel:deleteModel")
+    public R delete(@RequestBody Integer[] ids) {
+        boolean result = cdtDistributionLevelService.removeByIds(Arrays.asList(ids));
+        return R.ok(result);
     }
-
 }
