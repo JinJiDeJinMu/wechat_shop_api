@@ -65,6 +65,15 @@ let vue = new Vue({
             } else {
                 return '未支付';
             }
+        },
+        formatTye(value) {
+            if (value === 0) {
+                return '未审核';
+            } else if (value === 1) {
+                return '已通过';
+            } else {
+                return '其他';
+            }
         }
     },
     methods: {
@@ -120,6 +129,7 @@ let vue = new Vue({
                 async: true,
                 successCallback: function (res) {
                     that.baseForm.data = res.data;
+                    that.baseForm.data.status = 1;
                 }
             });
         },
@@ -136,7 +146,6 @@ let vue = new Vue({
                 async: true,
                 successCallback: function (res) {
                     that.listLoading = false;
-                    console.log(res);
                     that.list = res.data.list;
                     that.total = res.data.total;
                 }
@@ -172,13 +181,13 @@ let vue = new Vue({
             if (!this.checkSelected()) {
                 return;
             }
-            this.$confirm('是否要进行该批量操作?', '提示', {
+            /*this.$confirm('是否要进行该批量操作?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() = > {
                 let ids = this.getSelectRowIds();
-            switch (this.operateType) {
+            /!*switch (this.operateType) {
                 case this.operates[0].value:
                     this.updatePublishStatus(1, ids);
                     break;
@@ -190,13 +199,13 @@ let vue = new Vue({
                     break;
                 default:
                     break;
-            }
-            this.getList();
+            }*!/
+           /!* this.getList();*!/
         }).
             catch(() = > {
                 console.log("cancel");
         })
-            ;
+            ;*/
         },
         handleResetSearch: function () {
             this.baseForm.data = Object.assign({}, defaultModel);
@@ -217,10 +226,9 @@ let vue = new Vue({
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
-        handleDelete(index, row) {
-            let ids = [];
-            ids.push(row.id);
-            this.deleteModel(ids);
+        handleDelete(row) {
+            let ids = this.getSelectRowIds();
+            this.deleteModel(ids)
         },
         handlePublishStatusChange(index, row) {
             let ids = [];
@@ -243,7 +251,7 @@ let vue = new Vue({
         reload: function (event) {
             this.showList = true;
             this.getList();
-            this.handleReset('formValidate');
+            /*this.handleReset('formValidate');*/
         },
         add: function () {
             this.showList = false;
@@ -257,6 +265,7 @@ let vue = new Vue({
             this.title = "修改";
             this.getModel(id);
         },
+
         dataFormSubmit: function (name) {
             handleSubmitValidate(this, name, function () {
                 vue.saveOrUpdate()

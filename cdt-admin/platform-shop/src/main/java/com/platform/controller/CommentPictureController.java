@@ -1,6 +1,7 @@
 package com.platform.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.chundengtai.base.bean.CommentPicture;
 import com.chundengtai.base.service.CommentPictureService;
 import com.chundengtai.base.transfer.BaseForm;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -27,7 +27,6 @@ public class CommentPictureController {
         @PostMapping("/list.json")
 //@RequiresPermissions("commentpicture:list")
         public R list(@RequestBody BaseForm<CommentPicture> params) {
-                System.out.println("++++" + params);
                 QueryWrapper<CommentPicture> conditon = new QueryWrapper<>();
                 if (!StringUtils.isEmpty(params.getSortField()) && !StringUtils.isEmpty(params.getOrder())) {
                         if (params.getOrder().equalsIgnoreCase("asc")) {
@@ -36,11 +35,18 @@ public class CommentPictureController {
                                 conditon.orderByDesc(params.getSortField());
                         }
                 }
-
+            if (params.getData().getStatus() != null) {
+                conditon.eq("status", params.getData().getStatus());
+            }
+            if (params.getData().getCommentId() != null) {
+                conditon.eq("comment_id", params.getData().getCommentId());
+            }
+            if (params.getData().getType() != null) {
+                conditon.eq("type", params.getData().getType());
+            }
                 PageHelper.startPage(params.getPageIndex(), params.getPageSize());
                 List<CommentPicture> collectList = commentPictureService.list(conditon);
                 PageInfo pageInfo = new PageInfo(collectList);
-                System.out.println("===" + pageInfo);
                 return R.ok(pageInfo);
         }
 
@@ -70,7 +76,9 @@ public class CommentPictureController {
         @PostMapping("/updateModel.json")
 //@RequiresPermissions("commentpicture:updateModel")
         public R update(@RequestBody CommentPicture paramModel) {
-                boolean result = commentPictureService.updateById(paramModel);
+            System.out.println(paramModel.getStatus());
+            boolean result = commentPictureService.update(new LambdaUpdateWrapper<CommentPicture>()
+                    .set(CommentPicture::getStatus, paramModel.getStatus()).eq(CommentPicture::getId, paramModel.getId()));
                 return R.ok(result);
         }
 
@@ -80,7 +88,14 @@ public class CommentPictureController {
         @PostMapping("/deleteModel.json")
 //@RequiresPermissions("commentpicture:deleteModel")
         public R delete(@RequestBody Integer[] ids) {
-                boolean result = commentPictureService.removeByIds(Arrays.asList(ids));
-                return R.ok(result);
+
+            for (Integer id : ids
+                    ) {
+                System.out.println("==" + id);
+                commentPictureService.update(new LambdaUpdateWrapper<CommentPicture>()
+                        .set(CommentPicture::getStatus, 1)
+                        .eq(CommentPicture::getId, id));
+            }
+            return R.ok();
         }
 }

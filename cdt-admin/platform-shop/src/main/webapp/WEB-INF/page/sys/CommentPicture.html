@@ -9,55 +9,39 @@
     <div v-show="showList">
         <Row :gutter="16">
             <el-card class="filter-container" shadow="never">
-                <div>
-                    <i class="el-icon-search"></i>
-                    <span>筛选搜索</span>
-                    <el-button
-                            style="float: right"
-                            @click="handleSearchList()"
-                            type="primary"
-                            size="small">
-                        查询结果
-                    </el-button>
-                    <el-button
-                            style="float: right;margin-right: 15px"
-                            @click="handleResetSearch()"
-                            size="small">
-                        重置
-                    </el-button>
-                    <el-button
-                            style="float: right;margin-right: 15px"
-                            @click="add()"
-                            size="small">
-                        新建
-                    </el-button>
-                </div>
-                <div style="margin-top: 15px">
+                <div style="margin-top: 0px">
                     <el-form :inline="true" :model="baseForm.data" size="small" label-width="120px">
-                        <el-form-item label="主键">
-                            <el-input v-model="baseForm.data.id"
-                                      placeholder="主键"></el-input>
-                        </el-form-item>
                         <el-form-item label="类型">
-                            <el-input v-model="baseForm.data.type"
-                                      placeholder="类型"></el-input>
+                            <el-select v-model="baseForm.data.type" placeholder="类型">
+                                <el-option value="0">0</el-option>
+                                <el-option value="1">1</el-option>
+                            </el-select>
                         </el-form-item>
                         <el-form-item label="评价Id">
                             <el-input v-model="baseForm.data.commentId"
                                       placeholder="评价Id"></el-input>
                         </el-form-item>
-                        <el-form-item label="评价图片">
-                            <el-input v-model="baseForm.data.picUrl"
-                                      placeholder="评价图片"></el-input>
+                        <el-form-item label="审核">
+                            <el-select v-model="baseForm.data.status" placeholder="审核">
+                                <el-option value="1">已通过</el-option>
+                                <el-option value="0">未通过</el-option>
+                            </el-select>
                         </el-form-item>
-                        <el-form-item label="排序">
-                            <el-input v-model="baseForm.data.sortOrder"
-                                      placeholder="排序"></el-input>
-                        </el-form-item>
-                        <el-form-item label="">
-                            <el-input v-model="baseForm.data.status"
-                                      placeholder=""></el-input>
-                        </el-form-item>
+                        <el-button style="float: right;margin-right: 5px" type="danger" @click="handleDelete()">审核
+                        </el-button>
+                        <el-button
+                                style="float: right;margin-right: 35px"
+                                @click="handleSearchList()"
+                                type="primary"
+                                size="small">
+                            查询结果
+                        </el-button>
+                        <el-button
+                                style="float: right;margin-right: 35px"
+                                @click="handleResetSearch()"
+                                size="small">
+                            重置
+                        </el-button>
                     </el-form>
                 </div>
             </el-card>
@@ -77,39 +61,14 @@
                     <template slot-scope="scope">{{scope.row.commentId}}</template>
                 </el-table-column>
                 <el-table-column label="评价图片" width="150" align="center">
-                    <template slot-scope="scope"><img :src="scope.row.picUrl" width="40" height="40"/>
+                    <template slot-scope="scope"><img :src="scope.row.picUrl" width="80" height="80"/>
                     </template>
                 </el-table-column>
                 <el-table-column label="排序" width="150" align="center">
                     <template slot-scope="scope">{{scope.row.sortOrder}}</template>
                 </el-table-column>
-                <el-table-column label="" width="150" align="center">
-                    <template slot-scope="scope">{{scope.row.status}}</template>
-                </el-table-column>
-                <!-- <el-table-column label="审核状态" width="100" align="center">
-<template slot-scope="scope">
-<p>{{scope.row.verifyStatus | verifyStatusFilter}}</p>
-<p>
-<el-button
-type="text"
-@click="handleShowVerifyDetail(scope.index, scope.row)">审核详情
-</el-button>
-</p>
-</template>
-</el-table-column> -->
-                <el-table-column label="操作" width="160" align="center">
-                    <template slot-scope="scope">
-                        <p>
-                            #if($shiro.hasPermission("CommentPicture:update"))
-                            <el-button size="mini" @click="handleUpdateProduct(scope.$index, scope.row)">编辑
-                            </el-button>
-                            #end
-                            #if($shiro.hasPermission("CommentPicture:update"))
-                            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
-                            </el-button>
-                            #end
-                        </p>
-                    </template>
+                <el-table-column label="审核" width="150" align="center">
+                    <template slot-scope="scope">{{scope.row.status|formatTye}}</template>
                 </el-table-column>
             </el-table>
         </div>
@@ -163,7 +122,8 @@ type="text"
             { required: true, message: '请输入评价图片', trigger: 'blur' }
           ]">
                 <el-input style="width: 203px" v-model="baseForm.data.picUrl"
-                          placeholder="评价图片"></el-input>
+                          placeholder="评价图片">
+                </el-input>
             </el-form-item>
             <el-form-item label="排序" prop="sortOrder" :rules=" [
             { required: true, message: '请输入排序', trigger: 'blur' }
@@ -174,7 +134,7 @@ type="text"
             <el-form-item label="" prop="status" :rules=" [
             { required: true, message: '请输入', trigger: 'blur' }
           ]">
-                <el-input style="width: 203px" v-model="baseForm.data.status"
+                <el-input label="审核" style="width: 203px" v-model="baseForm.data.status"
                           placeholder=""></el-input>
             </el-form-item>
 
