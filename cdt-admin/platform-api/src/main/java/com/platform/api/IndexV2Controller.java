@@ -72,7 +72,7 @@ public class IndexV2Controller extends ApiBaseAction {
      */
     @ApiOperation(value = "首页包含轮播图、分类、分类下的商品、最新商品")
     @IgnoreAuth
-    @GetMapping(value = "index.json")
+    @GetMapping(value = "index")
     public Result<Map<String, Object>> index() {
         Map<String, Object> resultObj = (Map<String, Object>) redisTemplate.opsForValue().get("indexV2");
         if (resultObj == null) {
@@ -138,7 +138,7 @@ public class IndexV2Controller extends ApiBaseAction {
      */
     @ApiOperation(value = "首页新品")
     @IgnoreAuth
-    @GetMapping(value = "indexNewGoods.json")
+    @GetMapping(value = "indexNewGoods")
     public Result<List<GoodsDTO>> indexGoods(String referrerId) {
         List<GoodsDTO> goodsDTOS = (List<GoodsDTO>) redisTemplate.opsForValue().get("indexNewGoods");
         if (goodsDTOS == null) {
@@ -171,7 +171,7 @@ public class IndexV2Controller extends ApiBaseAction {
      */
     @ApiOperation(value = "首页新品更多")
     @IgnoreAuth
-    @GetMapping(value = "NewGoodsMore.json")
+    @GetMapping(value = "NewGoodsMore")
     public Result<Object> NewGoodsMore(@RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
                                        @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize) {
         //最新商品
