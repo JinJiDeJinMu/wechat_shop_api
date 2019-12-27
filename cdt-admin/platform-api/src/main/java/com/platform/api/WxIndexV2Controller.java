@@ -22,6 +22,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -44,21 +45,27 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v2/index")
 @Slf4j
-public class IndexV2Controller extends ApiBaseAction {
+public class WxIndexV2Controller extends ApiBaseAction {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
     @Autowired
     private ApiAdService adService;
+
     @Autowired
     private ApiGoodsService goodsService;
+
     @Autowired
     private ApiCategoryService categoryService;
+
     @Autowired
     private ApiAttributeCategoryMapper attributeCategoryMapper;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private MapperFacade mapperFacade;
 
     /**
      * app首页
@@ -87,7 +94,7 @@ public class IndexV2Controller extends ApiBaseAction {
             param.put("enabled", 1);
             PageHelper.startPage(0, 10, false);
             List<AttributeCategoryVo> categoryList = attributeCategoryMapper.queryList(param);
-            resultObj.put("categoryList", JsonTransfer.convertList(categoryList, AttributeCategoryDTO.class));
+            resultObj.put("categoryList", mapperFacade.mapAsList(categoryList, AttributeCategoryDTO.class));
 
             //分类下面模块的商品
             param = new HashMap<String, Object>();
@@ -145,7 +152,7 @@ public class IndexV2Controller extends ApiBaseAction {
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price");
             PageHelper.startPage(0, 300, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
-            goodsDTOS = JsonTransfer.convertList(newGoods, GoodsDTO.class);
+            goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
             redisTemplate.opsForValue().set("indexNewGoods", goodsDTOS, 10, TimeUnit.MINUTES);
             log.info("indexNewGoods数据库读取数据");
         }

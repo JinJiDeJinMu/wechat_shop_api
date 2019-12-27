@@ -1,4 +1,4 @@
-package com.platform.dto;
+package com.chundengtai.base.bean.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -13,11 +13,12 @@ import java.util.Date;
 
 
 /**
+ *
  */
 @Data
 @NoArgsConstructor
 @ApiModel(value = "产品实体dto", description = "产品实体dto类")
-public class GoodsDTO implements Serializable {
+public class GoodsDto implements Serializable {
 
     @ApiModelProperty(name = "id", value = "评论主键id", dataType = "int")
     private Integer id;
@@ -29,27 +30,27 @@ public class GoodsDTO implements Serializable {
     private Integer browse;
 
     @ApiModelProperty(value = "简明介绍")
-    private String goods_brief;
+    private String goodsBrief;
 
     //添加时间
     @ApiModelProperty(value = "添加时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date add_time;
+    private Date addTime;
 
     @ApiModelProperty(value = "商品主图")
-    private String primary_pic_url;
+    private String primaryPicUrl;
 
     //商品列表图
     @ApiModelProperty(value = "商品列表图")
-    private String list_pic_url;
+    private String listPicUrl;
 
     //市场价
     @ApiModelProperty(value = "市场价格")
-    private BigDecimal market_price;
+    private BigDecimal marketPrice;
 
     @ApiModelProperty(value = "零售价格")
-    private BigDecimal retail_price;
+    private BigDecimal retailPrice;
 
     //销售量
 //    @ApiModelProperty(value = "销售量")
@@ -57,7 +58,7 @@ public class GoodsDTO implements Serializable {
 
     //推广描述
     @ApiModelProperty(value = "推广描述")
-    private String promotion_desc;
+    private String promotionDesc;
 
 
 }
