@@ -27,6 +27,7 @@
         <result property="first_buy_money" column="first_buy_money"/>
         <result property="qrCode" column="qr_code"/>
         <result property="merchant_id" column="merchant_id"/>
+        <result column="is_distribut" property="isDistribut"/>
         <result column="first_leader" property="firstLeader"/>
         <result column="second_leader" property="secondLeader"/>
         <result property="fid" column="fid"/>

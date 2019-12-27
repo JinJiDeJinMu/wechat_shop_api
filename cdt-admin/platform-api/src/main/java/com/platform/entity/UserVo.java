@@ -57,6 +57,10 @@ public class UserVo implements Serializable {
     private Long merchant_id;
 
     /**
+     * 是否分销商
+     */
+    private Integer isDistribut;
+    /**
      * 第一个上级
      */
     private Integer firstLeader;
