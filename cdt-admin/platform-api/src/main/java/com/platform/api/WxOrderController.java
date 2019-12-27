@@ -74,7 +74,7 @@ public class WxOrderController extends ApiBaseAction {
      * 获取订单列表(要验证)
      */
     @ApiOperation(value = "获取订单列表")
-    @RequestMapping("/list.json")
+    @RequestMapping("list.json")
     public Object list(@LoginUser UserVo loginUser, Integer order_status,
                        Integer merchantId,
                        @RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -101,7 +101,7 @@ public class WxOrderController extends ApiBaseAction {
      * 获取订单列表(要验证)
      */
     @ApiOperation(value = "获取订单列表")
-    @RequestMapping("/merchantlist.json")
+    @RequestMapping("merchantlist.json")
     public Object merchantlist(@LoginUser UserVo loginUser, Integer order_status,
                                Integer merchantId,
                                @RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -132,7 +132,7 @@ public class WxOrderController extends ApiBaseAction {
      */
     @ApiOperation(value = "获取订单详情")
     @IgnoreAuth
-    @GetMapping("/detail.json")
+    @GetMapping("detail.json")
     public Object detail(Integer orderId) {
         Map resultObj = new HashMap();
         OrderVo orderInfo = orderService.queryObject(orderId);
@@ -166,7 +166,7 @@ public class WxOrderController extends ApiBaseAction {
      * @return
      */
     @ApiOperation(value = "修改订单")
-    @PostMapping("/updateSuccess.do")
+    @PostMapping("updateSuccess.do")
     public Object updateSuccess(Integer orderId) {
         OrderVo orderInfo = orderService.queryObject(orderId);
         if (orderInfo == null) {
@@ -192,7 +192,7 @@ public class WxOrderController extends ApiBaseAction {
      * 订单提交
      */
     @ApiOperation(value = "订单提交")
-    @PostMapping("/submit.do")
+    @PostMapping("submit")
     public Object submit(@LoginUser UserVo loginUser) {
         Map resultObj = null;
         try {
