@@ -14,8 +14,12 @@ import com.platform.service.ApiAdService;
 import com.platform.service.ApiCategoryService;
 import com.platform.service.ApiGoodsService;
 import com.platform.util.ApiBaseAction;
+import com.platform.util.ApiPageUtils;
 import com.platform.util.BannerType;
+import com.platform.utils.Query;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
@@ -24,6 +28,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -38,9 +43,9 @@ import java.util.stream.Collectors;
  */
 @Api(value = "窝边生活版本", tags = "窝边生活首页")
 @RestController
-@RequestMapping("/apis/v2/index")
+@RequestMapping("/api/v2/index")
 @Slf4j
-public class WxIndexV2Controller extends ApiBaseAction {
+public class IndexV2Controller extends ApiBaseAction {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
@@ -67,7 +72,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
      */
     @ApiOperation(value = "首页包含轮播图、分类、分类下的商品、最新商品")
     @IgnoreAuth
-    @GetMapping(value = "index.json")
+    @GetMapping(value = "index")
     public Result<Map<String, Object>> index() {
         Map<String, Object> resultObj = (Map<String, Object>) redisTemplate.opsForValue().get("indexV2");
         if (resultObj == null) {
@@ -133,7 +138,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
      */
     @ApiOperation(value = "首页新品")
     @IgnoreAuth
-    @GetMapping(value = "indexNewGoods.json")
+    @GetMapping(value = "indexNewGoods")
     public Result<List<GoodsDTO>> indexGoods(String referrerId) {
         List<GoodsDTO> goodsDTOS = (List<GoodsDTO>) redisTemplate.opsForValue().get("indexNewGoods");
         if (goodsDTOS == null) {
@@ -160,4 +165,59 @@ public class WxIndexV2Controller extends ApiBaseAction {
         ).collect(Collectors.toList());
     }
 
+
+    /**
+     * app首页新品查看更多
+     */
+    @ApiOperation(value = "首页新品更多")
+    @IgnoreAuth
+    @GetMapping(value = "NewGoodsMore")
+    public Result<Object> NewGoodsMore(@RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
+                                       @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize) {
+        //最新商品
+        HashMap param = new HashMap<String, Object>();
+        param.put("page", pageIndex);
+        param.put("limit", pagesize);
+        param.put("is_new", 1);
+        param.put("is_delete", 0);
+        param.put("is_on_sale", 1);
+        param.put("sidx", "add_time");
+        param.put("order", "desc");
+        param.put("fields", "id, name, list_pic_url, retail_price,market_price");
+        Query query = new Query(param);
+//        PageHelper.startPage(pageIndex, pagesize, false);
+        List<GoodsVo> newGoods = goodsService.queryList(query);
+        int total = goodsService.queryTotal(query);
+        ApiPageUtils pageUtil = new ApiPageUtils(newGoods, total, query.getLimit(), query.getPage());
+        return Result.success(pageUtil);
+    }
+
+
+    /**
+     * app首页查看更多
+     */
+    @ApiOperation(value = "首页查看更多")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "attribute_category", value = "商品类型id", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageIndex", value = "页码", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pagesize", value = "每页显示数量 ", dataType = "int", paramType = "query")
+    })
+    @IgnoreAuth
+    @GetMapping(value = "more")
+    public Result<Map<String, Object>> indexMore(Integer attribute_category,
+                                                 @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
+                                                 @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize) {
+        //最新商品
+        Map<String, Object> resultObj = new HashMap<String, Object>();
+        HashMap param = new HashMap<String, Object>();
+        param.put("attribute_category", attribute_category);
+        param.put("sidx", "add_time");
+        param.put("order", "desc");
+        param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price,market_price as market_price");
+        PageHelper.startPage(pageIndex, pagesize, false);
+        List<GoodsVo> goodsVoList = goodsService.queryList(param);
+        Map<String, Object> newCategory = new HashMap<String, Object>();
+        newCategory.put("goodsList", goodsVoList);
+        return Result.success(newCategory);
+    }
 }
