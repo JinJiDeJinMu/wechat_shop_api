@@ -79,7 +79,18 @@ let vue = new Vue({
                 return '未支付';
             }
         },
-
+        StatusType(value) {
+            if (value === 398) {
+                return '未满七天';
+            } else if (value === 399) {
+                return '已退订';
+            } else if (value === 400) {
+                return '未完成';
+            } else if (value === 402) {
+                return '已完成';
+            }
+            return value;
+        }
     },
     methods: {
         saveOrUpdate: function (event) {
