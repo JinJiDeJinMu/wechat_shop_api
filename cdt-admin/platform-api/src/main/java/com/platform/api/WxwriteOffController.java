@@ -46,7 +46,7 @@ public class WxwriteOffController extends ApiBaseAction {
     }
 
     @ApiOperation(value = "二维码核销", httpMethod = "POST")
-    @RequestMapping("/writeOffCodeExecute")
+    @PostMapping("/writeOffCodeExecute")
     @ResponseBody
     @IgnoreAuth
     public Object writeOffCodeExecute(@LoginUser UserVo loginUser
