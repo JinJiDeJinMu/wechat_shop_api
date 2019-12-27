@@ -33,7 +33,7 @@ import java.util.Map;
 
 @Api(value = "未名严选", tags = "未名严选")
 @RestController
-@RequestMapping("/api/v2/auth")
+@RequestMapping("/apis/v2/auth")
 @Slf4j
 public class WxUserController extends ApiBaseAction {
     @Autowired
@@ -56,7 +56,7 @@ public class WxUserController extends ApiBaseAction {
      */
     @ApiOperation(value = "登录")
     @IgnoreAuth
-    @PostMapping("wxLogin")
+    @PostMapping("wxLogin.do")
     public Object loginByWeixin(@RequestBody LoginInfo loginInfo, HttpServletRequest request) {
         //获取openid
         String requestUrl = ApiUserUtils.getWebAccess(loginInfo.getCode());
@@ -74,7 +74,6 @@ public class WxUserController extends ApiBaseAction {
 //        String sha1 = CommonUtil.getSha1(fullUserInfo.getRawData() + sessionData.getString("session_key"));
 //        if (!fullUserInfo.getSignature().equals(sha1)) {
 //        	 logger.info("登录失败---验证用户信息完整性"+fullUserInfo.getSignature());
-//        	 logger.info("登录失败---验证用户信息完整性 sha1"+sha1);
 //            return toResponsFail("登录失败");
 //        }
         User userVo = newUserService.getOne(new QueryWrapper<User>().lambda().eq(User::getWeixinOpenid, openid));
