@@ -43,6 +43,9 @@ public class CdtDistridetailController {
         if (params.getData().getOrderSn() != null) {
             conditon.eq("order_sn", params.getData().getOrderSn());
         }
+        if (params.getData().getStatus() != null) {
+            conditon.eq("status", params.getData().getStatus());
+        }
         PageHelper.startPage(params.getPageIndex(), params.getPageSize());
         List<CdtDistridetail> collectList = cdtDistridetailService.list(conditon);
         PageInfo pageInfo = new PageInfo(collectList);
