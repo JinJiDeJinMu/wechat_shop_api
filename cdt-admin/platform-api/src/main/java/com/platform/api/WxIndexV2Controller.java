@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  */
 @Api(value = "窝边生活版本", tags = "窝边生活首页")
 @RestController
-@RequestMapping("/api/v2/index")
+@RequestMapping("/apis/v2/index")
 @Slf4j
 public class WxIndexV2Controller extends ApiBaseAction {
     @Autowired
