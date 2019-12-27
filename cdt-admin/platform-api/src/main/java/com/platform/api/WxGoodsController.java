@@ -97,7 +97,7 @@ public class WxGoodsController extends ApiBaseAction {
      */
     @ApiOperation(value = "商品首页")
     @IgnoreAuth
-    @GetMapping(value = "index")
+    @GetMapping(value = "index.json")
     public Object index(Integer brand_id) {
         Map param = new HashMap();
         param.put("is_delete", 0);

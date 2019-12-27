@@ -74,7 +74,7 @@ public class WxOrderController extends ApiBaseAction {
      * 获取订单列表(要验证)
      */
     @ApiOperation(value = "获取订单列表")
-    @RequestMapping("list")
+    @RequestMapping("/list.json")
     public Object list(@LoginUser UserVo loginUser, Integer order_status,
                        Integer merchantId,
                        @RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -101,7 +101,7 @@ public class WxOrderController extends ApiBaseAction {
      * 获取订单列表(要验证)
      */
     @ApiOperation(value = "获取订单列表")
-    @RequestMapping("merchantlist")
+    @RequestMapping("/merchantlist.json")
     public Object merchantlist(@LoginUser UserVo loginUser, Integer order_status,
                                Integer merchantId,
                                @RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -132,7 +132,7 @@ public class WxOrderController extends ApiBaseAction {
      */
     @ApiOperation(value = "获取订单详情")
     @IgnoreAuth
-    @GetMapping("detail")
+    @GetMapping("/detail.json")
     public Object detail(Integer orderId) {
         Map resultObj = new HashMap();
         OrderVo orderInfo = orderService.queryObject(orderId);
@@ -146,11 +146,6 @@ public class WxOrderController extends ApiBaseAction {
         List<OrderGoodsVo> orderGoods = orderGoodsService.queryList(orderGoodsParam);
         //订单最后支付时间
         if (orderInfo.getOrder_status() == 0) {
-            // if (moment().subtract(60, 'minutes') < moment(orderInfo.add_time)) {
-//            orderInfo.final_pay_time = moment("001234", "Hmmss").format("mm:ss")
-            // } else {
-            //     //超过时间不支付，更新订单状态为取消
-            // }
         }
 
         //订单可操作的选择,删除，支付，收货，评论，退换货
@@ -171,7 +166,7 @@ public class WxOrderController extends ApiBaseAction {
      * @return
      */
     @ApiOperation(value = "修改订单")
-    @PostMapping("updateSuccess")
+    @PostMapping("/updateSuccess.do")
     public Object updateSuccess(Integer orderId) {
         OrderVo orderInfo = orderService.queryObject(orderId);
         if (orderInfo == null) {
@@ -197,7 +192,7 @@ public class WxOrderController extends ApiBaseAction {
      * 订单提交
      */
     @ApiOperation(value = "订单提交")
-    @PostMapping("submit")
+    @PostMapping("/submit.do")
     public Object submit(@LoginUser UserVo loginUser) {
         Map resultObj = null;
         try {
@@ -215,7 +210,7 @@ public class WxOrderController extends ApiBaseAction {
      * 获取订单列表
      */
     @ApiOperation(value = "取消订单")
-    @RequestMapping("cancelOrder")
+    @RequestMapping("cancelOrder.do")
     public Object cancelOrder(@LoginUser UserVo loginUser, Integer orderId) {
         Order orderVo = cdtOrderService.getById(orderId);
         BigDecimal allPrice = BigDecimal.ZERO;
@@ -333,7 +328,7 @@ public class WxOrderController extends ApiBaseAction {
      * 确认收货
      */
     @ApiOperation(value = "确认收货")
-    @RequestMapping("confirmOrder")
+    @RequestMapping("confirmOrder.do")
     public Object confirmOrder(@LoginUser UserVo loginUser, Integer orderId) {
         try {
             Order orderVo = cdtOrderService.getById(orderId);
