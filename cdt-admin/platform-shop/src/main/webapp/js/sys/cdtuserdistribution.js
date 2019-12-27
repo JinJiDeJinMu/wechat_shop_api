@@ -1,9 +1,14 @@
 const defaultModel = {
     id: null,
     userId: null,
-    parentId: null,
-    fxLevel: null,
-    sponsorId: null,
+    userName: null,
+    goodsId: null,
+    goodsName: null,
+    specId: null,
+    shareNum: null,
+    salesNum: null,
+    mechantId: null,
+    createdBy: null,
     createdTime: null,
     token: null,
 };
@@ -58,15 +63,6 @@ let vue = new Vue({
         this.getList();
     },
     filters: {
-        formatPayType(value) {
-            if (value === 1) {
-                return '支付宝';
-            } else if (value === 2) {
-                return '微信';
-            } else {
-                return '未支付';
-            }
-        },
         dateFormat: function (time) {
             var date = new Date(time);
             var year = date.getFullYear();
@@ -76,11 +72,20 @@ let vue = new Vue({
             var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
             var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
             return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+        },
+        formatPayType(value) {
+            if (value === 1) {
+                return '支付宝';
+            } else if (value === 2) {
+                return '微信';
+            } else {
+                return '未支付';
+            }
         }
     },
     methods: {
         saveOrUpdate: function (event) {
-            var url = this.baseForm.data.id == null ? "../cdtDistributionLevel/saveModel.json" : "../cdtDistributionLevel/updateModel.json";
+            var url = this.baseForm.data.id == null ? "../cdtUserDistribution/saveModel.json" : "../cdtUserDistribution/updateModel.json";
             var params = JSON.stringify(this.baseForm.data);
             let that = this;
             Ajax.request({
@@ -104,7 +109,7 @@ let vue = new Vue({
             let that = this;
             Ajax.request({
                 type: "POST",
-                url: "../cdtDistributionLevel/deleteModel.json",
+                url: "../cdtUserDistribution/deleteModel.json",
                 contentType: "application/json",
                 params: JSON.stringify(ids),
                 successCallback: function (res) {
@@ -117,7 +122,7 @@ let vue = new Vue({
         getModel: function (id) {
             let that = this;
             Ajax.request({
-                url: "../cdtDistributionLevel/getModel/" + id + ".json",
+                url: "../cdtUserDistribution/getModel/" + id + ".json",
                 async: true,
                 successCallback: function (res) {
                     that.baseForm.data = res.data;
@@ -130,7 +135,7 @@ let vue = new Vue({
             let that = this;
             Ajax.request({
                 type: "POST",
-                url: "../cdtDistributionLevel/list.json",
+                url: "../cdtUserDistribution/list.json",
                 contentType: "application/json",
                 params: JSON.stringify(params),
                 async: true,
@@ -141,13 +146,6 @@ let vue = new Vue({
                     that.total = res.data.total;
                 }
             });
-        },
-        handleResetSearch: function () {
-            this.baseForm.data = Object.assign({}, defaultModel);
-            this.getList();
-        },
-        handleSearchList: function () {
-            this.getList();
         },
         getSelectRowIds() {
             let ids = [];
@@ -248,14 +246,14 @@ let vue = new Vue({
         },
         add: function () {
             this.showList = false;
-            this.title = "新增分销层级表 分销层级表-绑定用户关系";
+            this.title = "新增用户分布 用户分布";
         },
         updateFun: function (id) {
             if (id == null) {
                 return;
             }
             this.showList = false;
-            this.title = "修改分销层级表 分销层级表-绑定用户关系";
+            this.title = "修改用户分布 用户分布";
             this.getModel(id);
         },
         dataFormSubmit: function (name) {
