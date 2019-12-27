@@ -23,6 +23,10 @@
             <mvc:mapping path="/api/**"/>
             <ref bean="authorizationInterceptor"/>
         </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/apis/**"/>
+            <ref bean="authorizationInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
 
     <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>

@@ -51,7 +51,6 @@
 				/statics/**=anon
 				/h5/**=anon
 				/apis/**=anon
-				/apis/**=noSessionCreation
 				/api/**=anon
 				/api/**=noSessionCreation
 				/login.html=anon

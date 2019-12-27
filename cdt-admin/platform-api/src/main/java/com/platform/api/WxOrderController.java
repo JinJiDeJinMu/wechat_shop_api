@@ -166,7 +166,7 @@ public class WxOrderController extends ApiBaseAction {
      * @return
      */
     @ApiOperation(value = "修改订单")
-    @PostMapping("updateSuccess.do")
+    @GetMapping("updateSuccess.do")
     public Object updateSuccess(Integer orderId) {
         OrderVo orderInfo = orderService.queryObject(orderId);
         if (orderInfo == null) {
@@ -192,7 +192,7 @@ public class WxOrderController extends ApiBaseAction {
      * 订单提交
      */
     @ApiOperation(value = "订单提交")
-    @PostMapping("submit")
+    @PostMapping("submit.do")
     public Object submit(@LoginUser UserVo loginUser) {
         Map resultObj = null;
         try {
@@ -210,7 +210,7 @@ public class WxOrderController extends ApiBaseAction {
      * 获取订单列表
      */
     @ApiOperation(value = "取消订单")
-    @RequestMapping("cancelOrder.do")
+    @GetMapping("cancelOrder.do")
     public Object cancelOrder(@LoginUser UserVo loginUser, Integer orderId) {
         Order orderVo = cdtOrderService.getById(orderId);
         BigDecimal allPrice = BigDecimal.ZERO;
@@ -328,7 +328,7 @@ public class WxOrderController extends ApiBaseAction {
      * 确认收货
      */
     @ApiOperation(value = "确认收货")
-    @RequestMapping("confirmOrder.do")
+    @GetMapping("confirmOrder.do")
     public Object confirmOrder(@LoginUser UserVo loginUser, Integer orderId) {
         try {
             Order orderVo = cdtOrderService.getById(orderId);
