@@ -37,13 +37,13 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-    <mvc:cors>
-        <mvc:mapping path="/**"
-                     allowed-origins="http://localhost:8088"
-                     allowed-methods="POST, GET, OPTIONS, DELETE, PUT"
-                     allowed-headers="*"
-                     allow-credentials="true"/>
-    </mvc:cors>
+    <!--    <mvc:cors>-->
+    <!--        <mvc:mapping path="/**"-->
+    <!--                     allowed-origins="http://localhost:8088"-->
+    <!--                     allowed-methods="POST, GET, OPTIONS, DELETE, PUT"-->
+    <!--                     allowed-headers="*"-->
+    <!--                     allow-credentials="true"/>-->
+    <!--    </mvc:cors>-->
 
     <!-- 为了加载拦截器 需要 日志拦截器 （登录拦截和权限拦截已在shiro实现，看实现 情况处理） -->
     <mvc:interceptors>
