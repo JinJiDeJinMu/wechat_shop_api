@@ -60,19 +60,8 @@ let vue = new Vue({
         this.getList();
     },
     filters: {
-        formatPayType(value) {
-            if (value === 1) {
-                return '支付宝';
-            } else if (value === 2) {
-                return '微信';
-            } else {
-                return '未支付';
-            }
-        }
-    },
-    methods: {
         dateFormat: function (time) {
-            var date = new Date(time.addTime);
+            var date = new Date(time);
             var year = date.getFullYear();
             var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
             var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
@@ -81,6 +70,18 @@ let vue = new Vue({
             var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
             return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
         },
+        formatPayType(value) {
+            if (value === 1) {
+                return '支付宝';
+            } else if (value === 2) {
+                return '微信';
+            } else {
+                return '未支付';
+            }
+        },
+
+    },
+    methods: {
         saveOrUpdate: function (event) {
             var url = this.baseForm.data.id == null ? "../cdtDistridetail/saveModel.json" : "../cdtDistridetail/updateModel.json";
             var params = JSON.stringify(this.baseForm.data);
@@ -174,7 +175,7 @@ let vue = new Vue({
             if (!this.checkSelected()) {
                 return;
             }
-            this.$confirm('是否要进行该批量操作?', '提示', {
+            /*this.$confirm('是否要进行该批量操作?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -195,7 +196,7 @@ let vue = new Vue({
             }
             this.getList();
         })
-            ;
+            ;*/
 
         },
         handleResetSearch: function () {

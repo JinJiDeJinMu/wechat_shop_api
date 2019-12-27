@@ -74,11 +74,9 @@ let vue = new Vue({
             } else {
                 return '其他';
             }
-        }
-    },
-    methods: {
+        },
         dateFormat: function (time) {
-            var date = new Date(time.addTime);
+            var date = new Date(time);
             var year = date.getFullYear();
             var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
             var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
@@ -86,7 +84,10 @@ let vue = new Vue({
             var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
             var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
             return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
-        },
+        }
+    },
+    methods: {
+
         saveOrUpdate: function (event) {
             var url = this.baseForm.data.id == null ? "../commentPicture/saveModel.json" : "../commentPicture/updateModel.json";
             var params = JSON.stringify(this.baseForm.data);

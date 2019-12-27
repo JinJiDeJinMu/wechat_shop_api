@@ -50,9 +50,6 @@ public class CdtDistributionLevelController {
         if (params.getData().getSponsorId() != null) {
             conditon.eq("sponsor_id", params.getData().getSponsorId());
         }
-        if (params.getData().getToken() != null) {
-            conditon.eq("token", params.getData().getToken());
-        }
         PageHelper.startPage(params.getPageIndex(), params.getPageSize());
         List<CdtDistributionLevel> collectList = cdtDistributionLevelService.list(conditon);
         PageInfo pageInfo = new PageInfo(collectList);

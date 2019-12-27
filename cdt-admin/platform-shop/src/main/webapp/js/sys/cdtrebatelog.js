@@ -1,11 +1,20 @@
 const defaultModel = {
     id: null,
-    userId: null,
-    parentId: null,
-    fxLevel: null,
-    sponsorId: null,
-    createdTime: null,
+    goldUserId: null,
+    buyUserId: null,
+    nickname: null,
+    orderId: null,
+    orderSn: null,
+    goodsPrice: null,
+    money: null,
+    level: null,
+    completeTime: null,
+    status: null,
+    confirmTime: null,
+    remark: null,
+    mechantId: null,
     token: null,
+    createdTime: null,
 };
 let vue = new Vue({
     el: '#app',
@@ -67,6 +76,38 @@ let vue = new Vue({
                 return '未支付';
             }
         },
+        orderFormat: function (value) {
+            if (value == '0') {
+                return '待付款';
+            } else if (value == '101') {
+                return '订单已取消';
+            } else if (value == '102') {
+                return '订单已删除';
+            } else if (value == '201') {
+                return '订单已付款';
+            } else if (value == '206') {
+                return '待使用';
+            } else if (value == '207') {
+                return '待XX';
+            } else if (value == '300') {
+                return '订单已发货';
+            } else if (value == '301') {
+                return '用户确认收货';
+            } else if (value == '401') {
+                return '退款';
+            } else if (value == '402') {
+                return '完成';
+            } else if (value == '501') {
+                return '买家申请退货';
+            } else if (value == '502') {
+                return '退货寄回中';
+            } else if (value == '503') {
+                return '仓库已收退货';
+            } else if (value == '504') {
+                return '仓库拒绝退货';
+            }
+            return value;
+        },
         dateFormat: function (time) {
             var date = new Date(time);
             var year = date.getFullYear();
@@ -79,8 +120,19 @@ let vue = new Vue({
         }
     },
     methods: {
+        dateFormat: function (time) {
+            var date = new Date(time.addTime);
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+            var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+            var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+        },
+
         saveOrUpdate: function (event) {
-            var url = this.baseForm.data.id == null ? "../cdtDistributionLevel/saveModel.json" : "../cdtDistributionLevel/updateModel.json";
+            var url = this.baseForm.data.id == null ? "../cdtRebateLog/saveModel.json" : "../cdtRebateLog/updateModel.json";
             var params = JSON.stringify(this.baseForm.data);
             let that = this;
             Ajax.request({
@@ -104,7 +156,7 @@ let vue = new Vue({
             let that = this;
             Ajax.request({
                 type: "POST",
-                url: "../cdtDistributionLevel/deleteModel.json",
+                url: "../cdtRebateLog/deleteModel.json",
                 contentType: "application/json",
                 params: JSON.stringify(ids),
                 successCallback: function (res) {
@@ -117,7 +169,7 @@ let vue = new Vue({
         getModel: function (id) {
             let that = this;
             Ajax.request({
-                url: "../cdtDistributionLevel/getModel/" + id + ".json",
+                url: "../cdtRebateLog/getModel/" + id + ".json",
                 async: true,
                 successCallback: function (res) {
                     that.baseForm.data = res.data;
@@ -130,7 +182,7 @@ let vue = new Vue({
             let that = this;
             Ajax.request({
                 type: "POST",
-                url: "../cdtDistributionLevel/list.json",
+                url: "../cdtRebateLog/list.json",
                 contentType: "application/json",
                 params: JSON.stringify(params),
                 async: true,
@@ -141,13 +193,6 @@ let vue = new Vue({
                     that.total = res.data.total;
                 }
             });
-        },
-        handleResetSearch: function () {
-            this.baseForm.data = Object.assign({}, defaultModel);
-            this.getList();
-        },
-        handleSearchList: function () {
-            this.getList();
         },
         getSelectRowIds() {
             let ids = [];
@@ -248,14 +293,14 @@ let vue = new Vue({
         },
         add: function () {
             this.showList = false;
-            this.title = "新增分销层级表 分销层级表-绑定用户关系";
+            this.title = "新增分销记录表 分销记录表";
         },
         updateFun: function (id) {
             if (id == null) {
                 return;
             }
             this.showList = false;
-            this.title = "修改分销层级表 分销层级表-绑定用户关系";
+            this.title = "修改分销记录表 分销记录表";
             this.getModel(id);
         },
         dataFormSubmit: function (name) {
