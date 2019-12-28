@@ -84,7 +84,7 @@ public class OrdercashApplyServiceImpl implements OrdercashApplyService {
     @Override
     public boolean wechatMoneyToUser(UserEntity userEntity, Double amount) {
 
-        if(userEntity == null || userEntity.getMerchantId() == null){
+        /*if(userEntity == null || userEntity.getMerchantId() == null){
             log.info("UserEntity is null or MerchantId is null or RealName is null");
             return false;
         }
@@ -102,7 +102,7 @@ public class OrdercashApplyServiceImpl implements OrdercashApplyService {
         if("SUCCESS".equals(ret.getResult_code())) {
             redisTemplate.delete("backtx" + userEntity.getMerchantId());
             return true;
-        }
+        }*/
         return false;
     }
 

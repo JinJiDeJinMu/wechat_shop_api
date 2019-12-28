@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+        #parse("sys/header.html")
+</head>
+<body>
+<div id="app" v-cloak>
+    <div v-show="showList">
+        <Row :gutter="16">
+            <el-card class="filter-container" shadow="never">
+                <div>
+                    <el-button
+                            style="float: right"
+                            @click="getList()"
+                            type="primary"
+                            size="small">
+                        查询结果
+                    </el-button>
+                    <el-button
+                            style="float: right;margin-right: 15px"
+                            @click="handleResetSearch()"
+                            size="small">
+                        重置
+                    </el-button>
+            </div>
+            <div style="margin-top: 15px">
+                <el-form :inline="true" :model="baseForm.data" size="small" label-width="120px">
+                                            <el-form-item label="id">
+                            <el-input style="width: 203px" v-model="baseForm.data.id"
+                                      placeholder="id"></el-input>
+                        </el-form-item>
+                                            <el-form-item label="订单号">
+                            <el-input style="width: 203px" v-model="baseForm.data.orderSn"
+                                      placeholder="订单号"></el-input>
+                        </el-form-item>
+                                            <el-form-item label="提现账号id">
+                            <el-input style="width: 203px" v-model="baseForm.data.advanceId"
+                                      placeholder="提现账号id"></el-input>
+                        </el-form-item>
+                                            <el-form-item label="状态">
+                                            <el-select style="width: 203px" clearable v-model="baseForm.data.status">
+                                                <el-option value="0" label="未审核">未审核</el-option>
+                                                <el-option value="1" label="已通过">已通过</el-option>
+                                            </el-select>
+                        </el-form-item>
+
+                    <el-button style="margin-right: 20px;float:right" class="search-button" @click="handleBatchOperate()" type="primary"
+                               size="small">
+                        审核
+                    </el-button>
+                                                                                                                                                                                                                                            </el-form>
+            </div>
+        </el-card>
+        </Row>
+        <div class="table-container">
+            <el-table ref="productTable" :data="list" style="width: 100%" @selection-change="handleSelectionChange"
+                      v-loading="listLoading"
+                      border>
+                <el-table-column type="selection" width="60" align="center"></el-table-column>
+                                                            <el-table-column label="id" width="100" align="center">
+                            <template slot-scope="scope">{{scope.row.id}}</template>
+                        </el-table-column>
+                                                                                <el-table-column label="订单号" width="160" align="center">
+                            <template slot-scope="scope">{{scope.row.orderSn}}</template>
+                        </el-table-column>
+                                                                                <el-table-column label="返利金额" width="120" align="center">
+                            <template slot-scope="scope">{{scope.row.money}}</template>
+                        </el-table-column>
+                                                                                <el-table-column label="提现账号id" width="100" align="center">
+                            <template slot-scope="scope">{{scope.row.advanceId}}</template>
+                        </el-table-column>
+                                                                                <el-table-column label="账号真实姓名" width="120" align="center">
+                            <template slot-scope="scope">{{scope.row.advanceName}}</template>
+                        </el-table-column>
+                                                                                <el-table-column label="申请时间" width="160" align="center">
+                            <template slot-scope="scope">{{scope.row.applyTime|dateFormat|dateFormat}}</template>
+                        </el-table-column>
+                                                                                <el-table-column label="申请人" width="100" align="center">
+                            <template slot-scope="scope">{{scope.row.applyId}}</template>
+                        </el-table-column>
+                                                                                <el-table-column label="更新时间" width="160" align="center">
+                            <template slot-scope="scope">{{scope.row.updateTime|dateFormat|dateFormat}}</template>
+                        </el-table-column>
+                                                                                <el-table-column label="更新人" width="100" align="center">
+                            <template slot-scope="scope">{{scope.row.updateId}}</template>
+                        </el-table-column>
+                                                                                <el-table-column label="状态" width="100" align="center">
+                            <template slot-scope="scope">{{scope.row.status|statusType}}</template>
+                        </el-table-column>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <!-- <el-table-column label="审核状态" width="100" align="center">
+             <template slot-scope="scope">
+                 <p>{{scope.row.verifyStatus | verifyStatusFilter}}</p>
+                 <p>
+                     <el-button
+                             type="text"
+                             @click="handleShowVerifyDetail(scope.index, scope.row)">审核详情
+                     </el-button>
+                 </p>
+             </template>
+         </el-table-column> -->
+                <!--<el-table-column label="操作" width="160" align="center">
+                    <template slot-scope="scope">
+                        <p>
+                            #if($shiro.hasPermission("CdtDistridetailApply:update"))
+                            <el-button size="mini" @click="handleUpdateProduct(scope.$index, scope.row)">编辑
+                            </el-button>
+                            #end
+                            #if($shiro.hasPermission("CdtDistridetailApply:update"))
+                            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
+                            </el-button>
+                            #end
+                        </p>
+                    </template>
+                </el-table-column>-->
+            </el-table>
+        </div>
+        <div class="pagination-container">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                           layout="total, sizes,prev, pager, next,jumper"
+                           :page-size="baseForm.pageSize" :page-sizes="[10,20,30,50,100]"
+                           :current-page.sync="baseForm.pageIndex" :total="total">
+            </el-pagination>
+        </div>
+    </div>
+</div>
+
+<script src="${rc.contextPath}/js/sys/cdtdistridetailapply.js?time=${date.systemTime}"></script>
+</body>
+</html>
