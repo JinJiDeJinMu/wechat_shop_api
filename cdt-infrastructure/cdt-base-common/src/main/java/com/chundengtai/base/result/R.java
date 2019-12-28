@@ -1,4 +1,4 @@
-package com.platform.utils;
+package com.chundengtai.base.result;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +11,7 @@ public class R extends HashMap<String, Object> {
 
     public R() {
         put("code", 0);
+        put("msg", "执行成功");
     }
 
     public static R error() {
