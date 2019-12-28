@@ -109,11 +109,6 @@ public class WxDistributionController {
                     .eq(CdtDistridetail::getStatus, DistributionStatus.NOT_SERVEN_ORDER.getCode());
             unsetMoney = distridetailService.getUnsetMoney(conditionOne);
 
-//            QueryWrapper<CdtDistridetail> queryWrapper = new QueryWrapper<>();
-//            queryWrapper.select("sum(money)").lambda()
-//                    .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue())
-//                    .eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER.getCode());
-
             LambdaQueryWrapper<CdtDistridetail> conditionTwo = new QueryWrapper<CdtDistridetail>().lambda()
                     .eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER.getCode())
                     .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue());
