@@ -1,10 +1,12 @@
 package com.platform.api;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtDistributionLevel;
 import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.bean.CdtRebateLog;
 import com.chundengtai.base.bean.CdtUserSummary;
+import com.chundengtai.base.bean.dto.CdtRebateLogDto;
 import com.chundengtai.base.bean.dto.CdtUserSummaryDto;
 import com.chundengtai.base.service.*;
 import com.github.pagehelper.PageHelper;
@@ -93,11 +95,19 @@ public class WxDistributionController {
     @GetMapping("/getUserShareOrder.json")
     @ResponseBody
     @IgnoreAuth
-    public R getUserShareOrder(@LoginUser UserVo loginUser, Integer pageIndex, Integer pageSize) {
+    public R getUserShareOrder(@LoginUser UserVo loginUser, Integer pageIndex,
+                               Integer status,
+                               Integer pageSize) {
         PageHelper.startPage(pageIndex, pageSize);
-        List<CdtRebateLog> resultList = rebateLogService.list(new QueryWrapper<CdtRebateLog>().lambda()
-                .eq(CdtRebateLog::getGoldUserId, loginUser.getUserId().intValue()));
-        PageInfo pageInfo = new PageInfo(resultList);
+        LambdaQueryWrapper<CdtRebateLog> condition = new QueryWrapper<CdtRebateLog>().lambda()
+                .eq(CdtRebateLog::getGoldUserId, loginUser.getUserId().intValue());
+        if (status != null && status != 0) {
+            condition.eq(CdtRebateLog::getStatus, status);
+        }
+        List<CdtRebateLog> resultList = rebateLogService.list(condition);
+
+        List<CdtRebateLogDto> result = mapperFacade.mapAsList(resultList, CdtRebateLogDto.class);
+        PageInfo pageInfo = new PageInfo(result);
         return R.ok().put("data", pageInfo);
     }
 }
