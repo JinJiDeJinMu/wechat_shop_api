@@ -1,5 +1,6 @@
 package com.chundengtai.base.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.dao.CdtDistridetailMapper;
@@ -8,6 +9,7 @@ import com.chundengtai.base.utils.ReflectUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -20,6 +22,16 @@ import java.util.List;
  */
 @Service
 public class CdtDistridetailServiceImpl extends ServiceImpl<CdtDistridetailMapper, CdtDistridetail> implements CdtDistridetailService {
+
+    @Override
+    public BigDecimal getUnsetMoney(Wrapper wrapper) {
+        return baseMapper.getUnsetMoney(wrapper);
+    }
+
+    @Override
+    public BigDecimal getTotalMoney(Wrapper wrapper) {
+        return baseMapper.getTotalMoney(wrapper);
+    }
 
     /**
      * 新增一条用户购买分销得钱记录
