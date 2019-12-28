@@ -71,7 +71,10 @@ public class CdtDistridetailDto implements Serializable {
   private Integer type;
 
   public String getTypeName() {
-    return DistributionTypeEnum.getEnumByKey(this.type).getDesc();
+    if (this.type != null) {
+      return DistributionTypeEnum.getEnumByKey(this.type).getDesc();
+    }
+    return "";
   }
 
   private String typeName;
@@ -83,7 +86,10 @@ public class CdtDistridetailDto implements Serializable {
   private Integer status;
 
   public String getStatusText() {
-    return DistributionStatus.getEnumByKey(this.status).getDesc();
+    if (this.status != null) {
+      return DistributionStatus.getEnumByKey(this.status).getDesc();
+    }
+    return "";
   }
 
   private String statusText;

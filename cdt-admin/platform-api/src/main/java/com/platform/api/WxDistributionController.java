@@ -92,12 +92,13 @@ public class WxDistributionController {
     public R getUserInfoarnings(@LoginUser UserVo loginUser, Integer pageIndex, Integer pageSize) {
 
         LambdaQueryWrapper<CdtDistridetail> condition = new QueryWrapper<CdtDistridetail>().lambda()
-                .eq(CdtDistridetail::getUserId, loginUser.getUserId().intValue());
+                .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue());
 
         PageHelper.startPage(pageIndex, pageSize);
         List<CdtDistridetail> resultList = distridetailService.list(
                 condition);
 
+        if (resultList.size() == 0) return R.error("已经是最后一页");
         List<CdtDistridetailDto> dtoList = mapperFacade.mapAsList(resultList, CdtDistridetailDto.class);
         PageInfo pageInfo = new PageInfo(dtoList);
         BigDecimal unsetMoney = BigDecimal.ZERO;
@@ -108,9 +109,14 @@ public class WxDistributionController {
                     .eq(CdtDistridetail::getStatus, DistributionStatus.NOT_SERVEN_ORDER.getCode());
             unsetMoney = distridetailService.getUnsetMoney(conditionOne);
 
-            LambdaQueryWrapper<CdtDistridetail> conditionTwo = condition;
-            conditionOne.eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER.getCode());
+//            QueryWrapper<CdtDistridetail> queryWrapper = new QueryWrapper<>();
+//            queryWrapper.select("sum(money)").lambda()
+//                    .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue())
+//                    .eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER.getCode());
 
+            LambdaQueryWrapper<CdtDistridetail> conditionTwo = new QueryWrapper<CdtDistridetail>().lambda()
+                    .eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER.getCode())
+                    .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue());
             totalMoney = distridetailService.getTotalMoney(conditionTwo);
         }
         return R.ok().put("data", pageInfo).put("unsetMoney", unsetMoney).put("totalMoney", totalMoney);

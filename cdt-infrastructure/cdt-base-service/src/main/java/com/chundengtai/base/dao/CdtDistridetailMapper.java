@@ -19,9 +19,9 @@ import java.math.BigDecimal;
  */
 public interface CdtDistridetailMapper extends BaseMapper<CdtDistridetail> {
 
-    @Select("select count(money) from cdt_distridetail ${ew.customSqlSegment}")
+    @Select("select sum(money) from cdt_distridetail ${ew.customSqlSegment}")
     BigDecimal getUnsetMoney(@Param(Constants.WRAPPER) Wrapper wrapper);
 
-    @Select("select count(money) from cdt_distridetail ${ew.customSqlSegment}")
+    @Select("select sum(money) from cdt_distridetail ${ew.customSqlSegment}")
     BigDecimal getTotalMoney(@Param(Constants.WRAPPER) Wrapper wrapper);
 }

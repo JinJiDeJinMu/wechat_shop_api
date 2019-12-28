@@ -25,12 +25,12 @@ public class CdtDistridetailServiceImpl extends ServiceImpl<CdtDistridetailMappe
 
     @Override
     public BigDecimal getUnsetMoney(Wrapper wrapper) {
-        return this.getUnsetMoney(wrapper);
+        return baseMapper.getUnsetMoney(wrapper);
     }
 
     @Override
     public BigDecimal getTotalMoney(Wrapper wrapper) {
-        return this.getTotalMoney(wrapper);
+        return baseMapper.getTotalMoney(wrapper);
     }
 
     /**
