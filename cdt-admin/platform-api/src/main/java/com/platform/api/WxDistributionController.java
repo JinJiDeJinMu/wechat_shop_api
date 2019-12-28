@@ -9,6 +9,7 @@ import com.chundengtai.base.bean.CdtUserSummary;
 import com.chundengtai.base.bean.dto.CdtRebateLogDto;
 import com.chundengtai.base.bean.dto.CdtUserSummaryDto;
 import com.chundengtai.base.service.*;
+import com.chundengtai.base.weixinapi.DistributionStatus;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.platform.annotation.IgnoreAuth;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Api(tags = "v2分销中心管理")
@@ -87,11 +89,29 @@ public class WxDistributionController {
     @GetMapping("/getUserEarnings.json")
     @ResponseBody
     public R getUserInfoarnings(@LoginUser UserVo loginUser, Integer pageIndex, Integer pageSize) {
+
+        LambdaQueryWrapper<CdtDistridetail> condition = new QueryWrapper<CdtDistridetail>().lambda()
+                .eq(CdtDistridetail::getUserId, loginUser.getUserId().intValue());
+
         PageHelper.startPage(pageIndex, pageSize);
-        List<CdtDistridetail> resultList = distridetailService.list(new QueryWrapper<CdtDistridetail>().lambda()
-                .eq(CdtDistridetail::getUserId, loginUser.getUserId().intValue()));
+        List<CdtDistridetail> resultList = distridetailService.list(
+                condition);
+
         PageInfo pageInfo = new PageInfo(resultList);
-        return R.ok().put("data", pageInfo);
+        BigDecimal unsetMoney = BigDecimal.ZERO;
+        BigDecimal totalMoney = BigDecimal.ZERO;
+        if (pageInfo.getTotal() > 0) {
+            LambdaQueryWrapper<CdtDistridetail> conditionOne = condition;
+            conditionOne.eq(CdtDistridetail::getStatus, DistributionStatus.NON_COMPLETE_ORDER.getCode()).or()
+                    .eq(CdtDistridetail::getStatus, DistributionStatus.NOT_SERVEN_ORDER.getCode());
+            unsetMoney = distridetailService.getUnsetMoney(conditionOne);
+
+            LambdaQueryWrapper<CdtDistridetail> conditionTwo = condition;
+            conditionOne.eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER.getCode());
+
+            totalMoney = distridetailService.getTotalMoney(conditionTwo);
+        }
+        return R.ok().put("data", pageInfo).put("totalMoney", totalMoney).put("totalMoney", totalMoney);
     }
 
     @ApiOperation(value = "分销中心个人分享的订单列表", httpMethod = "GET")
