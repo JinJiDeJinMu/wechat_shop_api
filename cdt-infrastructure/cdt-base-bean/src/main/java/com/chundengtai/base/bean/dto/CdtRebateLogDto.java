@@ -1,7 +1,5 @@
 package com.chundengtai.base.bean.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -26,12 +24,9 @@ import java.util.Date;
 @Accessors(chain = true)
 public class CdtRebateLogDto implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     /**
      * id
      */
-    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**

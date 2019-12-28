@@ -6,6 +6,7 @@ import com.chundengtai.base.bean.CdtDistributionLevel;
 import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.bean.CdtRebateLog;
 import com.chundengtai.base.bean.CdtUserSummary;
+import com.chundengtai.base.bean.dto.CdtDistridetailDto;
 import com.chundengtai.base.bean.dto.CdtRebateLogDto;
 import com.chundengtai.base.bean.dto.CdtUserSummaryDto;
 import com.chundengtai.base.service.*;
@@ -97,7 +98,8 @@ public class WxDistributionController {
         List<CdtDistridetail> resultList = distridetailService.list(
                 condition);
 
-        PageInfo pageInfo = new PageInfo(resultList);
+        List<CdtDistridetailDto> dtoList = mapperFacade.mapAsList(resultList, CdtDistridetailDto.class);
+        PageInfo pageInfo = new PageInfo(dtoList);
         BigDecimal unsetMoney = BigDecimal.ZERO;
         BigDecimal totalMoney = BigDecimal.ZERO;
         if (pageInfo.getTotal() > 0) {
@@ -111,7 +113,7 @@ public class WxDistributionController {
 
             totalMoney = distridetailService.getTotalMoney(conditionTwo);
         }
-        return R.ok().put("data", pageInfo).put("totalMoney", totalMoney).put("totalMoney", totalMoney);
+        return R.ok().put("data", pageInfo).put("unsetMoney", unsetMoney).put("totalMoney", totalMoney);
     }
 
     @ApiOperation(value = "分销中心个人分享的订单列表", httpMethod = "GET")
