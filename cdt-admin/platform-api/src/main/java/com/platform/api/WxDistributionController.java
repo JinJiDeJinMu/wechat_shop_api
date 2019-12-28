@@ -20,7 +20,10 @@ import io.swagger.annotations.ApiOperation;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -62,8 +65,8 @@ public class WxDistributionController {
     @GetMapping("/getUserDistributionInfo.json")
     @ResponseBody
     @IgnoreAuth
-    public R getUserDistributionInfo(@RequestParam Integer userId) {
-        CdtUserSummary model = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, userId));
+    public R getUserDistributionInfo(@LoginUser UserVo loginUser) {
+        CdtUserSummary model = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, loginUser.getUserId().intValue()));
         CdtUserSummaryDto result = mapperFacade.map(model, CdtUserSummaryDto.class);
         return R.ok().put("data", result);
     }
