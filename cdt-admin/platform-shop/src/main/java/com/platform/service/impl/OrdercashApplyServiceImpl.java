@@ -4,18 +4,14 @@ import com.platform.dao.OrdercashApplyDao;
 import com.platform.entity.OrdercashApplyEntity;
 import com.platform.entity.UserEntity;
 import com.platform.service.OrdercashApplyService;
-import com.platform.util.wechat.WechatRefundApiResult;
-import com.platform.util.wechat.WechatUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * Service实现类

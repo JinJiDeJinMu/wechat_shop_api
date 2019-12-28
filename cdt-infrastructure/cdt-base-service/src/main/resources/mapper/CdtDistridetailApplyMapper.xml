@@ -6,19 +6,20 @@
     <resultMap id="BaseResultMap" type="com.chundengtai.base.bean.CdtDistridetailApply">
         <id column="id" property="id" />
         <result column="order_sn" property="orderSn" />
+        <result column="status" property="status"/>
         <result column="money" property="money" />
-        <result column="advance_id" property="advanceId" />
-        <result column="advance_name" property="advanceName" />
+        <result column="weixinOpenid" property="weixinOpenid"/>
+        <result column="userName" property="userName"/>
+        <result column="realName" property="realName"/>
         <result column="apply_time" property="applyTime" />
-        <result column="apply_id" property="applyId" />
+        <result column="operator" property="operator"/>
         <result column="update_time" property="updateTime" />
-        <result column="update_id" property="updateId" />
-        <result column="status" property="status" />
+        <result column="type" property="type"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, order_sn, money, advance_id, advance_name, apply_time, apply_id, update_time, update_id, status
+        id, order_sn, status, money, weixinOpenid, userName, realName, apply_time, operator, update_time, type
     </sql>
 
 </mapper>

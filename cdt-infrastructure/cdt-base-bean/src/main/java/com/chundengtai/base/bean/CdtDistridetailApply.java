@@ -1,11 +1,13 @@
 package com.chundengtai.base.bean;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * <p>
@@ -25,12 +27,17 @@ public class CdtDistridetailApply implements Serializable {
       /**
      * id
      */
-        private Integer id;
+      private Long id;
 
       /**
      * 订单号
      */
       private String orderSn;
+
+  /**
+   * 分销记录状态
+   */
+  private Integer status;
 
       /**
      * 返利金额
@@ -40,12 +47,20 @@ public class CdtDistridetailApply implements Serializable {
       /**
      * 提现账号id
      */
-      private Integer advanceId;
+      @TableField("weixinOpenid")
+      private String weixinOpenid;
 
       /**
-     * 账号真实姓名
+       * 提现人
      */
-      private String advanceName;
+      @TableField("userName")
+      private String userName;
+
+  /**
+   * 真实姓名
+   */
+  @TableField("realName")
+  private String realName;
 
       /**
      * 申请时间
@@ -53,9 +68,9 @@ public class CdtDistridetailApply implements Serializable {
       private Date applyTime;
 
       /**
-     * 申请人
+       * 更新人
      */
-      private Integer applyId;
+      private String operator;
 
       /**
      * 更新时间
@@ -63,14 +78,9 @@ public class CdtDistridetailApply implements Serializable {
       private Date updateTime;
 
       /**
-     * 更新人
+       * 类型
      */
-      private Integer updateId;
-
-      /**
-     * 状态
-     */
-      private Integer status;
+      private Integer type;
 
 
 }

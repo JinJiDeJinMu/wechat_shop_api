@@ -9,7 +9,6 @@
     <div v-show="showList">
         <Row :gutter="16">
             <el-card class="filter-container" shadow="never">
-                <div>
                     <el-button
                             style="float: right"
                             @click="getList()"
@@ -23,9 +22,14 @@
                             size="small">
                         重置
                     </el-button>
-            </div>
+                <el-button
+                        style="float: right;margin-right: 15px"
+                        @click="add()"
+                        size="small">
+                    新建
+                </el-button>
             <div style="margin-top: 15px">
-                <el-form :inline="true" :model="baseForm.data" size="small" label-width="120px">
+                <el-form :inline="true" :model="baseForm.data" size="small" label-width="140px">
                                             <el-form-item label="id">
                             <el-input style="width: 203px" v-model="baseForm.data.id"
                                       placeholder="id"></el-input>
@@ -34,22 +38,32 @@
                             <el-input style="width: 203px" v-model="baseForm.data.orderSn"
                                       placeholder="订单号"></el-input>
                         </el-form-item>
-                                            <el-form-item label="提现账号id">
-                            <el-input style="width: 203px" v-model="baseForm.data.advanceId"
-                                      placeholder="提现账号id"></el-input>
+                    <el-form-item label="分销记录状态">
+                        <el-select style="width: 200px" clearable v-model="baseForm.data.status" placeholder="分销记录状态">
+                            <el-option value="398" label="未满七天">未满七天</el-option>
+                            <el-option value="399" label="已退订">已退订</el-option>
+                            <el-option value="400" label="未完成">未完成</el-option>
+                            <el-option value="402" label="已完成">已完成</el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="提现人">
+                        <el-input style="width: 203px" v-model="baseForm.data.userName"
+                                  placeholder="提现人"></el-input>
+                    </el-form-item>
                         </el-form-item>
-                                            <el-form-item label="状态">
-                                            <el-select style="width: 203px" clearable v-model="baseForm.data.status">
-                                                <el-option value="0" label="未审核">未审核</el-option>
-                                                <el-option value="1" label="已通过">已通过</el-option>
-                                            </el-select>
+                    <el-form-item label="类型">
+                        <el-select style="width: 200px" clearable v-model="baseForm.data.type" placeholder="类型">
+                            <el-option value="0" label="未审核">未审核</el-option>
+                            <el-option value="1" label="已通过">已通过</el-option>
+                        </el-select>
                         </el-form-item>
 
-                    <el-button style="margin-right: 20px;float:right" class="search-button" @click="handleBatchOperate()" type="primary"
+                    <el-button style="margin-left: 20px;float:right" class="search-button" @click="handleBatchOperate()"
+                               type="primary"
                                size="small">
                         审核
                     </el-button>
-                                                                                                                                                                                                                                            </el-form>
+                </el-form>
             </div>
         </el-card>
         </Row>
@@ -64,57 +78,55 @@
                                                                                 <el-table-column label="订单号" width="160" align="center">
                             <template slot-scope="scope">{{scope.row.orderSn}}</template>
                         </el-table-column>
-                                                                                <el-table-column label="返利金额" width="120" align="center">
+                <el-table-column label="分销状态" width="130" align="center">
+                    <template slot-scope="scope">{{scope.row.status|OrderStatusType}}</template>
+                </el-table-column>
+                <el-table-column label="返利金额" width="100" align="center">
                             <template slot-scope="scope">{{scope.row.money}}</template>
                         </el-table-column>
                                                                                 <el-table-column label="提现账号id" width="100" align="center">
-                            <template slot-scope="scope">{{scope.row.advanceId}}</template>
+                                                                                    <template slot-scope="scope">
+                                                                                        {{scope.row.weixinOpenid}}
+                                                                                    </template>
+                                                                                </el-table-column>
+                <el-table-column label="提现人" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.userName}}</template>
                         </el-table-column>
-                                                                                <el-table-column label="账号真实姓名" width="120" align="center">
-                            <template slot-scope="scope">{{scope.row.advanceName}}</template>
+                <el-table-column label="真实姓名" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.realName}}</template>
                         </el-table-column>
                                                                                 <el-table-column label="申请时间" width="160" align="center">
-                            <template slot-scope="scope">{{scope.row.applyTime|dateFormat|dateFormat}}</template>
+                                                                                    <template slot-scope="scope">
+                                                                                        {{scope.row.applyTime|dateFormat}}
+                                                                                    </template>
                         </el-table-column>
-                                                                                <el-table-column label="申请人" width="100" align="center">
-                            <template slot-scope="scope">{{scope.row.applyId}}</template>
+                <el-table-column label="更新人" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.operator}}</template>
                         </el-table-column>
                                                                                 <el-table-column label="更新时间" width="160" align="center">
-                            <template slot-scope="scope">{{scope.row.updateTime|dateFormat|dateFormat}}</template>
+                                                                                    <template slot-scope="scope">
+                                                                                        {{scope.row.updateTime|dateFormat}}
+                                                                                    </template>
                         </el-table-column>
-                                                                                <el-table-column label="更新人" width="100" align="center">
-                            <template slot-scope="scope">{{scope.row.updateId}}</template>
+                <el-table-column label="类型" width="80" align="center">
+                    <template slot-scope="scope">{{scope.row.type|statusType}}</template>
                         </el-table-column>
-                                                                                <el-table-column label="状态" width="100" align="center">
-                            <template slot-scope="scope">{{scope.row.status|statusType}}</template>
-                        </el-table-column>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <!-- <el-table-column label="审核状态" width="100" align="center">
-             <template slot-scope="scope">
-                 <p>{{scope.row.verifyStatus | verifyStatusFilter}}</p>
-                 <p>
-                     <el-button
-                             type="text"
-                             @click="handleShowVerifyDetail(scope.index, scope.row)">审核详情
-                     </el-button>
-                 </p>
-             </template>
-         </el-table-column> -->
-                <!--<el-table-column label="操作" width="160" align="center">
-                    <template slot-scope="scope">
-                        <p>
-                            #if($shiro.hasPermission("CdtDistridetailApply:update"))
-                            <el-button size="mini" @click="handleUpdateProduct(scope.$index, scope.row)">编辑
-                            </el-button>
-                            #end
-                            #if($shiro.hasPermission("CdtDistridetailApply:update"))
-                            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
-                            </el-button>
-                            #end
-                        </p>
-                    </template>
-                </el-table-column>-->
+                <!-- <el-table-column label="审核状态" width="100" align="center">
+<template slot-scope="scope">
+<p>{{scope.row.verifyStatus | verifyStatusFilter}}</p>
+<p>
+<el-button
+type="text"
+@click="handleShowVerifyDetail(scope.index, scope.row)">审核详情
+</el-button>
+</p>
+</template>
+</el-table-column> -->
+
             </el-table>
+
         </div>
+
         <div class="pagination-container">
             <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
                            layout="total, sizes,prev, pager, next,jumper"
@@ -124,7 +136,6 @@
         </div>
     </div>
 </div>
-
 <script src="${rc.contextPath}/js/sys/cdtdistridetailapply.js?time=${date.systemTime}"></script>
 </body>
 </html>

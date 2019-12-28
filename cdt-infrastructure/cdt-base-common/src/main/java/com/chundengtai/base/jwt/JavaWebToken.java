@@ -40,17 +40,16 @@ public class JavaWebToken {
     }
 
     public static void main(String[] args) {
-        Map<String, Object> claims = new HashMap<>(5);
-        claims.put("username", "royal312");
-        claims.put("password", "123456");
-        claims.put("age", "11");
-        claims.put("level", "1");
-        claims.put("money", "10000");
-        long start = System.currentTimeMillis();
+        Map<String, Object> claims = new HashMap<>(7);
+        claims.put("user_id", "88");
+        claims.put("gold_user_id", "88");
+        claims.put("order_sn", "88");
+        claims.put("money", "88");
+        claims.put("status", "88");
+        claims.put("created_time", "2019-12-25 15:11:57");
+        claims.put("update_time", "2019-12-25 15:11:57");
         String token = JavaWebToken.createJavaWebToken(claims);
-        long end = System.currentTimeMillis();
-        System.out.println(end - start);
-        Map result = JavaWebToken.parserJavaWebToken(token);
+        System.out.println(token);
 
     }
 }

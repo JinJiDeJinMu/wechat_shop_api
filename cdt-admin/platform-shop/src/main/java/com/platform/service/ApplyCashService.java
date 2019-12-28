@@ -1,12 +1,9 @@
-package com.chundengtai.base.service;
-
-import org.springframework.stereotype.Service;
+package com.platform.service;
 
 /**
  * 提现service
  */
-@Service
 public interface ApplyCashService {
 
-    Boolean wechatMoneyToUser(String weixinOpenid, String realName,Double amount);
+    Boolean wechatMoneyToUser(String weixinOpenid, String realName, Double amount);
 }

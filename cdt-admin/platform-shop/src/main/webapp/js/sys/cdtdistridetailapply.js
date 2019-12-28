@@ -1,14 +1,15 @@
 const defaultModel = {
     id:null,
     orderSn:null,
+    status: null,
     money:null,
-    advanceId:null,
-    advanceName:null,
+    weixinOpenid: null,
+    userName: null,
+    realName: null,
     applyTime:null,
-    applyId:null,
+    operator: null,
     updateTime:null,
-    updateId:null,
-    status:null,
+    type: null,
 };
 let vue = new Vue({
     el: '#app',
@@ -77,6 +78,18 @@ let vue = new Vue({
             } else if(value === 1){
                 return '已通过'
             }
+        },
+        OrderStatusType(value) {
+            if (value === 398) {
+                return '未满七天';
+            } else if (value === 399) {
+                return '已退订';
+            } else if (value === 400) {
+                return '未完成';
+            } else if (value === 402) {
+                return '已完成';
+            }
+            return value;
         }
     },
     methods: {
@@ -144,8 +157,8 @@ let vue = new Vue({
             });
         },
         getSelectRowIds() {
-            let ids = [];
-            for (let i = 0; i < this.multipleSelection.length; i++) {
+            var ids = [];
+            for (var i = 0; i < this.multipleSelection.length; i++) {
                 ids.push(this.multipleSelection[i].id);
             }
             return ids;
@@ -165,15 +178,17 @@ let vue = new Vue({
             if (!this.checkSelected()) {
                 return;
             }
-            this.$confirm('是否要进行该批量审核操作?', '提示', {
+            this.$confirm('是否要进行该批量操作?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                let ids = this.getSelectRowIds();
-                this.reviewModel(ids);
-            });
+                var idlist = this.getSelectRowIds();
+            this.reviewModel(idlist);
+
             this.getList();
+        })
+            ;
         },
         handleResetSearch: function () {
             this.baseForm.data = Object.assign({}, defaultModel);

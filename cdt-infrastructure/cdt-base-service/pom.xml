@@ -90,12 +90,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.platform</groupId>
-            <artifactId>platform-shop</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <scope>compile</scope>

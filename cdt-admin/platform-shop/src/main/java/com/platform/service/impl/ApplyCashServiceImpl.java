@@ -1,15 +1,15 @@
-package com.chundengtai.base.service.impl;
+package com.platform.service.impl;
 
-import com.chundengtai.base.service.ApplyCashService;
+import com.platform.service.ApplyCashService;
 import com.platform.util.wechat.WechatRefundApiResult;
 import com.platform.util.wechat.WechatUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Description TODO
@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @Date 2019年12月28日 0028 上午 11:37:22
  * @Version 1.0
  **/
+@Service("cdtDistridetailApplyService")
 @Slf4j
 public class ApplyCashServiceImpl implements ApplyCashService {
 
@@ -40,6 +41,7 @@ public class ApplyCashServiceImpl implements ApplyCashService {
         String payCountId = UUID.randomUUID().toString().replaceAll("-", "");
         //开始调用提现微信接口
         WechatRefundApiResult ret = WechatUtil.wxPayMoneyToUser(weixinOpenid, amount, realName, payCountId);
+        System.out.println(ret);
         log.info("WechatRefundApiResult =" + ret.getResult_code() + "==" + ret.getReturn_msg());
         if("SUCCESS".equals(ret.getResult_code())) {
            // redisTemplate.delete("backtx" + userEntity.getMerchantId());
