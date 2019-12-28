@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtDistributionLevel;
 import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.bean.CdtRebateLog;
+import com.chundengtai.base.bean.CdtUserSummary;
+import com.chundengtai.base.bean.dto.CdtUserSummaryDto;
 import com.chundengtai.base.service.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -13,6 +15,7 @@ import com.platform.entity.UserVo;
 import com.platform.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +29,9 @@ public class WxDistributionController {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private CdtUserSummaryService cdtUserSummaryService;
 
     //用户层级服务
     @Autowired
@@ -47,13 +53,17 @@ public class WxDistributionController {
     @Autowired
     private CdtRebateLogService rebateLogService;
 
+    @Autowired
+    private MapperFacade mapperFacade;
+
     @ApiOperation(value = "分销中心个人发展信息汇总", httpMethod = "GET")
     @GetMapping("/getUserDistributionInfo.json")
     @ResponseBody
     @IgnoreAuth
     public R getUserDistributionInfo(@RequestParam Integer userId) {
-
-        return R.ok();
+        CdtUserSummary model = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, userId));
+        CdtUserSummaryDto result = mapperFacade.map(model, CdtUserSummaryDto.class);
+        return R.ok().put("data", result);
     }
 
     @ApiOperation(value = "分销中心个人下线人数列表", httpMethod = "GET")

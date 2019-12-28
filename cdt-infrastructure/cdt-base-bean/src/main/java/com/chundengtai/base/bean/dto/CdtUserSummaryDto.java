@@ -39,7 +39,7 @@ public class CdtUserSummaryDto implements Serializable {
     private BigDecimal totalIncome;
 
     /**
-     * 未结算
+     * unbalanced
      */
     private BigDecimal unbalanced;
 
@@ -47,6 +47,16 @@ public class CdtUserSummaryDto implements Serializable {
      * 下线人数
      */
     private Integer statsPerson;
+
+    /**
+     * 分销订单数量
+     */
+    private Integer shareOrderNum;
+
+    /**
+     * 合伙人奖励收益
+     */
+    private BigDecimal partnerIncome;
 
     /**
      * 下线累计收益
