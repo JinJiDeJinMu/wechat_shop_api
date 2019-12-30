@@ -18,6 +18,7 @@ public class GenericFastJson2JsonRedisSerializer<T> implements RedisSerializer<T
     public GenericFastJson2JsonRedisSerializer() {
         super();
         ParserConfig.getGlobalInstance().addAccept("com.platform");
+        ParserConfig.getGlobalInstance().addAccept("com.chundengtai.base");
     }
 
     @Override
