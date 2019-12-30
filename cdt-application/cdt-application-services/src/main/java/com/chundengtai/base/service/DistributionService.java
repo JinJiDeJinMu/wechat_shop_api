@@ -120,7 +120,7 @@ public class DistributionService {
         CdtDistrimoney model = (CdtDistrimoney) redisTemplate.opsForValue().get(CacheConstant.SERVICE_CDT_DISTRIMONEY);
         if (model == null) {
             model = distrimoneyService.getOne(new QueryWrapper<CdtDistrimoney>()
-                    .lambda().eq(CdtDistrimoney::getStatus, OnOffEnum.OFF.getCode()).orderByDesc(CdtDistrimoney::getId));
+                    .lambda().eq(CdtDistrimoney::getStatus, OnOffEnum.ON.getCode()).orderByDesc(CdtDistrimoney::getId));
             if (model != null) {
                 redisTemplate.opsForValue().set(CacheConstant.SERVICE_CDT_DISTRIMONEY, model, 30, TimeUnit.DAYS);
             }
