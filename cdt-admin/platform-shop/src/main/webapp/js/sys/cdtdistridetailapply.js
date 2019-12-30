@@ -9,7 +9,6 @@ const defaultModel = {
     applyTime:null,
     operator: null,
     updateTime:null,
-    type: null,
 };
 let vue = new Vue({
     el: '#app',
@@ -88,6 +87,12 @@ let vue = new Vue({
                 return '未完成';
             } else if (value === 402) {
                 return '已完成';
+            } else if (value === 403) {
+                return '审核中'
+            } else if (value === 404) {
+                return '审核失败'
+            } else if (value === 406) {
+                return '已提现'
             }
             return value;
         }
