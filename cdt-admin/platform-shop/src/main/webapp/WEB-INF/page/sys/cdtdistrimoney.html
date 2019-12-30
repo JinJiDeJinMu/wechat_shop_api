@@ -202,12 +202,12 @@ type="text"
                  ref="formValidate"
                  @keyup.enter.native="dataFormSubmit('formValidate')"
                  label-width="80px">
-            <el-form-item label="id" prop="id" :rules=" [
-            { required: true, message: '请输入id', trigger: 'blur' }
-          ]">
-                <el-input style="width: 203px" v-model="baseForm.data.id"
-                          placeholder="id" disabled></el-input>
-            </el-form-item>
+            <!-- <el-form-item label="id" prop="id" :rules=" [
+             { required: true, message: '请输入id', trigger: 'blur' }
+           ]">
+                 <el-input style="width: 203px" v-model="baseForm.data.id"
+                           placeholder="id" ></el-input>
+             </el-form-item>-->
             <el-form-item label="一级得钱的比例" prop="firstPercent" :rules=" [
             { required: true, message: '请输入一级得钱的比例', trigger: 'blur' }
           ]">

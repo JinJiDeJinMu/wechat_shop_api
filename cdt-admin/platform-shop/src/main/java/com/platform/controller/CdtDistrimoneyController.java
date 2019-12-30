@@ -140,6 +140,7 @@ public class CdtDistrimoneyController {
     private String encryt(Object logModel) {
         try {
             Map chain = BeanJwtUtil.javabean2map(logModel);
+            System.out.println("map=" + chain);
             return JavaWebToken.createJavaWebToken(chain);
         } catch (Exception e) {
             log.error("jwt加密异常========");

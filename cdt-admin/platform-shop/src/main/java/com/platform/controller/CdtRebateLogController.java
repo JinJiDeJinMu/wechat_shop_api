@@ -6,6 +6,7 @@ import com.chundengtai.base.service.CdtRebateLogService;
 import com.chundengtai.base.transfer.BaseForm;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.platform.utils.Base64;
 import com.platform.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -93,6 +95,10 @@ public class CdtRebateLogController {
         //Date=====
         PageHelper.startPage(params.getPageIndex(), params.getPageSize());
         List<CdtRebateLog> collectList = cdtRebateLogService.list(conditon);
+        collectList = collectList.stream().map(e -> {
+            e.setNickname(Base64.decode(e.getNickname()));
+            return e;
+        }).collect(Collectors.toList());
         PageInfo pageInfo = new PageInfo(collectList);
         return R.ok(pageInfo);
     }

@@ -5,6 +5,7 @@ const defaultModel = {
     fxLevel: null,
     sponsorId: null,
     createdTime: null,
+    money: null,
     token: null,
 };
 let vue = new Vue({
