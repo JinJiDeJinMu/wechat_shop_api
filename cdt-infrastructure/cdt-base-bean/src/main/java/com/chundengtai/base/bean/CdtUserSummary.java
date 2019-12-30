@@ -12,89 +12,94 @@ import java.util.Date;
 
 /**
  * <p>
- * 分销用户汇总信息
+ * 分销用户汇总信息 分销用户汇总信息
  * </p>
  *
  * @author Royal
- * @since 2019-12-28
+ * @since 2019-12-30
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class CdtUserSummary implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * id
-   */
-  @TableId(value = "id", type = IdType.AUTO)
-  private Integer id;
+    /**
+     * id
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
-  /**
-   * 用户id
-   */
-  private Integer userId;
+    /**
+     * 用户id
+     */
+    private Integer userId;
 
-  /**
-   * 累计收益
-   */
-  private BigDecimal totalIncome;
+    /**
+     * 累计收益
+     */
+    private BigDecimal totalIncome;
 
-  /**
-   * unbalanced
-   */
-  private BigDecimal unbalanced;
+    /**
+     * unbalanced
+     */
+    private BigDecimal unbalanced;
 
-  /**
-   * 下线人数
-   */
-  private Integer statsPerson;
+    /**
+     * 下线人数
+     */
+    private Integer statsPerson;
 
-  /**
-   * 分销订单数量
-   */
-  private Integer shareOrderNum;
+    /**
+     * 分销订单数量
+     */
+    private Integer shareOrderNum;
 
-  /**
-   * 合伙人奖励收益
-   */
-  private BigDecimal partnerIncome;
+    /**
+     * 合伙人奖励收益
+     */
+    private BigDecimal partnerIncome;
 
-  /**
-   * 下线累计收益
-   */
-  private BigDecimal statsIncome;
+    /**
+     * 下线累计收益
+     */
+    private BigDecimal statsIncome;
 
-  /**
-   * 加速合伙人
-   */
-  private Integer speedPartner;
+    /**
+     * 加速合伙人
+     */
+    private Integer speedPartner;
 
-  /**
-   * 乐观锁
-   */
-  private Integer revision;
+    /**
+     * 链路位置
+     */
+    private String chainRoad;
 
-  /**
-   * 创建人
-   */
-  private String createdBy;
+    /**
+     * 乐观锁
+     */
+    private Integer revision;
 
-  /**
-   * 创建时间
-   */
-  private Date createdTime;
+    /**
+     * 创建人
+     */
+    private String createdBy;
 
-  /**
-   * 更新人
-   */
-  private String updatedBy;
+    /**
+     * 创建时间
+     */
+    private Date createdTime;
 
-  /**
-   * 更新时间
-   */
-  private Date updatedTime;
+    /**
+     * 更新人
+     */
+    private String updatedBy;
+
+    /**
+     * 更新时间
+     */
+    private Date updatedTime;
 
 
 }
