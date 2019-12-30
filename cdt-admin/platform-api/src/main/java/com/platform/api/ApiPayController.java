@@ -1,7 +1,11 @@
 package com.platform.api;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.constant.CacheConstant;
+import com.chundengtai.base.facade.DistributionFacade;
+import com.chundengtai.base.service.OrderService;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
@@ -41,27 +45,42 @@ public class ApiPayController extends ApiBaseAction {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
     @Autowired
     private ApiOrderService orderService;
+
     @Autowired
     private ApiOrderGoodsService orderGoodsService;
+
     @Autowired
     private SysConfigService sysConfigService;
+
     @Autowired
     private UserRecordSer userRecordSer;
+
     @Autowired
     private MlsUserSer mlsUserSer;
+
     @Autowired
     private ApiGoodsService apiGoodsService;
+
     @Autowired
     private GroupBuyingService groupBuyingService;
+
     @Autowired
     private GroupBuyingDetailedService groupBuyingDetailedService;
+
     @Autowired
     private WxPayService wxPayService;
 
     @Autowired
     private CdtPaytransRecordService paytransRecordService;
+
+    @Autowired
+    private OrderService cdtOrderService;
+
+    @Autowired
+    private DistributionFacade distributionFacade;
 
     /**
      * 获取支付的请求参数
@@ -358,7 +377,7 @@ public class ApiPayController extends ApiBaseAction {
 //            order.setOrder_status(201);
 //            order.setShipping_status(0);
 //            order.setPay_time(new Date());
-            orderSetPayedStatus(order);
+            orderSetPayedStatusOld(order);
             orderService.updateStatus(order);
             //1购物车、2普通、3秒杀、4团购
             String orderType = order.getOrder_type();
@@ -457,99 +476,98 @@ public class ApiPayController extends ApiBaseAction {
      *
      * @return
      */
-    @ApiOperation(value = "微信订单回调接口")
-    @RequestMapping(value = "/notify")
-    @IgnoreAuth
-    @ResponseBody
-    public String notify(HttpServletRequest request, HttpServletResponse response) throws IOException, WxPayException {
-        String reqId = UUID.randomUUID().toString();
-        log.info(reqId + "====notify==>返回给微信回调处理结果====>");
-        String resultWxMsg = "";//返回给微信的处理结果
-        String inputLine;
-        String reponseXml = "";
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        //微信给返回的东西
-        try {
-            while ((inputLine = request.getReader().readLine()) != null) {
-                reponseXml += inputLine;
-            }
-            request.getReader().close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            resultWxMsg = setXml("fail", "xml获取失败");
-        }
-
-        if (StringUtils.isNullOrEmpty(reponseXml)) {
-            resultWxMsg = setXml("fail", "xml为空");
-        }
-
-        if (!StringUtils.isNullOrEmpty(resultWxMsg)) {
-            return resultWxMsg;
-        }
-
-        log.info(reqId + "===notify==微信回调返回======================>" + reponseXml);
-        WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(reponseXml);
-        String result_code = wxPayOrderNotifyResult.getResultCode();
-        if (result_code.equalsIgnoreCase("FAIL")) {
-            //订单编号
-            String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
-            log.error(reqId + "===notify==订单" + out_trade_no + "支付失败");
-            return setXml("fail", "fail");
-        } else if (result_code.equalsIgnoreCase("SUCCESS")) {
-            //订单编号
-            String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
-            log.info(reqId + "===notify==订单" + out_trade_no + "支付成功");
-            try {
-                // 更改订单状态
-                // 业务处理
-                orderStatusLogic(out_trade_no, wxPayOrderNotifyResult);
-            } catch (Exception ex) {
-                log.error("=====weixin===notify===error", ex);
-                return setXml("fail", "fail");
-            }
-            return setXml("SUCCESS", "OK");
-        }
-        return setXml("SUCCESS", "OK");
-    }
-
-    private void orderStatusLogic(String out_trade_no, WxPayOrderNotifyResult result) {
-        OrderVo orderItem = orderService.queryOrderNo(out_trade_no);
-        if (orderItem == null) {
-            orderItem = orderService.queryByOrderId(out_trade_no);
-
-            orderItem.setAll_order_id(out_trade_no);
-        } else {
-            orderItem.setOrder_sn(out_trade_no);
-        }
-        log.info("微信回调设置=====out_trade_no>:" + out_trade_no);
-        log.info("微信回调Json=====>:" + JSON.toJSONString(orderItem));
-
-        orderSetPayedStatus(orderItem);
-        orderItem.setPay_time(new Date());
-        int rows = orderService.update(orderItem);
-        log.warn("=====此次更新影响===行数====" + rows);
-        try {
-            CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
-            payrecord.setMchOrderNo(orderItem.getOrder_sn());
-            payrecord.setAmount(BigDecimal.valueOf(result.getTotalFee()));
-            payrecord.setTradePrice(BigDecimal.valueOf(result.getTotalFee()));
-            payrecord.setAppId("");
-            payrecord.setCreateDate(new Date());
-            //payrecord.setPayOrderId(result.getTransactionId());
-            payrecord.setPayType(PayTypeEnum.PAYED.getCode());
-            payrecord.setMemo(result.getPromotionDetail());
-            payrecord.setPayState(PayTypeEnum.PAYED.getCode());
-            payrecord.setResText(result.getXmlString());
-            paytransRecordService.save(payrecord);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void orderSetPayedStatus(OrderVo orderItem) {
+//    @ApiOperation(value = "微信订单回调接口")
+//    @RequestMapping(value = "/notify")
+//    @IgnoreAuth
+//    @ResponseBody
+//    public String notify(HttpServletRequest request, HttpServletResponse response) throws IOException, WxPayException {
+//        String reqId = UUID.randomUUID().toString();
+//        log.info(reqId + "====notify==>返回给微信回调处理结果====>");
+//        String resultWxMsg = "";//返回给微信的处理结果
+//        String inputLine;
+//        String reponseXml = "";
+//        request.setCharacterEncoding("UTF-8");
+//        response.setCharacterEncoding("UTF-8");
+//        response.setContentType("text/html;charset=UTF-8");
+//        response.setHeader("Access-Control-Allow-Origin", "*");
+//        //微信给返回的东西
+//        try {
+//            while ((inputLine = request.getReader().readLine()) != null) {
+//                reponseXml += inputLine;
+//            }
+//            request.getReader().close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            resultWxMsg = setXml("fail", "xml获取失败");
+//        }
+//
+//        if (StringUtils.isNullOrEmpty(reponseXml)) {
+//            resultWxMsg = setXml("fail", "xml为空");
+//        }
+//
+//        if (!StringUtils.isNullOrEmpty(resultWxMsg)) {
+//            return resultWxMsg;
+//        }
+//
+//        log.info(reqId + "===notify==微信回调返回======================>" + reponseXml);
+//        WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(reponseXml);
+//        String result_code = wxPayOrderNotifyResult.getResultCode();
+//        if (result_code.equalsIgnoreCase("FAIL")) {
+//            //订单编号
+//            String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
+//            log.error(reqId + "===notify==订单" + out_trade_no + "支付失败");
+//            return setXml("fail", "fail");
+//        } else if (result_code.equalsIgnoreCase("SUCCESS")) {
+//            //订单编号
+//            String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
+//            log.info(reqId + "===notify==订单" + out_trade_no + "支付成功");
+//            try {
+//                // 更改订单状态
+//                // 业务处理
+//                orderStatusLogic(out_trade_no, wxPayOrderNotifyResult);
+//            } catch (Exception ex) {
+//                log.error("=====weixin===notify===error", ex);
+//                return setXml("fail", "fail");
+//            }
+//            return setXml("SUCCESS", "OK");
+//        }
+//        return setXml("SUCCESS", "OK");
+//    }
+//
+//    private void orderStatusLogic(String out_trade_no, WxPayOrderNotifyResult result) {
+//        OrderVo orderItem = orderService.queryOrderNo(out_trade_no);
+//        if (orderItem == null) {
+//            orderItem = orderService.queryByOrderId(out_trade_no);
+//
+//            orderItem.setAll_order_id(out_trade_no);
+//        } else {
+//            orderItem.setOrder_sn(out_trade_no);
+//        }
+//        log.info("微信回调设置=====out_trade_no>:" + out_trade_no);
+//        log.info("微信回调Json=====>:" + JSON.toJSONString(orderItem));
+//
+//        orderSetPayedStatus(orderItem);
+//        orderItem.setPay_time(new Date());
+//        int rows = orderService.update(orderItem);
+//        log.warn("=====此次更新影响===行数====" + rows);
+//        try {
+//            CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
+//            payrecord.setMchOrderNo(orderItem.getOrder_sn());
+//            payrecord.setAmount(BigDecimal.valueOf(result.getTotalFee()));
+//            payrecord.setTradePrice(BigDecimal.valueOf(result.getTotalFee()));
+//            payrecord.setAppId("");
+//            payrecord.setCreateDate(new Date());
+//            //payrecord.setPayOrderId(result.getTransactionId());
+//            payrecord.setPayType(PayTypeEnum.PAYED.getCode());
+//            payrecord.setMemo(result.getPromotionDetail());
+//            payrecord.setPayState(PayTypeEnum.PAYED.getCode());
+//            payrecord.setResText(result.getXmlString());
+//            paytransRecordService.save(payrecord);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+    private void orderSetPayedStatusOld(OrderVo orderItem) {
         orderItem.setPay_status(PayTypeEnum.PAYED.getCode());
         if (orderItem.getGoods_type().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode())
         ) {
@@ -827,5 +845,121 @@ public class ApiPayController extends ApiBaseAction {
             return true;
         }
         return false;
+    }
+
+
+    /**
+     * 微信订单回调接口
+     *
+     * @return
+     */
+    @ApiOperation(value = "微信订单回调接口")
+    @RequestMapping(value = "/notify")
+    @IgnoreAuth
+    @ResponseBody
+    public String notify(HttpServletRequest request, HttpServletResponse response) throws
+            IOException, WxPayException {
+        String reqId = UUID.randomUUID().toString();
+        log.info(reqId + "====notify==>返回给微信回调处理结果====>");
+        String resultWxMsg = "";//返回给微信的处理结果
+        String inputLine;
+        String reponseXml = "";
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        //微信给返回的东西
+        try {
+            while ((inputLine = request.getReader().readLine()) != null) {
+                reponseXml += inputLine;
+            }
+            request.getReader().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultWxMsg = setXml("fail", "xml获取失败");
+        }
+
+        if (StringUtils.isNullOrEmpty(reponseXml)) {
+            resultWxMsg = setXml("fail", "xml为空");
+        }
+
+        if (!StringUtils.isNullOrEmpty(resultWxMsg)) {
+            return resultWxMsg;
+        }
+
+        log.info(reqId + "===notify==微信回调返回======================>" + reponseXml);
+        WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(reponseXml);
+        String result_code = wxPayOrderNotifyResult.getResultCode();
+        if (result_code.equalsIgnoreCase("FAIL")) {
+            //订单编号
+            String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
+            log.error(reqId + "===notify==订单" + out_trade_no + "支付失败");
+            return setXml("fail", "fail");
+        } else if (result_code.equalsIgnoreCase("SUCCESS")) {
+            //订单编号
+            String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
+            log.info(reqId + "===notify==订单" + out_trade_no + "支付成功");
+            try {
+                // 更改订单状态
+                // 业务处理
+                orderStatusLogic(out_trade_no, wxPayOrderNotifyResult);
+            } catch (Exception ex) {
+                log.error("=====weixin===notify===error", ex);
+                return setXml("fail", "fail");
+            }
+            return setXml("SUCCESS", "OK");
+        }
+        return setXml("SUCCESS", "OK");
+    }
+
+    private void orderStatusLogic(String out_trade_no, WxPayOrderNotifyResult result) {
+        Order orderItem = cdtOrderService.getOne(new QueryWrapper<Order>().lambda().eq(Order::getOrderSn, out_trade_no));
+        if (orderItem == null) {
+            orderItem = cdtOrderService.getOne(new QueryWrapper<Order>().lambda().eq(Order::getAllOrderId, out_trade_no));
+
+            orderItem.setAllOrderId(out_trade_no);
+        } else {
+            orderItem.setOrderSn(out_trade_no);
+        }
+        log.info("微信回调设置=====out_trade_no>:" + out_trade_no);
+        log.info("微信回调Json=====>:" + JSON.toJSONString(orderItem));
+
+        orderSetPayedStatus(orderItem);
+        orderItem.setPayTime(new Date());
+        boolean rows = cdtOrderService.updateById(orderItem);
+        log.warn("=====此次更新影响===行数====" + rows);
+        try {
+            if (rows) {
+                distributionFacade.recordDistributeLog(orderItem.getUserId(), orderItem);
+                //distributionFacade.notifyOrderStatus(orderItem.getUserId(), orderItem, GoodsTypeEnum.getEnumByKey(orderItem.getGoodsType()));
+                CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
+                payrecord.setMchOrderNo(orderItem.getOrderSn());
+                payrecord.setAmount(BigDecimal.valueOf(result.getTotalFee()));
+                payrecord.setTradePrice(BigDecimal.valueOf(result.getTotalFee()));
+                payrecord.setAppId("");
+                payrecord.setCreateDate(new Date());
+                //payrecord.setPayOrderId(result.getTransactionId());
+                payrecord.setPayType(PayTypeEnum.PAYED.getCode());
+                payrecord.setMemo(result.getPromotionDetail());
+                payrecord.setPayState(PayTypeEnum.PAYED.getCode());
+                payrecord.setResText(result.getXmlString());
+                paytransRecordService.save(payrecord);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void orderSetPayedStatus(Order orderItem) {
+        orderItem.setPayStatus(PayTypeEnum.PAYED.getCode());
+        if (orderItem.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode())
+        ) {
+            orderItem.setOrderStatus(OrderStatusEnum.NOT_USED.getCode());
+        } else if (orderItem.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode())) {
+            orderItem.setOrderStatus(OrderStatusEnum.WAIT_SHIPPED.getCode());
+        } else {
+            orderItem.setOrderStatus(OrderStatusEnum.PAYED_ORDER.getCode());
+        }
+        orderItem.setShippingStatus(ShippingTypeEnum.NOSENDGOODS.getCode());
     }
 }
