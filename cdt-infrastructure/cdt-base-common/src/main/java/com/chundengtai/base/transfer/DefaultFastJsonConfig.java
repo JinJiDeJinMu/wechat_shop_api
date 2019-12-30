@@ -37,6 +37,9 @@ public class DefaultFastJsonConfig extends FastJsonConfig {
          <value>WriteEnumUsingToString</value>
          */
         setSerializerFeatures(new SerializerFeature[]{
+                //SerializerFeature.PrettyFormat,
+                // SerializerFeature.DisableCircularReferenceDetect,
+
                 SerializerFeature.WriteMapNullValue,
                 SerializerFeature.BrowserCompatible,
                 SerializerFeature.WriteNullListAsEmpty,

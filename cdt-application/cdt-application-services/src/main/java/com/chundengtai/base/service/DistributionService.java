@@ -13,6 +13,8 @@ import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.utils.BeanJwtUtil;
 import com.chundengtai.base.utils.DateTimeConvert;
 import com.chundengtai.base.weixinapi.*;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -23,13 +25,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -72,6 +72,9 @@ public class DistributionService {
     //用户分布
     @Autowired
     private CdtUserDistributionService userDistributionService;
+
+    @Autowired
+    private CdtUserSummaryService cdtUserSummaryService;
 
     private CdtDistrimoney distrimoney;
 
@@ -184,7 +187,15 @@ public class DistributionService {
                 LambdaUpdateWrapper<User> condition = new LambdaUpdateWrapper<>();
                 if (userInfo.getFirstLeader().equals(0)) {
                     condition.set(User::getFirstLeader, parentId);
+                    //绑定链路关系
+                    try {
+                        bindLinkRelation(event, parentId);
+                    } catch (Exception ex) {
+                        log.error("绑定链路关系异常");
+                        ex.printStackTrace();
+                    }
                 }
+
                 condition.set(User::getIsDistribut, TrueOrFalseEnum.TRUE.getCode());
                 condition.eq(User::getId, event.getUserId());
 
@@ -199,6 +210,34 @@ public class DistributionService {
 
             boolean result = distributionLevelService.save(model);
         }
+    }
+
+    private void bindLinkRelation(DistributionEvent event, Long parentId) {
+        CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, parentId.intValue()));
+        Gson gson = new Gson();
+        CdtUserSummary userSummary = new CdtUserSummary();
+        userSummary.setUserId(event.getUserId().intValue());
+
+        if (cdtUserSummary == null) {
+            cdtUserSummary = new CdtUserSummary();
+            cdtUserSummary.setUserId(parentId.intValue());
+            LinkedList<Integer> chain = new LinkedList<>();
+            chain.add(parentId.intValue());
+            cdtUserSummary.setChainRoad(gson.toJson(chain));
+            boolean result = cdtUserSummaryService.save(cdtUserSummary);
+            chain.add(event.getUserId().intValue());
+            userSummary.setChainRoad(gson.toJson(userSummary));
+        } else if (cdtUserSummary.getChainRoad() != null) {
+            Type linkNodeType = new TypeToken<LinkedList<Integer>>() {
+            }.getType();
+            LinkedList<Integer> linkNode = gson.fromJson(cdtUserSummary.getChainRoad(), linkNodeType);
+            linkNode.add(event.getUserId().intValue());
+            userSummary.setChainRoad(gson.toJson(linkNode));
+            //ListNode chain = JSONObject.parseObject(cdtUserSummary.getChainRoad(),ListNode<Integer>.class);
+            //JSON.parseObject("转换json",new TypeReference<A<B<C>>>(){})
+            //ListNode<Integer> chain = JSON.parseObject(cdtUserSummary.getChainRoad(),new TypeReference<ListNode<Integer>>(){});
+        }
+        boolean rows = cdtUserSummaryService.save(userSummary);
     }
 
     /**
