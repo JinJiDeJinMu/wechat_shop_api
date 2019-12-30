@@ -23,6 +23,7 @@ public enum DistributionStatus {
     NON_COMPLETE_ORDER(400, "未完成"),
     COMPLETED_ORDER(402, "已完成"),
     COMPLETED_GETGOLD_CHECK(403, "审核中"),
+    COMPLETED_GETGOLD_FAILED(404, "审核失败"),
     COMPLETED_GETGOLD(406, "已提现");
 
     private Integer code;
