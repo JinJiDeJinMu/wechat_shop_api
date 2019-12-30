@@ -3,6 +3,7 @@ package com.chundengtai.base.service;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.chundengtai.base.bean.*;
 import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.event.DistributionEvent;
@@ -172,6 +173,11 @@ public class DistributionService {
             model.setSponsorId(parentId.intValue());
 
             //绑定user表层架关系
+            boolean resultRows = userService.update(new UpdateWrapper<User>().lambda().set(User::getIsDistribut, TrueOrFalseEnum.TRUE.getCode())
+                    .eq(User::getId, parentId).eq(User::getIsDistribut, TrueOrFalseEnum.FALSE.getCode())
+            );
+            log.warn("====开通推荐的分销合伙人按钮====>" + resultRows);
+
             User userInfo = userService.getOne(new QueryWrapper<User>().lambda().eq(User::getId, event.getUserId()));
             System.out.printf("用户id====>" + event.getUserId());
             if (userInfo.getSecondLeader().equals(0)) {
