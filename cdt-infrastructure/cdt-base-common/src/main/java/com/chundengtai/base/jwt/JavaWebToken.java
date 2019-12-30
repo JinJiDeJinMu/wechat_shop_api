@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,14 +42,21 @@ public class JavaWebToken {
     }
 
     public static void main(String[] args) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date now = new Date();
+        System.out.println(formatter.format(now));
+        System.out.println(now);
         Map<String, Object> claims = new HashMap<>(7);
         claims.put("user_id", "88");
         claims.put("gold_user_id", "88");
         claims.put("order_sn", "88");
-        claims.put("money", "88");
-        claims.put("status", "88");
-        claims.put("created_time", "2019-12-25 15:11:57");
-        claims.put("update_time", "2019-12-25 15:11:57");
+        claims.put("money", "0.30");
+        claims.put("status", "402");
+        claims.put("created_time", "Mon Dec 30 10:58:23 CST 2019");
+        claims.put("update_time", "Mon Dec 30 10:58:23 CST 2019");
+        claims.put("id", null);
+        claims.put("token", null);
+        System.out.println(claims);
         String token = JavaWebToken.createJavaWebToken(claims);
         System.out.println(token);
 
