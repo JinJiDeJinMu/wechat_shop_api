@@ -149,6 +149,7 @@ public class DistributionService {
             String promotionId = event.getEncryptCode().split("_")[0];
             Long parentId = Long.valueOf(promotionId);
             log.warn("推荐人id====>" + parentId);
+            System.out.printf("推荐人id====>" + parentId);
             if (event.getUserId().equals(parentId)) {
                 log.warn("自己不能推荐自己");
                 return;
@@ -172,6 +173,7 @@ public class DistributionService {
 
             //绑定user表层架关系
             User userInfo = userService.getOne(new QueryWrapper<User>().lambda().eq(User::getId, event.getUserId()));
+            System.out.printf("用户id====>" + event.getUserId());
             if (userInfo.getSecondLeader().equals(0)) {
                 LambdaUpdateWrapper<User> condition = new LambdaUpdateWrapper<>();
                 if (userInfo.getFirstLeader().equals(0)) {
