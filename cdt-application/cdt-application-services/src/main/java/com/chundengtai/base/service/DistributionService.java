@@ -226,7 +226,7 @@ public class DistributionService {
             cdtUserSummary.setChainRoad(gson.toJson(chain));
             boolean result = cdtUserSummaryService.save(cdtUserSummary);
             chain.add(event.getUserId().intValue());
-            userSummary.setChainRoad(gson.toJson(userSummary));
+            userSummary.setChainRoad(gson.toJson(chain));
         } else if (cdtUserSummary.getChainRoad() != null) {
             Type linkNodeType = new TypeToken<LinkedList<Integer>>() {
             }.getType();
