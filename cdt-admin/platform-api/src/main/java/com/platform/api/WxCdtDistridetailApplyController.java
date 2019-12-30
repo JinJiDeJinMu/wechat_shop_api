@@ -9,7 +9,6 @@ import com.chundengtai.base.service.CdtDistridetailApplyService;
 import com.chundengtai.base.service.CdtDistridetailService;
 import com.chundengtai.base.utils.BeanJwtUtil;
 import com.chundengtai.base.weixinapi.DistributionStatus;
-import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.UserVo;
 import io.swagger.annotations.Api;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
+
 
 /**
  * @Description 分销提现申请接口
@@ -42,55 +42,13 @@ public class WxCdtDistridetailApplyController {
     @Autowired
     private CdtDistridetailApplyService cdtDistridetailApplyService;
 
-    @ApiOperation(value = "提现申请接口", httpMethod = "POST")
-    @PostMapping("/distridetailapply.do")
-    @ResponseBody
-    @IgnoreAuth
-    public R apply(String weixinOpenid, String userName, String realName, Long distridetailId) {
-        return applyFfenxiaoData(weixinOpenid, userName, realName, distridetailId);
-    }
-
-    private R applyFfenxiaoData(String weixinOpenid, String userName, String realName, Long distridetailId) {
-        if (cdtDistridetailApplyService.getById(distridetailId) != null) {
-            return R.error("重复提交");
-        }
-        CdtDistridetail cdtDistridetail = cdtDistridetailService.getById(distridetailId);
-        String token = cdtDistridetail.getToken();
-        log.info("token=" + token);
-        System.out.println(token);
-        cdtDistridetail.setId(null);
-        cdtDistridetail.setToken(null);
-        String token_tem = "";
-        try {
-            token_tem = JavaWebToken.createJavaWebToken(BeanJwtUtil.javabean2map(cdtDistridetail));
-            log.info("token_tem=" + token_tem);
-        } catch (Exception e) {
-            log.error("jwt加密异常========");
-            e.printStackTrace();
-        }
-        if (token.equals(token_tem)) {
-            CdtDistridetailApply cdtDistridetailApply = new CdtDistridetailApply();
-            cdtDistridetailApply.setId(distridetailId);
-            cdtDistridetailApply.setOrderSn(cdtDistridetail.getOrderSn());
-            cdtDistridetailApply.setMoney(cdtDistridetail.getMoney());
-            cdtDistridetailApply.setStatus(cdtDistridetail.getStatus());
-            cdtDistridetailApply.setWeixinOpenid(weixinOpenid);
-            cdtDistridetailApply.setUserName(userName);
-            cdtDistridetailApply.setRealName(realName);
-            cdtDistridetailApply.setApplyTime(new Date());
-            cdtDistridetailApplyService.save(cdtDistridetailApply);
-            return R.ok("提交审核成功");
-        }
-        return R.error("提交审核失败");
-    }
-
     @ApiOperation(value = "提现申请", httpMethod = "POST")
+    @ResponseBody
     @PostMapping("/distriapply.do")
     public R getCashapply(@LoginUser UserVo loginUser, String realName, String tel) {
         List<CdtDistridetail> items = cdtDistridetailService.list(new QueryWrapper<CdtDistridetail>().lambda()
                 .eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER.getCode())
                 .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue()));
-
         try {
             items.stream().forEach(s -> {
                 applyFfenxiaoData(loginUser.getWeixin_openid(), loginUser.getUsername(), realName, s.getId());
@@ -103,4 +61,34 @@ public class WxCdtDistridetailApplyController {
         return R.error("提交审核成功");
     }
 
+    private void applyFfenxiaoData(String weixinOpenid, String userName, String realName, long distridetailId) {
+        if (cdtDistridetailApplyService.getById(distridetailId) == null) {
+            CdtDistridetail cdtDistridetail = cdtDistridetailService.getById(distridetailId);
+            String token = cdtDistridetail.getToken();
+            log.info("token=" + token);
+            cdtDistridetail.setId(null);
+            cdtDistridetail.setToken(null);
+            String token_tem = "";
+            try {
+                token_tem = JavaWebToken.createJavaWebToken(BeanJwtUtil.javabean2map(cdtDistridetail));
+                log.info("token_tem=" + token_tem);
+            } catch (Exception e) {
+                log.error("jwt加密异常========");
+                e.printStackTrace();
+            }
+            if (token.equals(token_tem)) {
+                CdtDistridetailApply cdtDistridetailApply = new CdtDistridetailApply();
+                cdtDistridetailApply.setId(distridetailId);
+                cdtDistridetailApply.setOrderSn(cdtDistridetail.getOrderSn());
+                cdtDistridetailApply.setMoney(cdtDistridetail.getMoney());
+                cdtDistridetailApply.setStatus(cdtDistridetail.getStatus());
+                cdtDistridetailApply.setWeixinOpenid(weixinOpenid);
+                cdtDistridetailApply.setUserName(userName);
+                cdtDistridetailApply.setRealName(realName);
+                cdtDistridetailApply.setApplyTime(new Date());
+                cdtDistridetailApplyService.save(cdtDistridetailApply);
+            }
+
+        }
+    }
 }
