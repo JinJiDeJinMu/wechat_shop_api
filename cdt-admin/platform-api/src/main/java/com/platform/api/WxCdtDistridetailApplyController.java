@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.bean.CdtDistridetailApply;
 import com.chundengtai.base.jwt.JavaWebToken;
@@ -7,7 +8,10 @@ import com.chundengtai.base.result.R;
 import com.chundengtai.base.service.CdtDistridetailApplyService;
 import com.chundengtai.base.service.CdtDistridetailService;
 import com.chundengtai.base.utils.BeanJwtUtil;
+import com.chundengtai.base.weixinapi.DistributionStatus;
 import com.platform.annotation.IgnoreAuth;
+import com.platform.annotation.LoginUser;
+import com.platform.entity.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Description 分销提现申请接口
@@ -42,7 +47,10 @@ public class WxCdtDistridetailApplyController {
     @ResponseBody
     @IgnoreAuth
     public R apply(String weixinOpenid, String userName, String realName, Long distridetailId) {
+        return applyFfenxiaoData(weixinOpenid, userName, realName, distridetailId);
+    }
 
+    private R applyFfenxiaoData(String weixinOpenid, String userName, String realName, Long distridetailId) {
         if (cdtDistridetailApplyService.getById(distridetailId) != null) {
             return R.error("重复提交");
         }
@@ -74,6 +82,25 @@ public class WxCdtDistridetailApplyController {
             return R.ok("提交审核成功");
         }
         return R.error("提交审核失败");
+    }
+
+    @ApiOperation(value = "提现申请", httpMethod = "POST")
+    @PostMapping("/distriapply.do")
+    public R getCashapply(@LoginUser UserVo loginUser, String realName, String tel) {
+        List<CdtDistridetail> items = cdtDistridetailService.list(new QueryWrapper<CdtDistridetail>().lambda()
+                .eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER.getCode())
+                .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue()));
+
+        try {
+            items.stream().forEach(s -> {
+                applyFfenxiaoData(loginUser.getWeixin_openid(), loginUser.getUsername(), realName, s.getId());
+            });
+        } catch (Exception ex) {
+            log.error("提交审核异常=========》" + ex.getMessage());
+            return R.error("提交审核失败");
+        }
+
+        return R.error("提交审核成功");
     }
 
 }
