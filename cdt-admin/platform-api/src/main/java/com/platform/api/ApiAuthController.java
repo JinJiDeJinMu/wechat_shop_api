@@ -78,13 +78,13 @@ public class ApiAuthController extends ApiBaseAction {
     @IgnoreAuth
     @PostMapping("login_by_weixin")
     public Object loginByWeixin(@RequestBody LoginInfo loginInfo,HttpServletRequest request) {
-        log.info(" testAsync 当前线程id:" + Thread.currentThread().getId() + ", 当前线程名称:" + Thread.currentThread().getName());
+        log.info(" loginByWeixin 当前线程id:" + Thread.currentThread().getId() + ", 当前线程名称:" + Thread.currentThread().getName());
 
         //获取openid
         String requestUrl = ApiUserUtils.getWebAccess(loginInfo.getCode());//通过自定义工具类组合出小程序需要的登录凭证 code
-        log.info("》》》组合token为：" + requestUrl);
+        //log.info("》》》组合token为：" + requestUrl);
         String res = restTemplate.getForObject(requestUrl, String.class);
-        log.info("res==" + res);
+        //log.info("res==" + res);
         JSONObject sessionData = JSON.parseObject(res);
         String openid=sessionData.getString("openid");
         log.info("》》》promoterId：" + loginInfo.getPromoterId());
