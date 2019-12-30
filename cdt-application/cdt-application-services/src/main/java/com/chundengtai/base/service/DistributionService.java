@@ -148,6 +148,7 @@ public class DistributionService {
         if (event.getEncryptCode().contains("_")) {
             String promotionId = event.getEncryptCode().split("_")[0];
             Long parentId = Long.valueOf(promotionId);
+            log.warn("推荐人id====>" + parentId);
             if (event.getUserId().equals(parentId)) {
                 log.warn("自己不能推荐自己");
                 return;
@@ -170,20 +171,25 @@ public class DistributionService {
             model.setSponsorId(parentId.intValue());
 
             //绑定user表层架关系
-            LambdaUpdateWrapper<User> condition = new LambdaUpdateWrapper<>();
-            condition.set(User::getFirstLeader, parentId);
-            condition.set(User::getIsDistribut, TrueOrFalseEnum.TRUE.getCode());
-            condition.eq(User::getId, event.getUserId());
-            condition.eq(User::getFirstLeader, 0);
-            condition.eq(User::getSecondLeader, 0);
+            User userInfo = userService.getOne(new QueryWrapper<User>().lambda().eq(User::getId, event.getUserId()));
+            if (userInfo.getSecondLeader().equals(0)) {
+                LambdaUpdateWrapper<User> condition = new LambdaUpdateWrapper<>();
+                if (userInfo.getFirstLeader().equals(0)) {
+                    condition.set(User::getFirstLeader, parentId);
+                }
+                condition.set(User::getIsDistribut, TrueOrFalseEnum.TRUE.getCode());
+                condition.eq(User::getId, event.getUserId());
 
-            if (parentModel != null) {
-                model.setSponsorId(parentModel.getSponsorId());
-                condition.eq(User::getSecondLeader, parentModel.getParentId());
+                if (parentModel != null) {
+                    model.setSponsorId(parentModel.getSponsorId());
+                    condition.set(User::getSecondLeader, parentModel.getParentId());
+                }
+                boolean rows = userService.update(condition);
+
+                log.info("====绑定影响行数====" + rows);
             }
+
             boolean result = distributionLevelService.save(model);
-            boolean rows = userService.update(condition);
-            log.info("====绑定影响行数====" + rows);
         }
     }
 
