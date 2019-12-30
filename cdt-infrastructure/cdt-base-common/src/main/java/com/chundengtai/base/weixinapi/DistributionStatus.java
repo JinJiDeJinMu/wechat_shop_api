@@ -22,7 +22,8 @@ public enum DistributionStatus {
     REFUND_ORDER(399, "已退订"),
     NON_COMPLETE_ORDER(400, "未完成"),
     COMPLETED_ORDER(402, "已完成"),
-    COMPLETED_GETGOLD(403, "已提现");
+    COMPLETED_GETGOLD_CHECK(403, "审核中"),
+    COMPLETED_GETGOLD(406, "已提现");
 
     private Integer code;
     private String desc;
