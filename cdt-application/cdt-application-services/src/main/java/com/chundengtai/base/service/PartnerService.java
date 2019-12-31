@@ -74,6 +74,10 @@ public class PartnerService {
                 queryWrapper
         );
 
+        if (userSummarys == null || userSummarys.size() == 0) {
+            return null;
+        }
+
         CdtUserSummary userSummary = null;
 
         long exsit = userSummarys.stream().filter(s -> s.getIsPartner().equals(TrueOrFalseEnum.TRUE.getCode())).count();
