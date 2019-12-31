@@ -54,11 +54,12 @@ public class WxwriteOffController extends ApiBaseAction {
             @RequestParam String orderNo,
                                       @RequestParam Integer orderId,
                                       @RequestParam Integer userId,
-                                      Integer merchantId,
+                                      @RequestParam Integer merchantId,
                                       @ApiParam(name = "timestamp", value = "时间戳") String timestamp,
                                       @ApiParam(name = "tokenSgin", value = "token秘钥") String tokenSgin
     ) {
 
+        log.info("merchantId" + merchantId);
         if (!merchantId.equals(loginUser.getMerchant_id().intValue())) {
             return toResponsSuccess("您当前不是店铺管理员");
         }
