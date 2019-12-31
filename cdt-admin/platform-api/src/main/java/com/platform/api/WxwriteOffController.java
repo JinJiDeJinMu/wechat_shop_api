@@ -51,10 +51,10 @@ public class WxwriteOffController extends ApiBaseAction {
     @IgnoreAuth
     public Object writeOffCodeExecute(@LoginUser UserVo loginUser
             , @ApiParam(name = "orderNo", value = "订单号")
-            @RequestParam String orderNo,
+                                          @RequestParam String orderNo,
                                       @RequestParam Integer orderId,
                                       @RequestParam Integer userId,
-                                      @RequestParam Integer merchantId,
+                                      @RequestParam Long merchantId,
                                       @ApiParam(name = "timestamp", value = "时间戳") String timestamp,
                                       @ApiParam(name = "tokenSgin", value = "token秘钥") String tokenSgin
     ) {
