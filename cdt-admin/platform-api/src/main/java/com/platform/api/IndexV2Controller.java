@@ -73,7 +73,7 @@ public class IndexV2Controller extends ApiBaseAction {
     @ApiOperation(value = "首页包含轮播图、分类、分类下的商品、最新商品")
     @IgnoreAuth
     @GetMapping(value = "index")
-    public Result<Map<String, Object>> index() {
+    public Result<Map<String, Object>> index(String school) {
         Map<String, Object> resultObj = (Map<String, Object>) redisTemplate.opsForValue().get("indexV2");
         if (resultObj == null) {
             resultObj = new HashMap<String, Object>();
@@ -139,7 +139,7 @@ public class IndexV2Controller extends ApiBaseAction {
     @ApiOperation(value = "首页新品")
     @IgnoreAuth
     @GetMapping(value = "indexNewGoods")
-    public Result<List<GoodsDTO>> indexGoods(String referrerId) {
+    public Result<List<GoodsDTO>> indexGoods(String school) {
         List<GoodsDTO> goodsDTOS = (List<GoodsDTO>) redisTemplate.opsForValue().get("indexNewGoods");
         if (goodsDTOS == null) {
             //最新商品
