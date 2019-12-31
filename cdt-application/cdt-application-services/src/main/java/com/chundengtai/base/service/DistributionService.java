@@ -1,6 +1,7 @@
 package com.chundengtai.base.service;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -143,7 +144,7 @@ public class DistributionService {
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
     public void distributionLogic(DistributionEvent event) {
-        log.info(" testAsync 当前线程id:" + Thread.currentThread().getId() + ", 当前线程名称:" + Thread.currentThread().getName());
+        log.info(" distributionLogic 当前线程id:" + Thread.currentThread().getId() + ", 当前线程名称:" + Thread.currentThread().getName());
         //todo:对推荐信息解密
         if (StringUtils.isEmpty(event.getEncryptCode())) {
             return;
@@ -173,7 +174,11 @@ public class DistributionService {
             CdtDistributionLevel model = new CdtDistributionLevel();
             model.setUserId(event.getUserId().intValue());
             model.setParentId(parentId.intValue());
-            model.setSponsorId(parentId.intValue());
+            if (parentModel != null) {
+                model.setSponsorId(parentModel.getSponsorId());
+            } else {
+                model.setSponsorId(parentId.intValue());
+            }
 
             //绑定user表层架关系
             boolean resultRows = userService.update(new UpdateWrapper<User>().lambda().set(User::getIsDistribut, TrueOrFalseEnum.TRUE.getCode())
@@ -182,13 +187,13 @@ public class DistributionService {
             log.warn("====开通推荐的分销合伙人按钮====>" + resultRows);
 
             User userInfo = userService.getOne(new QueryWrapper<User>().lambda().eq(User::getId, event.getUserId()));
-            System.out.printf("用户id====>" + event.getUserId());
+            log.warn("用户id====>" + event.getUserId());
             if (userInfo.getSecondLeader().equals(0)) {
                 LambdaUpdateWrapper<User> condition = new LambdaUpdateWrapper<>();
                 if (userInfo.getFirstLeader().equals(0)) {
                     condition.set(User::getFirstLeader, parentId);
-                    //绑定链路关系
                     try {
+                        //绑定链路关系 //记录标号信息
                         bindLinkRelation(event, parentId);
                     } catch (Exception ex) {
                         log.error("绑定链路关系异常");
@@ -198,16 +203,14 @@ public class DistributionService {
 
                 condition.set(User::getIsDistribut, TrueOrFalseEnum.TRUE.getCode());
                 condition.eq(User::getId, event.getUserId());
-
                 if (parentModel != null) {
                     model.setSponsorId(parentModel.getSponsorId());
                     condition.set(User::getSecondLeader, parentModel.getParentId());
                 }
+                //更新用户表一二级合伙人绑定
                 boolean rows = userService.update(condition);
-
                 log.info("====绑定影响行数====" + rows);
             }
-
             boolean result = distributionLevelService.save(model);
         }
     }
@@ -218,12 +221,14 @@ public class DistributionService {
         CdtUserSummary userSummary = new CdtUserSummary();
         userSummary.setUserId(event.getUserId().intValue());
 
+        // 绑定用户链路关系的同时更新上级发展的下线数量
         if (cdtUserSummary == null) {
             cdtUserSummary = new CdtUserSummary();
             cdtUserSummary.setUserId(parentId.intValue());
             LinkedList<Integer> chain = new LinkedList<>();
             chain.add(parentId.intValue());
             cdtUserSummary.setChainRoad(gson.toJson(chain));
+            cdtUserSummary.setStatsPerson(1);
             boolean result = cdtUserSummaryService.save(cdtUserSummary);
             chain.add(event.getUserId().intValue());
             userSummary.setChainRoad(gson.toJson(chain));
@@ -233,9 +238,8 @@ public class DistributionService {
             LinkedList<Integer> linkNode = gson.fromJson(cdtUserSummary.getChainRoad(), linkNodeType);
             linkNode.add(event.getUserId().intValue());
             userSummary.setChainRoad(gson.toJson(linkNode));
-            //ListNode chain = JSONObject.parseObject(cdtUserSummary.getChainRoad(),ListNode<Integer>.class);
-            //JSON.parseObject("转换json",new TypeReference<A<B<C>>>(){})
-            //ListNode<Integer> chain = JSON.parseObject(cdtUserSummary.getChainRoad(),new TypeReference<ListNode<Integer>>(){});
+            cdtUserSummary.setStatsPerson(cdtUserSummary.getStatsPerson() + 1);
+            boolean result2 = cdtUserSummaryService.updateById(cdtUserSummary);
         }
         boolean rows = cdtUserSummaryService.save(userSummary);
     }
@@ -388,11 +392,34 @@ public class DistributionService {
 
     }
 
-
     /**
      * 分佣计算返佣金+合伙人计算分成
      */
-    public void computeCommission() {
+    public void computeCommission(int userId, int goldUserId, BigDecimal money, Order order) {
+
+        //读取链路关系
+        CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, userId));
+        Gson gson = new Gson();
+
+        Type linkNodeType = new TypeToken<LinkedList<Integer>>() {
+        }.getType();
+        LinkedList<Integer> linkNode = gson.fromJson(cdtUserSummary.getChainRoad(), linkNodeType);
+
+        LambdaQueryWrapper<CdtUserSummary> queryWrapper = new QueryWrapper<CdtUserSummary>().lambda().in(CdtUserSummary::getUserId, linkNode);
+        log.warn("=========>" + queryWrapper.getSqlSegment());
+        List<CdtUserSummary> userSummarys = cdtUserSummaryService.list(
+                queryWrapper
+        );
+
+        while (linkNode.size() != 0) {
+            Integer roadUserId = linkNode.pollLast();
+            System.out.println(roadUserId);
+            // 相当于倒叙输出；
+            CdtUserSummary model = userSummarys.stream().filter(s -> s.getUserId().equals(roadUserId)).findFirst().get();
+            if (model.getIsPartner().equals(0))
+                continue;
+        }
+
 
     }
 

@@ -36,6 +36,10 @@ public class AppTest {
         llist.add("D");
 
 
+        for (Object object : llist) {
+            System.out.println(object);
+        }
+
         String gsonJson1 = gson.toJson(llist);
         Type jsonType1 = new TypeToken<LinkedList<String>>() {
         }.getType();

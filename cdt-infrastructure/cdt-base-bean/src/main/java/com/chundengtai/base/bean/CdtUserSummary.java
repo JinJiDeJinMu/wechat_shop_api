@@ -16,90 +16,110 @@ import java.util.Date;
  * </p>
  *
  * @author Royal
- * @since 2019-12-30
+ * @since 2019-12-31
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class CdtUserSummary implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * id
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+  /**
+   * id
+   */
+  @TableId(value = "id", type = IdType.AUTO)
+  private Integer id;
 
-    /**
-     * 用户id
-     */
-    private Integer userId;
+  /**
+   * 用户id
+   */
+  private Integer userId;
 
-    /**
-     * 累计收益
-     */
-    private BigDecimal totalIncome;
+  /**
+   * 累计收益
+   */
+  private BigDecimal totalIncome;
 
-    /**
-     * unbalanced
-     */
-    private BigDecimal unbalanced;
+  /**
+   * unbalanced
+   */
+  private BigDecimal unbalanced;
 
-    /**
-     * 下线人数
-     */
-    private Integer statsPerson;
+  /**
+   * 是否是合伙人
+   */
+  private Integer isPartner;
 
-    /**
-     * 分销订单数量
-     */
-    private Integer shareOrderNum;
+  /**
+   * 合伙人等级
+   */
+  private Integer partnerLevel;
 
-    /**
-     * 合伙人奖励收益
-     */
-    private BigDecimal partnerIncome;
+  /**
+   * 下线人数
+   */
+  private Integer statsPerson;
 
-    /**
-     * 下线累计收益
-     */
-    private BigDecimal statsIncome;
+  /**
+   * 有效下线人数
+   */
+  private Integer tradePerson;
 
-    /**
-     * 加速合伙人
-     */
-    private Integer speedPartner;
+  /**
+   * 分销订单数量
+   */
+  private Integer shareOrderNum;
 
-    /**
-     * 链路位置
-     */
-    private String chainRoad;
+  /**
+   * 合伙人奖励收益
+   */
+  private BigDecimal partnerIncome;
 
-    /**
-     * 乐观锁
-     */
-    private Integer revision;
+  /**
+   * 下线累计收益
+   */
+  private BigDecimal statsIncome;
 
-    /**
-     * 创建人
-     */
-    private String createdBy;
+  /**
+   * 加速合伙人
+   */
+  private Integer speedPartner;
 
-    /**
-     * 创建时间
-     */
-    private Date createdTime;
+  /**
+   * 链路位置
+   */
+  private String chainRoad;
 
-    /**
-     * 更新人
-     */
-    private String updatedBy;
+  /**
+   * 加密校验token
+   */
+  private String token;
 
-    /**
-     * 更新时间
-     */
-    private Date updatedTime;
+  /**
+   * 乐观锁
+   */
+  private Integer revision;
+
+  /**
+   * 创建人
+   */
+  private String createdBy;
+
+  /**
+   * 创建时间
+   */
+  private Date createdTime;
+
+  /**
+   * 更新人
+   */
+  private String updatedBy;
+
+  /**
+   * 更新时间
+   */
+  private Date updatedTime;
 
 
 }
