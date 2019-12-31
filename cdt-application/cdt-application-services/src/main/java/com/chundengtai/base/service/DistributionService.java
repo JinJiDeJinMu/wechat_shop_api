@@ -386,7 +386,7 @@ public class DistributionService {
         );
 
         List<CdtDistridetail> batListDetail = new ArrayList<>();
-        for (CdtDistridetail detail : batListDetail) {
+        for (CdtDistridetail detail : distridetail) {
             String token = detail.getToken();
             Long id = detail.getId();
             detail.setId(null);
