@@ -77,18 +77,31 @@ public class WxCdtDistridetailApplyController {
                 e.printStackTrace();
             }
             if (token.equals(token_tem)) {
-                CdtDistridetailApply cdtDistridetailApply = new CdtDistridetailApply();
-                cdtDistridetailApply.setId(distridetailId);
-                cdtDistridetailApply.setOrderSn(cdtDistridetail.getOrderSn());
-                cdtDistridetailApply.setMoney(cdtDistridetail.getMoney());
-                cdtDistridetailApply.setStatus(cdtDistridetail.getStatus());
-                cdtDistridetailApply.setWeixinOpenid(weixinOpenid);
-                cdtDistridetailApply.setUserName(userName);
-                cdtDistridetailApply.setRealName(realName);
-                cdtDistridetailApply.setApplyTime(new Date());
-                cdtDistridetailApplyService.save(cdtDistridetailApply);
+                try {
+                    //更改分销订单状态为审核中
+                    cdtDistridetail.setId(null);
+                    cdtDistridetail.setStatus(DistributionStatus.COMPLETED_GETGOLD_CHECK.getCode());
+                    cdtDistridetail.setUpdateTime(new Date());
+                    cdtDistridetail.setToken(null);
+                    String cdtToken = JavaWebToken.createJavaWebToken(BeanJwtUtil.javabean2map(cdtDistridetail));
+                    cdtDistridetail.setToken(cdtToken);
+                    cdtDistridetail.setId(distridetailId);
+                    cdtDistridetailService.updateById(cdtDistridetail);
+                    //插入到审核表
+                    CdtDistridetailApply cdtDistridetailApply = new CdtDistridetailApply();
+                    cdtDistridetailApply.setId(distridetailId);
+                    cdtDistridetailApply.setOrderSn(cdtDistridetail.getOrderSn());
+                    cdtDistridetailApply.setMoney(cdtDistridetail.getMoney());
+                    cdtDistridetailApply.setStatus(cdtDistridetail.getStatus());
+                    cdtDistridetailApply.setWeixinOpenid(weixinOpenid);
+                    cdtDistridetailApply.setUserName(userName);
+                    cdtDistridetailApply.setRealName(realName);
+                    cdtDistridetailApply.setApplyTime(new Date());
+                    cdtDistridetailApplyService.save(cdtDistridetailApply);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-
         }
     }
 }
