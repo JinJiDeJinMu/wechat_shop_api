@@ -60,7 +60,7 @@ public class WxwriteOffController extends ApiBaseAction {
     ) {
 
         log.info("merchantId" + merchantId);
-        if (!merchantId.equals(loginUser.getMerchant_id().intValue())) {
+        if (!merchantId.equals(loginUser.getMerchant_id())) {
             return toResponsSuccess("您当前不是店铺管理员");
         }
         //todo:核销订单验证参数加密
