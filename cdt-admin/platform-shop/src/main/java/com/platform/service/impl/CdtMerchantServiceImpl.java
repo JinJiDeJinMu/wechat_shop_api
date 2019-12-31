@@ -40,7 +40,7 @@ public class CdtMerchantServiceImpl implements CdtMerchantService {
 
     @Override
     public int save(CdtMerchantEntity cdtMerchant) {
-        cdtMerchant.setId(keygenService.genNumber().longValue());
+        //cdtMerchant.setId(keygenService.genNumber().longValue());
         return cdtMerchantDao.save(cdtMerchant);
     }
 
