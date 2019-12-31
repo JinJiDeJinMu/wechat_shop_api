@@ -77,6 +77,9 @@ public class DistributionService {
     @Autowired
     private CdtUserSummaryService cdtUserSummaryService;
 
+    @Autowired
+    private PartnerService partnerService;
+
     private CdtDistrimoney distrimoney;
 
     @PostConstruct
@@ -260,7 +263,7 @@ public class DistributionService {
     /**
      * 记录用户所挣钱
      */
-    public boolean recordEarning(int userId, int goldUserId, BigDecimal money, Order order) {
+    public boolean recordEarning(int userId, int goldUserId, BigDecimal money, Order order, int type) {
         CdtDistridetail distridetail = new CdtDistridetail();
         distridetail.setUserId(userId);
         distridetail.setGoldUserId(goldUserId);
@@ -268,10 +271,9 @@ public class DistributionService {
         distridetail.setOrderSn(order.getOrderSn());
         distridetail.setCreatedTime(new Date());
         changeDistridetailStatus(order, distridetail);
-
+        distridetail.setType(type);
         distridetail.setToken(encryt(distridetail));
         boolean result = distridetailService.save(distridetail);
-
         return result;
         //更新用户分销参数信息
     }
@@ -301,8 +303,11 @@ public class DistributionService {
         logModel.setCreatedTime(new Date());
         logModel.setToken(encryt(logModel));
         boolean result = rebateLogService.save(logModel);
-        recordEarning(user.getId(), user.getFirstLeader(), earnMoney, order);
 
+        //记录分销奖励
+        recordEarning(user.getId(), user.getFirstLeader(), earnMoney, order, 0);
+
+        //记录二级分销奖励
         if (!user.getSecondLeader().equals(0)) {
             logModel.setId(null);
             logModel.setToken(null);
@@ -314,7 +319,28 @@ public class DistributionService {
             logModel.setCreatedTime(new Date());
             logModel.setToken(encryt(logModel));
             boolean secondResult = rebateLogService.save(logModel);
-            recordEarning(user.getId(), user.getSecondLeader(), secondMoney, order);
+            recordEarning(user.getId(), user.getSecondLeader(), secondMoney, order, 0);
+        }
+
+        //记录合伙人奖励
+        CdtUserSummary partner = partnerService.getPartnerInfo(distrimoney, user.getId());
+        if (partner != null) {
+            BigDecimal percent = BigDecimal.ZERO;
+
+            switch (partner.getPartnerLevel()) {
+                case 1:
+                    percent = distrimoney.getFirstPartner();
+                    break;
+                case 2:
+                    percent = distrimoney.getSecondPartner();
+                    break;
+                case 3:
+                    percent = distrimoney.getThirdPartner();
+                    break;
+
+            }
+            BigDecimal partnerMoney = order.getAllPrice().multiply(percent);
+            recordEarning(user.getId(), partner.getUserId(), partnerMoney, order, 1);
         }
     }
 

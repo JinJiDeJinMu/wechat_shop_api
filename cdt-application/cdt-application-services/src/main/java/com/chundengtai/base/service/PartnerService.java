@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtDistributionLevel;
 import com.chundengtai.base.bean.CdtDistrimoney;
 import com.chundengtai.base.bean.CdtUserSummary;
-import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.weixinapi.TrueOrFalseEnum;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
-import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +47,7 @@ public class PartnerService {
     /**
      * 轮询获取到可以拿合伙人奖励的合伙人
      */
-    public CdtUserSummary getPartnerInfo(CdtDistrimoney distrimoney, int userId, int goldUserId, BigDecimal money, Order order) {
+    public CdtUserSummary getPartnerInfo(CdtDistrimoney distrimoney, int userId) {
         //读取链路关系
         CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
                 .eq(CdtUserSummary::getUserId, userId));
