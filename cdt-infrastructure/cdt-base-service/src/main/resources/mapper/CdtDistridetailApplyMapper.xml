@@ -14,12 +14,11 @@
         <result column="apply_time" property="applyTime" />
         <result column="operator" property="operator"/>
         <result column="update_time" property="updateTime" />
-        <result column="type" property="type"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, order_sn, status, money, weixinOpenid, userName, realName, apply_time, operator, update_time, type
+        id, order_sn, status, money, weixinOpenid, userName, realName, apply_time, operator, update_time
     </sql>
 
 </mapper>

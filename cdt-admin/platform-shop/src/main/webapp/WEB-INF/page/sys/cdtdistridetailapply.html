@@ -22,12 +22,6 @@
                             size="small">
                         重置
                     </el-button>
-                <el-button
-                        style="float: right;margin-right: 15px"
-                        @click="add()"
-                        size="small">
-                    新建
-                </el-button>
             <div style="margin-top: 15px">
                 <el-form :inline="true" :model="baseForm.data" size="small" label-width="140px">
                                             <el-form-item label="id">
@@ -54,12 +48,12 @@
                                   placeholder="提现人"></el-input>
                     </el-form-item>
                         </el-form-item>
-                    <el-form-item label="类型">
-                        <el-select style="width: 200px" clearable v-model="baseForm.data.type" placeholder="类型">
-                            <el-option value="0" label="未审核">未审核</el-option>
-                            <el-option value="1" label="已通过">已通过</el-option>
-                        </el-select>
-                        </el-form-item>
+                    <!-- <el-form-item label="类型">
+                         <el-select style="width: 200px" clearable v-model="baseForm.data.type" placeholder="类型">
+                             <el-option value="0" label="未审核">未审核</el-option>
+                             <el-option value="1" label="已通过">已通过</el-option>
+                         </el-select>
+                         </el-form-item>-->
 
                     <el-button style="margin-left: 20px;float:right" class="search-button" @click="handleBatchOperate()"
                                type="primary"
@@ -110,9 +104,6 @@
                                                                                     <template slot-scope="scope">
                                                                                         {{scope.row.updateTime|dateFormat}}
                                                                                     </template>
-                        </el-table-column>
-                <el-table-column label="类型" width="80" align="center">
-                    <template slot-scope="scope">{{scope.row.type|statusType}}</template>
                         </el-table-column>
                 <!-- <el-table-column label="审核状态" width="100" align="center">
 <template slot-scope="scope">

@@ -78,6 +78,7 @@ public class WxCdtDistridetailApplyController {
             }
             if (token.equals(token_tem)) {
                 try {
+                    log.info("token校验成功");
                     //更改分销订单状态为审核中
                     cdtDistridetail.setId(null);
                     cdtDistridetail.setStatus(DistributionStatus.COMPLETED_GETGOLD_CHECK.getCode());
