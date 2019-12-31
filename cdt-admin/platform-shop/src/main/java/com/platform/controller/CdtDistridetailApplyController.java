@@ -1,9 +1,14 @@
 package com.platform.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.bean.CdtDistridetailApply;
+import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.service.CdtDistridetailApplyService;
+import com.chundengtai.base.service.CdtDistridetailService;
 import com.chundengtai.base.transfer.BaseForm;
+import com.chundengtai.base.utils.BeanJwtUtil;
+import com.chundengtai.base.weixinapi.DistributionStatus;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.platform.service.ApplyCashService;
@@ -30,6 +35,9 @@ public class CdtDistridetailApplyController {
 
     @Autowired
     private ApplyCashService applyCashService;
+
+    @Autowired
+    private CdtDistridetailService cdtDistridetailService;
 
     /**
      * 列表
@@ -66,9 +74,6 @@ public class CdtDistridetailApplyController {
         if (params.getData().getOperator() != null) {
             conditon.like("operator", params.getData().getOperator());
         }
-        if (params.getData().getType() != null) {
-            conditon.eq("type", params.getData().getType());
-        }
         PageHelper.startPage(params.getPageIndex(), params.getPageSize());
         List<CdtDistridetailApply> collectList = cdtDistridetailApplyService.list(conditon);
         PageInfo pageInfo = new PageInfo(collectList);
@@ -82,16 +87,32 @@ public class CdtDistridetailApplyController {
     //@RequiresPermissions("cdtdistridetailapply:deleteModel")
     public R review(@RequestBody Integer[] ids) {
         List<CdtDistridetailApply> list = cdtDistridetailApplyService.listByIds(Arrays.asList(ids));
-        list.parallelStream().filter(e -> e.getType() == 0).collect(Collectors.toList())
+        list.parallelStream().filter(e -> e.getStatus() == 405).collect(Collectors.toList())
                 .forEach(e -> {
                     String weixinOpenid = e.getWeixinOpenid();
                     String realName = e.getRealName();
                     double money = e.getMoney().doubleValue();
                     if (applyCashService.wechatMoneyToUser(weixinOpenid, realName, money)) {
-                        e.setType(1);
-                        e.setUpdateTime(new Date());
-                        e.setOperator(ShiroUtils.getUserEntity().getUsername());
-                        cdtDistridetailApplyService.save(e);
+                        try {
+                            //更新分销审核表类型
+                            //e.setType(1);
+                            e.setStatus(DistributionStatus.COMPLETED_GETGOLD.getCode());
+                            e.setUpdateTime(new Date());
+                            e.setOperator(ShiroUtils.getUserEntity().getUsername());
+                            cdtDistridetailApplyService.save(e);
+                            //更新分销订单类型
+                            CdtDistridetail cdtDistridetail = cdtDistridetailService.getById(e.getId());
+                            cdtDistridetail.setUpdateTime(new Date());
+                            cdtDistridetail.setStatus(DistributionStatus.COMPLETED_GETGOLD.getCode());
+                            cdtDistridetail.setId(null);
+                            cdtDistridetail.setToken(null);
+                            String token = JavaWebToken.createJavaWebToken(BeanJwtUtil.javabean2map(cdtDistridetail));
+                            cdtDistridetail.setToken(token);
+                            cdtDistridetail.setId(e.getId());
+                            cdtDistridetailService.updateById(cdtDistridetail);
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
                     }
 
                 });

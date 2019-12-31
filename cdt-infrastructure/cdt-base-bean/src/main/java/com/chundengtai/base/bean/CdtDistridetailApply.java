@@ -77,10 +77,5 @@ public class CdtDistridetailApply implements Serializable {
      */
       private Date updateTime;
 
-      /**
-       * 类型
-     */
-      private Integer type;
-
 
 }

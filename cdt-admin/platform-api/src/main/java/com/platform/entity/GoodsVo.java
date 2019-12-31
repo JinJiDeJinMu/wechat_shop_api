@@ -119,6 +119,15 @@ public class GoodsVo implements Serializable {
     private Integer success_people;//成团人数
     private BigDecimal group_price;//团购价格(元)
 
+    private String schoolName;
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
 
     public Integer getId() {
         return id;
