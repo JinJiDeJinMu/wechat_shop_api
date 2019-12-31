@@ -219,6 +219,9 @@ public class DistributionService {
     }
 
     private void bindLinkRelation(DistributionEvent event, Long parentId) {
+        int count = cdtUserSummaryService.count(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, event.getUserId().intValue()));
+        if (count > 0)
+            return;
         CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, parentId.intValue()));
         Gson gson = new Gson();
         CdtUserSummary userSummary = new CdtUserSummary();
@@ -322,25 +325,30 @@ public class DistributionService {
             recordEarning(user.getId(), user.getSecondLeader(), secondMoney, order, 0);
         }
 
-        //记录合伙人奖励
-        CdtUserSummary partner = partnerService.getPartnerInfo(distrimoney, user.getId());
-        if (partner != null) {
-            BigDecimal percent = BigDecimal.ZERO;
+        try {
+            //记录合伙人奖励
+            CdtUserSummary partner = partnerService.getPartnerInfo(distrimoney, user.getId());
+            if (partner != null) {
+                BigDecimal percent = BigDecimal.ZERO;
 
-            switch (partner.getPartnerLevel()) {
-                case 1:
-                    percent = distrimoney.getFirstPartner();
-                    break;
-                case 2:
-                    percent = distrimoney.getSecondPartner();
-                    break;
-                case 3:
-                    percent = distrimoney.getThirdPartner();
-                    break;
+                switch (partner.getPartnerLevel()) {
+                    case 1:
+                        percent = distrimoney.getFirstPartner();
+                        break;
+                    case 2:
+                        percent = distrimoney.getSecondPartner();
+                        break;
+                    case 3:
+                        percent = distrimoney.getThirdPartner();
+                        break;
 
+                }
+                BigDecimal partnerMoney = order.getAllPrice().multiply(percent);
+                recordEarning(user.getId(), partner.getUserId(), partnerMoney, order, 1);
             }
-            BigDecimal partnerMoney = order.getAllPrice().multiply(percent);
-            recordEarning(user.getId(), partner.getUserId(), partnerMoney, order, 1);
+        } catch (Exception ex) {
+            log.error("========记录合伙人奖励异常===============");
+            ex.printStackTrace();
         }
     }
 
