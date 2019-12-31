@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Type;
 import java.util.LinkedList;
@@ -51,10 +52,17 @@ public class PartnerService {
         //读取链路关系
         CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
                 .eq(CdtUserSummary::getUserId, userId));
+
+        if (cdtUserSummary == null) return null;
         Gson gson = new Gson();
 
         Type linkNodeType = new TypeToken<LinkedList<Integer>>() {
         }.getType();
+
+        if (StringUtils.isEmpty(cdtUserSummary.getChainRoad())) {
+            log.warn("======绑定结构层级数据有误请检查========");
+            return null;
+        }
         LinkedList<Integer> linkNode = gson.fromJson(cdtUserSummary.getChainRoad(), linkNodeType);
 
         LambdaQueryWrapper<CdtUserSummary> queryWrapper = new QueryWrapper<CdtUserSummary>().lambda()
