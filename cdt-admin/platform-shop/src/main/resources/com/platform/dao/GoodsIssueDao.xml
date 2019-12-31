@@ -25,7 +25,10 @@
         nideshop_goods_issue.question,
         nideshop_goods_issue.answer
         from nideshop_goods_issue
-        WHERE 1=1 and nideshop_goods_issue.merchant_id = ${merchant_id}
+        WHERE 1=1
+        <if test="merchantId != null and merchanId != ''">
+            and nideshop_goods_issue.merchant_id = #{merchantId}
+        </if>
         <if test="question != null and question != ''">
             AND nideshop_goods_issue.question LIKE concat('%',#{question},'%')
         </if>
@@ -44,7 +47,10 @@
 
     <select id="queryTotal" resultType="int">
         select count(*) from nideshop_goods_issue
-        WHERE 1=1 and nideshop_goods_issue.merchant_id = ${merchant_id}
+        WHERE 1=1
+        <if test="merchantId != null and merchanId != ''">
+            and nideshop_goods_issue.merchant_id = #{merchantId}
+        </if>
         <if test="question != null and question != ''">
             AND nideshop_goods_issue.question LIKE concat('%',#{question},'%')
         </if>

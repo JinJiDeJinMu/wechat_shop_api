@@ -1,5 +1,6 @@
 package com.platform.controller;
 
+import com.platform.constance.ShopShow;
 import com.platform.entity.GoodsIssueEntity;
 import com.platform.service.GoodsIssueService;
 import com.platform.utils.PageUtils;
@@ -32,6 +33,9 @@ public class GoodsIssueController extends BaseController {
     public R list(@RequestParam Map<String, Object> params) {
         //查询列表数据
         Query query = getqCurrentQuery(params);
+        if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
+            query.put("merchantId", ShiroUtils.getUserEntity().getMerchantId());
+        }
         List<GoodsIssueEntity> goodsIssueList = goodsIssueService.queryList(query);
         int total = goodsIssueService.queryTotal(query);
 
