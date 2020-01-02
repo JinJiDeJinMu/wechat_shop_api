@@ -361,12 +361,16 @@ public class DistributionService {
         List<CdtRebateLog> listLogModel = rebateLogService.list(new QueryWrapper<CdtRebateLog>()
                 .lambda().eq(CdtRebateLog::getBuyUserId, userId).eq(CdtRebateLog::getOrderSn, order.getOrderSn()));
         List<CdtRebateLog> batListLog = new ArrayList<>();
+        log.info("查询结果" + listLogModel);
         for (CdtRebateLog item : listLogModel) {
             String token = item.getToken();
             Integer id = item.getId();
             item.setId(null);
             item.setToken(null);
             String dynamicToken = encryt(item);
+            log.info("解密" + JavaWebToken.parserJavaWebToken(token));
+            log.info("token" + token);
+            log.info("dynamicToken" + dynamicToken);
             if (dynamicToken.equalsIgnoreCase(token)) {
                 item.setId(id);
                 if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
@@ -464,4 +468,5 @@ public class DistributionService {
 
 
     }
+
 }
