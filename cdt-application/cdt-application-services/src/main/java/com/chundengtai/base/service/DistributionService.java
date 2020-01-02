@@ -397,7 +397,6 @@ public class DistributionService {
         if (batListLog.size() > 0) {
             boolean result = rebateLogService.updateBatchById(batListLog);
         }
-
         //更新用户所得的钱记录状态
         List<CdtDistridetail> distridetail = distridetailService.list(new QueryWrapper<CdtDistridetail>().lambda()
                 .eq(CdtDistridetail::getUserId, userId).eq(CdtDistridetail::getOrderSn, order.getOrderSn())
