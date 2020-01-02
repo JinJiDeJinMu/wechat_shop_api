@@ -136,7 +136,7 @@ public class DistributionService implements IdistributionService {
     }
 
     private BigDecimal computeFirstMoney(BigDecimal totalMoney) {
-        return totalMoney.multiply(distrimoney.getFirstPartner());
+        return totalMoney.multiply(distrimoney.getFirstPercent());
     }
 
     private BigDecimal computeSecondMoney(BigDecimal totalMoney) {
