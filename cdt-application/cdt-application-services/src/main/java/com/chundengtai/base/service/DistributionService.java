@@ -303,8 +303,8 @@ public class DistributionService {
         logModel.setRemark("一级返佣结算");
         BigDecimal earnMoney = computeFirstMoney(order.getAllPrice());
         logModel.setMoney(earnMoney);
-        logModel.setCreatedTime(new Date());
         logModel.setToken(encryt(logModel));
+        logModel.setCreatedTime(new Date());
         boolean result = rebateLogService.save(logModel);
 
         //记录分销奖励
@@ -319,8 +319,8 @@ public class DistributionService {
             logModel.setRemark("二级返佣结算");
             BigDecimal secondMoney = computeSecondMoney(order.getAllPrice());
             logModel.setMoney(secondMoney);
-            logModel.setCreatedTime(new Date());
             logModel.setToken(encryt(logModel));
+            logModel.setCreatedTime(new Date());
             boolean secondResult = rebateLogService.save(logModel);
             recordEarning(user.getId(), user.getSecondLeader(), secondMoney, order, 0);
         }
@@ -365,8 +365,14 @@ public class DistributionService {
         for (CdtRebateLog item : listLogModel) {
             String token = item.getToken();
             Integer id = item.getId();
+            Date createTime = item.getCreatedTime();
+            Date completeTime = item.getCompleteTime();
+            Date confirmTime = item.getConfirmTime();
             item.setId(null);
             item.setToken(null);
+            item.setCreatedTime(null);
+            item.setCompleteTime(null);
+            item.setConfirmTime(null);
             log.info("实体类=" + item);
             try {
                 log.info("map=" + BeanJwtUtil.javabean2map(item));
@@ -379,16 +385,20 @@ public class DistributionService {
             log.info("token=" + token);
             log.info("dynamicToken=" + dynamicToken);
             /*if (true) {*/
-                item.setId(id);
-                if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
-                    item.setCompleteTime(new Date());
-                } else {
-                    item.setConfirmTime(new Date());
-                }
+            item.setId(id);
 
-                item.setStatus(order.getOrderStatus());
-                item.setToken(encryt(item));
-                batListLog.add(item);
+            item.setStatus(order.getOrderStatus());
+            item.setToken(encryt(item));
+            item.setCreatedTime(createTime);
+            item.setCompleteTime(completeTime);
+            item.setConfirmTime(confirmTime);
+            if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
+                item.setCompleteTime(new Date());
+            } else {
+                item.setConfirmTime(new Date());
+            }
+
+            batListLog.add(item);
             /*} else {
                 log.warn("分销安全校验失败==========》" + JSON.toJSONString(item));
                 throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
@@ -408,14 +418,21 @@ public class DistributionService {
         for (CdtDistridetail detail : distridetail) {
             String token = detail.getToken();
             Long id = detail.getId();
+            Date creatTime = detail.getCreatedTime();
+            Date updateTime = detail.getUpdateTime();
             detail.setId(null);
             detail.setToken(null);
+            detail.setCreatedTime(null);
+            detail.setUpdateTime(null);
             String dynamicToken = encryt(detail);
             if (dynamicToken.equalsIgnoreCase(token)) {
                 detail.setId(id);
-                detail.setUpdateTime(new Date());
                 changeDistridetailStatus(order, detail);
                 detail.setToken(encryt(detail));
+
+                //时间放在加密之后
+                detail.setUpdateTime(new Date());
+                detail.setCreatedTime(creatTime);
                 batListDetail.add(detail);
             } else {
                 log.warn("分销安全校验失败==========》" + JSON.toJSONString(detail));
@@ -464,14 +481,6 @@ public class DistributionService {
             if (model.getIsPartner().equals(0))
                 continue;
         }
-
-
-    }
-
-    /**
-     * 判定是否能成功合伙人
-     */
-    public void determinePartner() {
 
 
     }
