@@ -128,4 +128,18 @@ public class PartnerService {
         return userSummary;
 
     }
+
+    /**
+     * 判定是否能成功合伙人
+     */
+    public void determinePartner(CdtDistrimoney distrimoney, int userId) {
+        //读取链路关系
+        CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
+                .eq(CdtUserSummary::getUserId, userId));
+        if (cdtUserSummary.getIsPartner().equals(TrueOrFalseEnum.TRUE.getCode())) {
+            return;
+        }
+
+
+    }
 }
