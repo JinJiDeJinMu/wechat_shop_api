@@ -204,7 +204,7 @@
         AND cart.user_id = #{userId}
         AND cart.checked = 1
         GROUP BY
-            cart.merchant_id,sys.merchant_name
+            cart.merchant_id
     </select>
     <select id="queryCheckedByUserIdAndMerId" parameterType="java.util.Map" resultMap="cartMap">
         select * from nideshop_cart where user_id=#{user_id} and checked = 1 and merchant_id=#{merchantId}
