@@ -30,7 +30,7 @@ public class UserBindListener {
 
     @Async
     public void asyncExcute(DistributionEvent event) {
-        log.info(" testAsync 当前线程id:" + Thread.currentThread().getId() + ", 当前线程名称:" + Thread.currentThread().getName());
+        log.info(" asyncExcute 当前线程id:" + Thread.currentThread().getId() + ", 当前线程名称:" + Thread.currentThread().getName());
         distributionService.distributionLogic(event);
     }
 }
