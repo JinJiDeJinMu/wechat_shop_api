@@ -421,6 +421,7 @@ public class DistributionService implements IdistributionService {
             CdtDistributionLevel item = distributionLevelService.getOne(new QueryWrapper<CdtDistributionLevel>().lambda()
                     .eq(CdtDistributionLevel::getUserId, orderModel.getUserId()));
 
+            log.info("============BiConsumer====================>进入表达式逻辑");
             if (item == null) {
                 log.error("==userSumeryOp====绑定关系层级不存在不存在！=====");
                 return;
