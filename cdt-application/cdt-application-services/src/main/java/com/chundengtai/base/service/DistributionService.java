@@ -378,7 +378,7 @@ public class DistributionService {
             log.info("解密2=" + JavaWebToken.parserJavaWebToken(dynamicToken));
             log.info("token=" + token);
             log.info("dynamicToken=" + dynamicToken);
-            if (true) {
+            /*if (true) {*/
                 item.setId(id);
                 if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
                     item.setCompleteTime(new Date());
@@ -389,10 +389,10 @@ public class DistributionService {
                 item.setStatus(order.getOrderStatus());
                 item.setToken(encryt(item));
                 batListLog.add(item);
-            } else {
+            /*} else {
                 log.warn("分销安全校验失败==========》" + JSON.toJSONString(item));
                 throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
-            }
+            }*/
         }
         if (batListLog.size() > 0) {
             boolean result = rebateLogService.updateBatchById(batListLog);
