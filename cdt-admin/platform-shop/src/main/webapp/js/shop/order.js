@@ -62,7 +62,7 @@ $(function () {
                     } else if (value == '206') {
                         return '待使用';
                     } else if (value == '207') {
-                        return '待XX';
+                        return '待发货';
                     } else if (value == '300') {
                         return '订单已发货';
                     } else if (value == '301') {

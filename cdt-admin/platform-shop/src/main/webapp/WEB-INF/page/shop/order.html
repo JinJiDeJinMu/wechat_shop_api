@@ -64,13 +64,13 @@
     <Card v-show="!showList&&!detail">
         <p slot="title">{{title}}</p>
         <i-form :model="order" :label-width="100">
-            <Form-item label="快递公司" prop="shippingId">
+            <Form-item label="快递公司" prop="shippingId" v-show="order.goodsType ==1">
                 <i-select v-model="order.shippingId" filterable>
                     <i-option v-for="shipping in shippings" :value="shipping.id" :key="shipping.id">{{shipping.name}}
                     </i-option>
                 </i-select>
             </Form-item>
-            <Form-item label="快递单号" prop="shippingNo">
+            <Form-item label="快递单号" prop="shippingNo" v-show="order.goodsType ==1">
                 <i-input v-model="order.shippingNo" placeholder="快递单号"/>
             </Form-item>
             <Form-item>
