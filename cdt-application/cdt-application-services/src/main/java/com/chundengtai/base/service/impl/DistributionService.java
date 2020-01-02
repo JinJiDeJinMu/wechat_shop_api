@@ -477,7 +477,7 @@ public class DistributionService implements IdistributionService {
             String dynamicToken = encryt(detail);
             /*  if (dynamicToken.equalsIgnoreCase(token)) {*/
             detail.setId(id);
-            changeDistridetailStatus(order, detail);
+            changeDistridetailStatusLogic(order, detail, userSumeryOp);
             detail.setToken(encryt(detail));
 
             //时间放在加密之后
