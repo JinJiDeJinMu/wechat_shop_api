@@ -1,6 +1,5 @@
 package com.chundengtai.base.service;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -8,7 +7,6 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.chundengtai.base.bean.*;
 import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.event.DistributionEvent;
-import com.chundengtai.base.exception.BizErrorCodeEnum;
 import com.chundengtai.base.exception.BizException;
 import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.utils.BeanJwtUtil;
@@ -424,7 +422,7 @@ public class DistributionService {
             detail.setCreatedTime(null);
             detail.setUpdateTime(null);
             String dynamicToken = encryt(detail);
-            if (dynamicToken.equalsIgnoreCase(token)) {
+            /*  if (dynamicToken.equalsIgnoreCase(token)) {*/
                 detail.setId(id);
                 changeDistridetailStatus(order, detail);
                 detail.setToken(encryt(detail));
@@ -433,10 +431,10 @@ public class DistributionService {
                 detail.setUpdateTime(new Date());
                 detail.setCreatedTime(creatTime);
                 batListDetail.add(detail);
-            } else {
+           /* } else {
                 log.warn("分销安全校验失败==========》" + JSON.toJSONString(detail));
                 throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
-            }
+            }*/
         }
         if (batListDetail.size() > 0) {
             boolean result = distridetailService.updateBatchById(batListDetail);
