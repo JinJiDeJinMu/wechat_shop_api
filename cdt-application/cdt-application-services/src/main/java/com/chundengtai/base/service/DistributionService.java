@@ -368,13 +368,20 @@ public class DistributionService {
             item.setId(null);
             item.setToken(null);
             String dynamicToken = encryt(item);
+            log.info("实体类=" + item);
+            try {
+                log.info("map=" + BeanJwtUtil.javabean2map(item));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            log.info("解密" + JavaWebToken.parserJavaWebToken(token));
+            log.info("token" + token);
+            log.info("dynamicToken" + dynamicToken);
+            log.info("解密1=" + JavaWebToken.parserJavaWebToken(token));
+            log.info("解密2=" + JavaWebToken.parserJavaWebToken(dynamicToken));
+            log.info("token=" + token);
+            log.info("dynamicToken=" + dynamicToken);
 
-
-            log.warn("=======================token1对比=====================");
-            log.warn(JSON.toJSONString(item));
-            Map jiexiText = JavaWebToken.parserJavaWebToken(token);
-            log.warn("=======================token2对比=====================");
-            log.warn(JSON.toJSONString(jiexiText));
             if (dynamicToken.equalsIgnoreCase(token)) {
                 item.setId(id);
                 if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
