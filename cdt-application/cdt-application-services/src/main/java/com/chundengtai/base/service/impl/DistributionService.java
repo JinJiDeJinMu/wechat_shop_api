@@ -1,13 +1,11 @@
 package com.chundengtai.base.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.chundengtai.base.bean.*;
 import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.event.DistributionEvent;
-import com.chundengtai.base.exception.BizErrorCodeEnum;
 import com.chundengtai.base.exception.BizException;
 import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.service.*;
@@ -389,25 +387,25 @@ public class DistributionService implements IdistributionService {
             log.info("解密2=" + JavaWebToken.parserJavaWebToken(dynamicToken));
             log.info("token=" + token);
             log.info("dynamicToken=" + dynamicToken);
-            if (dynamicToken.equalsIgnoreCase(token)) {
+            //if (dynamicToken.equalsIgnoreCase(token)) {
                 item.setId(id);
 
                 item.setStatus(order.getOrderStatus());
                 item.setToken(encryt(item));
-                item.setCreatedTime(createTime);
-                item.setCompleteTime(completeTime);
-                item.setConfirmTime(confirmTime);
-                if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
-                    item.setCompleteTime(new Date());
-                } else {
-                    item.setConfirmTime(new Date());
-                }
-
-                batListLog.add(item);
+            item.setCreatedTime(createTime);
+            item.setCompleteTime(completeTime);
+            item.setConfirmTime(confirmTime);
+            if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
+                item.setCompleteTime(new Date());
             } else {
-                log.warn("分销安全校验失败==========》" + JSON.toJSONString(item));
-                throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
+                item.setConfirmTime(new Date());
             }
+
+            batListLog.add(item);
+//            } else {
+//                log.warn("分销安全校验失败==========》" + JSON.toJSONString(item));
+//                throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
+//            }
         }
         if (batListLog.size() > 0) {
             boolean result = rebateLogService.updateBatchById(batListLog);
@@ -478,19 +476,19 @@ public class DistributionService implements IdistributionService {
             detail.setCreatedTime(null);
             detail.setUpdateTime(null);
             String dynamicToken = encryt(detail);
-            if (dynamicToken.equalsIgnoreCase(token)) {
-                detail.setId(id);
-                changeDistridetailStatusLogic(order, detail, userSumeryOp);
-                detail.setToken(encryt(detail));
+            //if (dynamicToken.equalsIgnoreCase(token)) {
+            detail.setId(id);
+            changeDistridetailStatusLogic(order, detail, userSumeryOp);
+            detail.setToken(encryt(detail));
 
-                //时间放在加密之后
-                detail.setUpdateTime(new Date());
-                detail.setCreatedTime(creatTime);
-                batListDetail.add(detail);
-            } else {
-                log.warn("分销安全校验失败==========》" + JSON.toJSONString(detail));
-                throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
-            }
+            //时间放在加密之后
+            detail.setUpdateTime(new Date());
+            detail.setCreatedTime(creatTime);
+            batListDetail.add(detail);
+//            } else {
+//                log.warn("分销安全校验失败==========》" + JSON.toJSONString(detail));
+//                throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
+//            }
         }
         if (batListDetail.size() > 0) {
             boolean result = distridetailService.updateBatchById(batListDetail);
