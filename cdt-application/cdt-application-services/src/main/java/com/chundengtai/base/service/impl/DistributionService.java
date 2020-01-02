@@ -442,11 +442,13 @@ public class DistributionService implements IdistributionService {
                     item.setIsTrade(TrueOrFalseEnum.FALSE.getCode());
                 }
 
+                assert partner != null;
                 partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 0 : partner.getTradePerson() - 1);
                 partner.setInvalidOrderNum((partner.getInvalidOrderNum() == null || partner.getInvalidOrderNum() == 0) ? 0 : partner.getInvalidOrderNum() + 1);
                 partner.setRefundOrderNum((partner.getRefundOrderNum() == null || partner.getRefundOrderNum() == 0) ? 0 : partner.getRefundOrderNum() + 1);
                 item.setTradeOrderNum((item.getTradeOrderNum() == null || item.getTradeOrderNum() == 0) ? 0 : item.getTradeOrderNum() - 1);
             } else {
+                assert partner != null;
                 partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
                 //绑定用户层级关系编号
                 item.setDevNum(partner.getTradePerson());
