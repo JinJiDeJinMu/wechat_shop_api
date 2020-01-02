@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.User;
-import com.chundengtai.base.service.DistributionService;
+import com.chundengtai.base.facade.IdistributionFacade;
 import com.chundengtai.base.service.UserService;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.LoginInfo;
@@ -37,7 +37,7 @@ import java.util.Map;
 @Slf4j
 public class WxUserController extends ApiBaseAction {
     @Autowired
-    private DistributionService distributionService;
+    private IdistributionFacade idistributionFacade;
 
     @Autowired
     private ApiUserService userService;
@@ -117,7 +117,7 @@ public class WxUserController extends ApiBaseAction {
         }
 
         if (!StringUtils.isNullOrEmpty(loginInfo.getReferrerId())) {
-            distributionService.referreRelation(userVo.getId(), loginInfo.getReferrerId());
+            idistributionFacade.referreRelation(userVo.getId(), loginInfo.getReferrerId());
         }
         Map<String, Object> resultObj = new HashMap<String, Object>();
         resultObj.put("userVo", userVo);

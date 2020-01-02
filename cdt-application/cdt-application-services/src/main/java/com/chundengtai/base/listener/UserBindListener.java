@@ -2,7 +2,7 @@ package com.chundengtai.base.listener;
 
 import com.alibaba.fastjson.JSON;
 import com.chundengtai.base.event.DistributionEvent;
-import com.chundengtai.base.service.DistributionService;
+import com.chundengtai.base.service.IdistributionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserBindListener {
     @Autowired
-    private DistributionService distributionService;
+    private IdistributionService idistributionService;
 
     @EventListener(DistributionEvent.class)
     @Order(0)
@@ -31,6 +31,6 @@ public class UserBindListener {
     @Async
     public void asyncExcute(DistributionEvent event) {
         log.info(" asyncExcute 当前线程id:" + Thread.currentThread().getId() + ", 当前线程名称:" + Thread.currentThread().getName());
-        distributionService.distributionLogic(event);
+        idistributionService.distributionLogic(event);
     }
 }

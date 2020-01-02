@@ -1,4 +1,4 @@
-package com.chundengtai.base.service;
+package com.chundengtai.base.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -9,6 +9,7 @@ import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.event.DistributionEvent;
 import com.chundengtai.base.exception.BizException;
 import com.chundengtai.base.jwt.JavaWebToken;
+import com.chundengtai.base.service.*;
 import com.chundengtai.base.utils.BeanJwtUtil;
 import com.chundengtai.base.utils.DateTimeConvert;
 import com.chundengtai.base.weixinapi.*;
@@ -36,7 +37,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @Slf4j
-public class DistributionService {
+public class DistributionService implements IdistributionService {
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -143,6 +144,7 @@ public class DistributionService {
     }
     //返佣比例配置结束
 
+    @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
     public void distributionLogic(DistributionEvent event) {
         log.info(" distributionLogic 当前线程id:" + Thread.currentThread().getId() + ", 当前线程名称:" + Thread.currentThread().getName());
@@ -254,6 +256,7 @@ public class DistributionService {
      * @param userId         the user id
      * @param referrerEncpyt the referrer encpyt
      */
+    @Override
     public void referreRelation(long userId, String referrerEncpyt) {
         DistributionEvent event = new DistributionEvent();
         event.setEncryptCode(referrerEncpyt);
@@ -282,6 +285,7 @@ public class DistributionService {
     /**
      * 记录分销日志
      */
+    @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
     public void recordDistributeLog(Integer userId, Order order) {
         User user = userService.getById(userId);
@@ -353,6 +357,7 @@ public class DistributionService {
     /**
      * 更新订单状态
      */
+    @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {BizException.class})
     public boolean notifyOrderStatus(Integer userId, Order order, GoodsTypeEnum goodsTypeEnum) {
         //更新日志记录状态
