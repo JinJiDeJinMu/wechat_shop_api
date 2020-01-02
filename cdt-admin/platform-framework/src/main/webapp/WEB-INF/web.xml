@@ -94,6 +94,8 @@
             org.springframework.web.servlet.DispatcherServlet
         </servlet-class>
         <load-on-startup>1</load-on-startup>
+        <!--是否支持异步-->
+        <async-supported>true</async-supported>
     </servlet>
 
     <servlet-mapping>

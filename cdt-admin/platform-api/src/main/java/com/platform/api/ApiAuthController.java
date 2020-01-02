@@ -182,6 +182,7 @@ public class ApiAuthController extends ApiBaseAction {
         }
 
         if (!StringUtils.isNullOrEmpty(loginInfo.getReferrerId())) {
+            log.info(" loginByWeixin 当前线程id:" + Thread.currentThread().getId() + ", 当前线程名称:" + Thread.currentThread().getName());
             distributionService.referreRelation(userVo.getUserId(), loginInfo.getReferrerId());
         }
         Map<String, Object> resultObj = new HashMap<String, Object>();

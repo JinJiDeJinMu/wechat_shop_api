@@ -42,6 +42,7 @@ public class JavaWebToken {
     }
 
     public static void main(String[] args) {
+        Map token1 = JavaWebToken.parserJavaWebToken("");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date now = new Date();
         System.out.println(formatter.format(now));

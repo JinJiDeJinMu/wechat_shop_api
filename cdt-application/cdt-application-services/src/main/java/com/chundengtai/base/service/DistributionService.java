@@ -220,8 +220,9 @@ public class DistributionService {
 
     private void bindLinkRelation(DistributionEvent event, Long parentId) {
         int count = cdtUserSummaryService.count(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, event.getUserId().intValue()));
-        if (count > 0)
+        if (count > 0) {
             return;
+        }
         CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, parentId.intValue()));
         Gson gson = new Gson();
         CdtUserSummary userSummary = new CdtUserSummary();
@@ -367,6 +368,13 @@ public class DistributionService {
             item.setId(null);
             item.setToken(null);
             String dynamicToken = encryt(item);
+
+
+            log.warn("=======================token1对比=====================");
+            log.warn(JSON.toJSONString(item));
+            Map jiexiText = JavaWebToken.parserJavaWebToken(token);
+            log.warn("=======================token2对比=====================");
+            log.warn(JSON.toJSONString(jiexiText));
             if (dynamicToken.equalsIgnoreCase(token)) {
                 item.setId(id);
                 if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
