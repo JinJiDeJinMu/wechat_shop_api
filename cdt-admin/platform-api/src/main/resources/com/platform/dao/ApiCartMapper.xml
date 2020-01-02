@@ -187,7 +187,7 @@
     <select id="queryMerCartList" parameterType="java.lang.Long" resultType="com.platform.entity.MerCartVo">
             SELECT
             cart.merchant_id as merchantId,
-            sys.merchant_name as merchantName,
+            merchant.shop_name as merchantName,
             sum(
                 cart.retail_price * cart.number
             ) as orderTotalPrice,
@@ -197,10 +197,10 @@
         FROM
             nideshop_cart cart,
             nideshop_goods goods,
-            sys_user sys
+           cdt_merchant merchant
         WHERE
             cart.goods_id = goods.id
-         AND sys.merchant_id=cart.merchant_id
+         AND merchant.id=cart.merchant_id
         AND cart.user_id = #{userId}
         AND cart.checked = 1
         GROUP BY
