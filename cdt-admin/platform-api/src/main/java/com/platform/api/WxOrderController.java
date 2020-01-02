@@ -2,7 +2,7 @@ package com.platform.api;
 
 import com.alibaba.fastjson.JSON;
 import com.chundengtai.base.bean.Order;
-import com.chundengtai.base.facade.DistributionFacade;
+import com.chundengtai.base.facade.IdistributionFacade;
 import com.chundengtai.base.service.OrderService;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
@@ -50,7 +50,7 @@ public class WxOrderController extends ApiBaseAction {
     private OrderService cdtOrderService;
 
     @Autowired
-    private DistributionFacade distributionFacade;
+    private IdistributionFacade distributionFacade;
 
     @Autowired
     private ApiOrderService orderService;

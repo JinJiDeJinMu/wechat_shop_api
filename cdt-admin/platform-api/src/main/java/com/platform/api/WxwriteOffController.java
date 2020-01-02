@@ -2,7 +2,7 @@ package com.platform.api;
 
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.constant.CacheConstant;
-import com.chundengtai.base.facade.DistributionFacade;
+import com.chundengtai.base.facade.IdistributionFacade;
 import com.chundengtai.base.service.OrderService;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
@@ -36,7 +36,7 @@ public class WxwriteOffController extends ApiBaseAction {
     private OrderService cdtOrderService;
 
     @Autowired
-    private DistributionFacade distributionFacade;
+    private IdistributionFacade distributionFacade;
 
     @ApiOperation(value = "获得核销码基础信息", httpMethod = "POST")
     @RequestMapping("/getWriteOffCodeInfo")

@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.constant.CacheConstant;
-import com.chundengtai.base.facade.DistributionFacade;
+import com.chundengtai.base.facade.IdistributionFacade;
 import com.chundengtai.base.service.OrderService;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
@@ -80,7 +80,7 @@ public class ApiPayController extends ApiBaseAction {
     private OrderService cdtOrderService;
 
     @Autowired
-    private DistributionFacade distributionFacade;
+    private IdistributionFacade distributionFacade;
 
     /**
      * 获取支付的请求参数
