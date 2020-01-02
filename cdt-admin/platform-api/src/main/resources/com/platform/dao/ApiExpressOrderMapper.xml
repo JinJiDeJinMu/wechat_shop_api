@@ -75,7 +75,7 @@
                     			`pick_number`,
                     			`express_no`,
                     			`getGoodsAddress`,
-                    			`getGoodsExpress`,
+                    			`getGoodsExpress`
                     			            )
 		values(
         			#{id},
@@ -93,7 +93,7 @@
                     			#{pickNumber},
                     			#{expressNo},
                     			#{getGoodsAddress},
-                    			#{getGoodsExpress},
+                    			#{getGoodsExpress}
                     			            )
 	</insert>
 

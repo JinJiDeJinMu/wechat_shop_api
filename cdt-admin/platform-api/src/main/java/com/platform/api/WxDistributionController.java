@@ -19,6 +19,7 @@ import com.platform.annotation.LoginUser;
 import com.platform.entity.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 @Api(tags = "v2分销中心管理")
 @RestController
 @RequestMapping("/apis/v2/distribution")
+@Slf4j
 public class WxDistributionController {
 
     @Autowired
@@ -134,6 +136,7 @@ public class WxDistributionController {
         }
         List<CdtRebateLog> resultList = rebateLogService.list(condition);
 
+        log.info("resultList=" + resultList);
         List<CdtRebateLogDto> result = mapperFacade.mapAsList(resultList, CdtRebateLogDto.class);
         result = result.stream().sorted(Comparator.comparing(CdtRebateLogDto::getId).reversed()).collect(Collectors.toList());
         PageInfo pageInfo = new PageInfo(result);
