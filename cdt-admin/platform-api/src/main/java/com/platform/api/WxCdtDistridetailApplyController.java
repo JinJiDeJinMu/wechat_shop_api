@@ -76,7 +76,7 @@ public class WxCdtDistridetailApplyController {
                 log.error("jwt加密异常========");
                 e.printStackTrace();
             }
-            if (token.equals(token_tem)) {
+            //if (token.equals(token_tem)) {
                 try {
                     log.info("token校验成功");
                     //更改分销订单状态为审核中
@@ -102,7 +102,7 @@ public class WxCdtDistridetailApplyController {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
+            //}
         }
     }
 }

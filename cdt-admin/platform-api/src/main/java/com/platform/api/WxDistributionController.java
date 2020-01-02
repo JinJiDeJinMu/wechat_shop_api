@@ -28,7 +28,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(tags = "v2分销中心管理")
 @RestController
@@ -133,6 +135,7 @@ public class WxDistributionController {
         List<CdtRebateLog> resultList = rebateLogService.list(condition);
 
         List<CdtRebateLogDto> result = mapperFacade.mapAsList(resultList, CdtRebateLogDto.class);
+        result = result.stream().sorted(Comparator.comparing(CdtRebateLogDto::getId).reversed()).collect(Collectors.toList());
         PageInfo pageInfo = new PageInfo(result);
         return R.ok().put("data", pageInfo);
     }
