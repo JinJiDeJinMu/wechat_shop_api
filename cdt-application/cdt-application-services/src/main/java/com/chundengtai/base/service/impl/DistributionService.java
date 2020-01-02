@@ -1,6 +1,5 @@
 package com.chundengtai.base.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -31,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 
 /**
  * 分销系统应用服务
@@ -136,7 +136,7 @@ public class DistributionService implements IdistributionService {
     }
 
     private BigDecimal computeFirstMoney(BigDecimal totalMoney) {
-        return totalMoney.multiply(distrimoney.getFirstPartner());
+        return totalMoney.multiply(distrimoney.getFirstPercent());
     }
 
     private BigDecimal computeSecondMoney(BigDecimal totalMoney) {
@@ -220,8 +220,9 @@ public class DistributionService implements IdistributionService {
 
     private void bindLinkRelation(DistributionEvent event, Long parentId) {
         int count = cdtUserSummaryService.count(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, event.getUserId().intValue()));
-        if (count > 0)
+        if (count > 0) {
             return;
+        }
         CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, parentId.intValue()));
         Gson gson = new Gson();
         CdtUserSummary userSummary = new CdtUserSummary();
@@ -332,18 +333,17 @@ public class DistributionService implements IdistributionService {
             CdtUserSummary partner = partnerService.getPartnerInfo(distrimoney, user.getId());
             if (partner != null) {
                 BigDecimal percent = BigDecimal.ZERO;
-
                 switch (partner.getPartnerLevel()) {
-                    case 1:
-                        percent = distrimoney.getFirstPartner();
-                        break;
                     case 2:
                         percent = distrimoney.getSecondPartner();
                         break;
                     case 3:
                         percent = distrimoney.getThirdPartner();
                         break;
-
+                    default:
+                    case 1:
+                        percent = distrimoney.getFirstPartner();
+                        break;
                 }
                 BigDecimal partnerMoney = order.getAllPrice().multiply(percent);
                 recordEarning(user.getId(), partner.getUserId(), partnerMoney, order, 1);
@@ -417,6 +417,54 @@ public class DistributionService implements IdistributionService {
         );
 
         List<CdtDistridetail> batListDetail = new ArrayList<>();
+
+//        BiConsumer<T, U> biConsumer = (T t, U u)->{System.out.println(String.format("biConsumer receive-->%s+%s", t,u));};
+//        BiConsumer<T, U> biConsumer2 = (T t, U u)->{System.out.println(String.format("biConsumer2 receive-->%s+%s", t,u));};
+//        biConsumer.andThen(biConsumer2).accept(new T(), new U());
+
+        BiConsumer<Integer, Order> userSumeryOp = (Integer id, Order orderModel) -> {
+            CdtDistributionLevel item = distributionLevelService.getOne(new QueryWrapper<CdtDistributionLevel>().lambda().eq(CdtDistributionLevel::getUserId, id));
+
+            if (item == null) {
+                return;
+            }
+            //更新用户统计有效下线
+            CdtUserSummary partner = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
+                    .eq(CdtUserSummary::getUserId, item.getParentId()));
+            if (partner == null) {
+                log.error("==userSumeryOp====推荐人不存在！=====");
+            }
+
+            if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
+                if (item.getTradeOrderNum() == 1) {
+                    //绑定用户层级关系编号
+                    item.setDevNum(partner.getTradePerson());
+                    item.setIsTrade(TrueOrFalseEnum.FALSE.getCode());
+                }
+
+                assert partner != null;
+                partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 0 : partner.getTradePerson() - 1);
+                partner.setInvalidOrderNum((partner.getInvalidOrderNum() == null || partner.getInvalidOrderNum() == 0) ? 0 : partner.getInvalidOrderNum() + 1);
+                partner.setRefundOrderNum((partner.getRefundOrderNum() == null || partner.getRefundOrderNum() == 0) ? 0 : partner.getRefundOrderNum() + 1);
+                item.setTradeOrderNum((item.getTradeOrderNum() == null || item.getTradeOrderNum() == 0) ? 0 : item.getTradeOrderNum() - 1);
+            } else {
+                assert partner != null;
+                partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
+                //绑定用户层级关系编号
+                item.setDevNum(partner.getTradePerson());
+                item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
+                item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
+            }
+            boolean rows = cdtUserSummaryService.update(new UpdateWrapper<CdtUserSummary>().lambda()
+                    .set(CdtUserSummary::getTradePerson, partner.getTradePerson())
+                    .eq(CdtUserSummary::getUserId, id)
+            );
+            log.warn("==userSumeryOp====更新用户统计有效下线=====>" + rows);
+
+            boolean rows2 = distributionLevelService.updateById(item);
+            log.warn("==userSumeryOp====绑定用户层级关系编号=====>" + rows2);
+        };
+
         for (CdtDistridetail detail : distridetail) {
             String token = detail.getToken();
             Long id = detail.getId();
@@ -428,14 +476,14 @@ public class DistributionService implements IdistributionService {
             detail.setUpdateTime(null);
             String dynamicToken = encryt(detail);
             /*  if (dynamicToken.equalsIgnoreCase(token)) {*/
-                detail.setId(id);
-                changeDistridetailStatus(order, detail);
-                detail.setToken(encryt(detail));
+            detail.setId(id);
+            changeDistridetailStatusLogic(order, detail, userSumeryOp);
+            detail.setToken(encryt(detail));
 
-                //时间放在加密之后
-                detail.setUpdateTime(new Date());
-                detail.setCreatedTime(creatTime);
-                batListDetail.add(detail);
+            //时间放在加密之后
+            detail.setUpdateTime(new Date());
+            detail.setCreatedTime(creatTime);
+            batListDetail.add(detail);
            /* } else {
                 log.warn("分销安全校验失败==========》" + JSON.toJSONString(detail));
                 throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
@@ -449,42 +497,29 @@ public class DistributionService implements IdistributionService {
         return true;
     }
 
-    /**
-     * 更新用户分销参数信息-下一版本迭代
-     */
-    public void updateUserConfigInfo() {
-
-    }
-
-    /**
-     * 分佣计算返佣金+合伙人计算分成
-     */
-    public void computeCommission(int userId, int goldUserId, BigDecimal money, Order order) {
-
-        //读取链路关系
-        CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, userId));
-        Gson gson = new Gson();
-
-        Type linkNodeType = new TypeToken<LinkedList<Integer>>() {
-        }.getType();
-        LinkedList<Integer> linkNode = gson.fromJson(cdtUserSummary.getChainRoad(), linkNodeType);
-
-        LambdaQueryWrapper<CdtUserSummary> queryWrapper = new QueryWrapper<CdtUserSummary>().lambda().in(CdtUserSummary::getUserId, linkNode);
-        log.warn("=========>" + queryWrapper.getSqlSegment());
-        List<CdtUserSummary> userSummarys = cdtUserSummaryService.list(
-                queryWrapper
-        );
-
-        while (linkNode.size() != 0) {
-            Integer roadUserId = linkNode.pollLast();
-            System.out.println(roadUserId);
-            // 相当于倒叙输出；
-            CdtUserSummary model = userSummarys.stream().filter(s -> s.getUserId().equals(roadUserId)).findFirst().get();
-            if (model.getIsPartner().equals(0))
-                continue;
+    private void changeDistridetailStatusLogic(Order order, CdtDistridetail distridetail, BiConsumer<Integer, Order> userSumeryOp) {
+        if (!order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
+            distridetail.setStatus(DistributionStatus.NON_COMPLETE_ORDER.getCode());
+        } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
+                order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())
+        ) {
+            int daysNum = Period.between(LocalDateTime.now().toLocalDate(), DateTimeConvert.date2LocalDateTime(order.getConfirmTime()).toLocalDate()).getDays();
+            if (daysNum < 7) {
+                distridetail.setStatus(DistributionStatus.NOT_SERVEN_ORDER.getCode());
+            } else {
+                distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
+                userSumeryOp.accept(order.getUserId(), order);
+            }
+        } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
+                (order.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
+                        order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode()
+                        ))) {
+            distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
+            userSumeryOp.accept(order.getUserId(), order);
+        } else if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
+            distridetail.setStatus(DistributionStatus.REFUND_ORDER.getCode());
+            userSumeryOp.accept(order.getUserId(), order);
         }
-
-
     }
 
 }

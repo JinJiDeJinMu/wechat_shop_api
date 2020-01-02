@@ -13,6 +13,8 @@
         <result column="stats_person" property="statsPerson"/>
         <result column="trade_person" property="tradePerson"/>
         <result column="share_order_num" property="shareOrderNum"/>
+        <result column="refund_order_num" property="refundOrderNum"/>
+        <result column="invalid_order_num" property="invalidOrderNum"/>
         <result column="partner_income" property="partnerIncome"/>
         <result column="stats_income" property="statsIncome"/>
         <result column="speed_partner" property="speedPartner"/>
@@ -27,7 +29,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, total_income, unbalanced, is_partner, partner_level, stats_person, trade_person, share_order_num, partner_income, stats_income, speed_partner, chain_road, token, revision, created_by, created_time, updated_by, updated_time
+        id, user_id, total_income, unbalanced, is_partner, partner_level, stats_person, trade_person, share_order_num, refund_order_num, invalid_order_num, partner_income, stats_income, speed_partner, chain_road, token, revision, created_by, created_time, updated_by, updated_time
     </sql>
 
 </mapper>

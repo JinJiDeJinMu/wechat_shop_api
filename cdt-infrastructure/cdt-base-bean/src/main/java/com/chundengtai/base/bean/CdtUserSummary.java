@@ -16,7 +16,7 @@ import java.util.Date;
  * </p>
  *
  * @author Royal
- * @since 2019-12-31
+ * @since 2020-01-02
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -70,6 +70,16 @@ public class CdtUserSummary implements Serializable {
    * 分销订单数量
    */
   private Integer shareOrderNum;
+
+  /**
+   * 退款订单数量
+   */
+  private Integer refundOrderNum;
+
+  /**
+   * 无效订单数量
+   */
+  private Integer invalidOrderNum;
 
   /**
    * 合伙人奖励收益
