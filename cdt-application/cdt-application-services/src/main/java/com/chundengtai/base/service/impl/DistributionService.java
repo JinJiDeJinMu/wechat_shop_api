@@ -436,25 +436,18 @@ public class DistributionService implements IdistributionService {
             }
 
             if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
-                if (partner.getTradePerson() == null || partner.getTradePerson() == 0) {
-                    partner.setStatsPerson(0);
-                } else {
-                    partner.setTradePerson(partner.getTradePerson() - 1);
-                }
-
                 if (item.getTradeOrderNum() == 1) {
                     //绑定用户层级关系编号
                     item.setDevNum(partner.getTradePerson());
                     item.setIsTrade(TrueOrFalseEnum.FALSE.getCode());
                 }
+
+                partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 0 : partner.getTradePerson() - 1);
+                partner.setInvalidOrderNum((partner.getInvalidOrderNum() == null || partner.getInvalidOrderNum() == 0) ? 0 : partner.getInvalidOrderNum() + 1);
+                partner.setRefundOrderNum((partner.getRefundOrderNum() == null || partner.getRefundOrderNum() == 0) ? 0 : partner.getRefundOrderNum() + 1);
                 item.setTradeOrderNum((item.getTradeOrderNum() == null || item.getTradeOrderNum() == 0) ? 0 : item.getTradeOrderNum() - 1);
             } else {
-                if (partner.getTradePerson() == null) {
-                    partner.setStatsPerson(1);
-                } else {
-                    partner.setTradePerson(partner.getTradePerson() + 1);
-                }
-
+                partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
                 //绑定用户层级关系编号
                 item.setDevNum(partner.getTradePerson());
                 item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
