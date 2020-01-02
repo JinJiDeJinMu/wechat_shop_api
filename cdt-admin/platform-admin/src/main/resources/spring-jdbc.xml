@@ -16,7 +16,6 @@
     <tx:annotation-driven/>
     <context:property-placeholder location="classpath*:platform.properties"/>
 
-
     <!-- 支持异步方法执行 -->
 
     <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">

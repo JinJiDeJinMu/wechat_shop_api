@@ -1,10 +1,14 @@
-package com.chundengtai.base.service;
+package com.chundengtai.base.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtDistributionLevel;
 import com.chundengtai.base.bean.CdtDistrimoney;
 import com.chundengtai.base.bean.CdtUserSummary;
+import com.chundengtai.base.service.CdtDistributionLevelService;
+import com.chundengtai.base.service.CdtUserSummaryService;
+import com.chundengtai.base.service.IpartnerService;
+import com.chundengtai.base.weixinapi.PartnerLeveEnum;
 import com.chundengtai.base.weixinapi.TrueOrFalseEnum;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -36,7 +40,7 @@ import java.util.Optional;
  */
 @Service
 @Slf4j
-public class PartnerService {
+public class PartnerService implements IpartnerService {
 
     @Autowired
     private CdtUserSummaryService cdtUserSummaryService;
@@ -48,6 +52,7 @@ public class PartnerService {
     /**
      * 轮询获取到可以拿合伙人奖励的合伙人
      */
+    @Override
     public CdtUserSummary getPartnerInfo(CdtDistrimoney distrimoney, int userId) {
         //读取链路关系
         CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
@@ -132,14 +137,22 @@ public class PartnerService {
     /**
      * 判定是否能成功合伙人
      */
+    @Override
     public void determinePartner(CdtDistrimoney distrimoney, int userId) {
         //读取链路关系
         CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
                 .eq(CdtUserSummary::getUserId, userId));
+
+        //如果是合伙人的情况下。判定为true
         if (cdtUserSummary.getIsPartner().equals(TrueOrFalseEnum.TRUE.getCode())) {
-            return;
+            //todo:合伙人二级提升逻辑
+
+            //todo:合伙人三级提升逻辑
+        } else if (cdtUserSummary.getTradePerson() >= distrimoney.getFirstPersonCondition()) {
+            cdtUserSummary.setIsPartner(TrueOrFalseEnum.TRUE.getCode());
+            cdtUserSummary.setPartnerLevel(PartnerLeveEnum.ONE.getCode());
         }
-
-
+        boolean result = cdtUserSummaryService.updateById(cdtUserSummary);
+        log.debug("=======判定是否能成功合伙人=======结果====>" + result);
     }
 }
