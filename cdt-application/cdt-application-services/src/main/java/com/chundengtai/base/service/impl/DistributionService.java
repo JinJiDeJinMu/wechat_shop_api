@@ -364,7 +364,6 @@ public class DistributionService implements IdistributionService {
         List<CdtRebateLog> listLogModel = rebateLogService.list(new QueryWrapper<CdtRebateLog>()
                 .lambda().eq(CdtRebateLog::getBuyUserId, userId).eq(CdtRebateLog::getOrderSn, order.getOrderSn()));
         List<CdtRebateLog> batListLog = new ArrayList<>();
-        log.info("查询结果" + listLogModel);
         for (CdtRebateLog item : listLogModel) {
             String token = item.getToken();
             Integer id = item.getId();
@@ -388,10 +387,10 @@ public class DistributionService implements IdistributionService {
             log.info("token=" + token);
             log.info("dynamicToken=" + dynamicToken);
             //if (dynamicToken.equalsIgnoreCase(token)) {
-                item.setId(id);
+            item.setId(id);
 
-                item.setStatus(order.getOrderStatus());
-                item.setToken(encryt(item));
+            item.setStatus(order.getOrderStatus());
+            item.setToken(encryt(item));
             item.setCreatedTime(createTime);
             item.setCompleteTime(completeTime);
             item.setConfirmTime(confirmTime);
@@ -418,15 +417,12 @@ public class DistributionService implements IdistributionService {
 
         List<CdtDistridetail> batListDetail = new ArrayList<>();
 
-//        BiConsumer<T, U> biConsumer = (T t, U u)->{System.out.println(String.format("biConsumer receive-->%s+%s", t,u));};
-//        BiConsumer<T, U> biConsumer2 = (T t, U u)->{System.out.println(String.format("biConsumer2 receive-->%s+%s", t,u));};
-//        biConsumer.andThen(biConsumer2).accept(new T(), new U());
-
         BiConsumer<CdtDistridetail, Order> userSumeryOp = (CdtDistridetail detailModel, Order orderModel) -> {
             CdtDistributionLevel item = distributionLevelService.getOne(new QueryWrapper<CdtDistributionLevel>().lambda()
                     .eq(CdtDistributionLevel::getUserId, orderModel.getUserId()));
 
             if (item == null) {
+                log.error("==userSumeryOp====绑定关系层级不存在不存在！=====");
                 return;
             }
             //更新用户统计有效下线
