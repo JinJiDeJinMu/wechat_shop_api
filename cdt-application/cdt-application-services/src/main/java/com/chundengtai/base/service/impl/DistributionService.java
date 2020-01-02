@@ -1,11 +1,13 @@
 package com.chundengtai.base.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.chundengtai.base.bean.*;
 import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.event.DistributionEvent;
+import com.chundengtai.base.exception.BizErrorCodeEnum;
 import com.chundengtai.base.exception.BizException;
 import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.service.*;
@@ -387,25 +389,25 @@ public class DistributionService implements IdistributionService {
             log.info("解密2=" + JavaWebToken.parserJavaWebToken(dynamicToken));
             log.info("token=" + token);
             log.info("dynamicToken=" + dynamicToken);
-            /*if (true) {*/
-            item.setId(id);
+            if (dynamicToken.equalsIgnoreCase(token)) {
+                item.setId(id);
 
-            item.setStatus(order.getOrderStatus());
-            item.setToken(encryt(item));
-            item.setCreatedTime(createTime);
-            item.setCompleteTime(completeTime);
-            item.setConfirmTime(confirmTime);
-            if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
-                item.setCompleteTime(new Date());
+                item.setStatus(order.getOrderStatus());
+                item.setToken(encryt(item));
+                item.setCreatedTime(createTime);
+                item.setCompleteTime(completeTime);
+                item.setConfirmTime(confirmTime);
+                if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
+                    item.setCompleteTime(new Date());
+                } else {
+                    item.setConfirmTime(new Date());
+                }
+
+                batListLog.add(item);
             } else {
-                item.setConfirmTime(new Date());
-            }
-
-            batListLog.add(item);
-            /*} else {
                 log.warn("分销安全校验失败==========》" + JSON.toJSONString(item));
                 throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
-            }*/
+            }
         }
         if (batListLog.size() > 0) {
             boolean result = rebateLogService.updateBatchById(batListLog);
@@ -422,8 +424,9 @@ public class DistributionService implements IdistributionService {
 //        BiConsumer<T, U> biConsumer2 = (T t, U u)->{System.out.println(String.format("biConsumer2 receive-->%s+%s", t,u));};
 //        biConsumer.andThen(biConsumer2).accept(new T(), new U());
 
-        BiConsumer<Integer, Order> userSumeryOp = (Integer id, Order orderModel) -> {
-            CdtDistributionLevel item = distributionLevelService.getOne(new QueryWrapper<CdtDistributionLevel>().lambda().eq(CdtDistributionLevel::getUserId, id));
+        BiConsumer<CdtDistridetail, Order> userSumeryOp = (CdtDistridetail detailModel, Order orderModel) -> {
+            CdtDistributionLevel item = distributionLevelService.getOne(new QueryWrapper<CdtDistributionLevel>().lambda()
+                    .eq(CdtDistributionLevel::getUserId, orderModel.getUserId()));
 
             if (item == null) {
                 return;
@@ -443,6 +446,7 @@ public class DistributionService implements IdistributionService {
                 }
 
                 assert partner != null;
+                partner.setUnbalanced(partner.getUnbalanced() == null ? BigDecimal.ZERO : partner.getUnbalanced().subtract(detailModel.getMoney()));
                 partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 0 : partner.getTradePerson() - 1);
                 partner.setInvalidOrderNum((partner.getInvalidOrderNum() == null || partner.getInvalidOrderNum() == 0) ? 0 : partner.getInvalidOrderNum() + 1);
                 partner.setRefundOrderNum((partner.getRefundOrderNum() == null || partner.getRefundOrderNum() == 0) ? 0 : partner.getRefundOrderNum() + 1);
@@ -450,15 +454,14 @@ public class DistributionService implements IdistributionService {
             } else {
                 assert partner != null;
                 partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
+                partner.setUnbalanced(partner.getUnbalanced() == null ? detailModel.getMoney() : partner.getUnbalanced().add(detailModel.getMoney()));
+
                 //绑定用户层级关系编号
                 item.setDevNum(partner.getTradePerson());
                 item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
                 item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
             }
-            boolean rows = cdtUserSummaryService.update(new UpdateWrapper<CdtUserSummary>().lambda()
-                    .set(CdtUserSummary::getTradePerson, partner.getTradePerson())
-                    .eq(CdtUserSummary::getUserId, id)
-            );
+            boolean rows = cdtUserSummaryService.updateById(partner);
             log.warn("==userSumeryOp====更新用户统计有效下线=====>" + rows);
 
             boolean rows2 = distributionLevelService.updateById(item);
@@ -475,19 +478,19 @@ public class DistributionService implements IdistributionService {
             detail.setCreatedTime(null);
             detail.setUpdateTime(null);
             String dynamicToken = encryt(detail);
-            /*  if (dynamicToken.equalsIgnoreCase(token)) {*/
-            detail.setId(id);
-            changeDistridetailStatusLogic(order, detail, userSumeryOp);
-            detail.setToken(encryt(detail));
+            if (dynamicToken.equalsIgnoreCase(token)) {
+                detail.setId(id);
+                changeDistridetailStatusLogic(order, detail, userSumeryOp);
+                detail.setToken(encryt(detail));
 
-            //时间放在加密之后
-            detail.setUpdateTime(new Date());
-            detail.setCreatedTime(creatTime);
-            batListDetail.add(detail);
-           /* } else {
+                //时间放在加密之后
+                detail.setUpdateTime(new Date());
+                detail.setCreatedTime(creatTime);
+                batListDetail.add(detail);
+            } else {
                 log.warn("分销安全校验失败==========》" + JSON.toJSONString(detail));
                 throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
-            }*/
+            }
         }
         if (batListDetail.size() > 0) {
             boolean result = distridetailService.updateBatchById(batListDetail);
@@ -497,7 +500,7 @@ public class DistributionService implements IdistributionService {
         return true;
     }
 
-    private void changeDistridetailStatusLogic(Order order, CdtDistridetail distridetail, BiConsumer<Integer, Order> userSumeryOp) {
+    private void changeDistridetailStatusLogic(Order order, CdtDistridetail distridetail, BiConsumer<CdtDistridetail, Order> userSumeryOp) {
         if (!order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
             distridetail.setStatus(DistributionStatus.NON_COMPLETE_ORDER.getCode());
         } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
@@ -508,17 +511,17 @@ public class DistributionService implements IdistributionService {
                 distridetail.setStatus(DistributionStatus.NOT_SERVEN_ORDER.getCode());
             } else {
                 distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
-                userSumeryOp.accept(order.getUserId(), order);
+                userSumeryOp.accept(distridetail, order);
             }
         } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
                 (order.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
                         order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode()
                         ))) {
             distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
-            userSumeryOp.accept(order.getUserId(), order);
+            userSumeryOp.accept(distridetail, order);
         } else if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
             distridetail.setStatus(DistributionStatus.REFUND_ORDER.getCode());
-            userSumeryOp.accept(order.getUserId(), order);
+            userSumeryOp.accept(distridetail, order);
         }
     }
 
