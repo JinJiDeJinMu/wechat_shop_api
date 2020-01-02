@@ -506,8 +506,9 @@ public class DistributionService implements IdistributionService {
                 distridetail.setStatus(DistributionStatus.NOT_SERVEN_ORDER.getCode());
             } else {
                 distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
-                userSumeryOp.accept(distridetail, order);
+
             }
+            userSumeryOp.accept(distridetail, order);
         } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
                 (order.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
                         order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode()
