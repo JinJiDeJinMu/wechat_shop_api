@@ -1,21 +1,9 @@
 package com.platform.task;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.chundengtai.base.bean.CdtDistridetail;
-import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.service.CdtDistridetailService;
 import com.chundengtai.base.service.OrderService;
-import com.chundengtai.base.utils.DateTimeConvert;
-import com.chundengtai.base.weixinapi.DistributionStatus;
-import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @Description TODO
@@ -33,8 +21,8 @@ public class DistridetailFinishTask {
     private OrderService orderService;
 
 
-    @Scheduled(cron = "0 0 0 * * ？")
-    public void execute() {
+   /* @Scheduled(cron = "0 0 0 * * ？")
+    public void change() {
 
         List<CdtDistridetail> cdtDistridetailList = cdtDistridetailService.list(new LambdaQueryWrapper<CdtDistridetail>()
                 .eq(CdtDistridetail::getStatus, DistributionStatus.NOT_SERVEN_ORDER.getCode()));
@@ -54,5 +42,5 @@ public class DistridetailFinishTask {
             }
         });
 
-    }
+    }*/
 }
