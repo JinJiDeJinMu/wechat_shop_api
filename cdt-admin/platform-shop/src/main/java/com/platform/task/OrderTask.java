@@ -13,10 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.List;
 
 
@@ -39,7 +37,7 @@ public class OrderTask {
     /**
      * 订单未支付超过60分钟取消
      */
-    @Scheduled(cron = "0 0/20 * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void orderCancel() {
         List<Order> orderList = orderService.list(new LambdaQueryWrapper<Order>()
                 .eq(Order::getPayStatus, PayTypeEnum.NOPAY.getCode())
@@ -47,7 +45,7 @@ public class OrderTask {
         if (orderList != null) {
             orderList.forEach(e -> {
                 long num = 60;
-                long minutes = Duration.between(LocalDateTime.now(), DateTimeConvert.date2LocalDateTime(e.getAddTime())).toMinutes();
+                long minutes = Duration.between(DateTimeConvert.date2LocalDateTime(e.getAddTime()), LocalDateTime.now()).toMinutes();
                 if (minutes > num) {
                     e.setOrderStatus(OrderStatusEnum.CANCEL_ORDER.getCode());
                     orderService.updateById(e);
@@ -59,12 +57,11 @@ public class OrderTask {
     /**
      * 确认收货超过7天订单已自动完成
      */
-    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "0 0/50 * * * ?")
     public void orderFinish() {
         List<Order> orderList = orderService.list(new LambdaQueryWrapper<Order>()
                 .eq(Order::getOrderStatus, OrderStatusEnum.CONFIRM_GOODS.getCode())
                 .eq(Order::getPayStatus, PayTypeEnum.PAYED.getCode()));
-        log.info("====确认收货====" + orderList);
         if (orderList != null) {
             orderList.forEach(e -> {
                 long num = 7;
@@ -80,14 +77,5 @@ public class OrderTask {
             });
         }
 
-    }
-
-    public static void main(String[] args) throws ParseException {
-        LocalDateTime now = LocalDateTime.of(2020, 1, 25, 9, 43, 20);
-        LocalDateTime now1 = LocalDateTime.of(2020, 2, 25, 9, 53, 20);
-        Duration day = Duration.between(now, now1);
-        System.out.println(day.toDays());
-        System.out.println(Period.between(now.toLocalDate(), now1.toLocalDate()).getDays());
-        System.out.println(day.toMinutes());
     }
 }
