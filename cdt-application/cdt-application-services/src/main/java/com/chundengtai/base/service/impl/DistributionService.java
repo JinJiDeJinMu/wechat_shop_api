@@ -409,7 +409,7 @@ public class DistributionService implements IdistributionService {
 
         BiConsumer<CdtDistridetail, Order> userSumeryOp = (CdtDistridetail detailModel, Order orderModel) -> {
             CdtDistributionLevel item = distributionLevelService.getOne(new QueryWrapper<CdtDistributionLevel>().lambda()
-                    .eq(CdtDistributionLevel::getUserId, detailModel.getGoldUserId()));
+                    .eq(CdtDistributionLevel::getUserId, detailModel.getUserId()));
 
             log.info("============BiConsumer====================>进入表达式逻辑");
             if (item == null) {
