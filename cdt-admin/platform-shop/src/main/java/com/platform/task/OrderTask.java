@@ -59,7 +59,7 @@ public class OrderTask {
     /**
      * 确认收货超过7天订单已自动完成
      */
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
     public void orderFinish() {
         List<Order> orderList = orderService.list(new LambdaQueryWrapper<Order>()
                 .eq(Order::getOrderStatus, OrderStatusEnum.CONFIRM_GOODS.getCode())
@@ -68,7 +68,7 @@ public class OrderTask {
         if (orderList != null) {
             orderList.forEach(e -> {
                 long num = 7;
-                long daysNum = Duration.between(LocalDateTime.now(), DateTimeConvert.date2LocalDateTime(e.getConfirmTime())).toDays();
+                long daysNum = Duration.between(DateTimeConvert.date2LocalDateTime(e.getConfirmTime()), LocalDateTime.now()).toDays();
                 if (daysNum > num) {
                     e.setOrderStatus(OrderStatusEnum.COMPLETED_ORDER.getCode());
                     boolean flag = orderService.updateById(e);
