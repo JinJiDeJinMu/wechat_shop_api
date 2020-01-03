@@ -28,7 +28,6 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
@@ -107,7 +106,7 @@ public class DistributionService implements IdistributionService {
         } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
                 order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())
         ) {
-            int daysNum = Period.between(LocalDateTime.now().toLocalDate(), DateTimeConvert.date2LocalDateTime(order.getConfirmTime()).toLocalDate()).getDays();
+            long daysNum = Duration.between(DateTimeConvert.date2LocalDateTime(order.getConfirmTime()), LocalDateTime.now()).toDays();
             if (daysNum < 7) {
                 distridetail.setStatus(DistributionStatus.NOT_SERVEN_ORDER.getCode());
             } else {

@@ -57,7 +57,7 @@ public class OrderTask {
     /**
      * 订单已发货超过7天自动确认收货
      */
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void orderFinish() {
         List<Order> orderList = orderService.list(new LambdaQueryWrapper<Order>()
                 .eq(Order::getOrderStatus, OrderStatusEnum.SHIPPED_ORDER.getCode())
