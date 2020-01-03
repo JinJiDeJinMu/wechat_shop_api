@@ -8,6 +8,7 @@ import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiPageUtils;
 import com.platform.utils.Query;
+import com.platform.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,13 +156,15 @@ public class ApiIndexController extends ApiBaseAction {
     @ApiOperation(value = "新商品信息")
     @IgnoreAuth
     @GetMapping(value = "newGoods")
-    public Object newGoods() {
+    public Object newGoods(String schoolName) {
         Map<String, Object> resultObj = new HashMap<String, Object>();
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("is_new", 1);
         param.put("is_delete", 0);
         param.put("is_on_sale", 1);
-//        param.put("fields", "id, name, list_pic_url, retail_price");
+        if (StringUtils.isNotEmpty(schoolName)) {
+            param.put("shoolName", schoolName);
+        }
         PageHelper.startPage(0, 4, false);
         List<GoodsVo> newGoods = goodsService.queryList(param);
         resultObj.put("newGoodsList", newGoods);

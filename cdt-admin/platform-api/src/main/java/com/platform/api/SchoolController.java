@@ -47,7 +47,13 @@ public class SchoolController {
     @IgnoreAuth
     public Result saveBatch(@RequestParam String schoolLists) {
         List<School> list1 = JSONObject.parseArray(schoolLists, School.class);
-        System.out.println(list1);
+
+        List<School> schoolList = schoolService.list();
+        schoolList.stream().forEach(e -> {
+            if (list1.contains(e)) {
+                list1.remove(e);
+            }
+        });
         schoolService.saveBatch(list1);
         return Result.success();
     }
