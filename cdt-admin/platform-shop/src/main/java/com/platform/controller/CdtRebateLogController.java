@@ -2,8 +2,10 @@ package com.platform.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtRebateLog;
+import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.service.CdtRebateLogService;
 import com.chundengtai.base.transfer.BaseForm;
+import com.chundengtai.base.utils.BeanJwtUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.platform.utils.Base64;
@@ -13,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -141,5 +145,31 @@ public class CdtRebateLogController {
     public R delete(@RequestBody Integer[] ids) {
         boolean result = cdtRebateLogService.removeByIds(Arrays.asList(ids));
         return R.ok(result);
+    }
+
+    public static void main(String[] args) throws Exception {
+        CdtRebateLog cdtRebateLog = new CdtRebateLog();
+        cdtRebateLog.setNickname("6YeR5pyo");
+        cdtRebateLog.setBuyUserId(135);
+        cdtRebateLog.setId(null);
+        cdtRebateLog.setToken(null);
+        cdtRebateLog.setGoldUserId(125);
+        cdtRebateLog.setCompleteTime(null);
+        cdtRebateLog.setLevel(1);
+        cdtRebateLog.setMechantId(-1L);
+        cdtRebateLog.setMoney(new BigDecimal(0.00));
+        cdtRebateLog.setOrderId(577);
+        cdtRebateLog.setOrderSn("419447383337906176");
+        cdtRebateLog.setGoodsPrice(new BigDecimal(0.02));
+        cdtRebateLog.setStatus(201);
+        cdtRebateLog.setRemark("一级返佣结算");
+        cdtRebateLog.setCompleteTime(null);
+
+        String s = "2020-01-02 10:54:25";
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        cdtRebateLog.setCreatedTime(formatter.parse(s));
+        System.out.println(cdtRebateLog);
+        System.out.println(JavaWebToken.createJavaWebToken(BeanJwtUtil.javabean2map(cdtRebateLog)));
+
     }
 }

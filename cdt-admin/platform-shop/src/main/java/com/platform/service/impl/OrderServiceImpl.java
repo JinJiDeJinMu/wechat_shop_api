@@ -1,6 +1,5 @@
 package com.platform.service.impl;
 
-import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.platform.dao.OrderDao;
 import com.platform.dao.ShippingDao;
 import com.platform.entity.GroupBuyingEntity;
@@ -85,10 +84,10 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order = orderDao.queryObject(order.getId());
-        if (order.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode())
+       /* if (order.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode())
                 || order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode())) {
             throw new RRException("此订单不是普通订单不能做发货操作！");
-        }
+        }*/
         ShippingEntity shippingEntity = shippingDao.queryObject(order.getShippingId());
         if (null != shippingEntity) {
             order.setShippingName(shippingEntity.getName());
