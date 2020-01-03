@@ -375,17 +375,7 @@ public class DistributionService implements IdistributionService {
             item.setCreatedTime(null);
             item.setCompleteTime(null);
             item.setConfirmTime(null);
-            log.info("实体类=" + item);
-            try {
-                log.info("map=" + BeanJwtUtil.javabean2map(item));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             String dynamicToken = encryt(item);
-            log.info("解密1=" + JavaWebToken.parserJavaWebToken(token));
-            log.info("解密2=" + JavaWebToken.parserJavaWebToken(dynamicToken));
-            log.info("token=" + token);
-            log.info("dynamicToken=" + dynamicToken);
             //if (dynamicToken.equalsIgnoreCase(token)) {
             item.setId(id);
 
@@ -496,10 +486,11 @@ public class DistributionService implements IdistributionService {
     }
 
     private void changeDistridetailStatusLogic(Order order, CdtDistridetail distridetail, BiConsumer<CdtDistridetail, Order> userSumeryOp) {
-        if (!order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
+        log.info("改变状态===order=" + order + "distridetail=" + distridetail);
+        if (!order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {//订单未完成
             distridetail.setStatus(DistributionStatus.NON_COMPLETE_ORDER.getCode());
         } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
-                order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())
+                order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())//普通订单已完成
         ) {
             int daysNum = Period.between(LocalDateTime.now().toLocalDate(), DateTimeConvert.date2LocalDateTime(order.getConfirmTime()).toLocalDate()).getDays();
             if (daysNum < 7) {
@@ -511,11 +502,11 @@ public class DistributionService implements IdistributionService {
             userSumeryOp.accept(distridetail, order);
         } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
                 (order.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
-                        order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode()
+                        order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode()//核销和快递代取订单已完成
                         ))) {
             distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
             userSumeryOp.accept(distridetail, order);
-        } else if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
+        } else if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {//订单退款
             distridetail.setStatus(DistributionStatus.REFUND_ORDER.getCode());
             userSumeryOp.accept(distridetail, order);
         }
