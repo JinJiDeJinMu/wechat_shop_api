@@ -8,7 +8,6 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,22 +43,15 @@ public class JavaWebToken {
     public static void main(String[] args) {
         Map token1 = JavaWebToken.parserJavaWebToken("");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date now = new Date();
-        System.out.println(formatter.format(now));
-        System.out.println(now);
         Map<String, Object> claims = new HashMap<>(7);
-        claims.put("user_id", "88");
-        claims.put("gold_user_id", "88");
-        claims.put("order_sn", "88");
-        claims.put("money", "0.30");
-        claims.put("status", "402");
-        claims.put("created_time", "Mon Dec 30 10:58:23 CST 2019");
-        claims.put("update_time", "Mon Dec 30 10:58:23 CST 2019");
-        claims.put("id", null);
-        claims.put("token", null);
+        claims.put("created_time", System.currentTimeMillis());
         System.out.println(claims);
         String token = JavaWebToken.createJavaWebToken(claims);
-        System.out.println(token);
+        String str = "eyJhbGciOiJIUzI1NiJ9.eyJtZWNoYW50SWQiOi0xLCJsZXZlbCI6MSwib3JkZXJJZCI6NTcxLCJvcmRlclNuIjoiNDE4ODU1MTkxOTIxNzMzNjMyIiwiY29tcGxldGVUaW1lIjpudWxsLCJjb25maXJtVGltZSI6bnVsbCwicmVtYXJrIjoi5LiA57qn6L-U5L2j57uT566XIiwidG9rZW4iOm51bGwsImdvbGRVc2VySWQiOjEyNSwiYnV5VXNlcklkIjoxMzUsIm1vbmV5IjowLjk5MTAsImdvb2RzUHJpY2UiOjkuOTEsIm5pY2tuYW1lIjoiNlllUjVweW8iLCJjcmVhdGVkVGltZSI6MTU3Nzc5MjQ3MDU2NSwiaWQiOm51bGwsInN0YXR1cyI6MjAxfQ.HEMy8UsML4O4fyUZtBDoTlsUQQmDq0pCW6TjPDxPBLI";
 
+        String s = "eyJhbGciOiJIUzI1NiJ9.eyJtZWNoYW50SWQiOi0xLCJsZXZlbCI6MSwib3JkZXJJZCI6NTc1LCJvcmRlclNuIjoiNDE4ODc4MjI0NzUzNDA1OTUyIiwiY29tcGxldGVUaW1lIjpudWxsLCJjb25maXJtVGltZSI6bnVsbCwicmVtYXJrIjoi5LiA57qn6L-U5L2j57uT566XIiwidG9rZW4iOm51bGwsImdvbGRVc2VySWQiOjEyNSwiYnV5VXNlcklkIjoxMzUsIm1vbmV5IjowLjk5MTAsImdvb2RzUHJpY2UiOjkuOTEsIm5pY2tuYW1lIjoiNlllUjVweW8iLCJjcmVhdGVkVGltZSI6MTU3Nzc5Nzk2NDE5MSwiaWQiOm51bGwsInN0YXR1cyI6MjAxfQ.HXKqvTE75CtRK47--vl2_F9Z2tbN9RmqypE-259yr4k";
+        String ss = "eyJhbGciOiJIUzI1NiJ9.eyJtZWNoYW50SWQiOi0xLCJsZXZlbCI6MSwib3JkZXJJZCI6NTc2LCJvcmRlclNuIjoiNDE5NDM3NTUwMTEwOTQ1MjgwIiwiY29tcGxldGVUaW1lIjpudWxsLCJjb25maXJtVGltZSI6bnVsbCwicmVtYXJrIjoi5LiA57qn6L-U5L2j57uT566XIiwidG9rZW4iOm51bGwsImdvbGRVc2VySWQiOjEyNSwiYnV5VXNlcklkIjoxMzUsIm1vbmV5IjowLjAwMjAsImdvb2RzUHJpY2UiOjAuMDIsIm5pY2tuYW1lIjoiNlllUjVweW8iLCJjcmVhdGVkVGltZSI6MTU3NzkzMTMzMDYzNiwiaWQiOm51bGwsInN0YXR1cyI6MjAxfQ.dqICs7wGnxuvBSFfxuc0sKxcCjfxgydCAaiRVii9VJw";
+        System.out.println(token);
+        System.out.println(JavaWebToken.parserJavaWebToken(token));
     }
 }

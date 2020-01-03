@@ -26,6 +26,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.*;
@@ -486,13 +487,12 @@ public class DistributionService implements IdistributionService {
     }
 
     private void changeDistridetailStatusLogic(Order order, CdtDistridetail distridetail, BiConsumer<CdtDistridetail, Order> userSumeryOp) {
-        log.info("改变状态===order=" + order + "distridetail=" + distridetail);
         if (!order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {//订单未完成
             distridetail.setStatus(DistributionStatus.NON_COMPLETE_ORDER.getCode());
         } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
                 order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())//普通订单已完成
         ) {
-            int daysNum = Period.between(LocalDateTime.now().toLocalDate(), DateTimeConvert.date2LocalDateTime(order.getConfirmTime()).toLocalDate()).getDays();
+            long daysNum = Duration.between(DateTimeConvert.date2LocalDateTime(order.getConfirmTime()), LocalDateTime.now()).toDays();
             if (daysNum < 7) {
                 distridetail.setStatus(DistributionStatus.NOT_SERVEN_ORDER.getCode());
             } else {

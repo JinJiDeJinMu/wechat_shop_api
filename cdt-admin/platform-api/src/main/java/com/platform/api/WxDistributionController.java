@@ -135,10 +135,9 @@ public class WxDistributionController {
             condition.eq(CdtRebateLog::getStatus, status);
         }
         List<CdtRebateLog> resultList = rebateLogService.list(condition);
-
+        resultList = resultList.stream().sorted(Comparator.comparing(CdtRebateLog::getId).reversed()).collect(Collectors.toList());
         log.info("resultList=" + resultList);
         List<CdtRebateLogDto> result = mapperFacade.mapAsList(resultList, CdtRebateLogDto.class);
-        result = result.stream().sorted(Comparator.comparing(CdtRebateLogDto::getId).reversed()).collect(Collectors.toList());
         PageInfo pageInfo = new PageInfo(result);
         return R.ok().put("data", pageInfo);
     }
