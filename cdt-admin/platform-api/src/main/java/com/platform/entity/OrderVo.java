@@ -529,6 +529,12 @@ public class OrderVo implements Serializable {
             handleOption.put("logistics",true);
         }
 
+        //订单待收货状态
+        if (order_status.equals(OrderStatusEnum.WAIT_SHIPPED.getCode())) {
+            handleOption.put("confirm", true);
+            handleOption.put("return", true);
+            handleOption.put("logistics", true);
+        }
         //如果订单已经支付，且已经收货，则可完成交易、评论和再次购买
         if (order_status.equals(OrderStatusEnum.CONFIRM_GOODS.getCode())) {
             handleOption.put("comment", true);
