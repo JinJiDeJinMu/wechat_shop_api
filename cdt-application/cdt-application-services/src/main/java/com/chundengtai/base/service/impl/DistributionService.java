@@ -396,6 +396,7 @@ public class DistributionService implements IdistributionService {
 //                throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
 //            }
         }
+        //更改
         if (batListLog.size() > 0) {
             boolean result = rebateLogService.updateBatchById(batListLog);
         }

@@ -8,6 +8,7 @@ import com.chundengtai.base.utils.DateTimeConvert;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,7 @@ import java.util.List;
  * @Version 1.0
  **/
 @Component
+@Slf4j
 public class OrderTask {
 
     @Autowired
@@ -55,23 +57,25 @@ public class OrderTask {
     }
 
     /**
-     * 订单已发货超过7天自动确认收货
+     * 确认收货超过7天订单已自动完成
      */
     @Scheduled(cron = "0 0/10 * * * ?")
     public void orderFinish() {
         List<Order> orderList = orderService.list(new LambdaQueryWrapper<Order>()
-                .eq(Order::getOrderStatus, OrderStatusEnum.SHIPPED_ORDER.getCode())
+                .eq(Order::getOrderStatus, OrderStatusEnum.CONFIRM_GOODS.getCode())
                 .eq(Order::getPayStatus, PayTypeEnum.PAYED.getCode()));
+        log.info("====确认收货====" + orderList);
         if (orderList != null) {
             orderList.forEach(e -> {
                 long num = 7;
                 long daysNum = Duration.between(LocalDateTime.now(), DateTimeConvert.date2LocalDateTime(e.getConfirmTime())).toDays();
                 if (daysNum > num) {
                     e.setOrderStatus(OrderStatusEnum.COMPLETED_ORDER.getCode());
-                    orderService.updateById(e);
-
+                    boolean flag = orderService.updateById(e);
                     //通知分销订单状态改变
-                    distributionService.notifyOrderStatus(e.getUserId(), e, GoodsTypeEnum.getEnumByKey(e.getGoodsType()));
+                    if (flag) {
+                        distributionService.notifyOrderStatus(e.getUserId(), e, GoodsTypeEnum.getEnumByKey(e.getGoodsType()));
+                    }
                 }
             });
         }

@@ -10,6 +10,7 @@ import com.platform.utils.RRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,7 @@ public class OrderServiceImpl implements OrderService {
         }
         orderEntity.setShippingStatus(2);
         orderEntity.setOrderStatus(301);
+        orderEntity.setConfirmTime(new Date());
         return orderDao.update(orderEntity);
     }
 
@@ -93,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
             order.setShippingName(shippingEntity.getName());
         }
 
-        order.setOrderStatus(300);//订单已发货
+        order.setOrderStatus(207);//订单待收货
         order.setShippingStatus(1);//已发货
         return orderDao.update(order);
     }
