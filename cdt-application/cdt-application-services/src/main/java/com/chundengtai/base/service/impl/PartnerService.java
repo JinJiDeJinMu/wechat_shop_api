@@ -139,6 +139,7 @@ public class PartnerService implements IpartnerService {
      */
     @Override
     public void determinePartner(CdtDistrimoney distrimoney, int userId) {
+        log.info("======开始判断是否是合伙人======");
         //读取链路关系
         CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
                 .eq(CdtUserSummary::getUserId, userId));
