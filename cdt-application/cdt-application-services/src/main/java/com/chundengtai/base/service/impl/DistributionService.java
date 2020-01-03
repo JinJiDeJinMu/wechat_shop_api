@@ -423,6 +423,8 @@ public class DistributionService implements IdistributionService {
             if (partner == null) {
                 log.error("==userSumeryOp====推荐人不存在！=====");
             }
+            //
+            partnerService.determinePartner(getDistrimoney(), userId);
 
             if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
                 if (item.getTradeOrderNum() == 1) {
