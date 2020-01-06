@@ -340,9 +340,9 @@ public class WxOrderController extends ApiBaseAction {
                 orderVo.setShippingStatus(ShippingTypeEnum.GETEDGOODS.getCode());
                 orderVo.setConfirmTime(new Date());
                 boolean result = cdtOrderService.updateById(orderVo);
-               /* if (result) {
-                    distributionFacade.notifyOrderStatus(loginUser.getUserId().intValue(), orderVo, GoodsTypeEnum.getEnumByKey(orderVo.getGoodsType()));
-                }*/
+               if (result) {
+                   distributionFacade.notifyOrderStatus(loginUser.getUserId().intValue(), orderVo, GoodsTypeEnum.getEnumByKey(orderVo.getGoodsType()));
+               }
                 return toResponsSuccess("确认收货成功");
             } else {
                 return toResponsSuccess("订单状态不对,请核实后在操作");

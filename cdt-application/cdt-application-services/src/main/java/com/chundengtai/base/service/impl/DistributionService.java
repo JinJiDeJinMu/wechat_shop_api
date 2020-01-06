@@ -426,11 +426,6 @@ public class DistributionService implements IdistributionService {
             }
 
             if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
-                if (item.getTradeOrderNum() == 1) {
-                    //绑定用户层级关系编号
-                    item.setDevNum(partner.getTradePerson());
-                    item.setIsTrade(TrueOrFalseEnum.FALSE.getCode());
-                }
 
                 assert partner != null;
                 partner.setUnbalanced(partner.getUnbalanced() == null ? BigDecimal.ZERO : partner.getUnbalanced().subtract(detailModel.getMoney()));
@@ -438,6 +433,11 @@ public class DistributionService implements IdistributionService {
                 partner.setInvalidOrderNum((partner.getInvalidOrderNum() == null || partner.getInvalidOrderNum() == 0) ? 0 : partner.getInvalidOrderNum() + 1);
                 partner.setRefundOrderNum((partner.getRefundOrderNum() == null || partner.getRefundOrderNum() == 0) ? 0 : partner.getRefundOrderNum() + 1);
                 item.setTradeOrderNum((item.getTradeOrderNum() == null || item.getTradeOrderNum() == 0) ? 0 : item.getTradeOrderNum() - 1);
+                if (item.getTradeOrderNum() == 1) {
+                    //绑定用户层级关系编号
+                    item.setDevNum(partner.getTradePerson());
+                    item.setIsTrade(TrueOrFalseEnum.FALSE.getCode());
+                }
             } else {
                 assert partner != null;
                 partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
@@ -503,9 +503,8 @@ public class DistributionService implements IdistributionService {
                 distridetail.setStatus(DistributionStatus.NOT_SERVEN_ORDER.getCode());
             } else {
                 distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
-
+                userSumeryOp.accept(distridetail, order);
             }
-            userSumeryOp.accept(distridetail, order);
         } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
                 (order.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
                         order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode()//核销和快递代取订单已完成
