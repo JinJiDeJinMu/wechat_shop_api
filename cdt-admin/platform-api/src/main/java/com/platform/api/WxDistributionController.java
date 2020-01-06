@@ -75,12 +75,12 @@ public class WxDistributionController {
         BigDecimal totalMoney = BigDecimal.ZERO;
         LambdaQueryWrapper<CdtDistridetail> conditionOne = new QueryWrapper<CdtDistridetail>().lambda()
                 .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue())
-                .eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER);
+                .eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER.getCode());
         unsetMoney = distridetailService.getUnsetMoney(conditionOne);
 
         LambdaQueryWrapper<CdtDistridetail> conditionTwo = new QueryWrapper<CdtDistridetail>().lambda()
                 .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue())
-                .ne(CdtDistridetail::getStatus, DistributionStatus.REFUND_ORDER);
+                .ne(CdtDistridetail::getStatus, DistributionStatus.REFUND_ORDER.getCode());
         totalMoney = distridetailService.getTotalMoney(conditionTwo);
 
         return R.ok().put("unsetMoney", unsetMoney).put("totalMoney", totalMoney);
