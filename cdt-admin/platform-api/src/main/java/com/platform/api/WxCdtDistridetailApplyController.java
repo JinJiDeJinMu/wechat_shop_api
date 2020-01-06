@@ -60,7 +60,6 @@ public class WxCdtDistridetailApplyController {
     }
 
     private void applyFfenxiaoData(String weixinOpenid, String userName, String realName, long distridetailId) {
-        if (cdtDistridetailApplyService.getById(distridetailId) == null) {
             CdtDistridetail cdtDistridetail = cdtDistridetailService.getById(distridetailId);
             String token = cdtDistridetail.getToken();
             log.info("token=" + token);
@@ -90,7 +89,7 @@ public class WxCdtDistridetailApplyController {
 
                     //插入到审核表
                     CdtDistridetailApply cdtDistridetailApply = new CdtDistridetailApply();
-                    cdtDistridetailApply.setId(distridetailId);
+                    //cdtDistridetailApply.setId(distridetailId);
                     cdtDistridetailApply.setOrderSn(cdtDistridetail.getOrderSn());
                     cdtDistridetailApply.setMoney(cdtDistridetail.getMoney());
                     cdtDistridetailApply.setStatus(cdtDistridetail.getStatus());
@@ -104,6 +103,6 @@ public class WxCdtDistridetailApplyController {
                     e.printStackTrace();
                 }
             //}
-        }
+
     }
 }
