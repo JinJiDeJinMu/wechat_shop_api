@@ -101,13 +101,13 @@ public class WxDistributionController {
         PageHelper.startPage(pageIndex, pageSize);
         List<CdtDistridetail> resultList = distridetailService.list(
                 condition);
-
+        resultList = resultList.stream().sorted(Comparator.comparing(CdtDistridetail::getId).reversed()).collect(Collectors.toList());
         if (resultList.size() == 0) return R.error("已经是最后一页");
         List<CdtDistridetailDto> dtoList = mapperFacade.mapAsList(resultList, CdtDistridetailDto.class);
         PageInfo pageInfo = new PageInfo(dtoList);
         BigDecimal unsetMoney = BigDecimal.ZERO;
         BigDecimal totalMoney = BigDecimal.ZERO;
-        if (pageInfo.getTotal() > 0) {
+        /*  if (pageInfo.getTotal() > 0) {*/
             LambdaQueryWrapper<CdtDistridetail> conditionOne = condition;
             conditionOne.eq(CdtDistridetail::getStatus, DistributionStatus.NON_COMPLETE_ORDER.getCode()).or()
                     .eq(CdtDistridetail::getStatus, DistributionStatus.NOT_SERVEN_ORDER.getCode());
@@ -117,7 +117,8 @@ public class WxDistributionController {
                     .eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER.getCode())
                     .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue());
             totalMoney = distridetailService.getTotalMoney(conditionTwo);
-        }
+        //}
+        log.info("=====" + pageInfo);
         return R.ok().put("data", pageInfo).put("unsetMoney", unsetMoney).put("totalMoney", totalMoney);
     }
 

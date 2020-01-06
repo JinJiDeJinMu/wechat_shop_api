@@ -63,18 +63,17 @@ public class OrderTask {
     /**
      * 普通订单完成七天之后自动更新分销状态
      */
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void orderChange() {
         List<CdtDistridetail> cdtDistridetailList = cdtDistridetailService.list(new LambdaQueryWrapper<CdtDistridetail>()
                 .eq(CdtDistridetail::getStatus, DistributionStatus.NOT_SERVEN_ORDER.getCode()));
         if (cdtDistridetailList != null) {
             cdtDistridetailList.forEach(e -> {
-                long num = 7;
-                long daysNum = Duration.between(DateTimeConvert.date2LocalDateTime(e.getUpdateTime()), LocalDateTime.now()).toDays();
-                if (daysNum > num) {
-                    //通知分销订单状态改变
-                    Order order = orderService.getOne(new LambdaQueryWrapper<Order>().eq(Order::getOrderSn, e.getOrderSn()));
-                    if (order != null && order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())) {
+                Order order = orderService.getOne(new LambdaQueryWrapper<Order>().eq(Order::getOrderSn, e.getOrderSn()));
+                if (order != null && order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())) {
+                    long num = 7;
+                    long daysNum = Duration.between(DateTimeConvert.date2LocalDateTime(order.getConfirmTime()), LocalDateTime.now()).toDays();
+                    if (daysNum > num) {
                         distributionService.notifyOrderStatus(e.getUserId(), order, GoodsTypeEnum.getEnumByKey(order.getGoodsType()));
                     }
                 }
