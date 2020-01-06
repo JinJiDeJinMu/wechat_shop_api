@@ -123,6 +123,7 @@ public class DistributionService implements IdistributionService {
     }
 
     //返佣比例配置信息获取
+    @Override
     public CdtDistrimoney getDistrimoney() {
         CdtDistrimoney model = (CdtDistrimoney) redisTemplate.opsForValue().get(CacheConstant.SERVICE_CDT_DISTRIMONEY);
         if (model == null) {

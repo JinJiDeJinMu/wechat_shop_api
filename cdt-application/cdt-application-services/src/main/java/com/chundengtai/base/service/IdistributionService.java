@@ -1,5 +1,6 @@
 package com.chundengtai.base.service;
 
+import com.chundengtai.base.bean.CdtDistrimoney;
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.event.DistributionEvent;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
@@ -21,6 +22,8 @@ import com.chundengtai.base.weixinapi.GoodsTypeEnum;
  * **************************************************************
  */
 public interface IdistributionService {
+
+    CdtDistrimoney getDistrimoney();
 
     void distributionLogic(DistributionEvent event);
 
