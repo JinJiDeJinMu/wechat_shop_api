@@ -5,10 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtDistributionLevel;
 import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.bean.CdtRebateLog;
-import com.chundengtai.base.bean.CdtUserSummary;
 import com.chundengtai.base.bean.dto.CdtDistridetailDto;
 import com.chundengtai.base.bean.dto.CdtRebateLogDto;
-import com.chundengtai.base.bean.dto.CdtUserSummaryDto;
 import com.chundengtai.base.result.R;
 import com.chundengtai.base.service.*;
 import com.chundengtai.base.weixinapi.DistributionStatus;
@@ -73,9 +71,21 @@ public class WxDistributionController {
     @ResponseBody
     @IgnoreAuth
     public R getUserDistributionInfo(@LoginUser UserVo loginUser) {
-        CdtUserSummary model = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, loginUser.getUserId().intValue()));
-        CdtUserSummaryDto result = mapperFacade.map(model, CdtUserSummaryDto.class);
-        return R.ok().put("data", result);
+        /*CdtUserSummary model = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, loginUser.getUserId().intValue()));
+        CdtUserSummaryDto result = mapperFacade.map(model, CdtUserSummaryDto.class);*/
+
+        BigDecimal unsetMoney = BigDecimal.ZERO;
+        BigDecimal totalMoney = BigDecimal.ZERO;
+        LambdaQueryWrapper<CdtDistridetail> conditionOne = new QueryWrapper<CdtDistridetail>().lambda();
+        conditionOne.eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER);
+        unsetMoney = distridetailService.getUnsetMoney(conditionOne);
+
+        LambdaQueryWrapper<CdtDistridetail> conditionTwo = new QueryWrapper<CdtDistridetail>().lambda()
+                .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue())
+                .ne(CdtDistridetail::getStatus, DistributionStatus.REFUND_ORDER);
+        totalMoney = distridetailService.getTotalMoney(conditionTwo);
+
+        return R.ok().put("unsetMoney", unsetMoney).put("totalMoney", totalMoney);
     }
 
     @ApiOperation(value = "分销中心个人下线人数列表", httpMethod = "GET")
@@ -101,7 +111,7 @@ public class WxDistributionController {
         PageHelper.startPage(pageIndex, pageSize);
         List<CdtDistridetail> resultList = distridetailService.list(
                 condition);
-
+        resultList = resultList.stream().sorted(Comparator.comparing(CdtDistridetail::getId).reversed()).collect(Collectors.toList());
         if (resultList.size() == 0) return R.error("已经是最后一页");
         List<CdtDistridetailDto> dtoList = mapperFacade.mapAsList(resultList, CdtDistridetailDto.class);
         PageInfo pageInfo = new PageInfo(dtoList);
@@ -118,6 +128,7 @@ public class WxDistributionController {
                     .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue());
             totalMoney = distridetailService.getTotalMoney(conditionTwo);
         }
+        log.info("=====" + pageInfo);
         return R.ok().put("data", pageInfo).put("unsetMoney", unsetMoney).put("totalMoney", totalMoney);
     }
 

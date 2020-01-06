@@ -1,10 +1,13 @@
 package com.platform.task;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.bean.Order;
+import com.chundengtai.base.service.CdtDistridetailService;
 import com.chundengtai.base.service.OrderService;
 import com.chundengtai.base.service.impl.DistributionService;
 import com.chundengtai.base.utils.DateTimeConvert;
+import com.chundengtai.base.weixinapi.DistributionStatus;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
@@ -34,6 +37,9 @@ public class OrderTask {
     @Autowired
     private DistributionService distributionService;
 
+    @Autowired
+    private CdtDistridetailService cdtDistridetailService;
+
     /**
      * 订单未支付超过60分钟取消
      */
@@ -55,27 +61,23 @@ public class OrderTask {
     }
 
     /**
-     * 确认收货超过7天订单已自动完成
+     * 普通订单完成七天之后自动更新分销状态
      */
-    @Scheduled(cron = "0 0/50 * * * ?")
-    public void orderFinish() {
-        List<Order> orderList = orderService.list(new LambdaQueryWrapper<Order>()
-                .eq(Order::getOrderStatus, OrderStatusEnum.CONFIRM_GOODS.getCode())
-                .eq(Order::getPayStatus, PayTypeEnum.PAYED.getCode()));
-        if (orderList != null) {
-            orderList.forEach(e -> {
-                long num = 7;
-                long daysNum = Duration.between(DateTimeConvert.date2LocalDateTime(e.getConfirmTime()), LocalDateTime.now()).toDays();
-                if (daysNum > num) {
-                    e.setOrderStatus(OrderStatusEnum.COMPLETED_ORDER.getCode());
-                    boolean flag = orderService.updateById(e);
-                    //通知分销订单状态改变
-                    if (flag) {
-                        distributionService.notifyOrderStatus(e.getUserId(), e, GoodsTypeEnum.getEnumByKey(e.getGoodsType()));
+    @Scheduled(cron = "0 0/10 * * * ?")
+    public void orderChange() {
+        List<CdtDistridetail> cdtDistridetailList = cdtDistridetailService.list(new LambdaQueryWrapper<CdtDistridetail>()
+                .eq(CdtDistridetail::getStatus, DistributionStatus.NOT_SERVEN_ORDER.getCode()));
+        if (cdtDistridetailList != null) {
+            cdtDistridetailList.forEach(e -> {
+                Order order = orderService.getOne(new LambdaQueryWrapper<Order>().eq(Order::getOrderSn, e.getOrderSn()));
+                if (order != null && order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())) {
+                    long num = 7;
+                    long daysNum = Duration.between(DateTimeConvert.date2LocalDateTime(order.getConfirmTime()), LocalDateTime.now()).toDays();
+                    if (daysNum > num) {
+                        distributionService.notifyOrderStatus(e.getUserId(), order, GoodsTypeEnum.getEnumByKey(order.getGoodsType()));
                     }
                 }
             });
         }
-
     }
 }
