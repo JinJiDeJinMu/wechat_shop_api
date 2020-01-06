@@ -71,9 +71,6 @@ public class WxDistributionController {
     @ResponseBody
     @IgnoreAuth
     public R getUserDistributionInfo(@LoginUser UserVo loginUser) {
-        /*CdtUserSummary model = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, loginUser.getUserId().intValue()));
-        CdtUserSummaryDto result = mapperFacade.map(model, CdtUserSummaryDto.class);*/
-
         BigDecimal unsetMoney = BigDecimal.ZERO;
         BigDecimal totalMoney = BigDecimal.ZERO;
         LambdaQueryWrapper<CdtDistridetail> conditionOne = new QueryWrapper<CdtDistridetail>().lambda()
