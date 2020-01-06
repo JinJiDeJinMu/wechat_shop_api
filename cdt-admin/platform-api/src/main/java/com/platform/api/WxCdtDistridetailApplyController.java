@@ -99,7 +99,5 @@ public class WxCdtDistridetailApplyController {
                     log.info("======" + cdtDistridetailApply);
                     cdtDistridetailApplyService.save(cdtDistridetailApply);
 
-        //}
-
     }
 }
