@@ -65,7 +65,7 @@ public class WxCdtDistridetailApplyController {
             log.info("token=" + token);
            /* cdtDistridetail.setId(null);
             cdtDistridetail.setToken(null);*/
-            String token_tem = "";
+        //String token_tem = "";
            /* try {
                 token_tem = JavaWebToken.createJavaWebToken(BeanJwtUtil.javabean2map(cdtDistridetail));
                 log.info("token_tem=" + token_tem);
@@ -74,7 +74,6 @@ public class WxCdtDistridetailApplyController {
                 e.printStackTrace();
             }*/
             //if (token.equals(token_tem)) {
-                try {
                     log.info("token校验成功");
                     //更改分销订单状态为审核中
                     //cdtDistridetail.setId(null);
@@ -82,14 +81,14 @@ public class WxCdtDistridetailApplyController {
                     cdtDistridetail.setUpdateTime(new Date());
                     //cdtDistridetail.setToken(null);
                     //String cdtToken = JavaWebToken.createJavaWebToken(BeanJwtUtil.javabean2map(cdtDistridetail));
-                    cdtDistridetail.setToken(null);
+        //cdtDistridetail.setToken(null);
                     cdtDistridetail.setId(distridetailId);
                     cdtDistridetailService.updateById(cdtDistridetail);
                     log.info("======" + cdtDistridetail);
 
                     //插入到审核表
                     CdtDistridetailApply cdtDistridetailApply = new CdtDistridetailApply();
-                    //cdtDistridetailApply.setId(distridetailId);
+        cdtDistridetailApply.setId(distridetailId);
                     cdtDistridetailApply.setOrderSn(cdtDistridetail.getOrderSn());
                     cdtDistridetailApply.setMoney(cdtDistridetail.getMoney());
                     cdtDistridetailApply.setStatus(cdtDistridetail.getStatus());
@@ -99,10 +98,8 @@ public class WxCdtDistridetailApplyController {
                     cdtDistridetailApply.setApplyTime(new Date());
                     log.info("======" + cdtDistridetailApply);
                     cdtDistridetailApplyService.save(cdtDistridetailApply);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            //}
+
+        //}
 
     }
 }
