@@ -3,11 +3,9 @@ package com.platform.api;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.bean.CdtDistridetailApply;
-import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.result.R;
 import com.chundengtai.base.service.CdtDistridetailApplyService;
 import com.chundengtai.base.service.CdtDistridetailService;
-import com.chundengtai.base.utils.BeanJwtUtil;
 import com.chundengtai.base.weixinapi.DistributionStatus;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.UserVo;
@@ -66,28 +64,30 @@ public class WxCdtDistridetailApplyController {
             CdtDistridetail cdtDistridetail = cdtDistridetailService.getById(distridetailId);
             String token = cdtDistridetail.getToken();
             log.info("token=" + token);
-            cdtDistridetail.setId(null);
-            cdtDistridetail.setToken(null);
+           /* cdtDistridetail.setId(null);
+            cdtDistridetail.setToken(null);*/
             String token_tem = "";
-            try {
+           /* try {
                 token_tem = JavaWebToken.createJavaWebToken(BeanJwtUtil.javabean2map(cdtDistridetail));
                 log.info("token_tem=" + token_tem);
             } catch (Exception e) {
                 log.error("jwt加密异常========");
                 e.printStackTrace();
-            }
+            }*/
             //if (token.equals(token_tem)) {
                 try {
                     log.info("token校验成功");
                     //更改分销订单状态为审核中
-                    cdtDistridetail.setId(null);
+                    //cdtDistridetail.setId(null);
                     cdtDistridetail.setStatus(DistributionStatus.COMPLETED_GETGOLD_CHECK.getCode());
                     cdtDistridetail.setUpdateTime(new Date());
+                    //cdtDistridetail.setToken(null);
+                    //String cdtToken = JavaWebToken.createJavaWebToken(BeanJwtUtil.javabean2map(cdtDistridetail));
                     cdtDistridetail.setToken(null);
-                    String cdtToken = JavaWebToken.createJavaWebToken(BeanJwtUtil.javabean2map(cdtDistridetail));
-                    cdtDistridetail.setToken(cdtToken);
                     cdtDistridetail.setId(distridetailId);
                     cdtDistridetailService.updateById(cdtDistridetail);
+                    log.info("======" + cdtDistridetail);
+
                     //插入到审核表
                     CdtDistridetailApply cdtDistridetailApply = new CdtDistridetailApply();
                     cdtDistridetailApply.setId(distridetailId);
@@ -98,6 +98,7 @@ public class WxCdtDistridetailApplyController {
                     cdtDistridetailApply.setUserName(userName);
                     cdtDistridetailApply.setRealName(realName);
                     cdtDistridetailApply.setApplyTime(new Date());
+                    log.info("======" + cdtDistridetailApply);
                     cdtDistridetailApplyService.save(cdtDistridetailApply);
                 } catch (Exception e) {
                     e.printStackTrace();

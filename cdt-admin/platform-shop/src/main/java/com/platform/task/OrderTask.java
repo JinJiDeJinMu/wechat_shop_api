@@ -54,9 +54,11 @@ public class OrderTask {
         }
     }
 
+    /*   */
+
     /**
      * 确认收货超过7天订单已自动完成
-     */
+     *//*
     @Scheduled(cron = "0 0/50 * * * ?")
     public void orderFinish() {
         List<Order> orderList = orderService.list(new LambdaQueryWrapper<Order>()
@@ -73,6 +75,24 @@ public class OrderTask {
                     if (flag) {
                         distributionService.notifyOrderStatus(e.getUserId(), e, GoodsTypeEnum.getEnumByKey(e.getGoodsType()));
                     }
+                }
+            });
+        }
+
+    }*/
+    @Scheduled(cron = "0 0/10 * * * ?")
+    public void orderChange() {
+        List<Order> orderList = orderService.list(new LambdaQueryWrapper<Order>()
+                .eq(Order::getOrderStatus, OrderStatusEnum.COMPLETED_ORDER.getCode())
+                .eq(Order::getPayStatus, PayTypeEnum.PAYED.getCode())
+                .eq(Order::getGoodsType, GoodsTypeEnum.ORDINARY_GOODS.getCode()));
+        if (orderList != null) {
+            orderList.forEach(e -> {
+                long num = 7;
+                long daysNum = Duration.between(DateTimeConvert.date2LocalDateTime(e.getConfirmTime()), LocalDateTime.now()).toDays();
+                if (daysNum > num) {
+                    //通知分销订单状态改变
+                    distributionService.notifyOrderStatus(e.getUserId(), e, GoodsTypeEnum.getEnumByKey(e.getGoodsType()));
                 }
             });
         }
