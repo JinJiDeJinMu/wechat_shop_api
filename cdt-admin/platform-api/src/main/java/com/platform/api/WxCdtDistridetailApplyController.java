@@ -61,34 +61,18 @@ public class WxCdtDistridetailApplyController {
 
     private void applyFfenxiaoData(String weixinOpenid, String userName, String realName, long distridetailId) {
             CdtDistridetail cdtDistridetail = cdtDistridetailService.getById(distridetailId);
-            String token = cdtDistridetail.getToken();
-            log.info("token=" + token);
-           /* cdtDistridetail.setId(null);
-            cdtDistridetail.setToken(null);*/
-        //String token_tem = "";
-           /* try {
-                token_tem = JavaWebToken.createJavaWebToken(BeanJwtUtil.javabean2map(cdtDistridetail));
-                log.info("token_tem=" + token_tem);
-            } catch (Exception e) {
-                log.error("jwt加密异常========");
-                e.printStackTrace();
-            }*/
-            //if (token.equals(token_tem)) {
+        try {
                     log.info("token校验成功");
                     //更改分销订单状态为审核中
-                    //cdtDistridetail.setId(null);
                     cdtDistridetail.setStatus(DistributionStatus.COMPLETED_GETGOLD_CHECK.getCode());
                     cdtDistridetail.setUpdateTime(new Date());
-                    //cdtDistridetail.setToken(null);
-                    //String cdtToken = JavaWebToken.createJavaWebToken(BeanJwtUtil.javabean2map(cdtDistridetail));
-        //cdtDistridetail.setToken(null);
                     cdtDistridetail.setId(distridetailId);
                     cdtDistridetailService.updateById(cdtDistridetail);
                     log.info("======" + cdtDistridetail);
 
                     //插入到审核表
                     CdtDistridetailApply cdtDistridetailApply = new CdtDistridetailApply();
-        cdtDistridetailApply.setId(distridetailId);
+            cdtDistridetailApply.setId(distridetailId);
                     cdtDistridetailApply.setOrderSn(cdtDistridetail.getOrderSn());
                     cdtDistridetailApply.setMoney(cdtDistridetail.getMoney());
                     cdtDistridetailApply.setStatus(cdtDistridetail.getStatus());
@@ -98,6 +82,8 @@ public class WxCdtDistridetailApplyController {
                     cdtDistridetailApply.setApplyTime(new Date());
                     log.info("======" + cdtDistridetailApply);
                     cdtDistridetailApplyService.save(cdtDistridetailApply);
-
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

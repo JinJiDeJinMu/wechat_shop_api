@@ -1,5 +1,6 @@
 package com.chundengtai.base.bean;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
@@ -28,7 +29,7 @@ public class CdtDistridetailApply implements Serializable {
       /**
      * id
      */
-      @TableId(value = "id")
+      @TableId(value = "id", type = IdType.INPUT)
       private Long id;
 
       /**
