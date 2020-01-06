@@ -149,7 +149,7 @@ public class PartnerService implements IpartnerService {
             //todo:合伙人二级提升逻辑
 
             //todo:合伙人三级提升逻辑
-        } else if (cdtUserSummary.getTradePerson() >= distrimoney.getFirstPersonCondition()) {
+        } else if (cdtUserSummary.getTradePerson() > distrimoney.getFirstPersonCondition()) {
             cdtUserSummary.setIsPartner(TrueOrFalseEnum.TRUE.getCode());
             cdtUserSummary.setPartnerLevel(PartnerLeveEnum.ONE.getCode());
         }
