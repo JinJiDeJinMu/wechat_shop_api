@@ -411,7 +411,7 @@ public class DistributionService implements IdistributionService {
 
         BiConsumer<CdtDistridetail, Order> userSumeryOp = (CdtDistridetail detailModel, Order orderModel) -> {
             CdtDistributionLevel item = distributionLevelService.getOne(new QueryWrapper<CdtDistributionLevel>().lambda()
-                    .eq(CdtDistributionLevel::getUserId, detailModel.getGoldUserId()));
+                    .eq(CdtDistributionLevel::getUserId, detailModel.getUserId()));
 
             log.info("============BiConsumer====================>进入表达式逻辑");
             if (item == null) {
@@ -420,7 +420,7 @@ public class DistributionService implements IdistributionService {
             }
             //更新用户统计有效下线
             CdtUserSummary partner = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
-                    .eq(CdtUserSummary::getUserId, item.getParentId()));
+                    .eq(CdtUserSummary::getUserId, detailModel.getGoldUserId()));
             if (partner == null) {
                 log.error("==userSumeryOp====推荐人不存在！=====");
             }
