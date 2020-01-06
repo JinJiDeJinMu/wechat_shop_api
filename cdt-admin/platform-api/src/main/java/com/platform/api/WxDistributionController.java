@@ -76,8 +76,9 @@ public class WxDistributionController {
 
         BigDecimal unsetMoney = BigDecimal.ZERO;
         BigDecimal totalMoney = BigDecimal.ZERO;
-        LambdaQueryWrapper<CdtDistridetail> conditionOne = new QueryWrapper<CdtDistridetail>().lambda();
-        conditionOne.eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER);
+        LambdaQueryWrapper<CdtDistridetail> conditionOne = new QueryWrapper<CdtDistridetail>().lambda()
+                .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue())
+                .eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER);
         unsetMoney = distridetailService.getUnsetMoney(conditionOne);
 
         LambdaQueryWrapper<CdtDistridetail> conditionTwo = new QueryWrapper<CdtDistridetail>().lambda()
