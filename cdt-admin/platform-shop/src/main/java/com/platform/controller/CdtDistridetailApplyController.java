@@ -3,11 +3,9 @@ package com.platform.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.bean.CdtDistridetailApply;
-import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.service.CdtDistridetailApplyService;
 import com.chundengtai.base.service.CdtDistridetailService;
 import com.chundengtai.base.transfer.BaseForm;
-import com.chundengtai.base.utils.BeanJwtUtil;
 import com.chundengtai.base.weixinapi.DistributionStatus;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -95,20 +93,19 @@ public class CdtDistridetailApplyController {
                     if (applyCashService.wechatMoneyToUser(weixinOpenid, realName, money)) {
                         try {
                             //更新分销审核表类型
-                            //e.setType(1);
                             e.setStatus(DistributionStatus.COMPLETED_GETGOLD.getCode());
                             e.setUpdateTime(new Date());
                             e.setOperator(ShiroUtils.getUserEntity().getUsername());
-                            cdtDistridetailApplyService.save(e);
+                            cdtDistridetailApplyService.updateById(e);
                             //更新分销订单类型
                             CdtDistridetail cdtDistridetail = cdtDistridetailService.getById(e.getId());
                             cdtDistridetail.setUpdateTime(new Date());
                             cdtDistridetail.setStatus(DistributionStatus.COMPLETED_GETGOLD.getCode());
-                            cdtDistridetail.setId(null);
+                            /*cdtDistridetail.setId(null);
                             cdtDistridetail.setToken(null);
                             String token = JavaWebToken.createJavaWebToken(BeanJwtUtil.javabean2map(cdtDistridetail));
                             cdtDistridetail.setToken(token);
-                            cdtDistridetail.setId(e.getId());
+                            cdtDistridetail.setId(e.getId());*/
                             cdtDistridetailService.updateById(cdtDistridetail);
                         } catch (Exception e1) {
                             e1.printStackTrace();
