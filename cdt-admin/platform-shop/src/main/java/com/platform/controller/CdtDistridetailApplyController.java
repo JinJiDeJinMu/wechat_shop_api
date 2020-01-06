@@ -12,6 +12,7 @@ import com.github.pagehelper.PageInfo;
 import com.platform.service.ApplyCashService;
 import com.platform.utils.R;
 import com.platform.utils.ShiroUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cdtDistridetailApply")
+@Slf4j
 public class CdtDistridetailApplyController {
 
     @Autowired
@@ -85,11 +87,13 @@ public class CdtDistridetailApplyController {
     //@RequiresPermissions("cdtdistridetailapply:deleteModel")
     public R review(@RequestBody Integer[] ids) {
         List<CdtDistridetailApply> list = cdtDistridetailApplyService.listByIds(Arrays.asList(ids));
-        list.parallelStream().filter(e -> e.getStatus() == 405).collect(Collectors.toList())
-                .forEach(e -> {
+        list = list.stream().filter(e -> e.getStatus() == 405).collect(Collectors.toList());
+        log.info("======" + list);
+        list.forEach(e -> {
                     String weixinOpenid = e.getWeixinOpenid();
                     String realName = e.getRealName();
                     double money = e.getMoney().doubleValue();
+            log.info("===开始审核===" + e);
                     if (applyCashService.wechatMoneyToUser(weixinOpenid, realName, money)) {
                         try {
                             //更新分销审核表类型
