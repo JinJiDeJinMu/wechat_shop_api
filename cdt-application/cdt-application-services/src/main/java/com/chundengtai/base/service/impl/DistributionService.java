@@ -311,10 +311,10 @@ public class DistributionService implements IdistributionService {
         logModel.setCreatedTime(new Date());
         boolean result = rebateLogService.save(logModel);
 
-        //记录分销奖励
+        //todo:s记录分销奖励
         recordEarning(user.getId(), user.getFirstLeader(), earnMoney, order, 0);
 
-        //记录二级分销奖励
+        //todo:记录二级分销奖励
         if (!user.getSecondLeader().equals(0)) {
             logModel.setId(null);
             logModel.setToken(null);
@@ -330,7 +330,7 @@ public class DistributionService implements IdistributionService {
         }
 
         try {
-            //记录合伙人奖励
+            //todo:记录合伙人奖励
             CdtUserSummary partner = partnerService.getPartnerInfo(distrimoney, user.getId());
             if (partner != null) {
                 BigDecimal percent = BigDecimal.ZERO;
@@ -447,6 +447,11 @@ public class DistributionService implements IdistributionService {
                 item.setDevNum(partner.getTradePerson());
                 item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
                 item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
+
+                //todo:判定符合合伙人逻辑
+                if (partner.getTradePerson() >= distrimoney.getFirstPersonCondition()) {
+                    partnerService.determinePartner(distrimoney, partner.getUserId());
+                }
             }
             boolean rows = cdtUserSummaryService.updateById(partner);
             log.warn("==userSumeryOp====更新用户统计有效下线=====>" + rows);
