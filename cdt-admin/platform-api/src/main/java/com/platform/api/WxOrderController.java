@@ -336,7 +336,7 @@ public class WxOrderController extends ApiBaseAction {
             if (orderVo.getOrderStatus().equals(OrderStatusEnum.SHIPPED_ORDER.getCode()) ||
                     orderVo.getOrderStatus().equals(OrderStatusEnum.WAIT_SHIPPED.getCode())
             ) {
-                orderVo.setOrderStatus(OrderStatusEnum.CONFIRM_GOODS.getCode());
+                orderVo.setOrderStatus(OrderStatusEnum.COMPLETED_ORDER.getCode());
                 orderVo.setShippingStatus(ShippingTypeEnum.GETEDGOODS.getCode());
                 orderVo.setConfirmTime(new Date());
                 boolean result = cdtOrderService.updateById(orderVo);
