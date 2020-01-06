@@ -71,13 +71,11 @@ public class WxDistributionController {
     @ResponseBody
     @IgnoreAuth
     public R getUserDistributionInfo(@LoginUser UserVo loginUser) {
-        /*CdtUserSummary model = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, loginUser.getUserId().intValue()));
-        CdtUserSummaryDto result = mapperFacade.map(model, CdtUserSummaryDto.class);*/
-
         BigDecimal unsetMoney = BigDecimal.ZERO;
         BigDecimal totalMoney = BigDecimal.ZERO;
-        LambdaQueryWrapper<CdtDistridetail> conditionOne = new QueryWrapper<CdtDistridetail>().lambda();
-        conditionOne.eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER);
+        LambdaQueryWrapper<CdtDistridetail> conditionOne = new QueryWrapper<CdtDistridetail>().lambda()
+                .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue())
+                .eq(CdtDistridetail::getStatus, DistributionStatus.COMPLETED_ORDER);
         unsetMoney = distridetailService.getUnsetMoney(conditionOne);
 
         LambdaQueryWrapper<CdtDistridetail> conditionTwo = new QueryWrapper<CdtDistridetail>().lambda()
