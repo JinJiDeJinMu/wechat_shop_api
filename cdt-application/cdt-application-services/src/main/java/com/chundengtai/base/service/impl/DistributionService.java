@@ -423,15 +423,6 @@ public class DistributionService implements IdistributionService {
                 partner = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
                         .eq(CdtUserSummary::getUserId, item.getParentId()));
 
-                partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
-                //绑定用户层级关系编号
-                item.setDevNum(partner.getTradePerson());
-                item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
-                item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
-                //todo:判定符合合伙人逻辑
-                if (partner.getTradePerson() >= distrimoney.getFirstPersonCondition()) {
-                    partnerService.determinePartner(distrimoney, partner.getUserId());
-                }
             } else {
                 partner = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
                         .eq(CdtUserSummary::getUserId, detailModel.getGoldUserId()));
@@ -458,6 +449,17 @@ public class DistributionService implements IdistributionService {
             } else {
                 assert partner != null;
                 partner.setUnbalanced(partner.getUnbalanced() == null ? detailModel.getMoney() : partner.getUnbalanced().add(detailModel.getMoney()));
+                if (item.getParentId().equals(detailModel.getGoldUserId())) {
+                    partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
+                    //绑定用户层级关系编号
+                    item.setDevNum(partner.getTradePerson());
+                    item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
+                    item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
+                    //todo:判定符合合伙人逻辑
+                    if (partner.getTradePerson() >= distrimoney.getFirstPersonCondition()) {
+                        partnerService.determinePartner(distrimoney, partner.getUserId());
+                    }
+                }
 
             }
             boolean rows = cdtUserSummaryService.updateById(partner);
