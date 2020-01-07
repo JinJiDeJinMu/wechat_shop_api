@@ -233,3 +233,12 @@
 <script src="${rc.contextPath}/js/module/${entity}.js?time=${date.systemTime}"></script>
 </body>
 </html>
+
+
+#foreach($field in ${table.fields})
+<tr>
+    <td class="firsttd">${field.comment}：</td>
+    <td>{{tradeData.${field.propertyName}}}</td>
+</tr>
+#end
+

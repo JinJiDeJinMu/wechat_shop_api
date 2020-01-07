@@ -55,6 +55,7 @@
 				/api/**=anon
 				/api/**=noSessionCreation
 				/login.html=anon
+				/product.html=anon
 				/sys/login=anon
 				/yanzhengma.do=anon
 				/**=authc

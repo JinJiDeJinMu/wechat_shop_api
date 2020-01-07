@@ -156,18 +156,6 @@
                 this.src = "yanzhengma.do?time=" + new Date().getTime();
             },
             login: function (event) {
-                if (this.username == '') {
-                    iview.Message.warning("用户名不能为空");
-                    return false;
-                }
-                if (this.password == '') {
-                    iview.Message.warning("密码不能为空");
-                    return false;
-                }
-                if (this.captcha == '') {
-                    iview.Message.warning("验证码不能为空");
-                    return false;
-                }
                 this.loading = true;
                 let data = "username=" + this.loginForm.username + "&password=" + this.loginForm.password + "&captcha=" + this.loginForm.captcha;
                 $.ajax({
