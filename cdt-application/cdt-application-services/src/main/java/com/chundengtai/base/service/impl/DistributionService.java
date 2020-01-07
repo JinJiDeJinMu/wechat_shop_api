@@ -502,7 +502,7 @@ public class DistributionService implements IdistributionService {
     }
 
     private void changeDistridetailStatusLogic(Order order, CdtDistridetail distridetail, BiConsumer<CdtDistridetail, Order> userSumeryOp) {
-        if (!order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {//订单未完成
+        if (!order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) && !order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {//订单未完成
             distridetail.setStatus(DistributionStatus.NON_COMPLETE_ORDER.getCode());
         } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
                 order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())//普通订单已完成
