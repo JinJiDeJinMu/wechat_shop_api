@@ -81,4 +81,7 @@ public class CdtDistridetailApply implements Serializable {
       private Date updateTime;
 
 
+    private String remark;
+
+
 }

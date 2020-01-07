@@ -1,9 +1,11 @@
 package com.platform.service;
 
+import com.platform.utils.R;
+
 /**
  * 提现service
  */
 public interface ApplyCashService {
 
-    Boolean wechatMoneyToUser(String weixinOpenid, String realName, Double amount);
+    R wechatMoneyToUser(String weixinOpenid, String realName, Double amount);
 }

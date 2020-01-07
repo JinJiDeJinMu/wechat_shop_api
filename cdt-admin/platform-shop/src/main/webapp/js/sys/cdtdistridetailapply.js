@@ -9,6 +9,7 @@ const defaultModel = {
     applyTime:null,
     operator: null,
     updateTime:null,
+    remark: null,
 };
 let vue = new Vue({
     el: '#app',
@@ -128,6 +129,7 @@ let vue = new Vue({
                 params: JSON.stringify(ids),
                 successCallback: function (res) {
                     alert('操作成功', function (index) {
+                        this.handleResetSearch();
                         that.reload();
                     });
                 }

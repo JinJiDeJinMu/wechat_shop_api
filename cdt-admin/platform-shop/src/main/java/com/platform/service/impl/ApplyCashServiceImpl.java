@@ -3,6 +3,7 @@ package com.platform.service.impl;
 import com.platform.service.ApplyCashService;
 import com.platform.util.wechat.WechatRefundApiResult;
 import com.platform.util.wechat.WechatUtil;
+import com.platform.utils.R;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,28 +26,20 @@ public class ApplyCashServiceImpl implements ApplyCashService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public Boolean wechatMoneyToUser(String weixinOpenid, String realName,Double amount) {
+    public R wechatMoneyToUser(String weixinOpenid, String realName, Double amount) {
 
         if(StringUtils.isBlank(weixinOpenid) || StringUtils.isBlank(realName) || amount == null){
             log.info("请求参数不合法==" + "weixinOpenid=" + weixinOpenid + "realName=" + realName + "amount=" + amount);
-            return false;
+            return R.error("参数不合法");
         }
-       /* String txKey = (String) redisTemplate.opsForValue().get("backtx");
-        if(StringUtils.isNotBlank(txKey)) {
-            log.info("redis key " + "backtx" +  + " exists");
-            return false;
-        }*/
-        //设置redisKsy
-       // redisTemplate.opsForValue().set("backtx" + userEntity.getMerchantId(), "10", 180, TimeUnit.MINUTES);
         String payCountId = UUID.randomUUID().toString().replaceAll("-", "");
         //开始调用提现微信接口
         WechatRefundApiResult ret = WechatUtil.wxPayMoneyToUser(weixinOpenid, amount, realName, payCountId);
-        System.out.println(ret);
+        System.out.println("====" + ret.getReturn_msg());
         log.info("WechatRefundApiResult =" + ret.getResult_code() + "==" + ret.getReturn_msg());
         if("SUCCESS".equals(ret.getResult_code())) {
-           // redisTemplate.delete("backtx" + userEntity.getMerchantId());
-            return true;
+            return R.ok(ret.getReturn_msg());
         }
-        return false;
+        return R.error(ret.getReturn_msg());
     }
 }
