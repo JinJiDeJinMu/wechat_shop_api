@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    #parse("sys/header.html")
+</head>
+<body>
+<div id="app" v-cloak>
+    <div v-show="showList">
+        <Row :gutter="16">
+            <el-card class="filter-container" shadow="never">
+                <div>
+                    <i class="el-icon-search"></i>
+                    <span>筛选搜索</span>
+                    <el-button
+                            style="float: right"
+                            @click="getList()"
+                            type="primary"
+                            size="small">
+                        查询结果
+                    </el-button>
+                    <el-button
+                            style="float: right;margin-right: 15px"
+                            @click="handleResetSearch()"
+                            size="small">
+                        重置
+                    </el-button>
+                    <el-button
+                            style="float: right;margin-right: 15px"
+                            @click="add()"
+                            size="small">
+                        新建
+                    </el-button>
+                </div>
+                <div style="margin-top: 15px">
+                    <el-form :inline="true" :model="baseForm.data" size="small" label-width="140px">
+                        <el-form-item label="id">
+                            <el-input style="width: 203px" v-model="baseForm.data.id"
+                                      placeholder="id"></el-input>
+                        </el-form-item>
+                        <el-form-item label="产品名称">
+                            <el-input style="width: 203px" v-model="baseForm.data.name"
+                                      placeholder="产品名称"></el-input>
+                        </el-form-item>
+                        <el-form-item label="产品主图">
+                            <el-input style="width: 203px" v-model="baseForm.data.mainImage"
+                                      placeholder="产品主图"></el-input>
+                        </el-form-item>
+                        <el-form-item label="产品附图">
+                            <el-input style="width: 203px" v-model="baseForm.data.figureImage"
+                                      placeholder="产品附图"></el-input>
+                        </el-form-item>
+                        <el-form-item label="产品二维码">
+                            <el-input style="width: 203px" v-model="baseForm.data.qrcode"
+                                      placeholder="产品二维码"></el-input>
+                        </el-form-item>
+                        <el-form-item label="产品对应小程序二维码图片">
+                            <el-input style="width: 203px" v-model="baseForm.data.mpQrcode"
+                                      placeholder="产品对应小程序二维码图片"></el-input>
+                        </el-form-item>
+                        <el-form-item label="商品产地">
+                            <el-input style="width: 203px" v-model="baseForm.data.originGoods"
+                                      placeholder="商品产地"></el-input>
+                        </el-form-item>
+                        <el-form-item label="净含量">
+                            <el-input style="width: 203px" v-model="baseForm.data.height"
+                                      placeholder="净含量"></el-input>
+                        </el-form-item>
+                        <el-form-item label="生产日期">
+                            <el-input style="width: 203px" v-model="baseForm.data.produceDateCode"
+                                      placeholder="生产日期"></el-input>
+                        </el-form-item>
+                        <el-form-item label="保质期">
+                            <el-input style="width: 203px" v-model="baseForm.data.expirationDate"
+                                      placeholder="保质期"></el-input>
+                        </el-form-item>
+                        <el-form-item label="存储条件">
+                            <el-input style="width: 203px" v-model="baseForm.data.storageCondition"
+                                      placeholder="存储条件"></el-input>
+                        </el-form-item>
+                        <el-form-item label="平台批次号">
+                            <el-input style="width: 203px" v-model="baseForm.data.platformBatchNumber"
+                                      placeholder="平台批次号"></el-input>
+                        </el-form-item>
+                        <el-form-item label="产品简介">
+                            <el-input style="width: 203px" v-model="baseForm.data.productBrief"
+                                      placeholder="产品简介"></el-input>
+                        </el-form-item>
+                        <el-form-item label="产品访问次数">
+                            <el-input style="width: 203px" v-model="baseForm.data.accessCount"
+                                      placeholder="产品访问次数"></el-input>
+                        </el-form-item>
+                        <el-form-item label="最后访问时间">
+                            <el-input style="width: 203px" v-model="baseForm.data.lastAccessTime"
+                                      placeholder="最后访问时间"></el-input>
+                        </el-form-item>
+                        <el-form-item label="生产企业_批次号">
+                            <el-input style="width: 203px" v-model="baseForm.data.productionEnterpriseNo"
+                                      placeholder="生产企业_批次号"></el-input>
+                        </el-form-item>
+                        <el-form-item label="委托方名称">
+                            <el-input style="width: 203px" v-model="baseForm.data.responsibilityName"
+                                      placeholder="委托方名称"></el-input>
+                        </el-form-item>
+                        <el-form-item label="委托方地址">
+                            <el-input style="width: 203px" v-model="baseForm.data.responsibilityAddress"
+                                      placeholder="委托方地址"></el-input>
+                        </el-form-item>
+                        <el-form-item label="生产商名称">
+                            <el-input style="width: 203px" v-model="baseForm.data.manufacturerName"
+                                      placeholder="生产商名称"></el-input>
+                        </el-form-item>
+                        <el-form-item label="生产商地址">
+                            <el-input style="width: 203px" v-model="baseForm.data.manufacturerAddress"
+                                      placeholder="生产商地址"></el-input>
+                        </el-form-item>
+                        <el-form-item label="经销商名称">
+                            <el-input style="width: 203px" v-model="baseForm.data.distributorName"
+                                      placeholder="经销商名称"></el-input>
+                        </el-form-item>
+                        <el-form-item label="经销商地址">
+                            <el-input style="width: 203px" v-model="baseForm.data.distributorAddress"
+                                      placeholder="经销商地址"></el-input>
+                        </el-form-item>
+                        <el-form-item label="经销商联系方式">
+                            <el-input style="width: 203px" v-model="baseForm.data.distributorContact"
+                                      placeholder="经销商联系方式"></el-input>
+                        </el-form-item>
+                        <el-form-item label="原料信息">
+                            <el-input style="width: 203px" v-model="baseForm.data.materialInfo"
+                                      placeholder="原料信息"></el-input>
+                        </el-form-item>
+                        <el-form-item label="原产国">
+                            <el-input style="width: 203px" v-model="baseForm.data.materialCountryOrigin"
+                                      placeholder="原产国"></el-input>
+                        </el-form-item>
+                        <el-form-item label="乐观锁">
+                            <el-input style="width: 203px" v-model="baseForm.data.revision"
+                                      placeholder="乐观锁"></el-input>
+                        </el-form-item>
+                        <el-form-item label="创建人">
+                            <el-input style="width: 203px" v-model="baseForm.data.createdBy"
+                                      placeholder="创建人"></el-input>
+                        </el-form-item>
+                        <el-form-item label="创建时间">
+                            <el-input style="width: 203px" v-model="baseForm.data.createdTime"
+                                      placeholder="创建时间"></el-input>
+                        </el-form-item>
+                        <el-form-item label="更新人">
+                            <el-input style="width: 203px" v-model="baseForm.data.updatedBy"
+                                      placeholder="更新人"></el-input>
+                        </el-form-item>
+                        <el-form-item label="更新时间">
+                            <el-input style="width: 203px" v-model="baseForm.data.updatedTime"
+                                      placeholder="更新时间"></el-input>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </el-card>
+        </Row>
+        <div class="table-container">
+            <el-table ref="productTable" :data="list" style="width: 100%" @selection-change="handleSelectionChange"
+                      v-loading="listLoading"
+                      border>
+                <el-table-column type="selection" width="60" align="center"></el-table-column>
+                <el-table-column label="id" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.id}}</template>
+                </el-table-column>
+                <el-table-column label="产品名称" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.name}}</template>
+                </el-table-column>
+                <el-table-column label="产品主图" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.mainImage}}</template>
+                </el-table-column>
+                <el-table-column label="产品附图" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.figureImage}}</template>
+                </el-table-column>
+                <el-table-column label="产品二维码" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.qrcode}}</template>
+                </el-table-column>
+                <el-table-column label="产品对应小程序二维码图片" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.mpQrcode}}</template>
+                </el-table-column>
+                <el-table-column label="商品产地" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.originGoods}}</template>
+                </el-table-column>
+                <el-table-column label="净含量" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.height}}</template>
+                </el-table-column>
+                <el-table-column label="生产日期" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.produceDateCode}}</template>
+                </el-table-column>
+                <el-table-column label="保质期" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.expirationDate}}</template>
+                </el-table-column>
+                <el-table-column label="存储条件" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.storageCondition}}</template>
+                </el-table-column>
+                <el-table-column label="平台批次号" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.platformBatchNumber}}</template>
+                </el-table-column>
+                <el-table-column label="产品简介" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.productBrief}}</template>
+                </el-table-column>
+                <el-table-column label="产品访问次数" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.accessCount}}</template>
+                </el-table-column>
+                <el-table-column label="最后访问时间" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.lastAccessTime|dateFormat}}</template>
+                </el-table-column>
+                <el-table-column label="生产企业_批次号" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.productionEnterpriseNo}}</template>
+                </el-table-column>
+                <el-table-column label="委托方名称" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.responsibilityName}}</template>
+                </el-table-column>
+                <el-table-column label="委托方地址" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.responsibilityAddress}}</template>
+                </el-table-column>
+                <el-table-column label="生产商名称" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.manufacturerName}}</template>
+                </el-table-column>
+                <el-table-column label="生产商地址" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.manufacturerAddress}}</template>
+                </el-table-column>
+                <el-table-column label="经销商名称" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.distributorName}}</template>
+                </el-table-column>
+                <el-table-column label="经销商地址" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.distributorAddress}}</template>
+                </el-table-column>
+                <el-table-column label="经销商联系方式" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.distributorContact}}</template>
+                </el-table-column>
+                <el-table-column label="原料信息" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.materialInfo}}</template>
+                </el-table-column>
+                <el-table-column label="原产国" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.materialCountryOrigin}}</template>
+                </el-table-column>
+                <el-table-column label="乐观锁" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.revision}}</template>
+                </el-table-column>
+                <el-table-column label="创建人" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.createdBy}}</template>
+                </el-table-column>
+                <el-table-column label="创建时间" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.createdTime|dateFormat}}</template>
+                </el-table-column>
+                <el-table-column label="更新人" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.updatedBy}}</template>
+                </el-table-column>
+                <el-table-column label="更新时间" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.updatedTime|dateFormat}}</template>
+                </el-table-column>
+                <!-- <el-table-column label="审核状态" width="100" align="center">
+<template slot-scope="scope">
+<p>{{scope.row.verifyStatus | verifyStatusFilter}}</p>
+<p>
+<el-button
+type="text"
+@click="handleShowVerifyDetail(scope.index, scope.row)">审核详情
+</el-button>
+</p>
+</template>
+</el-table-column> -->
+                <el-table-column label="操作" width="160" align="center">
+                    <template slot-scope="scope">
+                        <p>
+                            #if($shiro.hasPermission("CdtProdcutTrace:update"))
+                            <el-button size="mini" @click="handleUpdateProduct(scope.$index, scope.row)">编辑
+                            </el-button>
+                            #end
+                            #if($shiro.hasPermission("CdtProdcutTrace:update"))
+                            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
+                            </el-button>
+                            #end
+                        </p>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="batch-operate-container">
+            #if($shiro.hasPermission("cdtProdcutTrace:delete"))
+            <el-select size="small" v-model="operateType" placeholder="批量操作">
+                <el-option v-for="item in operates" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+            </el-select>
+            <el-button style="margin-left: 20px" class="search-button" @click="handleBatchOperate()" type="primary"
+                       size="small">
+                确定
+            </el-button>
+            #end
+        </div>
+        <div class="pagination-container">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                           layout="total, sizes,prev, pager, next,jumper"
+                           :page-size="baseForm.pageSize" :page-sizes="[10,20,30,50,100]"
+                           :current-page.sync="baseForm.pageIndex" :total="total">
+            </el-pagination>
+        </div>
+    </div>
+
+    <Card v-show="!showList">
+        <p slot="title">{{title}}</p>
+        <el-form :model="baseForm.data"
+                 :rules="ruleValidate"
+                 ref="formValidate"
+                 @keyup.enter.native="dataFormSubmit('formValidate')"
+                 label-width="80px">
+            <el-form-item label="id" prop="id" :rules=" [
+            { required: true, message: '请输入id', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.id"
+                          placeholder="id"></el-input>
+            </el-form-item>
+            <el-form-item label="产品名称" prop="name" :rules=" [
+            { required: true, message: '请输入产品名称', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.name"
+                          placeholder="产品名称"></el-input>
+            </el-form-item>
+            <el-form-item label="产品主图" prop="mainImage" :rules=" [
+            { required: true, message: '请输入产品主图', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.mainImage"
+                          placeholder="产品主图"></el-input>
+            </el-form-item>
+            <el-form-item label="产品附图" prop="figureImage" :rules=" [
+            { required: true, message: '请输入产品附图', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.figureImage"
+                          placeholder="产品附图"></el-input>
+            </el-form-item>
+            <el-form-item label="产品二维码" prop="qrcode" :rules=" [
+            { required: true, message: '请输入产品二维码', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.qrcode"
+                          placeholder="产品二维码"></el-input>
+            </el-form-item>
+            <el-form-item label="产品对应小程序二维码图片" prop="mpQrcode" :rules=" [
+            { required: true, message: '请输入产品对应小程序二维码图片', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.mpQrcode"
+                          placeholder="产品对应小程序二维码图片"></el-input>
+            </el-form-item>
+            <el-form-item label="商品产地" prop="originGoods" :rules=" [
+            { required: true, message: '请输入商品产地', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.originGoods"
+                          placeholder="商品产地"></el-input>
+            </el-form-item>
+            <el-form-item label="净含量" prop="height" :rules=" [
+            { required: true, message: '请输入净含量', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.height"
+                          placeholder="净含量"></el-input>
+            </el-form-item>
+            <el-form-item label="生产日期" prop="produceDateCode" :rules=" [
+            { required: true, message: '请输入生产日期', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.produceDateCode"
+                          placeholder="生产日期"></el-input>
+            </el-form-item>
+            <el-form-item label="保质期" prop="expirationDate" :rules=" [
+            { required: true, message: '请输入保质期', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.expirationDate"
+                          placeholder="保质期"></el-input>
+            </el-form-item>
+            <el-form-item label="存储条件" prop="storageCondition" :rules=" [
+            { required: true, message: '请输入存储条件', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.storageCondition"
+                          placeholder="存储条件"></el-input>
+            </el-form-item>
+            <el-form-item label="平台批次号" prop="platformBatchNumber" :rules=" [
+            { required: true, message: '请输入平台批次号', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.platformBatchNumber"
+                          placeholder="平台批次号"></el-input>
+            </el-form-item>
+            <el-form-item label="产品简介" prop="productBrief" :rules=" [
+            { required: true, message: '请输入产品简介', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.productBrief"
+                          placeholder="产品简介"></el-input>
+            </el-form-item>
+            <el-form-item label="产品访问次数" prop="accessCount" :rules=" [
+            { required: true, message: '请输入产品访问次数', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.accessCount"
+                          placeholder="产品访问次数"></el-input>
+            </el-form-item>
+            <el-form-item label="最后访问时间" prop="lastAccessTime" :rules=" [
+            { required: true, message: '请输入最后访问时间', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.lastAccessTime"
+                          placeholder="最后访问时间"></el-input>
+            </el-form-item>
+            <el-form-item label="生产企业_批次号" prop="productionEnterpriseNo" :rules=" [
+            { required: true, message: '请输入生产企业_批次号', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.productionEnterpriseNo"
+                          placeholder="生产企业_批次号"></el-input>
+            </el-form-item>
+            <el-form-item label="委托方名称" prop="responsibilityName" :rules=" [
+            { required: true, message: '请输入委托方名称', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.responsibilityName"
+                          placeholder="委托方名称"></el-input>
+            </el-form-item>
+            <el-form-item label="委托方地址" prop="responsibilityAddress" :rules=" [
+            { required: true, message: '请输入委托方地址', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.responsibilityAddress"
+                          placeholder="委托方地址"></el-input>
+            </el-form-item>
+            <el-form-item label="生产商名称" prop="manufacturerName" :rules=" [
+            { required: true, message: '请输入生产商名称', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.manufacturerName"
+                          placeholder="生产商名称"></el-input>
+            </el-form-item>
+            <el-form-item label="生产商地址" prop="manufacturerAddress" :rules=" [
+            { required: true, message: '请输入生产商地址', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.manufacturerAddress"
+                          placeholder="生产商地址"></el-input>
+            </el-form-item>
+            <el-form-item label="经销商名称" prop="distributorName" :rules=" [
+            { required: true, message: '请输入经销商名称', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.distributorName"
+                          placeholder="经销商名称"></el-input>
+            </el-form-item>
+            <el-form-item label="经销商地址" prop="distributorAddress" :rules=" [
+            { required: true, message: '请输入经销商地址', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.distributorAddress"
+                          placeholder="经销商地址"></el-input>
+            </el-form-item>
+            <el-form-item label="经销商联系方式" prop="distributorContact" :rules=" [
+            { required: true, message: '请输入经销商联系方式', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.distributorContact"
+                          placeholder="经销商联系方式"></el-input>
+            </el-form-item>
+            <el-form-item label="原料信息" prop="materialInfo" :rules=" [
+            { required: true, message: '请输入原料信息', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.materialInfo"
+                          placeholder="原料信息"></el-input>
+            </el-form-item>
+            <el-form-item label="原产国" prop="materialCountryOrigin" :rules=" [
+            { required: true, message: '请输入原产国', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.materialCountryOrigin"
+                          placeholder="原产国"></el-input>
+            </el-form-item>
+
+            <el-form-item style="text-align: center">
+                <el-button size="medium" @click="showList = true">取消</el-button>
+                <el-button type="primary" size="medium" @click="dataFormSubmit('formValidate')">确定</el-button>
+            </el-form-item>
+        </el-form>
+    </Card>
+</div>
+
+<script src="${rc.contextPath}/js/sys/CdtProdcutTrace.js?time=${date.systemTime}"></script>
+</body>
+</html>
