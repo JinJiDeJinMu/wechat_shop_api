@@ -185,21 +185,15 @@
                 <el-input style="width: 203px" v-model="baseForm.data.realName"
                           placeholder="真实姓名"></el-input>
             </el-form-item>
-            <el-form-item label="申请时间" prop="applyTime" :rules=" [
-            { required: true, message: '请输入申请时间', trigger: 'blur' }
-          ]">
+            <el-form-item label="申请时间" prop="applyTime">
                 <el-input style="width: 203px" v-model="baseForm.data.applyTime"
                           placeholder="申请时间" disabled></el-input>
             </el-form-item>
-            <el-form-item label="更新人" prop="operator" :rules=" [
-            { required: true, message: '请输入更新人', trigger: 'blur' }
-          ]">
+            <el-form-item label="更新人" prop="operator">
                 <el-input style="width: 203px" v-model="baseForm.data.operator"
                           placeholder="更新人" disabled></el-input>
             </el-form-item>
-            <el-form-item label="更新时间" prop="updateTime" :rules=" [
-            { required: true, message: '请输入更新时间', trigger: 'blur' }
-          ]">
+            <el-form-item label="更新时间" prop="updateTime">
                 <el-input style="width: 203px" v-model="baseForm.data.updateTime"
                           placeholder="更新时间" disabled></el-input>
             </el-form-item>
