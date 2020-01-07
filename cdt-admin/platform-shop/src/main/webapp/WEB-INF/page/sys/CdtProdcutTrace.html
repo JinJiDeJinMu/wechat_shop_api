@@ -3,6 +3,7 @@
 <head>
     <title></title>
     #parse("sys/header.html")
+    <script src="/js/jquery.qrcode.js"></script>
 </head>
 <body>
 <div id="app" v-cloak>
@@ -63,16 +64,20 @@
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
                 <el-table-column label="产品主图" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.mainImage}}</template>
+                    <template slot-scope="scope"><img style="height: 80px" :src="scope.row.mainImage"></template>
                 </el-table-column>
                 <el-table-column label="产品附图" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.figureImage}}</template>
+                    <template slot-scope="scope"><img style="height: 80px" :src="scope.row.figureImage"></template>
                 </el-table-column>
-                <el-table-column label="产品二维码" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.qrcode}}</template>
-                </el-table-column>
-                <el-table-column label="产品对应小程序二维码图片" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.mpQrcode}}</template>
+                <el-table-column label="产品附图" width="300px" align="center">
+                    <template slot-scope="scope">
+                        <p @click="useqrcode(scope.row.id)">
+                            　　　　　　{{scope.row.id|useqrcode}}
+                        </p>
+                        <p>
+                        <div :id="'code'+scope.row.id"></div>
+                        </p>
+                    </template>
                 </el-table-column>
                 <el-table-column label="商品产地" width="100" align="center">
                     <template slot-scope="scope">{{scope.row.originGoods}}</template>
@@ -131,21 +136,7 @@
                 <el-table-column label="原产国" width="100" align="center">
                     <template slot-scope="scope">{{scope.row.materialCountryOrigin}}</template>
                 </el-table-column>
-                <el-table-column label="乐观锁" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.revision}}</template>
-                </el-table-column>
-                <el-table-column label="创建人" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.createdBy}}</template>
-                </el-table-column>
-                <el-table-column label="创建时间" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.createdTime|dateFormat}}</template>
-                </el-table-column>
-                <el-table-column label="更新人" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.updatedBy}}</template>
-                </el-table-column>
-                <el-table-column label="更新时间" width="100" align="center">
-                    <template slot-scope="scope">{{scope.row.updatedTime|dateFormat}}</template>
-                </el-table-column>
+
                 <!-- <el-table-column label="审核状态" width="100" align="center">
 <template slot-scope="scope">
 <p>{{scope.row.verifyStatus | verifyStatusFilter}}</p>

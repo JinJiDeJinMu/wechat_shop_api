@@ -1,3 +1,4 @@
+//var QRCode = require('qrcode');
 const defaultModel = {
     id: null,
     name: null,
@@ -102,7 +103,41 @@ let vue = new Vue({
         }
     },
     methods: {
-
+        toUtf8: function (str) {
+            var out, i, len, c;
+            out = "";
+            len = str.length;
+            for (i = 0; i < len; i++) {
+                c = str.charCodeAt(i);
+                if ((c >= 0x0001) && (c <= 0x007F)) {
+                    out += str.charAt(i);
+                } else if (c > 0x07FF) {
+                    out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+                    out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
+                    out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+                } else {
+                    out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
+                    out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+                }
+            }
+            return out;
+        },
+        useqrcode: function (id) {
+            console.log(id);
+            $("#code").empty();
+            var content = this.toUtf8('http://school.chundengtai.com/product.html?id=' + id);
+            $("#code" + id).qrcode({
+                render: "canvas",
+                width: 300,
+                height: 300,
+                text: content
+            });
+            // var canvas = document.getElementById('canvas' + id);
+            // QRCode.toCanvas(canvas, 'http://school.chundengtai.com/product.html?id=' + id, function (error) {
+            //     if (error) console.error(error);
+            //     console.log('QRCode success!');
+            // })
+        },
         saveOrUpdate: function (event) {
             var url = this.baseForm.data.id == null ? "../cdtProdcutTrace/saveModel.json" : "../cdtProdcutTrace/updateModel.json";
             var params = JSON.stringify(this.baseForm.data);
