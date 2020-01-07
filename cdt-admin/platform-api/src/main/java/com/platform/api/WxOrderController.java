@@ -207,6 +207,7 @@ public class WxOrderController extends ApiBaseAction {
     }
 
     @GetMapping("TestCancelOrder.do")
+    @IgnoreAuth
     public Object TestCancelOrder(Integer userId, Integer orderId) {
         Order orderVo = cdtOrderService.getById(orderId);
 
