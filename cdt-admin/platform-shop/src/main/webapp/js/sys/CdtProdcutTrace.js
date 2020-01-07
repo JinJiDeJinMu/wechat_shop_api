@@ -128,8 +128,8 @@ let vue = new Vue({
             var content = this.toUtf8('http://school.chundengtai.com/product.html?id=' + id);
             $("#code" + id).qrcode({
                 render: "canvas",
-                width: 300,
-                height: 300,
+                width: 200,
+                height: 200,
                 text: content
             });
             // var canvas = document.getElementById('canvas' + id);
