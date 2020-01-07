@@ -40,6 +40,6 @@ public class ApplyCashServiceImpl implements ApplyCashService {
         if("SUCCESS".equals(ret.getResult_code())) {
             return R.ok(ret.getReturn_msg());
         }
-        return R.error(ret.getReturn_msg());
+        return R.error(ret.getErr_code_des());
     }
 }
