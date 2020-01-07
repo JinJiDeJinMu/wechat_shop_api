@@ -408,50 +408,59 @@ public class DistributionService implements IdistributionService {
         );
 
         List<CdtDistridetail> batListDetail = new ArrayList<>();
-
         BiConsumer<CdtDistridetail, Order> userSumeryOp = (CdtDistridetail detailModel, Order orderModel) -> {
             CdtDistributionLevel item = distributionLevelService.getOne(new QueryWrapper<CdtDistributionLevel>().lambda()
                     .eq(CdtDistributionLevel::getUserId, detailModel.getUserId()));
-
             log.info("============BiConsumer====================>进入表达式逻辑");
             if (item == null) {
                 log.error("==userSumeryOp====绑定关系层级不存在不存在！=====");
                 return;
             }
+
             //更新用户统计有效下线
-            CdtUserSummary partner = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
-                    .eq(CdtUserSummary::getUserId, detailModel.getGoldUserId()));
+            CdtUserSummary partner = null;
+            if (item.getParentId().equals(detailModel.getGoldUserId())) {
+                partner = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
+                        .eq(CdtUserSummary::getUserId, item.getParentId()));
+
+            } else {
+                partner = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
+                        .eq(CdtUserSummary::getUserId, detailModel.getGoldUserId()));
+            }
             if (partner == null) {
                 log.error("==userSumeryOp====推荐人不存在！=====");
             }
 
-            if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
 
+            if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
                 assert partner != null;
                 partner.setUnbalanced(partner.getUnbalanced() == null ? BigDecimal.ZERO : partner.getUnbalanced().subtract(detailModel.getMoney()));
-                partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 0 : partner.getTradePerson() - 1);
-                partner.setInvalidOrderNum((partner.getInvalidOrderNum() == null || partner.getInvalidOrderNum() == 0) ? 0 : partner.getInvalidOrderNum() + 1);
-                partner.setRefundOrderNum((partner.getRefundOrderNum() == null || partner.getRefundOrderNum() == 0) ? 0 : partner.getRefundOrderNum() + 1);
-                item.setTradeOrderNum((item.getTradeOrderNum() == null || item.getTradeOrderNum() == 0) ? 0 : item.getTradeOrderNum() - 1);
-                if (item.getTradeOrderNum() == 1) {
-                    //绑定用户层级关系编号
-                    item.setDevNum(partner.getTradePerson());
-                    item.setIsTrade(TrueOrFalseEnum.FALSE.getCode());
+                if (item.getParentId().equals(detailModel.getGoldUserId())) {
+                    partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 0 : partner.getTradePerson() - 1);
+                    partner.setInvalidOrderNum((partner.getInvalidOrderNum() == null || partner.getInvalidOrderNum() == 0) ? 0 : partner.getInvalidOrderNum() + 1);
+                    partner.setRefundOrderNum((partner.getRefundOrderNum() == null || partner.getRefundOrderNum() == 0) ? 0 : partner.getRefundOrderNum() + 1);
+                    item.setTradeOrderNum((item.getTradeOrderNum() == null || item.getTradeOrderNum() == 0) ? 0 : item.getTradeOrderNum() - 1);
+                    if (item.getTradeOrderNum() == 1) {
+                        //绑定用户层级关系编号
+                        item.setDevNum(partner.getTradePerson());
+                        item.setIsTrade(TrueOrFalseEnum.FALSE.getCode());
+                    }
                 }
             } else {
                 assert partner != null;
-                partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
                 partner.setUnbalanced(partner.getUnbalanced() == null ? detailModel.getMoney() : partner.getUnbalanced().add(detailModel.getMoney()));
-
-                //绑定用户层级关系编号
-                item.setDevNum(partner.getTradePerson());
-                item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
-                item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
-
-                //todo:判定符合合伙人逻辑
-                if (partner.getTradePerson() >= distrimoney.getFirstPersonCondition()) {
-                    partnerService.determinePartner(distrimoney, partner.getUserId());
+                if (item.getParentId().equals(detailModel.getGoldUserId())) {
+                    partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
+                    //绑定用户层级关系编号
+                    item.setDevNum(partner.getTradePerson());
+                    item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
+                    item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
+                    //todo:判定符合合伙人逻辑
+                    if (partner.getTradePerson() > distrimoney.getFirstPersonCondition()) {
+                        partnerService.determinePartner(distrimoney, partner.getUserId());
+                    }
                 }
+
             }
             boolean rows = cdtUserSummaryService.updateById(partner);
             log.warn("==userSumeryOp====更新用户统计有效下线=====>" + rows);
