@@ -200,7 +200,7 @@ let vue = new Vue({
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            }).then(() = > {
+            })/*.then(() = > {
                 let ids = this.getSelectRowIds();
             switch (this.operateType) {
                 case this.operates[0].value:
@@ -216,7 +216,7 @@ let vue = new Vue({
                     break;
             }
             this.getList();
-        })
+        })*/
             ;
         },
         handleResetSearch: function () {
