@@ -456,7 +456,7 @@ public class DistributionService implements IdistributionService {
                     item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
                     item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
                     //todo:判定符合合伙人逻辑
-                    if (partner.getTradePerson() >= distrimoney.getFirstPersonCondition()) {
+                    if (partner.getTradePerson() > distrimoney.getFirstPersonCondition()) {
                         partnerService.determinePartner(distrimoney, partner.getUserId());
                     }
                 }
