@@ -206,6 +206,20 @@ public class WxOrderController extends ApiBaseAction {
         return toResponsFail("提交失败");
     }
 
+    @GetMapping("TestCancelOrder.do")
+    public Object TestCancelOrder(Integer userId, Integer orderId) {
+        Order orderVo = cdtOrderService.getById(orderId);
+
+        if (orderVo.getOrderStatus().equals(OrderStatusEnum.PAYED_ORDER.getCode())) {
+            orderVo.setOrderStatus(OrderStatusEnum.REFUND_ORDER.getCode());
+        } else {
+            orderVo.setOrderStatus(OrderStatusEnum.REFUND_ORDER.getCode());
+        }
+        orderVo.setPayStatus(PayTypeEnum.REFUND.getCode());
+        distributionFacade.notifyOrderStatus(userId, orderVo, GoodsTypeEnum.getEnumByKey(orderVo.getGoodsType()));
+        return toResponsFail("测试取消订单");
+    }
+
     /**
      * 获取订单列表
      */
