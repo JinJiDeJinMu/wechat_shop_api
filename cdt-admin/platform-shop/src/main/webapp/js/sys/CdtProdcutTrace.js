@@ -57,7 +57,7 @@ let vue = new Vue({
         title: null,
         uploadList: [],
         baseForm: {
-            pageIndex: 1,
+            pageIndex: 0,
             pageSize: 10,
             sortField: 'id',
             order: 'desc',
@@ -222,6 +222,7 @@ let vue = new Vue({
                 successCallback: function (res) {
                     if (res.data) {
                         alert('操作成功', function (index) {
+                            that.baseForm.data = Object.assign({}, defaultModel);
                             that.reload();
                         });
                     }
