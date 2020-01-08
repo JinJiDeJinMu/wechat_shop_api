@@ -192,42 +192,39 @@ type="text"
                  ref="formValidate"
                  @keyup.enter.native="dataFormSubmit('formValidate')"
                  label-width="80px">
-            <el-form-item label="id" prop="id" :rules=" [
-            { required: true, message: '请输入id', trigger: 'blur' }
-          ]">
-                <el-input style="width: 203px" v-model="baseForm.data.id"
-                          placeholder="id"></el-input>
-            </el-form-item>
-            <el-form-item label="产品名称" prop="name" :rules=" [
+           <el-form-item label="产品名称" prop="name" :rules=" [
             { required: true, message: '请输入产品名称', trigger: 'blur' }
           ]">
-                <el-input style="width: 203px" v-model="baseForm.data.name"
-                          placeholder="产品名称"></el-input>
-            </el-form-item>
+               <el-input style="width: 203px" v-model="baseForm.data.name"
+                         placeholder="产品名称"></el-input>
+           </el-form-item>
             <el-form-item label="产品主图" prop="mainImage" :rules=" [
             { required: true, message: '请输入产品主图', trigger: 'blur' }
           ]">
                 <el-input style="width: 203px" v-model="baseForm.data.mainImage"
                           placeholder="产品主图"></el-input>
+                <Upload style="width: 300px;" action="../sys/oss/upload" :format="['jpg','jpeg','png']"
+                        max-size="2048"
+                        :on-success="handleSuccessMainImage" :on-format-error="handleFormatError"
+                        :show-upload-list="false"
+                        :on-exceeded-size="handleMaxSize">
+                    <i-button icon="ios-cloud-upload-outline">上传图片</i-button>
+                </Upload>
             </el-form-item>
             <el-form-item label="产品附图" prop="figureImage" :rules=" [
             { required: true, message: '请输入产品附图', trigger: 'blur' }
           ]">
                 <el-input style="width: 203px" v-model="baseForm.data.figureImage"
                           placeholder="产品附图"></el-input>
+                <Upload style="width: 300px;" action="../sys/oss/upload" :format="['jpg','jpeg','png']"
+                        max-size="2048"
+                        :on-success="handleSuccessFigureImage" :on-format-error="handleFormatError"
+                        :show-upload-list="false"
+                        :on-exceeded-size="handleMaxSize">
+                    <i-button icon="ios-cloud-upload-outline">上传图片</i-button>
+                </Upload>
             </el-form-item>
-            <el-form-item label="产品二维码" prop="qrcode" :rules=" [
-            { required: true, message: '请输入产品二维码', trigger: 'blur' }
-          ]">
-                <el-input style="width: 203px" v-model="baseForm.data.qrcode"
-                          placeholder="产品二维码"></el-input>
-            </el-form-item>
-            <el-form-item label="产品对应小程序二维码图片" prop="mpQrcode" :rules=" [
-            { required: true, message: '请输入产品对应小程序二维码图片', trigger: 'blur' }
-          ]">
-                <el-input style="width: 203px" v-model="baseForm.data.mpQrcode"
-                          placeholder="产品对应小程序二维码图片"></el-input>
-            </el-form-item>
+
             <el-form-item label="商品产地" prop="originGoods" :rules=" [
             { required: true, message: '请输入商品产地', trigger: 'blur' }
           ]">
@@ -341,6 +338,12 @@ type="text"
           ]">
                 <el-input style="width: 203px" v-model="baseForm.data.materialCountryOrigin"
                           placeholder="原产国"></el-input>
+            </el-form-item>
+
+            <el-form-item label="原产国" prop="productDesc" :rules=" [
+            { required: true, message: '请输入产品详情', trigger: 'blur' }
+          ]">
+                <div id="goodsDesc"></div>
             </el-form-item>
 
             <el-form-item style="text-align: center">

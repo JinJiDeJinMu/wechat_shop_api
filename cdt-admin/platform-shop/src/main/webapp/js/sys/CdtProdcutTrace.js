@@ -1,4 +1,3 @@
-//var QRCode = require('qrcode');
 const defaultModel = {
     id: null,
     name: null,
@@ -36,6 +35,7 @@ let vue = new Vue({
     data: {
         showList: true,
         title: null,
+        uploadList: [],
         baseForm: {
             pageIndex: 1,
             pageSize: 10,
@@ -80,6 +80,23 @@ let vue = new Vue({
     },
     created: function () {
         this.getList();
+        $('#goodsDesc').editable({
+            inlineMode: false,
+            alwaysBlank: true,
+            height: '500px', //高度
+            minHeight: '200px',
+            language: "zh_cn",
+            spellcheck: false,
+            plainPaste: true,
+            enableScript: false,
+            imageButtons: ["floatImageLeft", "floatImageNone", "floatImageRight", "linkImage", "replaceImage", "removeImage"],
+            allowedImageTypes: ["jpeg", "jpg", "png", "gif"],
+            imageUploadURL: '../sys/oss/upload',
+            imageUploadParams: {
+                id: "edit"
+            },
+            imagesLoadURL: '../sys/oss/queryAll'
+        });
     },
     filters: {
         dateFormat: function (time) {
@@ -103,6 +120,62 @@ let vue = new Vue({
         }
     },
     methods: {
+        handleView(name) {
+            this.imgName = name;
+            this.visible = true;
+        },
+        handleRemove(file) {
+            // 从 upload 实例删除数据
+            const fileList = this.uploadList;
+            this.uploadList.splice(fileList.indexOf(file), 1);
+        },
+        handleSuccess(res, file) {
+            // 因为上传过程为实例，这里模拟添加 url
+            file.imgUrl = res.url;
+            file.name = res.url;
+            this.uploadList.add(file);
+        },
+        handleBeforeUpload() {
+            const check = this.uploadList.length < 5;
+            if (!check) {
+                this.$Notice.warning({
+                    title: '最多只能上传 5 张图片。'
+                });
+            }
+            return check;
+        },
+        handleFormatError: function (file) {
+            this.$Notice.warning({
+                title: '文件格式不正确',
+                desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
+            });
+        },
+        handleMaxSize: function (file) {
+            this.$Notice.warning({
+                title: '超出文件大小限制',
+                desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
+            });
+        },
+        handleReset: function (name) {
+            handleResetForm(this, name);
+        },
+        handleSuccessMainImage: function (res, file) {
+            this.baseForm.data.mainImage = file.response.url;
+        },
+        handleSuccessFigureImage: function (res, file) {
+            this.baseForm.data.figureImage = file.response.url;
+        },
+        eyeImagePicUrl: function () {
+            var url = this.baseForm.data.mainImage;
+            eyeImage(url);
+        },
+        eyeImageListPicUrl: function () {
+            var url = this.baseForm.data.figureImage;
+            eyeImage(url);
+        },
+        eyeImage: function (e) {
+            eyeImage($(e.target).attr('src'));
+        },
         toUtf8: function (str) {
             var out, i, len, c;
             out = "";
@@ -123,23 +196,18 @@ let vue = new Vue({
             return out;
         },
         useqrcode: function (id) {
-            console.log(id);
             $("#code").empty();
-            var content = this.toUtf8('http://school.chundengtai.com/product.html?id=' + id);
+            var content = this.toUtf8('https://www.chundengtai.com/product.html?id=' + id);
             $("#code" + id).qrcode({
                 render: "canvas",
                 width: 200,
                 height: 200,
                 text: content
             });
-            // var canvas = document.getElementById('canvas' + id);
-            // QRCode.toCanvas(canvas, 'http://school.chundengtai.com/product.html?id=' + id, function (error) {
-            //     if (error) console.error(error);
-            //     console.log('QRCode success!');
-            // })
         },
         saveOrUpdate: function (event) {
             var url = this.baseForm.data.id == null ? "../cdtProdcutTrace/saveModel.json" : "../cdtProdcutTrace/updateModel.json";
+            this.baseForm.data.productDesc = $('#goodsDesc').editable('getHTML');
             var params = JSON.stringify(this.baseForm.data);
             let that = this;
             Ajax.request({
@@ -180,6 +248,7 @@ let vue = new Vue({
                 async: true,
                 successCallback: function (res) {
                     that.baseForm.data = res.data;
+                    $('#goodsDesc').editable('setHTML', that.baseForm.data.productDesc);
                 }
             });
         },
@@ -235,23 +304,7 @@ let vue = new Vue({
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            })/*.then(() = > {
-                let ids = this.getSelectRowIds();
-            switch (this.operateType) {
-                case this.operates[0].value:
-                    this.updatePublishStatus(1, ids);
-                    break;
-                case this.operates[1].value:
-                    this.updatePublishStatus(0, ids);
-                    break;
-                case this.operates[2].value:
-                    this.updateDeleteStatus(1, ids);
-                    break;
-                default:
-                    break;
-            }
-            this.getList();
-        })*/
+            })
             ;
         },
         handleResetSearch: function () {
@@ -279,7 +332,6 @@ let vue = new Vue({
             let ids = [];
             ids.push(row.id);
             console.log(JSON.stringify(row));
-            //this.updatePublishStatus(row.status, ids);
         },
         handleUpdateProduct(index, row) {
             this.updateFun(row.id);
