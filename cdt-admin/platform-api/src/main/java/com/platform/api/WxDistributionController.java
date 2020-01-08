@@ -131,7 +131,6 @@ public class WxDistributionController {
                     .eq(CdtDistridetail::getGoldUserId, loginUser.getUserId().intValue());
             totalMoney = distridetailService.getTotalMoney(conditionTwo);
         }
-        log.info("=====" + pageInfo);
         return R.ok().put("data", pageInfo).put("unsetMoney", unsetMoney).put("totalMoney", totalMoney);
     }
 
@@ -150,7 +149,6 @@ public class WxDistributionController {
         }
         List<CdtRebateLog> resultList = rebateLogService.list(condition);
         resultList = resultList.stream().sorted(Comparator.comparing(CdtRebateLog::getId).reversed()).collect(Collectors.toList());
-        log.info("resultList=" + resultList);
         List<CdtRebateLogDto> result = mapperFacade.mapAsList(resultList, CdtRebateLogDto.class);
         PageInfo pageInfo = new PageInfo(result);
         return R.ok().put("data", pageInfo);
