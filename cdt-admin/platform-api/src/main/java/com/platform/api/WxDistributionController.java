@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtDistributionLevel;
 import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.bean.CdtRebateLog;
+import com.chundengtai.base.bean.CdtUserSummary;
 import com.chundengtai.base.bean.dto.CdtDistridetailDto;
 import com.chundengtai.base.bean.dto.CdtRebateLogDto;
 import com.chundengtai.base.result.R;
@@ -71,6 +72,10 @@ public class WxDistributionController {
     @ResponseBody
     @IgnoreAuth
     public R getUserDistributionInfo(@LoginUser UserVo loginUser) {
+
+        CdtUserSummary userSummery = cdtUserSummaryService.getOne(new LambdaQueryWrapper<CdtUserSummary>()
+                .eq(CdtUserSummary::getUserId, loginUser.getUserId()));
+
         BigDecimal unsetMoney = BigDecimal.ZERO;
         BigDecimal totalMoney = BigDecimal.ZERO;
         LambdaQueryWrapper<CdtDistridetail> conditionOne = new QueryWrapper<CdtDistridetail>().lambda()
@@ -83,7 +88,7 @@ public class WxDistributionController {
                 .ne(CdtDistridetail::getStatus, DistributionStatus.REFUND_ORDER.getCode());
         totalMoney = distridetailService.getTotalMoney(conditionTwo);
 
-        return R.ok().put("unsetMoney", unsetMoney).put("totalMoney", totalMoney);
+        return R.ok().put("userSummery", userSummery).put("unsetMoney", unsetMoney).put("totalMoney", totalMoney);
     }
 
     @ApiOperation(value = "分销中心个人下线人数列表", httpMethod = "GET")
