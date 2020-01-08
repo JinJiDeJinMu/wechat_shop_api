@@ -29,6 +29,7 @@ const defaultModel = {
     createdTime: null,
     updatedBy: null,
     updatedTime: null,
+    productDesc: null,
 };
 let vue = new Vue({
     el: '#app',

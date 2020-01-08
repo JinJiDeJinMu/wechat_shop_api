@@ -15,7 +15,7 @@ import java.util.Date;
  * </p>
  *
  * @author Royal
- * @since 2020-01-07
+ * @since 2020-01-08
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -174,6 +174,11 @@ public class CdtProdcutTrace implements Serializable {
    * 更新时间
    */
   private Date updatedTime;
+
+  /**
+   * 产品详情
+   */
+  private String productDesc;
 
 
 }

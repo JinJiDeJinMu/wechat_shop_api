@@ -34,11 +34,12 @@
         <result column="created_time" property="createdTime"/>
         <result column="updated_by" property="updatedBy"/>
         <result column="updated_time" property="updatedTime"/>
+        <result column="product_desc" property="productDesc"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, main_image, figure_image, qrcode, mp_qrcode, origin_goods, height, produce_date_code, expiration_date, storage_condition, platform_batch_number, product_brief, access_count, last_access_time, production_enterprise_no, responsibility_name, responsibility_address, manufacturer_name, manufacturer_address, distributor_name, distributor_address, distributor_contact, material_info, material_country_origin, revision, created_by, created_time, updated_by, updated_time
+        id, name, main_image, figure_image, qrcode, mp_qrcode, origin_goods, height, produce_date_code, expiration_date, storage_condition, platform_batch_number, product_brief, access_count, last_access_time, production_enterprise_no, responsibility_name, responsibility_address, manufacturer_name, manufacturer_address, distributor_name, distributor_address, distributor_contact, material_info, material_country_origin, revision, created_by, created_time, updated_by, updated_time, product_desc
     </sql>
 
 </mapper>
