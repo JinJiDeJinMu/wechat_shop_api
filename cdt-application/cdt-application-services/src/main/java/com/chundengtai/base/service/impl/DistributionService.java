@@ -363,7 +363,8 @@ public class DistributionService implements IdistributionService {
     public boolean notifyOrderStatus(Integer userId, Order order, GoodsTypeEnum goodsTypeEnum) {
         //更新日志记录状态
         List<CdtRebateLog> listLogModel = rebateLogService.list(new QueryWrapper<CdtRebateLog>()
-                .lambda().eq(CdtRebateLog::getBuyUserId, userId).eq(CdtRebateLog::getOrderSn, order.getOrderSn()));
+                .lambda().eq(CdtRebateLog::getBuyUserId, userId).eq(CdtRebateLog::getOrderSn, order.getOrderSn())
+                .ne(CdtRebateLog::getStatus, DistributionStatus.COMPLETED_ORDER.getCode()));
         List<CdtRebateLog> batListLog = new ArrayList<>();
         for (CdtRebateLog item : listLogModel) {
             String token = item.getToken();
@@ -488,10 +489,7 @@ public class DistributionService implements IdistributionService {
             detail.setUpdateTime(new Date());
             detail.setCreatedTime(creatTime);
             batListDetail.add(detail);
-//            } else {
-//                log.warn("分销安全校验失败==========》" + JSON.toJSONString(detail));
-//                throw new BizException(BizErrorCodeEnum.SAFE_EXCEPTION);
-//            }
+
         }
         if (batListDetail.size() > 0) {
             boolean result = distridetailService.updateBatchById(batListDetail);
@@ -502,10 +500,10 @@ public class DistributionService implements IdistributionService {
     }
 
     private void changeDistridetailStatusLogic(Order order, CdtDistridetail distridetail, BiConsumer<CdtDistridetail, Order> userSumeryOp) {
-        if (!order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) && !order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {//订单未完成
+        if (!order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) && !order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
             distridetail.setStatus(DistributionStatus.NON_COMPLETE_ORDER.getCode());
         } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
-                order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())//普通订单已完成
+                order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())
         ) {
             long daysNum = Duration.between(DateTimeConvert.date2LocalDateTime(order.getConfirmTime()), LocalDateTime.now()).toDays();
             if (daysNum < 7) {
@@ -516,14 +514,14 @@ public class DistributionService implements IdistributionService {
             }
         } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
                 (order.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
-                        order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode()//核销和快递代取订单已完成
+                        order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode()
                         ))) {
             distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
             userSumeryOp.accept(distridetail, order);
-        } else if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {//订单退款
+        } else if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
             distridetail.setStatus(DistributionStatus.REFUND_ORDER.getCode());
             userSumeryOp.accept(distridetail, order);
         }
-    }
 
+    }
 }
