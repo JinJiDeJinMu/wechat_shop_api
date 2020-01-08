@@ -244,18 +244,7 @@
                 <el-input v-model="baseForm.data.productBrief"
                           placeholder="产品简介"></el-input>
             </el-form-item>
-            <el-form-item label="产品访问次数" prop="accessCount" :rules=" [
-            { required: true, message: '请输入产品访问次数', trigger: 'blur' }
-          ]">
-                <el-input v-model="baseForm.data.accessCount"
-                          placeholder="产品访问次数"></el-input>
-            </el-form-item>
-            <el-form-item label="最后访问时间" prop="lastAccessTime" :rules=" [
-            { required: true, message: '请输入最后访问时间', trigger: 'blur' }
-          ]">
-                <el-input v-model="baseForm.data.lastAccessTime"
-                          placeholder="最后访问时间"></el-input>
-            </el-form-item>
+
             <el-form-item label="生产企业_批次号" prop="productionEnterpriseNo" :rules=" [
             { required: true, message: '请输入生产企业_批次号', trigger: 'blur' }
           ]">
@@ -317,7 +306,7 @@
                           placeholder="原产国"></el-input>
             </el-form-item>
 
-            <el-form-item label="原产国" prop="productDesc">
+            <el-form-item label="产品详细介绍" prop="productDesc">
                 <div id="goodsDesc"></div>
             </el-form-item>
 

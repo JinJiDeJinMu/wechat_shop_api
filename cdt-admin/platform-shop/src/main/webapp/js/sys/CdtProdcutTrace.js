@@ -1,3 +1,22 @@
+$(function () {
+    $('#goodsDesc').editable({
+        inlineMode: false,
+        alwaysBlank: true,
+        height: '500px', //高度
+        minHeight: '200px',
+        language: "zh_cn",
+        spellcheck: false,
+        plainPaste: true,
+        enableScript: false,
+        imageButtons: ["floatImageLeft", "floatImageNone", "floatImageRight", "linkImage", "replaceImage", "removeImage"],
+        allowedImageTypes: ["jpeg", "jpg", "png", "gif"],
+        imageUploadURL: '../sys/oss/upload',
+        imageUploadParams: {
+            id: "edit"
+        },
+        imagesLoadURL: '../sys/oss/queryAll'
+    })
+});
 const defaultModel = {
     id: null,
     name: null,
@@ -38,7 +57,7 @@ let vue = new Vue({
         title: null,
         uploadList: [],
         baseForm: {
-            pageIndex: 1,
+            pageIndex: 0,
             pageSize: 10,
             sortField: 'id',
             order: 'desc',
@@ -81,23 +100,6 @@ let vue = new Vue({
     },
     created: function () {
         this.getList();
-        $('#goodsDesc').editable({
-            inlineMode: false,
-            alwaysBlank: true,
-            height: '500px', //高度
-            minHeight: '200px',
-            language: "zh_cn",
-            spellcheck: false,
-            plainPaste: true,
-            enableScript: false,
-            imageButtons: ["floatImageLeft", "floatImageNone", "floatImageRight", "linkImage", "replaceImage", "removeImage"],
-            allowedImageTypes: ["jpeg", "jpg", "png", "gif"],
-            imageUploadURL: '../sys/oss/upload',
-            imageUploadParams: {
-                id: "edit"
-            },
-            imagesLoadURL: '../sys/oss/queryAll'
-        });
     },
     filters: {
         dateFormat: function (time) {
@@ -206,8 +208,9 @@ let vue = new Vue({
                 text: content
             });
         },
-        saveOrUpdate: function (event) {
+        saveOrUpdate: function () {
             var url = this.baseForm.data.id == null ? "../cdtProdcutTrace/saveModel.json" : "../cdtProdcutTrace/updateModel.json";
+            //var html=$('#goodsDesc').froalaEditor('html.get', true);
             this.baseForm.data.productDesc = $('#goodsDesc').editable('getHTML');
             var params = JSON.stringify(this.baseForm.data);
             let that = this;
@@ -219,6 +222,7 @@ let vue = new Vue({
                 successCallback: function (res) {
                     if (res.data) {
                         alert('操作成功', function (index) {
+                            that.baseForm.data = Object.assign({}, defaultModel);
                             that.reload();
                         });
                     }
