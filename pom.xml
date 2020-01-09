@@ -25,8 +25,9 @@
     </developers>
 
     <modules>
-        <module>cdt-admin/platform-common</module> <!-- 公共模块 -->
-        <module>cdt-admin/platform-api</module> <!-- API模块 -->
+        <module>cdt-admin/cdt-mp-admin</module>
+        <module>cdt-admin/cdt-mp-common</module> <!-- 公共模块 -->
+        <module>cdt-admin/cdt-mp-api</module> <!-- API模块 -->
         <module>cdt-wx-server</module>
         <module>cdt-infrastructure/cdt-base-common</module>
         <module>cdt-domain/cdt-base-domain</module>
@@ -35,7 +36,7 @@
         <module>cdt-infrastructure/cdt-base-bean</module>
         <module>cdt-infrastructure/cdt-base-service</module>
         <module>cdt-infrastructure/cdt-base-tool</module>
-        <module>cdt-admin/cdt-mvc-admin</module>
+        <module>cdt-infrastructure/cdt-wx-api</module>
     </modules>
 
     <properties>

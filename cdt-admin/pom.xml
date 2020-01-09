@@ -6,14 +6,8 @@
     <version>1.0.0</version>
     <packaging>pom</packaging>
     <description>cdt-admin</description>
-
-    <modules>
-        <module>platform-common</module> <!-- 公共模块 -->
-        <module>platform-api</module> <!-- API模块 -->
-    </modules>
-
     <properties>
-        <java-version>1.7</java-version>
+        <java-version>1.8</java-version>
         <servlet-version>3.1.0</servlet-version>
         <junit-version>4.12</junit-version>
         <springframework-version>4.3.7.RELEASE</springframework-version>

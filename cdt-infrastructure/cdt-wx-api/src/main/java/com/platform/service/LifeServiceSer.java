@@ -24,6 +24,7 @@ public class LifeServiceSer {
 
     /**
      * 身份验证
+     *
      * @param idcard
      * @param realname
      * @return

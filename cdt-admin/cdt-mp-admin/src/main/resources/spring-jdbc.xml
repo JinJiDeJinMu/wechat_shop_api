@@ -1,0 +1,285 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/tx
+     	http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <tx:annotation-driven/>
+    <context:property-placeholder location="classpath*:cdt.properties"/>
+
+    <!-- 支持异步方法执行 -->
+
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <!-- 核心线程数 -->
+        <property name="corePoolSize" value="${task.core_pool_size}"/>
+        <!-- 最大线程数 -->
+        <property name="maxPoolSize" value="${task.max_pool_size}"/>
+        <!-- 队列最大长度 -->
+        <property name="queueCapacity" value="${task.queue_capacity}"/>
+        <!-- 线程池维护线程所允许的空闲时间，默认为60s -->
+        <property name="keepAliveSeconds" value="${task.keep_alive_seconds}"/>
+    </bean>
+    <task:annotation-driven executor="taskExecutor"/>
+
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!-- 最大空闲数 -->
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <!-- 最大空连接数 -->
+        <property name="maxTotal" value="${redis.maxTotal}"/>
+        <!-- 最大等待时间 -->
+        <property name="maxWaitMillis" value="${redis.maxWaitMillis}"/>
+        <!-- 连接超时时是否阻塞，false时报异常,true阻塞直到超时, 默认true -->
+        <property name="blockWhenExhausted" value="${redis.blockWhenExhausted}"/>
+        <!-- 返回连接时，检测连接是否成功 -->
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+    </bean>
+
+    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:host-name="${redis.host}"
+          p:port="${redis.port}"
+          p:password="${redis.password}"
+          p:database="${redis.db}"
+          p:pool-config-ref="poolConfig"/>
+
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="keySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="valueSerializer">
+            <!--<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>-->
+            <bean class="com.chundengtai.base.serializer.GenericFastJson2JsonRedisSerializer"/>
+        </property>
+        <property name="hashKeySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="hashValueSerializer">
+            <!--<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>-->
+            <bean class="com.chundengtai.base.serializer.GenericFastJson2JsonRedisSerializer"/>
+        </property>
+        <!--开启事务  -->
+        <property name="enableTransactionSupport" value="false"></property>
+    </bean>
+
+    <bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory"></property>
+        <property name="keySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"></bean>
+        </property>
+        <property name="valueSerializer">
+            <bean class="com.chundengtai.base.serializer.GenericFastJson2JsonRedisSerializer"></bean>
+        </property>
+        <property name="hashKeySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="hashValueSerializer">
+            <bean class="com.chundengtai.base.serializer.GenericFastJson2JsonRedisSerializer"/>
+        </property>
+        <property name="stringSerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+    </bean>
+
+    <!--启用spring的一些annotation -->
+    <context:annotation-config/>
+
+    <!--<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="shutdown">-->
+    <!--<property name="driverClassName" value="${jdbc.driver}" />-->
+    <!--<property name="jdbcUrl" value="${jdbc.url}" />-->
+    <!--<property name="username" value="${jdbc.username}" />-->
+    <!--<property name="password" value="${jdbc.password}" />-->
+    <!--<property name="connectionTestQuery" value="SELECT 1" />-->
+    <!--&lt;!&ndash; 生效超时 &ndash;&gt;-->
+    <!--<property name="validationTimeout" value="3000" />-->
+    <!--&lt;!&ndash; 连接只读数据库时配置为true， 保证安全 &ndash;&gt;-->
+    <!--<property name="readOnly" value="false" />-->
+    <!--&lt;!&ndash; 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 缺省:30秒 &ndash;&gt;-->
+    <!--<property name="connectionTimeout" value="60000" />-->
+    <!--&lt;!&ndash; 一个连接idle状态的最大时长（毫秒），超时则被释放（retired），缺省:10分钟 &ndash;&gt;-->
+    <!--<property name="idleTimeout" value="60000" />-->
+    <!--&lt;!&ndash; 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒，参考MySQL-->
+    <!--wait_timeout参数（show variables like '%timeout%';） &ndash;&gt;-->
+    <!--<property name="maxLifetime" value="60000" />-->
+    <!--&lt;!&ndash; 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count) &ndash;&gt;-->
+    <!--<property name="maximumPoolSize" value="10" />-->
+    <!--</bean>-->
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="url">
+            <value>${jdbc.url}</value>
+        </property>
+        <property name="username">
+            <value>${jdbc.username}</value>
+        </property>
+        <property name="password">
+            <value>${jdbc.password}</value>
+        </property>
+        <property name="initialSize">
+            <value>${jdbc.initialSize}</value>
+        </property>
+        <property name="maxActive">
+            <value>${jdbc.maxActive}</value>
+        </property>
+        <property name="driverClassName">
+            <value>${jdbc.driverClassName}</value>
+        </property>
+        <property name="proxyFilters">
+            <list>
+                <ref bean="stat-filter"/>
+                <!--过滤永真条件 防止注入-->
+                <!--<ref bean="wall-filter"/>-->
+            </list>
+        </property>
+        <property name="connectionInitSqls" value="set names utf8mb4;"/>
+    </bean>
+
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="slowSqlMillis" value="1000"/>
+        <property name="logSlowSql" value="true"/>
+        <property name="mergeSql" value="true"/>
+    </bean>
+
+    <bean id="wall-filter" class="com.alibaba.druid.wall.WallFilter">
+        <property name="dbType" value="mysql"/>
+        <property name="config" ref="wall-filter-config"/>
+    </bean>
+
+    <bean id="wall-filter-config" class="com.alibaba.druid.wall.WallConfig">
+        <property name="multiStatementAllow" value="true"/>
+    </bean>
+    <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"></bean>
+    <bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut" scope="prototype">
+        <property name="patterns">
+            <list>
+                <value>com.platform.controller.*</value>
+                <value>com.platform.service.*</value>
+            </list>
+        </property>
+    </bean>
+    <aop:config>
+        <aop:advisor advice-ref="druid-stat-interceptor" pointcut-ref="druid-stat-pointcut"/>
+    </aop:config>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+
+    <!-- JDBC配置 -->
+    <bean id="namedParameterJdbcTemplate"
+          class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="dataSource"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.platform.dao,com.platform.*.dao,com.chundengtai.base.dao"/>
+    </bean>
+
+    <!--sqlSession-->
+    <bean class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--sql映射文件-->
+        <property name="mapperLocations" value="classpath*:com.platform.dao/*.xml,classpath*:mapper/*.xml"/>
+        <!--别名设置-->
+        <property name="typeAliasesPackage" value="com.platform.entity,com.chundengtai.base.bean"/>
+        <!--setting配置-->
+        <property name="configuration">
+            <bean class="com.baomidou.mybatisplus.core.MybatisConfiguration">
+                <!--自动映射-->
+                <property name="autoMappingBehavior" value="FULL"/>
+                <!--驼峰命名-->
+                <property name="mapUnderscoreToCamelCase" value="true"/>
+                <!--日志打印-->
+                <property name="logImpl" value="org.apache.ibatis.logging.log4j.Log4jImpl"/>
+            </bean>
+        </property>
+        <property name="globalConfig">
+            <bean class="com.baomidou.mybatisplus.core.config.GlobalConfig">
+                <property name="dbConfig">
+                    <bean class="com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig">
+                        <!--主键规则-->
+                        <property name="idType" value="AUTO"/>
+                        <!--表前缀-->
+                        <!--<property name="tablePrefix" value="tbl_"/>-->
+                    </bean>
+                </property>
+                <!--<property name="sqlInjector" ref="logicalDelInjector"/>-->
+            </bean>
+        </property>
+
+        <!--分页插件-->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+                            helperDialect=mysql
+                            reasonable=true
+                            supportMethodsArguments=true
+                            params=count=countSql
+                            autoRuntimeDialect=true
+                        </value>
+                    </property>
+                </bean>
+                <!--SQL执行分析插件-->
+                <bean class="com.baomidou.mybatisplus.extension.plugins.SqlExplainInterceptor"/>
+                <!--SQL性能分析-->
+                <!--<bean class="com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor">-->
+                <!--<property name="maxTime" value="6000"/>-->
+                <!--&lt;!&ndash;SQL是否格式化 默认false&ndash;&gt;-->
+                <!--<property name="format" value="true"/>-->
+                <!--</bean>-->
+                <!--乐观锁插件-->
+                <bean class="com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor"/>
+            </array>
+        </property>
+    </bean>
+
+    <!--<bean id="logicalDelInjector" class="com.baomidou.mybatisplus.extension.injector.methods.LogicDeleteByIdWithFill"/>-->
+
+    <!-- 配置事务管理 -->
+    <bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 事务管理 属性 -->
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="append*" propagation="REQUIRED"/>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="modify*" propagation="REQUIRED"/>
+            <tx:method name="edit*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="remove*" propagation="REQUIRED"/>
+            <tx:method name="repair" propagation="REQUIRED"/>
+            <tx:method name="get*" propagation="REQUIRED"/>
+            <tx:method name="find*" propagation="REQUIRED"/>
+            <tx:method name="load*" propagation="REQUIRED"/>
+            <tx:method name="search*" propagation="REQUIRED"/>
+            <tx:method name="datagrid*" propagation="REQUIRED"/>
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 配置切面 -->
+    <aop:config>
+        <aop:pointcut id="transactionPointcut"
+                      expression="(execution(* com.platform.service..*.*(..)))or (execution(* com.chundengtai.base.service..*.*(..)))"/>
+        <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
+    </aop:config>
+
+</beans>
