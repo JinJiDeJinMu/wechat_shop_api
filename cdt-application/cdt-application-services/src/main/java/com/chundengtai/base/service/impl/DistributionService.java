@@ -137,11 +137,11 @@ public class DistributionService implements IdistributionService {
     }
 
     private BigDecimal computeFirstMoney(BigDecimal totalMoney) {
-        return totalMoney.multiply(distrimoney.getFirstPercent());
+        return totalMoney.multiply(getDistrimoney().getFirstPercent());
     }
 
     private BigDecimal computeSecondMoney(BigDecimal totalMoney) {
-        return totalMoney.multiply(distrimoney.getSecondPercent());
+        return totalMoney.multiply(getDistrimoney().getSecondPercent());
     }
     //返佣比例配置结束
 
@@ -331,19 +331,19 @@ public class DistributionService implements IdistributionService {
 
         try {
             //todo:记录合伙人奖励
-            CdtUserSummary partner = partnerService.getPartnerInfo(distrimoney, user.getId());
+            CdtUserSummary partner = partnerService.getPartnerInfo(getDistrimoney(), user.getId());
             if (partner != null) {
                 BigDecimal percent = BigDecimal.ZERO;
                 switch (partner.getPartnerLevel()) {
                     case 2:
-                        percent = distrimoney.getSecondPartner();
+                        percent = getDistrimoney().getSecondPartner();
                         break;
                     case 3:
-                        percent = distrimoney.getThirdPartner();
+                        percent = getDistrimoney().getThirdPartner();
                         break;
                     default:
                     case 1:
-                        percent = distrimoney.getFirstPartner();
+                        percent = getDistrimoney().getFirstPartner();
                         break;
                 }
                 BigDecimal partnerMoney = order.getAllPrice().multiply(percent);
@@ -459,9 +459,9 @@ public class DistributionService implements IdistributionService {
                     item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
                     item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
                     //todo:判定符合合伙人逻辑
-                    if (partner.getTradePerson() > distrimoney.getFirstPersonCondition()) {
+                    if (partner.getTradePerson() > getDistrimoney().getFirstPersonCondition()) {
                         log.info("判定成为合伙人的逻辑");
-                        partnerService.determinePartner(distrimoney, partner.getUserId());
+                        partnerService.determinePartner(getDistrimoney(), partner.getUserId());
                     }
                 }
 
