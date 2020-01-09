@@ -4,13 +4,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.ResourceBundle;
 
 /**
- * 名称：ResourceUtil <br>
- * 描述：参数工具类<br>
+ * 参数工具类
  */
 public class ResourceUtil {
     private static ResourceUtil RESOURCE_UTIL = null;
 
-    private static ResourceBundle BUNDLE = java.util.ResourceBundle.getBundle("platform");
+    private static ResourceBundle BUNDLE = java.util.ResourceBundle.getBundle("cdt");
 
     private ResourceUtil() {
 
