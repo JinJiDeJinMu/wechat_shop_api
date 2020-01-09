@@ -3,7 +3,7 @@
 
 <mapper namespace="com.platform.dao.CdtPaytransRecordDao">
 
-    <resultMap type="com.platform.entity.CdtPaytransRecordEntity" id="cdtPaytransRecordMap">
+    <resultMap type="com.platform.entity.CdtPaytransRecordEntity" id="cdtPaytransRecordMapResult">
         <result property="id" column="id"/>
         <result property="rid" column="rid"/>
         <result property="name" column="name"/>
