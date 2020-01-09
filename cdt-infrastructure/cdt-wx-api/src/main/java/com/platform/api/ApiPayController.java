@@ -551,8 +551,9 @@ public class ApiPayController extends ApiBaseAction {
      * @return
      */
     @ApiOperation(value = "微信订单回调接口")
-    @PostMapping("/notify")
+    @PostMapping(value = "/notify", produces = "application/xml;charset=UTF-8")
     @IgnoreAuth
+    @ResponseBody
     public String notify(@RequestBody String reponseXml) throws
             IOException, WxPayException {
         request.setCharacterEncoding("UTF-8");
