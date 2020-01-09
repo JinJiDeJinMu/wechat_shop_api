@@ -100,27 +100,6 @@ public class DistributionService implements IdistributionService {
         return "";
     }
 
-    private void changeDistridetailStatus(Order order, CdtDistridetail distridetail) {
-        if (!order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
-            distridetail.setStatus(DistributionStatus.NON_COMPLETE_ORDER.getCode());
-        } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
-                order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())
-        ) {
-            long daysNum = Duration.between(DateTimeConvert.date2LocalDateTime(order.getConfirmTime()), LocalDateTime.now()).toDays();
-            if (daysNum < 7) {
-                distridetail.setStatus(DistributionStatus.NOT_SERVEN_ORDER.getCode());
-            } else {
-                distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
-            }
-        } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
-                (order.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
-                        order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode()
-                        ))) {
-            distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
-        } else if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
-            distridetail.setStatus(DistributionStatus.REFUND_ORDER.getCode());
-        }
-    }
 
     //返佣比例配置信息获取
     @Override
@@ -276,7 +255,8 @@ public class DistributionService implements IdistributionService {
         distridetail.setMoney(money);
         distridetail.setOrderSn(order.getOrderSn());
         distridetail.setCreatedTime(new Date());
-        changeDistridetailStatus(order, distridetail);
+        //changeDistridetailStatus(order, distridetail);
+        changeDistridetailStatusLogic(order, distridetail, null);
         distridetail.setType(type);
         distridetail.setToken(encryt(distridetail));
         boolean result = distridetailService.save(distridetail);
@@ -462,7 +442,7 @@ public class DistributionService implements IdistributionService {
                 assert partner != null;
                 partner.setUnbalanced(partner.getUnbalanced() == null ? detailModel.getMoney() : partner.getUnbalanced().add(detailModel.getMoney()));
                 if (item.getParentId().equals(detailModel.getGoldUserId())) {
-                    partner.setStatsPerson((partner.getStatsPerson() == null || partner.getStatsPerson() == 0) ? 1 : partner.getStatsPerson() + 1);
+                    //partner.setStatsPerson((partner.getStatsPerson() == null || partner.getStatsPerson() == 0) ? 1 : partner.getStatsPerson() + 1);
                     partner.setTradePerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
                     //绑定用户层级关系编号
                     item.setDevNum(partner.getTradePerson());
@@ -523,18 +503,46 @@ public class DistributionService implements IdistributionService {
                 distridetail.setStatus(DistributionStatus.NOT_SERVEN_ORDER.getCode());
             } else {
                 distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
-                userSumeryOp.accept(distridetail, order);
+                if (userSumeryOp != null) {
+                    userSumeryOp.accept(distridetail, order);
+                }
             }
         } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
                 (order.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
                         order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode()
                         ))) {
             distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
-            userSumeryOp.accept(distridetail, order);
+            if (userSumeryOp != null) {
+                userSumeryOp.accept(distridetail, order);
+            }
         } else if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
             distridetail.setStatus(DistributionStatus.REFUND_ORDER.getCode());
-            userSumeryOp.accept(distridetail, order);
+            if (userSumeryOp != null) {
+                userSumeryOp.accept(distridetail, order);
+            }
         }
 
+    }
+
+    private void changeDistridetailStatus(Order order, CdtDistridetail distridetail) {
+        if (!order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) && !order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
+            distridetail.setStatus(DistributionStatus.NON_COMPLETE_ORDER.getCode());
+        } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
+                order.getGoodsType().equals(GoodsTypeEnum.ORDINARY_GOODS.getCode())
+        ) {
+            long daysNum = Duration.between(DateTimeConvert.date2LocalDateTime(order.getConfirmTime()), LocalDateTime.now()).toDays();
+            if (daysNum < 7) {
+                distridetail.setStatus(DistributionStatus.NOT_SERVEN_ORDER.getCode());
+            } else {
+                distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
+            }
+        } else if (order.getOrderStatus().equals(OrderStatusEnum.COMPLETED_ORDER.getCode()) &&
+                (order.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode()) ||
+                        order.getGoodsType().equals(GoodsTypeEnum.EXPRESS_GET.getCode()
+                        ))) {
+            distridetail.setStatus(DistributionStatus.COMPLETED_ORDER.getCode());
+        } else if (order.getOrderStatus().equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
+            distridetail.setStatus(DistributionStatus.REFUND_ORDER.getCode());
+        }
     }
 }
