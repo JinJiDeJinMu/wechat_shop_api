@@ -5,7 +5,6 @@ import com.platform.service.UpkeepService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,6 @@ public class UpkeepController {
     /**
      * 查看列表
      */
-    @Ignore
     @RequestMapping("/list")
     @RequiresPermissions("upkeep:list")
     public R list(@RequestParam Map<String, Object> params) {
@@ -44,7 +42,7 @@ public class UpkeepController {
     /**
      * 查看信息
      */
-    @Ignore
+
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Integer id) {
         UpkeepEntity upkeepEntity = upkeepService.queryObject(id);
@@ -55,7 +53,7 @@ public class UpkeepController {
     /**
      * 保存
      */
-    @Ignore
+
     @RequestMapping("/save")
     public R save(@RequestBody UpkeepEntity upkeep) {
         upkeepService.save(upkeep);
@@ -66,7 +64,7 @@ public class UpkeepController {
     /**
      * 修改
      */
-    @Ignore
+
     @RequestMapping("/update")
     public R update(@RequestBody UpkeepEntity upkeep) {
         upkeepService.update(upkeep);
@@ -76,9 +74,8 @@ public class UpkeepController {
 
     /**
      * 删除
-     */
-    @Ignore
-    @RequestMapping("/delete")
+
+     @RequestMapping("/delete")
     public R delete(@RequestBody Integer[] ids) {
         upkeepService.deleteBatch(ids);
 
@@ -88,7 +85,7 @@ public class UpkeepController {
     /**
      * 查看所有列表
      */
-    @Ignore
+
     @RequestMapping("/queryAll")
     public R queryAll(@RequestParam Map<String, Object> params) {
 
