@@ -1,4 +1,4 @@
-package com.platform.dto;
+package com.chundengtai.base.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -14,7 +14,6 @@ import java.util.Map;
 
 
 /**
- * @date 2017-08-15 08:03:40
  */
 @Data
 @NoArgsConstructor

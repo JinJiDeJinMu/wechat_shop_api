@@ -19,8 +19,6 @@ import java.util.Map;
 
 /**
  * Excel2003格式解析
- *
- * @date 2017年10月28日 13:11:27
  */
 public class Excel2003Reader implements HSSFListener {
     private int minColumns = -1;

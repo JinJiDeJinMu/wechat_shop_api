@@ -1,4 +1,4 @@
-package com.platform.config;
+package com.chundengtai.base.config;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;

@@ -1,4 +1,4 @@
-package com.platform.config;
+package com.chundengtai.base.config;
 
 import org.springframework.stereotype.Component;
 

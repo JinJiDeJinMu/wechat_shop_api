@@ -16,9 +16,6 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 作者: @author Harmon <br>
- * 时间: 2016-09-01 09:18<br>
- * 描述: Http请求通用工具 <br>
  */
 public class HttpUtil {
 

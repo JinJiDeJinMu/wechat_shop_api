@@ -1,4 +1,4 @@
-package com.platform.dto;
+package com.chundengtai.base.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

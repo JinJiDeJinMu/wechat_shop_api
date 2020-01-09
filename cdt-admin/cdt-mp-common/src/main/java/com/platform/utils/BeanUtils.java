@@ -12,12 +12,7 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 
 /**
- * 名称：BeanUtils <br>
- * 描述：<br>
- *
- * @author 李鹏军
- * @version 1.0
- * @since 1.0.0
+ * 名称：BeanUtils
  */
 public class BeanUtils extends org.springframework.beans.BeanUtils {
     /**

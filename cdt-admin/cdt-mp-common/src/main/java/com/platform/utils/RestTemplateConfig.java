@@ -9,10 +9,6 @@ import org.springframework.web.client.RestTemplate;
 /**
  * 名称：RestTemplateConfig <br>
  * 描述：<br>
- *
- * @author suzy2
- * @version 1.0
- * @since 1.0.0
  */
 @Configuration
 public class RestTemplateConfig {

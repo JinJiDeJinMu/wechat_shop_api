@@ -1,4 +1,4 @@
-package com.platform.common;
+package com.chundengtai.base.common;
 
 import java.io.Serializable;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.List;
 /**
  * 基础dao
  *
- * @author wengl
  */
 public interface EntityDao<E, PK extends Serializable> {
 

@@ -40,9 +40,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @FileName HttpsUtils.java
- * @Description: HTTP 请求工具类
- * @Date 2017年6月26日
  */
 public class HttpsUtils {
     private static PoolingHttpClientConnectionManager connMgr;

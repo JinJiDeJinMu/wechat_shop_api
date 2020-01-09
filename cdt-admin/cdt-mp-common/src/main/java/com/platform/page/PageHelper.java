@@ -17,8 +17,6 @@ import java.util.Properties;
 
 /**
  * Mybatis - 通用分页拦截器
- *
- * @date 2017年11月16日 下午10:43:36
  */
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class}),
         @Signature(type = ResultSetHandler.class, method = "handleResultSets", args = {Statement.class})})

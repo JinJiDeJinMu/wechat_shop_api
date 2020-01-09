@@ -1,6 +1,6 @@
 package com.platform.dao;
 
-import com.platform.common.BaseBizMapper;
+import com.chundengtai.base.common.BaseBizMapper;
 import com.platform.entity.SysDeptEntity;
 import com.platform.entity.UserWindowDto;
 import org.apache.ibatis.annotations.Mapper;

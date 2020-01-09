@@ -1,4 +1,4 @@
-package com.platform.dto;
+package com.chundengtai.base.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;

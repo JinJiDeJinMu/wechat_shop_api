@@ -10,8 +10,6 @@ import java.util.UUID;
 
 /**
  * 云存储(支持七牛、阿里云、腾讯云、又拍云)
- *
- * @date 2017-03-25 14:58
  */
 public abstract class CloudStorageService {
     /**

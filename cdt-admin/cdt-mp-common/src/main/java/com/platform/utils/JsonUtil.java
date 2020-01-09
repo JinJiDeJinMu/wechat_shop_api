@@ -12,8 +12,6 @@ import java.util.List;
 
 /**
  * JSON对象工具类
- *
- * @date 2017年11月16日 下午10:43:36
  */
 public final class JsonUtil {
     private JsonUtil() {

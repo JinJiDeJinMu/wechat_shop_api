@@ -17,10 +17,6 @@ import java.util.Date;
 /**
  * 名称：LogInterceptor <br>
  * 描述：日志拦截器<br>
- *
- * @author 李鹏军
- * @version 1.0
- * @since 1.0.0
  */
 public class LogInterceptor extends HandlerInterceptorAdapter {
 

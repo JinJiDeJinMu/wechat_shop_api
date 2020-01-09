@@ -79,7 +79,7 @@
 
     <!--<filter>-->
     <!--<filter-name>cors</filter-name>-->
-    <!--<filter-class>com.platform.config.SimpleCORSFilter</filter-class>-->
+    <!--<filter-class>com.chundengtai.base.config.SimpleCORSFilter</filter-class>-->
     <!--</filter>-->
     <!--<filter-mapping>-->
     <!--<filter-name>cors</filter-name>-->

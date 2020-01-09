@@ -1,4 +1,4 @@
-package com.platform.common;
+package com.chundengtai.base.common;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 

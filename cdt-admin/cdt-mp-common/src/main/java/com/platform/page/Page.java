@@ -5,10 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 
 /**
- * @param <T>
-
-
- * @date 2017年11月16日 下午10:43:36
  */
 public class Page<T> {
     private int pageNum;

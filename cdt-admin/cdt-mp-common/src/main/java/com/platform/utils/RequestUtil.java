@@ -18,9 +18,6 @@ import java.util.logging.Logger;
 /**
  * HTTP请求处理工具类
  * HTTP请求处理工具类
- *
- * @author system
- * @version 1.0
  */
 public class RequestUtil {
 

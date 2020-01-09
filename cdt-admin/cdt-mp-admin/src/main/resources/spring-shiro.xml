@@ -9,16 +9,16 @@
 	<bean id="userRealm" class="com.platform.shiro.UserRealm"/>
 
     <!--<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">-->
-    <bean id="sessionManager" class="com.platform.config.CustomSessionManager">
+    <bean id="sessionManager" class="com.chundengtai.base.config.CustomSessionManager">
 		<!-- 设置session过期时间为1小时(单位：毫秒)，默认为30分钟 -->
 		<property name="globalSessionTimeout" value="3600000"></property>
 		<property name="sessionValidationSchedulerEnabled" value="true"></property>
 		<property name="sessionIdUrlRewritingEnabled" value="false"></property>
-        <property name="sessionDAO">
-            <bean class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
-            </bean>
-        </property>
-        <!--<property name="sessionDAO" ref="cluterShiroSessionDao"/>-->
+		<property name="sessionDAO">
+			<bean class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+			</bean>
+		</property>
+		<!--<property name="sessionDAO" ref="cluterShiroSessionDao"/>-->
 	</bean>
 	
 	<!-- Shiro默认会使用Servlet容器的Session,可通过sessionMode属性来指定使用Shiro原生Session -->  

@@ -12,8 +12,6 @@ import java.util.TreeMap;
 
 /**
  * xml相关的工具类
- *
- * @author yang.y
  */
 @SuppressWarnings("unchecked")
 public class XmlUtil {

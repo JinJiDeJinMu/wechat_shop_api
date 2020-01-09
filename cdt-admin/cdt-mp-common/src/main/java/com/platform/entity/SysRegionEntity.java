@@ -1,7 +1,6 @@
 package com.platform.entity;
 
 /**
- * @date 2017-11-04 11:19:31
  */
 public class SysRegionEntity extends Tree<SysRegionEntity> {
 

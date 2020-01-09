@@ -9,12 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 名称：TreeUtils <br>
- * 描述：<br>
- *
- * @author 李鹏军
- * @version 1.0
- * @since 1.0.0
  */
 public class TreeUtils {
     /**

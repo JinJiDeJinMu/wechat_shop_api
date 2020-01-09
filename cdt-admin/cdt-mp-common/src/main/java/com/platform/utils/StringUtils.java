@@ -8,12 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 名称：StringUtils <br>
- * 描述：String工具类<br>
- *
- * @author 李鹏军
- * @version 1.0
- * @since 1.0.0
+ * String工具类
  */
 public class StringUtils {
     public static final String EMPTY = "";

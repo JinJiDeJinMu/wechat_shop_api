@@ -1,6 +1,6 @@
 package com.platform.dao;
 
-import com.platform.common.BaseBizMapper;
+import com.chundengtai.base.common.BaseBizMapper;
 import com.platform.entity.SmsLogVo;
 import com.platform.entity.UserVo;
 import org.apache.ibatis.annotations.Param;

@@ -1,4 +1,4 @@
-package com.platform.dto;
+package com.chundengtai.base.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,6 @@ import java.util.Date;
 
 
 /**
- * @date 2017-08-15 08:03:40
  */
 @Data
 @NoArgsConstructor

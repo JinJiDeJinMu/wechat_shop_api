@@ -8,8 +8,6 @@ import java.io.IOException;
 
 /**
  * XSS过滤
- *
- * @date 2017-04-01 10:20
  */
 public class XssFilter implements Filter {
     //需要排除过滤的url
