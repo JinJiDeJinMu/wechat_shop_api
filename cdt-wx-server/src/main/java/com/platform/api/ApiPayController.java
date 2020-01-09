@@ -1,6 +1,7 @@
 package com.platform.api;
 
 import com.chundengtai.base.constant.CacheConstant;
+import com.chundengtai.base.utils.*;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
@@ -15,7 +16,6 @@ import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.RedisUtils;
 import com.platform.util.wechat.WechatUtil;
-import com.platform.utils.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

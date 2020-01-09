@@ -2,10 +2,10 @@ package com.platform.api;
 
 
 import com.chundengtai.base.result.Result;
+import com.chundengtai.base.utils.R;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.CdtNewsBulletinEntity;
 import com.platform.service.ApiCdtNewsBulletinService;
-import com.platform.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

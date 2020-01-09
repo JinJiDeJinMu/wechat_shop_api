@@ -1,12 +1,12 @@
 package com.platform.controller;
 
 import com.chundengtai.base.annotation.SysLog;
+import com.chundengtai.base.utils.*;
 import com.platform.dao.SysUserDao;
 import com.platform.entity.MlsUserEntity2;
 import com.platform.entity.SysUserEntity;
 import com.platform.service.SysUserRoleService;
 import com.platform.service.SysUserService;
-import com.platform.utils.*;
 import com.platform.validator.Assert;
 import com.platform.validator.ValidatorUtils;
 import com.platform.validator.group.AddGroup;

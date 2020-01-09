@@ -1,11 +1,11 @@
 package com.platform.api;
 
+import com.chundengtai.base.utils.PageUtils;
+import com.chundengtai.base.utils.Query;
+import com.chundengtai.base.utils.R;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.StorageAddressEntity;
 import com.platform.service.StorageAddressService;
-import com.platform.utils.PageUtils;
-import com.platform.utils.Query;
-import com.platform.utils.R;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;

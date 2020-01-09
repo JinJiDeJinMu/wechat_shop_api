@@ -1,5 +1,9 @@
 package com.platform.api;
 
+import com.chundengtai.base.utils.Base64;
+import com.chundengtai.base.utils.CharUtil;
+import com.chundengtai.base.utils.DateUtils;
+import com.chundengtai.base.utils.Query;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.platform.annotation.APPLoginUser;
@@ -8,10 +12,6 @@ import com.platform.annotation.LoginUser;
 import com.platform.entity.*;
 import com.platform.service.*;
 import com.platform.util.*;
-import com.platform.utils.Base64;
-import com.platform.utils.CharUtil;
-import com.platform.utils.DateUtils;
-import com.platform.utils.Query;
 import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

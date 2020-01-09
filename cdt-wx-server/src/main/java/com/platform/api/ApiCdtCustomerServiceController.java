@@ -1,10 +1,10 @@
 package com.platform.api;
 
 import com.chundengtai.base.result.Result;
+import com.chundengtai.base.utils.R;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.CdtCustomerServiceVo;
 import com.platform.service.ApiCdtCustomerServiceService;
-import com.platform.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

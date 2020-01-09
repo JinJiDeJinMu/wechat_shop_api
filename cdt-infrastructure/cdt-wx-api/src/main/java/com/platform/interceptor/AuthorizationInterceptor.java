@@ -1,11 +1,11 @@
 package com.platform.interceptor;
 
+import com.chundengtai.base.utils.ApiRRException;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.MlsUserEntity2;
 import com.platform.entity.UserVo;
 import com.platform.service.ApiUserService;
 import com.platform.service.MlsUserSer;
-import com.platform.utils.ApiRRException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

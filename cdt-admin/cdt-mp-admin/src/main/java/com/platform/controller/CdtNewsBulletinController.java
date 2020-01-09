@@ -1,11 +1,11 @@
 package com.platform.controller;
 
 
+import com.chundengtai.base.utils.PageUtils;
+import com.chundengtai.base.utils.Query;
+import com.chundengtai.base.utils.R;
 import com.platform.entity.CdtNewsBulletinEntity;
 import com.platform.service.CdtNewsBulletinService;
-import com.platform.utils.PageUtils;
-import com.platform.utils.Query;
-import com.platform.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

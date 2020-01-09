@@ -1,10 +1,10 @@
 package com.platform.shiro;
 
+import com.chundengtai.base.utils.Constant;
 import com.platform.dao.SysMenuDao;
 import com.platform.dao.SysUserDao;
 import com.platform.entity.SysMenuEntity;
 import com.platform.entity.SysUserEntity;
-import com.platform.utils.Constant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;

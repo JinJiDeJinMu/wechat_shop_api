@@ -1,5 +1,7 @@
 package com.platform.service.impl;
 
+import com.chundengtai.base.utils.RRException;
+import com.chundengtai.base.utils.ShiroUtils;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.platform.dao.GoodsAttributeDao;
 import com.platform.dao.GoodsDao;
@@ -8,8 +10,6 @@ import com.platform.dao.ProductDao;
 import com.platform.entity.*;
 import com.platform.service.GoodsService;
 import com.platform.service.KeygenService;
-import com.platform.utils.RRException;
-import com.platform.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

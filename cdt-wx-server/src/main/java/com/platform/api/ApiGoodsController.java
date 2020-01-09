@@ -1,6 +1,8 @@
 package com.platform.api;
 
 import com.chundengtai.base.result.Result;
+import com.chundengtai.base.utils.Base64;
+import com.chundengtai.base.utils.*;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -11,8 +13,6 @@ import com.platform.entity.*;
 import com.platform.oss.OSSFactory;
 import com.platform.service.*;
 import com.platform.util.*;
-import com.platform.utils.Base64;
-import com.platform.utils.*;
 import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

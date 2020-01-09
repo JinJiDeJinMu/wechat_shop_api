@@ -1,7 +1,7 @@
 package com.platform.entity;
 
+import com.chundengtai.base.utils.JsonDateSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.platform.utils.JsonDateSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

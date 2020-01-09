@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.chundengtai.base.utils.Query;
 import com.platform.annotation.APPLoginUser;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
@@ -14,7 +15,6 @@ import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiPageUtils;
 import com.platform.util.wechat.WechatRefundApiResult;
 import com.platform.util.wechat.WechatUtil;
-import com.platform.utils.Query;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.MapUtils;

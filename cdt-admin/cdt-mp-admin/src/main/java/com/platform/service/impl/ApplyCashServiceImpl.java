@@ -1,9 +1,9 @@
 package com.platform.service.impl;
 
+import com.chundengtai.base.utils.R;
 import com.platform.service.ApplyCashService;
 import com.platform.util.wechat.WechatRefundApiResult;
 import com.platform.util.wechat.WechatUtil;
-import com.platform.utils.R;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

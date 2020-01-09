@@ -1,6 +1,7 @@
 package com.platform.api;
 
 import com.chundengtai.base.result.Result;
+import com.chundengtai.base.utils.Query;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.GoodsVo;
@@ -12,7 +13,6 @@ import com.platform.service.ApiKeywordsService;
 import com.platform.service.ApiSearchHistoryService;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiPageUtils;
-import com.platform.utils.Query;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

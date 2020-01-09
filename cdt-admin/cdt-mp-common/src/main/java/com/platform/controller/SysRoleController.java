@@ -1,14 +1,14 @@
 package com.platform.controller;
 
 import com.chundengtai.base.annotation.SysLog;
+import com.chundengtai.base.utils.Constant;
+import com.chundengtai.base.utils.PageUtils;
+import com.chundengtai.base.utils.Query;
+import com.chundengtai.base.utils.R;
 import com.platform.entity.SysRoleEntity;
 import com.platform.service.SysRoleDeptService;
 import com.platform.service.SysRoleMenuService;
 import com.platform.service.SysRoleService;
-import com.platform.utils.Constant;
-import com.platform.utils.PageUtils;
-import com.platform.utils.Query;
-import com.platform.utils.R;
 import com.platform.validator.ValidatorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;

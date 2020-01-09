@@ -1,8 +1,8 @@
 package com.platform.controller;
 
+import com.chundengtai.base.utils.Query;
+import com.chundengtai.base.utils.ShiroUtils;
 import com.platform.constance.ShopShow;
-import com.platform.utils.Query;
-import com.platform.utils.ShiroUtils;
 
 import java.util.Map;
 

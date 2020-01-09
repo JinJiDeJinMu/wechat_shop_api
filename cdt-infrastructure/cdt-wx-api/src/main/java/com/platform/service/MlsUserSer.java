@@ -1,5 +1,6 @@
 package com.platform.service;
 
+import com.chundengtai.base.utils.CharUtil;
 import com.platform.dao.MlsUserMapper;
 import com.platform.dao.UserRecordMapper;
 import com.platform.entity.MlsUserEntity2;
@@ -7,7 +8,6 @@ import com.platform.entity.OrderVo;
 import com.platform.entity.UserGoods;
 import com.platform.entity.UserRecord;
 import com.platform.util.SmsUtils;
-import com.platform.utils.CharUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

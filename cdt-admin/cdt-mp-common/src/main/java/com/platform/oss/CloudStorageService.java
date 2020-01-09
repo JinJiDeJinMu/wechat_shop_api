@@ -1,6 +1,6 @@
 package com.platform.oss;
 
-import com.platform.utils.DateUtils;
+import com.chundengtai.base.utils.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 

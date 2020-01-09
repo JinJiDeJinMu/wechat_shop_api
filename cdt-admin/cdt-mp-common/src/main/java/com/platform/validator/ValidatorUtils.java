@@ -1,6 +1,6 @@
 package com.platform.validator;
 
-import com.platform.utils.RRException;
+import com.chundengtai.base.utils.RRException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

@@ -1,7 +1,7 @@
 package com.platform.entity;
 
+import com.chundengtai.base.utils.JsonTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.platform.utils.JsonTimeSerializer;
 
 import java.io.Serializable;
 

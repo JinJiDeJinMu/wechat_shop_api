@@ -1,8 +1,8 @@
 package com.platform.api;
 
+import com.chundengtai.base.utils.R;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.service.ApiUserService;
-import com.platform.utils.R;
 import com.platform.validator.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

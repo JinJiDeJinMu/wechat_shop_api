@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.chundengtai.base.utils.Query;
 import com.platform.annotation.APPLoginUser;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.BrandVo;
@@ -8,7 +9,6 @@ import com.platform.service.ApiBrandService;
 import com.platform.service.ApiGoodsService;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiPageUtils;
-import com.platform.utils.Query;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.platform.controller;
 
+import com.chundengtai.base.utils.ShiroUtils;
 import com.platform.entity.SysUserEntity;
-import com.platform.utils.ShiroUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

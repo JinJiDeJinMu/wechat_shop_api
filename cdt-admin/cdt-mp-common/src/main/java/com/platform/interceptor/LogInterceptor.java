@@ -1,8 +1,8 @@
 package com.platform.interceptor;
 
+import com.chundengtai.base.utils.Constant;
+import com.chundengtai.base.utils.RequestUtil;
 import com.platform.entity.SysUserEntity;
-import com.platform.utils.Constant;
-import com.platform.utils.RequestUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.SecurityUtils;

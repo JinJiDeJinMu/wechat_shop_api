@@ -1,12 +1,12 @@
 package com.platform.service.impl;
 
+import com.chundengtai.base.utils.BeanUtils;
+import com.chundengtai.base.utils.StringUtils;
 import com.platform.dao.GoodsSpecificationDao;
 import com.platform.dao.ProductDao;
 import com.platform.entity.GoodsSpecificationEntity;
 import com.platform.entity.ProductEntity;
 import com.platform.service.ProductService;
-import com.platform.utils.BeanUtils;
-import com.platform.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

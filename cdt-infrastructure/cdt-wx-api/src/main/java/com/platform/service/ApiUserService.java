@@ -1,11 +1,11 @@
 package com.platform.service;
 
+import com.chundengtai.base.utils.RRException;
 import com.platform.dao.ApiUserLevelMapper;
 import com.platform.dao.ApiUserMapper;
 import com.platform.entity.SmsLogVo;
 import com.platform.entity.UserLevelVo;
 import com.platform.entity.UserVo;
-import com.platform.utils.RRException;
 import com.platform.validator.Assert;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;

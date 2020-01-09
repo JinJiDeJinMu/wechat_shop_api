@@ -2,11 +2,11 @@ package com.platform.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chundengtai.base.constant.CacheConstant;
+import com.chundengtai.base.utils.DateUtils;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.platform.dao.*;
 import com.platform.entity.*;
 import com.platform.util.CommonUtil;
-import com.platform.utils.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

@@ -1,10 +1,10 @@
 package com.platform.controller;
 
 import com.chundengtai.base.annotation.SysLog;
+import com.chundengtai.base.utils.*;
+import com.chundengtai.base.utils.Constant.MenuType;
 import com.platform.entity.SysMenuEntity;
 import com.platform.service.SysMenuService;
-import com.platform.utils.*;
-import com.platform.utils.Constant.MenuType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;

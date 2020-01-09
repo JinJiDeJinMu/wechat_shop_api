@@ -1,8 +1,8 @@
 package com.platform.cache;
 
+import com.chundengtai.base.utils.StringUtils;
 import com.platform.dao.SysRegionDao;
 import com.platform.entity.SysRegionEntity;
-import com.platform.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

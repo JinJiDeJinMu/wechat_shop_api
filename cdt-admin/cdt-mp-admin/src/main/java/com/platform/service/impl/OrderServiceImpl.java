@@ -1,12 +1,12 @@
 package com.platform.service.impl;
 
+import com.chundengtai.base.utils.RRException;
 import com.platform.dao.OrderDao;
 import com.platform.dao.ShippingDao;
 import com.platform.entity.GroupBuyingEntity;
 import com.platform.entity.OrderEntity;
 import com.platform.entity.ShippingEntity;
 import com.platform.service.OrderService;
-import com.platform.utils.RRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

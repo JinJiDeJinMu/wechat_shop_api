@@ -1,11 +1,11 @@
 package com.platform.service.impl;
 
+import com.chundengtai.base.utils.*;
 import com.platform.dao.SysSmsLogDao;
 import com.platform.entity.SmsConfig;
 import com.platform.entity.SysSmsLogEntity;
 import com.platform.service.SysConfigService;
 import com.platform.service.SysSmsLogService;
-import com.platform.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,12 +1,12 @@
 package com.platform.controller;
 
+import com.chundengtai.base.utils.PageUtils;
+import com.chundengtai.base.utils.Query;
+import com.chundengtai.base.utils.R;
+import com.chundengtai.base.utils.ShiroUtils;
 import com.platform.constance.ShopShow;
 import com.platform.entity.GoodsSpecificationEntity;
 import com.platform.service.GoodsSpecificationService;
-import com.platform.utils.PageUtils;
-import com.platform.utils.Query;
-import com.platform.utils.R;
-import com.platform.utils.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

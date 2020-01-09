@@ -1,5 +1,7 @@
 package com.platform.service.impl;
 
+import com.chundengtai.base.utils.Constant;
+import com.chundengtai.base.utils.RRException;
 import com.platform.dao.SysUserDao;
 import com.platform.entity.SysUserEntity;
 import com.platform.entity.UserWindowDto;
@@ -8,8 +10,6 @@ import com.platform.page.PageHelper;
 import com.platform.service.SysRoleService;
 import com.platform.service.SysUserRoleService;
 import com.platform.service.SysUserService;
-import com.platform.utils.Constant;
-import com.platform.utils.RRException;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

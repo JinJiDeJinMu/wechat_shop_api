@@ -1,5 +1,7 @@
 package com.platform.service.impl;
 
+import com.chundengtai.base.utils.Constant;
+import com.chundengtai.base.utils.RRException;
 import com.platform.dao.SysRoleDao;
 import com.platform.entity.SysRoleEntity;
 import com.platform.entity.UserWindowDto;
@@ -9,8 +11,6 @@ import com.platform.service.SysRoleDeptService;
 import com.platform.service.SysRoleMenuService;
 import com.platform.service.SysRoleService;
 import com.platform.service.SysUserService;
-import com.platform.utils.Constant;
-import com.platform.utils.RRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

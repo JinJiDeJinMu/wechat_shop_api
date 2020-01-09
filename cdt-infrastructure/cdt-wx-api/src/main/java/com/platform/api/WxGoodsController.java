@@ -2,6 +2,8 @@ package com.platform.api;
 
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.CategoryService;
+import com.chundengtai.base.utils.Query;
+import com.chundengtai.base.utils.RRException;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -12,8 +14,6 @@ import com.platform.entity.*;
 import com.platform.oss.OSSFactory;
 import com.platform.service.*;
 import com.platform.util.*;
-import com.platform.utils.Query;
-import com.platform.utils.RRException;
 import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

@@ -1,11 +1,11 @@
 package com.platform.api;
 
+import com.chundengtai.base.utils.PageUtils;
+import com.chundengtai.base.utils.Query;
+import com.chundengtai.base.utils.R;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.ExpressOrderVo;
 import com.platform.service.ApiExpressOrderService;
-import com.platform.utils.PageUtils;
-import com.platform.utils.Query;
-import com.platform.utils.R;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;

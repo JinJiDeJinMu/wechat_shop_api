@@ -1,6 +1,6 @@
 package com.platform.xss;
 
-import com.platform.utils.RRException;
+import com.chundengtai.base.utils.RRException;
 import org.apache.commons.lang.StringUtils;
 
 /**

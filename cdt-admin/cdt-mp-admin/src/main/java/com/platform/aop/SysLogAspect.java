@@ -2,12 +2,12 @@ package com.platform.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.chundengtai.base.annotation.SysLog;
+import com.chundengtai.base.utils.HttpContextUtils;
+import com.chundengtai.base.utils.IPUtils;
+import com.chundengtai.base.utils.ShiroUtils;
 import com.platform.entity.SysLogEntity;
 import com.platform.entity.SysUserEntity;
 import com.platform.service.SysLogService;
-import com.platform.utils.HttpContextUtils;
-import com.platform.utils.IPUtils;
-import com.platform.utils.ShiroUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

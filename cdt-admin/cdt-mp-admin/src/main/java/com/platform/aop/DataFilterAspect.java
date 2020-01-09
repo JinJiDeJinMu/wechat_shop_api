@@ -1,11 +1,11 @@
 package com.platform.aop;
 
 import com.chundengtai.base.annotation.DataFilter;
+import com.chundengtai.base.utils.Constant;
+import com.chundengtai.base.utils.RRException;
+import com.chundengtai.base.utils.ShiroUtils;
 import com.platform.entity.SysUserEntity;
 import com.platform.service.SysRoleDeptService;
-import com.platform.utils.Constant;
-import com.platform.utils.RRException;
-import com.platform.utils.ShiroUtils;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

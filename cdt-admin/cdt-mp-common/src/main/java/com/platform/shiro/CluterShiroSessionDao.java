@@ -1,6 +1,6 @@
 package com.platform.shiro;
 
-import com.platform.utils.Constant;
+import com.chundengtai.base.utils.Constant;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;

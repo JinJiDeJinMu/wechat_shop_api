@@ -2,11 +2,11 @@ package com.platform.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chundengtai.base.constant.CacheConstant;
+import com.chundengtai.base.utils.DateUtils;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.platform.dao.*;
 import com.platform.entity.*;
-import com.platform.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

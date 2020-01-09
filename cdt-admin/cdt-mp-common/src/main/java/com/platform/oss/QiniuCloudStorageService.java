@@ -1,6 +1,6 @@
 package com.platform.oss;
 
-import com.platform.utils.RRException;
+import com.chundengtai.base.utils.RRException;
 import com.qiniu.common.Zone;
 import com.qiniu.http.Response;
 import com.qiniu.storage.Configuration;

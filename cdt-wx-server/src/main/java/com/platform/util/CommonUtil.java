@@ -1,8 +1,8 @@
 package com.platform.util;
 
 import com.alibaba.fastjson.JSONObject;
-import com.platform.utils.CharUtil;
-import com.platform.utils.DateUtils;
+import com.chundengtai.base.utils.CharUtil;
+import com.chundengtai.base.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

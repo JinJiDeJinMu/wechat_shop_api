@@ -1,5 +1,6 @@
 package com.platform.service.impl;
 
+import com.chundengtai.base.utils.R;
 import com.platform.dao.CouponDao;
 import com.platform.dao.CouponGoodsDao;
 import com.platform.dao.UserCouponDao;
@@ -9,7 +10,6 @@ import com.platform.entity.CouponGoodsEntity;
 import com.platform.entity.UserCouponEntity;
 import com.platform.entity.UserEntity;
 import com.platform.service.CouponService;
-import com.platform.utils.R;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

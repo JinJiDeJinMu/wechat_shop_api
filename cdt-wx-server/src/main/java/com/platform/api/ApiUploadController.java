@@ -1,9 +1,9 @@
 package com.platform.api;
 
+import com.chundengtai.base.utils.RRException;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.oss.OSSFactory;
 import com.platform.util.ApiBaseAction;
-import com.platform.utils.RRException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -2,9 +2,9 @@ package com.platform.controller;
 
 import com.chundengtai.base.annotation.SysLog;
 import com.chundengtai.base.common.HutoolCaptcha;
+import com.chundengtai.base.utils.R;
+import com.chundengtai.base.utils.ShiroUtils;
 import com.google.code.kaptcha.Constants;
-import com.platform.utils.R;
-import com.platform.utils.ShiroUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.subject.Subject;

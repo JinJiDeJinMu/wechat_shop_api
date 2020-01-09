@@ -1,6 +1,6 @@
 package com.platform.util;
 
-import com.platform.utils.ResourceUtil;
+import com.chundengtai.base.utils.ResourceUtil;
 
 /**
  * 作者: @author Harmon <br>

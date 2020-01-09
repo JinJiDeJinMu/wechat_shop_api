@@ -1,11 +1,11 @@
 package com.platform.api;
 
+import com.chundengtai.base.utils.StringUtils;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.cache.RegionCacheUtil;
 import com.platform.entity.RegionVo;
 import com.platform.entity.SysRegionEntity;
 import com.platform.util.ApiBaseAction;
-import com.platform.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;

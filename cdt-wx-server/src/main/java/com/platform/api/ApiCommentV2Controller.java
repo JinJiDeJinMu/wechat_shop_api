@@ -1,16 +1,16 @@
 package com.platform.api;
 
 import com.chundengtai.base.result.Result;
+import com.chundengtai.base.utils.Base64;
+import com.chundengtai.base.utils.Query;
+import com.chundengtai.base.utils.RRException;
+import com.chundengtai.base.utils.StringUtils;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.*;
 import com.platform.oss.OSSFactory;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiPageUtils;
-import com.platform.utils.Base64;
-import com.platform.utils.Query;
-import com.platform.utils.RRException;
-import com.platform.utils.StringUtils;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

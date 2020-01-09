@@ -2,6 +2,8 @@ package com.platform.api;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.chundengtai.base.utils.Base64;
+import com.chundengtai.base.utils.R;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.LoginInfo;
 import com.platform.entity.MlsUserEntity2;
@@ -11,8 +13,6 @@ import com.platform.service.MlsUserSer;
 import com.platform.service.TokenService;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiUserUtils;
-import com.platform.utils.Base64;
-import com.platform.utils.R;
 import com.platform.validator.Assert;
 import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;

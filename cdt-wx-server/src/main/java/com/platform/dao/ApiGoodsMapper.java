@@ -1,8 +1,8 @@
 package com.platform.dao;
 
 import com.chundengtai.base.common.BaseBizMapper;
+import com.chundengtai.base.utils.Query;
 import com.platform.entity.GoodsVo;
-import com.platform.utils.Query;
 
 import java.util.List;
 import java.util.Map;

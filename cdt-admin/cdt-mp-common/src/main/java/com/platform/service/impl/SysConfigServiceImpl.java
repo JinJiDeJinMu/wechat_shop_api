@@ -1,10 +1,10 @@
 package com.platform.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.chundengtai.base.utils.RRException;
 import com.platform.dao.SysConfigDao;
 import com.platform.entity.SysConfigEntity;
 import com.platform.service.SysConfigService;
-import com.platform.utils.RRException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

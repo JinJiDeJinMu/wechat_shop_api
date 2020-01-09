@@ -1,5 +1,6 @@
 package com.platform.service;
 
+import com.chundengtai.base.utils.CharUtil;
 import com.platform.dao.MlsUserMapper;
 import com.platform.dao.UserRecordMapper;
 import com.platform.entity.MlsUserEntity2;
@@ -8,7 +9,6 @@ import com.platform.entity.UserGoods;
 import com.platform.entity.UserRecord;
 import com.platform.util.RedisUtils;
 import com.platform.util.SmsUtils;
-import com.platform.utils.CharUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,7 @@
 package com.platform.oss;
 
 import com.aliyun.oss.OSSClient;
-import com.platform.utils.RRException;
+import com.chundengtai.base.utils.RRException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;

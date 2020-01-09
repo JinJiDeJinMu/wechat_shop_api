@@ -10,6 +10,6 @@
     <tool>
         <key>user</key>
         <scope>application</scope>
-        <class>com.platform.utils.ShiroUtils</class>
+        <class>com.chundengtai.base.utils.ShiroUtils</class>
     </tool>
 </toolbox>

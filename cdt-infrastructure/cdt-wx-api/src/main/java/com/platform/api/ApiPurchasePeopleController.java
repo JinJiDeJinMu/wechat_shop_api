@@ -2,10 +2,10 @@ package com.platform.api;
 
 
 import com.chundengtai.base.result.Result;
+import com.chundengtai.base.utils.R;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.PurchasePeopleEntity;
 import com.platform.service.ApiPurchasePeopleService;
-import com.platform.utils.R;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

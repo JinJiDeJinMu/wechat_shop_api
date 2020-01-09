@@ -2,10 +2,10 @@ package com.platform.util.wechat;
 
 import com.alibaba.druid.support.logging.Log;
 import com.alibaba.druid.support.logging.LogFactory;
-import com.platform.utils.CharUtil;
-import com.platform.utils.MapUtils;
-import com.platform.utils.ResourceUtil;
-import com.platform.utils.XmlUtil;
+import com.chundengtai.base.utils.CharUtil;
+import com.chundengtai.base.utils.MapUtils;
+import com.chundengtai.base.utils.ResourceUtil;
+import com.chundengtai.base.utils.XmlUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

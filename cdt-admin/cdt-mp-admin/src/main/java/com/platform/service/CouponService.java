@@ -1,7 +1,7 @@
 package com.platform.service;
 
+import com.chundengtai.base.utils.R;
 import com.platform.entity.CouponEntity;
-import com.platform.utils.R;
 
 import java.util.List;
 import java.util.Map;

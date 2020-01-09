@@ -1,6 +1,8 @@
 package com.platform.api;
 
 import com.alibaba.fastjson.JSON;
+import com.chundengtai.base.utils.CharUtil;
+import com.chundengtai.base.utils.Query;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
 import com.chundengtai.base.weixinapi.ShippingTypeEnum;
@@ -18,8 +20,6 @@ import com.platform.entity.OrderVo;
 import com.platform.entity.UserVo;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
-import com.platform.utils.CharUtil;
-import com.platform.utils.Query;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

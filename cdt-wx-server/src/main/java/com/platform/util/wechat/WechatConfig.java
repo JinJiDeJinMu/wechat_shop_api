@@ -1,6 +1,6 @@
 package com.platform.util.wechat;
 
-import com.platform.utils.ResourceUtil;
+import com.chundengtai.base.utils.ResourceUtil;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContexts;
 

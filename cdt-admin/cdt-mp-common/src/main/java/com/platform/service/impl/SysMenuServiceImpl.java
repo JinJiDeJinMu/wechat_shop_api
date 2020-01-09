@@ -1,11 +1,11 @@
 package com.platform.service.impl;
 
+import com.chundengtai.base.utils.Constant.MenuType;
 import com.platform.dao.SysMenuDao;
 import com.platform.entity.SysMenuEntity;
 import com.platform.service.SysMenuService;
 import com.platform.service.SysRoleMenuService;
 import com.platform.service.SysUserService;
-import com.platform.utils.Constant.MenuType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

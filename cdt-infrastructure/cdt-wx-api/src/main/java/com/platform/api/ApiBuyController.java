@@ -2,13 +2,13 @@ package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chundengtai.base.constant.CacheConstant;
+import com.chundengtai.base.utils.Base64;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.*;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
-import com.platform.utils.Base64;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

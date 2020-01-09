@@ -1,7 +1,7 @@
 package com.platform.util;
 
-import com.platform.utils.DateUtils;
-import com.platform.utils.JsonUtil;
+import com.chundengtai.base.utils.DateUtils;
+import com.chundengtai.base.utils.JsonUtil;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

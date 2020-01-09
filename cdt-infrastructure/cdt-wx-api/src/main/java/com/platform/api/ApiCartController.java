@@ -424,7 +424,7 @@ public class ApiCartController extends ApiBaseAction {
         BigDecimal goodsTotalPrice = new BigDecimal(0.00);
         //默认收货地址
         AddressVo checkedAddress = null;
-        if (com.platform.utils.StringUtils.isNullOrEmpty(addressId) || addressId == 0) {
+        if (com.chundengtai.base.utils.StringUtils.isNullOrEmpty(addressId) || addressId == 0) {
             checkedAddress = addressService.queryDefaultAddress(loginUser.getUserId());//设置默认地址
         } else {
             checkedAddress = addressService.queryObject(addressId);

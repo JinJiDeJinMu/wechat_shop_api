@@ -1,20 +1,16 @@
 package ${package.Controller};
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.${entity};
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.${table.serviceName};
 import com.chundengtai.base.transfer.BaseForm;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.platform.utils.R;
+import com.chundengtai.base.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
-import java.util.List;
 
 @RestController
 @RequestMapping("/${table.entityPath}")

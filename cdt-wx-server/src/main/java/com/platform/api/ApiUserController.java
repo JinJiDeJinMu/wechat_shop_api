@@ -1,6 +1,8 @@
 package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chundengtai.base.utils.Base64;
+import com.chundengtai.base.utils.CharUtil;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.MlsUserEntity2;
 import com.platform.entity.UserGoods;
@@ -14,8 +16,6 @@ import com.platform.util.RedisUtils;
 import com.platform.util.SmsUtils;
 import com.platform.util.wechat.WechatRefundApiResult;
 import com.platform.util.wechat.WechatUtil;
-import com.platform.utils.Base64;
-import com.platform.utils.CharUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;

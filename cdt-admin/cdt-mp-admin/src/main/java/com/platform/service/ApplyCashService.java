@@ -1,6 +1,6 @@
 package com.platform.service;
 
-import com.platform.utils.R;
+import com.chundengtai.base.utils.R;
 
 /**
  * 提现service

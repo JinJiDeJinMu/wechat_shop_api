@@ -1,8 +1,8 @@
 package com.platform.oss;
 
 import com.chundengtai.base.common.SpringContextUtils;
+import com.chundengtai.base.utils.Constant;
 import com.platform.service.SysConfigService;
-import com.platform.utils.Constant;
 
 /**
  * 文件上传Factory

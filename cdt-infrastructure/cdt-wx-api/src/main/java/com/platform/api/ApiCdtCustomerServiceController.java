@@ -1,6 +1,7 @@
 package com.platform.api;
 
 import com.chundengtai.base.result.Result;
+import com.chundengtai.base.utils.R;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.CdtCustomerServiceVo;
 import com.platform.entity.CdtMerchantEntity;
@@ -8,7 +9,6 @@ import com.platform.entity.GoodsVo;
 import com.platform.service.ApiCdtCustomerServiceService;
 import com.platform.service.ApiGoodsService;
 import com.platform.service.CdtMerchantService;
-import com.platform.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

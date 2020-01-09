@@ -1,6 +1,6 @@
 package com.platform.oss;
 
-import com.platform.utils.RRException;
+import com.chundengtai.base.utils.RRException;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
