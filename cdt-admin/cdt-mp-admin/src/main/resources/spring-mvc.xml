@@ -17,7 +17,19 @@
     <context:annotation-config/>
     <mvc:default-servlet-handler/>
     <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
+    <mvc:resources mapping="doc.html" location="classpath:/META-INF/resources/"/>
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+
+    <bean id="authorizationInterceptor" class="com.platform.interceptor.AuthorizationInterceptor"/>
     <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+            <bean class="com.platform.resolver.LoginUserHandlerMethodArgumentResolver">
+                <property name="userService" ref="apiUserService"></property>
+            </bean>
+            <bean class="com.platform.resolver.AppLoginUserHandlerMethodArgumentResolver">
+            </bean>
+        </mvc:argument-resolvers>
         <mvc:message-converters register-defaults="true">
             <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
                 <property name="fastJsonConfig" ref="fastJsonConfigExt"/>
@@ -43,9 +55,16 @@
     <!-- 为了加载拦截器 需要 日志拦截器 （登录拦截和权限拦截已在shiro实现，看实现 情况处理） -->
     <mvc:interceptors>
         <mvc:interceptor>
+            <mvc:mapping path="/api/**"/>
+            <ref bean="authorizationInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/apis/**"/>
+            <ref bean="authorizationInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/statics/**"/>
-            <mvc:exclude-mapping path="/goodQrCode/**"/>
             <mvc:exclude-mapping path="/**/**.html"/>
             <mvc:exclude-mapping path="/**/**.js"/>
             <bean class="com.platform.interceptor.LogInterceptor"/>
