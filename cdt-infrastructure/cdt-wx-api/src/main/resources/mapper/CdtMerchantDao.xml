@@ -3,7 +3,7 @@
 
 <mapper namespace="com.platform.dao.CdtMerchantDao">
 
-    <resultMap type="com.platform.entity.CdtMerchantEntity" id="cdtMerchantMap">
+    <resultMap type="com.platform.entity.CdtMerchantEntity" id="cdtMerchantMapResult">
         <result property="id" column="id"/>
         <result property="shopName" column="shop_name"/>
         <result property="userId" column="user_id"/>
