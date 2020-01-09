@@ -1,8 +1,8 @@
 package com.platform.controller;
 
+import com.chundengtai.base.annotation.SysLog;
 import com.chundengtai.base.common.HutoolCaptcha;
 import com.google.code.kaptcha.Constants;
-import com.platform.annotation.SysLog;
 import com.platform.utils.R;
 import com.platform.utils.ShiroUtils;
 import org.apache.shiro.authc.*;

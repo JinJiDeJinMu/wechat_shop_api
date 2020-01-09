@@ -1,6 +1,6 @@
 package com.platform.controller;
 
-import com.platform.annotation.SysLog;
+import com.chundengtai.base.annotation.SysLog;
 import com.platform.dao.SysUserDao;
 import com.platform.entity.MlsUserEntity2;
 import com.platform.entity.SysUserEntity;

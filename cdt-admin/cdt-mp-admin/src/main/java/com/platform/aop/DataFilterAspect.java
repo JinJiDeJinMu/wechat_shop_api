@@ -1,6 +1,6 @@
 package com.platform.aop;
 
-import com.platform.annotation.DataFilter;
+import com.chundengtai.base.annotation.DataFilter;
 import com.platform.entity.SysUserEntity;
 import com.platform.service.SysRoleDeptService;
 import com.platform.utils.Constant;
@@ -32,7 +32,7 @@ public class DataFilterAspect {
     /**
      * 切点
      */
-    @Pointcut("@annotation(com.platform.annotation.DataFilter)")
+    @Pointcut("@annotation(com.chundengtai.base.annotation.DataFilter)")
     public void dataFilterCut() {
 
     }

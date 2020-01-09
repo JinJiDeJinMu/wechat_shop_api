@@ -1,7 +1,7 @@
 package com.platform.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.platform.annotation.SysLog;
+import com.chundengtai.base.annotation.SysLog;
 import com.platform.entity.SmsConfig;
 import com.platform.entity.SysSmsLogEntity;
 import com.platform.service.SysConfigService;

@@ -1,6 +1,6 @@
 package com.platform.controller;
 
-import com.platform.annotation.SysLog;
+import com.chundengtai.base.annotation.SysLog;
 import com.platform.cache.RegionCacheUtil;
 import com.platform.entity.SysRegionEntity;
 import com.platform.service.SysRegionService;

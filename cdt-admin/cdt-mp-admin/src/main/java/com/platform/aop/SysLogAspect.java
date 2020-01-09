@@ -1,7 +1,7 @@
 package com.platform.aop;
 
 import com.alibaba.fastjson.JSON;
-import com.platform.annotation.SysLog;
+import com.chundengtai.base.annotation.SysLog;
 import com.platform.entity.SysLogEntity;
 import com.platform.entity.SysUserEntity;
 import com.platform.service.SysLogService;
@@ -34,7 +34,7 @@ public class SysLogAspect {
     /**
      * 切点
      */
-    @Pointcut("@annotation(com.platform.annotation.SysLog)")
+    @Pointcut("@annotation(com.chundengtai.base.annotation.SysLog)")
     public void logPointCut() {
 
     }

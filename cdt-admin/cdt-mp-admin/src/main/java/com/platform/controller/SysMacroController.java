@@ -1,6 +1,6 @@
 package com.platform.controller;
 
-import com.platform.annotation.SysLog;
+import com.chundengtai.base.annotation.SysLog;
 import com.platform.entity.SysMacroEntity;
 import com.platform.service.SysMacroService;
 import com.platform.utils.PageUtils;
