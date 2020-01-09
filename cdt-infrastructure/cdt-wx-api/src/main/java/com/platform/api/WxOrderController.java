@@ -221,6 +221,18 @@ public class WxOrderController extends ApiBaseAction {
         return toResponsFail("测试取消订单");
     }
 
+    @GetMapping("TestCompleteOrder.do")
+    @IgnoreAuth
+    public Object TestCompleteOrder(Integer userId, Integer orderId) {
+        Order orderItem = cdtOrderService.getById(orderId);
+        //distributionFacade.recordDistributeLog(orderItem.getUserId(), orderItem);
+
+        Order orderVo = cdtOrderService.getById(orderId);
+        orderVo.setOrderStatus(OrderStatusEnum.COMPLETED_ORDER.getCode());
+        distributionFacade.notifyOrderStatus(userId, orderVo, GoodsTypeEnum.getEnumByKey(orderVo.getGoodsType()));
+        return toResponsFail("测试提取合伙人订单");
+    }
+
     /**
      * 获取订单列表
      */

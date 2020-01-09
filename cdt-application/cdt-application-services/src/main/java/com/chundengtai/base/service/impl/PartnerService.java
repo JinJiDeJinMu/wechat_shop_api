@@ -58,7 +58,9 @@ public class PartnerService implements IpartnerService {
         CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
                 .eq(CdtUserSummary::getUserId, userId));
 
-        if (cdtUserSummary == null) return null;
+        if (cdtUserSummary == null) {
+            return null;
+        }
         Gson gson = new Gson();
 
         Type linkNodeType = new TypeToken<LinkedList<Integer>>() {
@@ -80,6 +82,7 @@ public class PartnerService implements IpartnerService {
         );
 
         if (userSummarys == null || userSummarys.size() == 0) {
+            log.error("用户当前链路中无合伙人角色");
             return null;
         }
 
@@ -91,10 +94,11 @@ public class PartnerService implements IpartnerService {
             return userSummary;
         }
 
-        LinkedList<Integer> linkNodeTemp = linkNode;
+        LinkedList<Integer> linkNodeTemp = (LinkedList<Integer>) linkNode.clone();
 
         while (linkNodeTemp.size() != 0) {
             Integer roadUserId = linkNodeTemp.pollLast();
+            log.info("链路遍历=====》" + roadUserId);
             System.out.println(roadUserId);
             // 相当于倒叙输出；
             Optional<CdtUserSummary> itemOptional = userSummarys.stream().filter(s -> s.getUserId().equals(roadUserId)).findFirst();
@@ -117,7 +121,7 @@ public class PartnerService implements IpartnerService {
                         .lambda().eq(CdtDistributionLevel::getUserId, linkNode.get(index + 1)));
 
                 //用户所在的层级是在合伙人界限内还是外
-                if (levelModel.getDevNum() <= distrimoney.getFirstPersonCondition()) {
+                if (levelModel.getDevNum() < distrimoney.getFirstPersonCondition()) {
                     continue;
                 }
                 //用户排在第21及之后的话那么合伙人奖励直接给到当前的这个合伙人
@@ -147,7 +151,10 @@ public class PartnerService implements IpartnerService {
         //如果是合伙人的情况下。判定为true
         if (cdtUserSummary.getIsPartner().equals(TrueOrFalseEnum.TRUE.getCode())) {
             //todo:合伙人二级提升逻辑
-
+            if (cdtUserSummary.getTradePerson() > distrimoney.getSecondPersonCondition()) {
+                cdtUserSummary.setIsPartner(TrueOrFalseEnum.TRUE.getCode());
+                cdtUserSummary.setPartnerLevel(PartnerLeveEnum.TWO.getCode());
+            }
             //todo:合伙人三级提升逻辑
         } else if (cdtUserSummary.getTradePerson() > distrimoney.getFirstPersonCondition()) {
             cdtUserSummary.setIsPartner(TrueOrFalseEnum.TRUE.getCode());
