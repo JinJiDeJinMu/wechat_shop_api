@@ -190,7 +190,7 @@
     <bean class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <!--sql映射文件-->
-        <property name="mapperLocations" value="classpath*:com.platform.dao/*.xml,classpath*:mapper/*.xml"/>
+        <property name="mapperLocations" value="classpath*:mapper/*.xml"/>
         <!--别名设置-->
         <property name="typeAliasesPackage" value="com.platform.entity,com.chundengtai.base.bean"/>
         <!--setting配置-->
