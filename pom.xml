@@ -26,12 +26,7 @@
 
     <modules>
         <module>cdt-admin/platform-common</module> <!-- 公共模块 -->
-        <module>cdt-admin/platform-schedule</module> <!-- 定时任务模块 -->
-        <module>cdt-admin/platform-gen</module> <!-- 代码生成器模块 -->
         <module>cdt-admin/platform-api</module> <!-- API模块 -->
-        <module>cdt-admin/platform-framework</module>
-        <module>cdt-admin/platform-admin</module>
-        <module>cdt-admin/platform-shop</module>
         <module>cdt-wx-server</module>
         <module>cdt-infrastructure/cdt-base-common</module>
         <module>cdt-domain/cdt-base-domain</module>
