@@ -26,8 +26,8 @@
 
     <modules>
         <module>cdt-admin/cdt-mp-admin</module>
-        <module>cdt-admin/cdt-mp-common</module> <!-- 公共模块 -->
-        <module>cdt-admin/cdt-mp-api</module> <!-- API模块 -->
+        <module>cdt-admin/cdt-mp-common</module>
+        <module>cdt-admin/cdt-mp-api</module>
         <module>cdt-wx-server</module>
         <module>cdt-infrastructure/cdt-base-common</module>
         <module>cdt-domain/cdt-base-domain</module>
