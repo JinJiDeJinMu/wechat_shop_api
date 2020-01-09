@@ -407,6 +407,7 @@
     </profiles>
 
     <build>
+        <finalName>cdt-mp-admin</finalName>
         <scriptSourceDirectory>src/main/java</scriptSourceDirectory>
         <resources>
             <resource>
