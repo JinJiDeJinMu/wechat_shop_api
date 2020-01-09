@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>订单票据</title>
+    #parse("sys/header.html")
+</head>
+<body class="gray-bg">
+<div id="rrapp" v-cloak class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox-content p-xl">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <address v-if="goodsType == 5">
+                            <abbr title="name">姓名：</abbr>{{expressOrder.name}}<br>
+                            <abbr title="address">地址：</abbr>{{expressOrder.address}}<br>
+                            <abbr title="remarks">备注：</abbr>{{expressOrder.remarks}}<br>
+                            <abbr title="mobile">联系方式：</abbr> {{expressOrder.mobile}}<br>
+                            <abbr title="expressNo">取件快递：</abbr> {{expressOrder.getGoodsExpress}}<br>
+                            <abbr title="expressNo">快递单号：</abbr> {{expressOrder.expressNo}}<br>
+                            <abbr title="expressNo">取件地址：</abbr> {{expressOrder.getGoodsAddress}}<br>
+                            <abbr title="pickNumber">配送时间：</abbr> {{expressOrder.pickNumber}}
+                        </address>
+
+                        <address v-else-if="goodsType == 6"></address>
+
+                        <address v-else>
+                            <strong>{{order.consignee}}</strong>
+                            <br>{{order.address}}<br>
+                            <abbr title="Phone">联系方式：</abbr> {{order.mobile}}
+                        </address>
+                    </div>
+
+                    <div class="col-sm-6 text-right">
+                        <h4>单据编号：</h4>
+                        <h4 class="text-navy">{{order.orderSn}}</h4>
+                        <address>
+                            <strong>未名严选商城</strong><br>
+                            小程序二维码<br>
+                            <abbr title="Phone">总机：</abbr> (86) xxxxxxxx
+                        </address>
+                        <p>
+                            <span><strong>日期：</strong> {{nowDate}}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="table-responsive m-t">
+                    <table class="table table-hover table-responsive table-bordered">
+                        <thead>
+                        <tr>
+                            <th>清单</th>
+                            <th>数量</th>
+                            <th>单价</th>
+                            <th>总价</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="goods in orderGoods">
+                            <td>
+                                <div><strong>{{goods.goodsName}}</strong>
+                                    --<strong>{{goods.goods_specifition_name_value}}</strong>
+                                    <!--<img  width="200px" height="200px">-->
+                                </div>
+                            </td>
+                            <td>{{goods.number}}</td>
+                            <td>&yen;{{goods.retailPrice}}</td>
+                            <td>&yen;{{goods.retailPrice*goods.number}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <table class="table invoice-total">
+                    <tbody>
+                    <tr>
+                        <td><strong>物流运费</strong>
+                        </td>
+                        <td>&yen;{{order.freightPrice}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>总计</strong>
+                        </td>
+                        <td>&yen;{{sumRetailPrice}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div style="float: right;">
+                    <i-button v-if="showBtn" class="btn btn-warning dim" @click="print"><i class="fa fa-print"></i>打印
+                    </i-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    let orderId = getQueryString("orderId");
+    var vm = new Vue({
+        el: '#rrapp',
+        data: {
+            showBtn: true,
+            order: {},
+            goodsType: {},
+            orderGoods: {},
+            expressOrder: {},
+            sumRetailPrice: 0,
+            nowDate: transDate(new Date())
+        },
+        methods: {
+            print: function () {
+                vm.showBtn = false;
+                window.print();
+            }
+        },
+        created: function () {
+            Ajax.request({
+                url: "../order/info/" + orderId,
+                async: true,
+                successCallback: function (r) {
+                    vm.order = r.order;
+                    vm.goodsType = r.order.goodsType;
+                }
+            });
+
+            Ajax.request({
+                url: "../order/express/" + orderId,
+                async: true,
+                successCallback: function (r) {
+                    vm.expressOrder = r.expressOrder;
+                }
+            });
+            Ajax.request({
+                url: "../ordergoods/queryAll?orderId=" + orderId,
+                async: true,
+                successCallback: function (r) {
+                    vm.orderGoods = r.list;
+                    for (let i = 0; i < r.list.length; i++) {
+                        vm.sumRetailPrice += r.list[i].retailPrice * r.list[i].number
+                    }
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

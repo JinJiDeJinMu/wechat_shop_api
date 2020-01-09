@@ -40,6 +40,7 @@
         <module>cdt-infrastructure/cdt-base-bean</module>
         <module>cdt-infrastructure/cdt-base-service</module>
         <module>cdt-infrastructure/cdt-base-tool</module>
+        <module>cdt-admin/cdt-mvc-admin</module>
     </modules>
 
     <properties>
