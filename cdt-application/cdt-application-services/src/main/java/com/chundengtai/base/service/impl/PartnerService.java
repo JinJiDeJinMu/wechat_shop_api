@@ -76,7 +76,6 @@ public class PartnerService implements IpartnerService {
                 .in(CdtUserSummary::getUserId, linkNode);
         //.eq(CdtUserSummary::getIsPartner, TrueOrFalseEnum.TRUE.getCode())
 
-        log.warn("=========>" + queryWrapper.getSqlSegment());
         List<CdtUserSummary> userSummarys = cdtUserSummaryService.list(
                 queryWrapper
         );

@@ -290,7 +290,17 @@ public class DistributionService implements IdistributionService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
     public void recordDistributeLog(Integer userId, Order order) {
+
+        int count = rebateLogService.count(new QueryWrapper<CdtRebateLog>().lambda()
+                .eq(CdtRebateLog::getBuyUserId, userId)
+                .eq(CdtRebateLog::getOrderSn, order.getOrderSn()));
+
+        if (count > 0) {
+            log.info(order.getOrderSn() + "======重复记录！");
+            return;
+        }
         User user = userService.getById(userId);
+
 
         CdtRebateLog logModel = new CdtRebateLog();
         logModel.setBuyUserId(user.getId());

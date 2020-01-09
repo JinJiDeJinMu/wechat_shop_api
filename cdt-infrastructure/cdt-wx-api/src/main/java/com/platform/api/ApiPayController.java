@@ -10,6 +10,7 @@ import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
 import com.chundengtai.base.weixinapi.ShippingTypeEnum;
+import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
@@ -28,10 +29,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
@@ -471,102 +471,6 @@ public class ApiPayController extends ApiBaseAction {
         return toResponsFail("查询失败，未知错误");
     }
 
-    /**
-     * 微信订单回调接口
-     *
-     * @return
-     */
-//    @ApiOperation(value = "微信订单回调接口")
-//    @RequestMapping(value = "/notify")
-//    @IgnoreAuth
-//    @ResponseBody
-//    public String notify(HttpServletRequest request, HttpServletResponse response) throws IOException, WxPayException {
-//        String reqId = UUID.randomUUID().toString();
-//        log.info(reqId + "====notify==>返回给微信回调处理结果====>");
-//        String resultWxMsg = "";//返回给微信的处理结果
-//        String inputLine;
-//        String reponseXml = "";
-//        request.setCharacterEncoding("UTF-8");
-//        response.setCharacterEncoding("UTF-8");
-//        response.setContentType("text/html;charset=UTF-8");
-//        response.setHeader("Access-Control-Allow-Origin", "*");
-//        //微信给返回的东西
-//        try {
-//            while ((inputLine = request.getReader().readLine()) != null) {
-//                reponseXml += inputLine;
-//            }
-//            request.getReader().close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            resultWxMsg = setXml("fail", "xml获取失败");
-//        }
-//
-//        if (StringUtils.isNullOrEmpty(reponseXml)) {
-//            resultWxMsg = setXml("fail", "xml为空");
-//        }
-//
-//        if (!StringUtils.isNullOrEmpty(resultWxMsg)) {
-//            return resultWxMsg;
-//        }
-//
-//        log.info(reqId + "===notify==微信回调返回======================>" + reponseXml);
-//        WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(reponseXml);
-//        String result_code = wxPayOrderNotifyResult.getResultCode();
-//        if (result_code.equalsIgnoreCase("FAIL")) {
-//            //订单编号
-//            String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
-//            log.error(reqId + "===notify==订单" + out_trade_no + "支付失败");
-//            return setXml("fail", "fail");
-//        } else if (result_code.equalsIgnoreCase("SUCCESS")) {
-//            //订单编号
-//            String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
-//            log.info(reqId + "===notify==订单" + out_trade_no + "支付成功");
-//            try {
-//                // 更改订单状态
-//                // 业务处理
-//                orderStatusLogic(out_trade_no, wxPayOrderNotifyResult);
-//            } catch (Exception ex) {
-//                log.error("=====weixin===notify===error", ex);
-//                return setXml("fail", "fail");
-//            }
-//            return setXml("SUCCESS", "OK");
-//        }
-//        return setXml("SUCCESS", "OK");
-//    }
-//
-//    private void orderStatusLogic(String out_trade_no, WxPayOrderNotifyResult result) {
-//        OrderVo orderItem = orderService.queryOrderNo(out_trade_no);
-//        if (orderItem == null) {
-//            orderItem = orderService.queryByOrderId(out_trade_no);
-//
-//            orderItem.setAll_order_id(out_trade_no);
-//        } else {
-//            orderItem.setOrder_sn(out_trade_no);
-//        }
-//        log.info("微信回调设置=====out_trade_no>:" + out_trade_no);
-//        log.info("微信回调Json=====>:" + JSON.toJSONString(orderItem));
-//
-//        orderSetPayedStatus(orderItem);
-//        orderItem.setPay_time(new Date());
-//        int rows = orderService.update(orderItem);
-//        log.warn("=====此次更新影响===行数====" + rows);
-//        try {
-//            CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
-//            payrecord.setMchOrderNo(orderItem.getOrder_sn());
-//            payrecord.setAmount(BigDecimal.valueOf(result.getTotalFee()));
-//            payrecord.setTradePrice(BigDecimal.valueOf(result.getTotalFee()));
-//            payrecord.setAppId("");
-//            payrecord.setCreateDate(new Date());
-//            //payrecord.setPayOrderId(result.getTransactionId());
-//            payrecord.setPayType(PayTypeEnum.PAYED.getCode());
-//            payrecord.setMemo(result.getPromotionDetail());
-//            payrecord.setPayState(PayTypeEnum.PAYED.getCode());
-//            payrecord.setResText(result.getXmlString());
-//            paytransRecordService.save(payrecord);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
     private void orderSetPayedStatusOld(OrderVo orderItem) {
         orderItem.setPay_status(PayTypeEnum.PAYED.getCode());
         if (orderItem.getGoods_type().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode())
@@ -580,84 +484,7 @@ public class ApiPayController extends ApiBaseAction {
         orderItem.setShipping_status(ShippingTypeEnum.NOSENDGOODS.getCode());
     }
 
-//    /**
-//     * 微信订单回调接口
-//     *
-//     * @return
-//     */
-//    @ApiOperation(value = "微信订单回调接口")
-//    @RequestMapping(value = "/notify", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
-//    @IgnoreAuth
-//    @ResponseBody
-//    public void notify(HttpServletRequest request, HttpServletResponse response) {
-//    	try {
-//            request.setCharacterEncoding("UTF-8");
-//            response.setCharacterEncoding("UTF-8");
-//            response.setContentType("text/html;charset=UTF-8");
-//            response.setHeader("Access-Control-Allow-Origin", "*");
-//            InputStream in = request.getInputStream();
-//            ByteArrayOutputStream out = new ByteArrayOutputStream();
-//            byte[] buffer = new byte[1024];
-//            int len = 0;
-//            while ((len = in.read(buffer)) != -1) {
-//                out.write(buffer, 0, len);
-//            }
-//            out.close();
-//            in.close();
-//            //xml数据
-//            String reponseXml = new String(out.toByteArray(), "utf-8");
-//
-//            WechatRefundApiResult result = (WechatRefundApiResult) XmlUtil.xmlStrToBean(reponseXml, WechatRefundApiResult.class);
-//
-//        	//处理订单的redis状态
-//        	String value = RedisUtils.get(result.getOut_trade_no().toString());
-//        	if(value != null && "51".equals(value)) {
-//        		RedisUtils.del(result.getOut_trade_no().toString());
-//        	}else {
-//        		//查询支付已结操作过
-//        		response.getWriter().write(setXml("SUCCESS", "OK"));
-//        		return;
-//        	}
-//
-//            String result_code = result.getResult_code();
-//            if (result_code.equalsIgnoreCase("FAIL")) {
-//                //订单编号
-//                String out_trade_no = result.getOut_trade_no();
-//                log.error("订单" + out_trade_no + "支付失败");
-//                response.getWriter().write(setXml("SUCCESS", "OK"));
-//            } else if (result_code.equalsIgnoreCase("SUCCESS")) {
-//                Map<Object, Object> retMap = XmlUtil.xmlStrToTreeMap(reponseXml);
-//            	String sign = WechatUtil.arraySign(retMap, ResourceUtil.getConfigByName("wx.paySignKey"));
-//            	if(!sign.equals(result.getSign())) {//判断签名
-//            		return;
-//            	}
-//
-//
-//
-////                Map<String, Object> map = new HashMap<String, Object>();
-////                map.put("all_order_id", result.getOut_trade_no());
-////                List<OrderVo> lists = orderService.queryList(map);
-////                OrderVo vo = null;
-////                for(OrderVo v : lists) {
-////                	vo = v;
-////                	try {
-////                    	//调用分销接口(现在支付成功就分润，后期要改造变成收货后，或者变成不可以体现的分润)
-////                    	fx(new Long(vo.getPromoter_id()), vo.getBrokerage(), vo.getOrder_price(), vo.getId(), vo.getMerchant_id());
-////                    }catch(Exception e) {
-////                    	System.out.println("================分销错误开始================");
-////                    	e.printStackTrace();
-////                    	System.out.println("================分销错误结束================");
-////                    }
-////                }
-//
-//
-//                response.getWriter().write(setXml("SUCCESS", "OK"));
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return;
-//        }
-//    }
+
 
 //    /**
 //     * 订单退款请求（暂无使用）
@@ -710,143 +537,13 @@ public class ApiPayController extends ApiBaseAction {
 //    }
 
 
-    //返回微信服务
-    public static String setXml(String return_code, String return_msg) {
-        return "<xml><return_code><![CDATA[" + return_code + "]]></return_code><return_msg><![CDATA[" + return_msg + "]]></return_msg></xml>";
+    @ApiOperation(value = "支付回调通知处理")
+    @PostMapping("/notify/order")
+    public String parseOrderNotifyResult(@RequestBody String xmlData) throws WxPayException {
+        final WxPayOrderNotifyResult notifyResult = this.wxPayService.parseOrderNotifyResult(xmlData);
+        // TODO 根据自己业务场景需要构造返回对象
+        return WxPayNotifyResponse.success("成功");
     }
-
-    //模拟微信回调接口
-    public static String callbakcXml(String orderNum) {
-        return "<xml><appid><![CDATA[wx2421b1c4370ec43b]]></appid><attach><![CDATA[支付测试]]></attach><bank_type><![CDATA[CFT]]></bank_type><fee_type><![CDATA[CNY]]></fee_type> <is_subscribe><![CDATA[Y]]></is_subscribe><mch_id><![CDATA[10000100]]></mch_id><nonce_str><![CDATA[5d2b6c2a8db53831f7eda20af46e531c]]></nonce_str><openid><![CDATA[oUpF8uMEb4qRXf22hE3X68TekukE]]></openid> <out_trade_no><![CDATA[" + orderNum + "]]></out_trade_no>  <result_code><![CDATA[SUCCESS]]></result_code> <return_code><![CDATA[SUCCESS]]></return_code><sign><![CDATA[B552ED6B279343CB493C5DD0D78AB241]]></sign><sub_mch_id><![CDATA[10000100]]></sub_mch_id> <time_end><![CDATA[20140903131540]]></time_end><total_fee>1</total_fee><trade_type><![CDATA[JSAPI]]></trade_type><transaction_id><![CDATA[1004400740201409030005092168]]></transaction_id></xml>";
-    }
-
-
-    /**
-     * 计算分润
-     *
-     * @param userId   用户Id
-     * @param fx_money 分销的分润金额
-     * @param orderId  订单ID
-     */
-    @ApiOperation(value = "微信订单回调接口")
-    @RequestMapping(value = "/fx", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
-    @IgnoreAuth
-    public void fx(Long userId, BigDecimal fx_money, BigDecimal orderPrice, int orderId, Long merchantId) {
-        if (userId == null || userId == 0L || fx_money.compareTo(BigDecimal.ZERO) == 0) {
-            System.out.println("*****分润参数错误userId=" + userId + ",fx_money=" + fx_money);
-            return;
-        }
-
-
-        Map<String, Object> map = mlsUserSer.getEntityMapper().getSysUserByMid(new Long(merchantId));
-        if (map == null) {
-            System.out.println("==============分销报错：" + merchantId + "=====没有找到供应商");
-            return;
-        }
-        Integer order_price = orderPrice.multiply(new BigDecimal("100")).intValue();
-        MlsUserEntity2 user = mlsUserSer.getEntityMapper().getById(userId);
-        if (user == null) {
-            System.out.println("==============分销报错：" + userId + "=====没有找到用户");
-            return;
-        }
-        BigDecimal fx = new BigDecimal(map.get("FX").toString());//上级分销比例
-        BigDecimal fx1 = new BigDecimal(map.get("FX1").toString());//上级分销比例
-        BigDecimal fx2 = new BigDecimal(map.get("FX2").toString());//上上级分销比例
-        BigDecimal pfx = new BigDecimal(map.get("PFX").toString());//平台分销比例
-        Integer fx1_money = 0;//上级分润金额
-        Integer fx2_money = 0;//上上级分润金额
-        Integer pfx_money = 0;//上上级分润金额
-        Integer user_money = 0;//本人分润金额
-        Integer brand_money = 0;//供应商金额
-        Long fid1 = 0L;//上级
-        Long fid2 = 0L;//上上级
-
-        //读取系统分润比例
-//    	String sys_fx = sysConfigService.getValue("sys_fx", null);
-//    	if(StringUtils.isNotBlank(sys_fx)) {
-//    		sys_fx_money = computeFx(orderPrice, new BigDecimal(sys_fx));
-//    		addUserRecord(0L, sys_fx_money, userId, order_price, orderId);//0L固定留给平台ID
-//    	}
-
-        //分人分润=总金额-系统分润（默认0）
-        //个人分润金额包括自己的分润、上级分润和上上级分润
-        //第一情况：没有上级或者上上级的情况分润给个人(现在使用)
-        //第二情况：没有上级或者上上级的情况分润给系统
-
-        //获得上级和上上级ID
-        fid1 = user.getFid();
-        if (fid1 != null && fid1 > 0) {
-            MlsUserEntity2 fuser = mlsUserSer.queryObject(fid1);
-            if (fuser != null) {
-                fid2 = fuser.getFid();
-            }
-        }
-        //判断是否存在上级和上上级增加分润比例
-        if (fxblIsNull(fx1) == true && fid1 != null && fid1 > 0) {
-            fx1_money = computeFx(fx_money, fx1);
-            addUserRecord(fid1, fx1_money, userId, order_price, orderId);
-        }
-        if (fxblIsNull(fx2) == true && fid2 != null && fid2 > 0) {
-            fx2_money = computeFx(fx_money, fx2);
-            addUserRecord(fid2, fx2_money, userId, order_price, orderId);
-        }
-        //计算平台分佣比例
-        if (fxblIsNull(pfx)) {
-            pfx_money = computeFx(fx_money, pfx);
-            addUserRecord(0L, pfx_money, userId, order_price, orderId);
-        }
-        //计算自己的分润比例
-        user_money = computeFx(fx_money, fx);
-        addUserRecord(user.getMlsUserId(), user_money, userId, order_price, orderId);
-        //计算供应商金额
-        brand_money = order_price - user_money - fx1_money - fx2_money - pfx_money;
-        //查询供应商ID
-        MlsUserEntity2 u = mlsUserSer.getEntityMapper().findByMerchantId(merchantId);
-        addUserRecord(u.getMlsUserId(), brand_money, userId, order_price, orderId);//1L固定留给供应商ID，多商户版本填写他的MLS_USER_ID
-    }
-
-    /**
-     * 增加分润记录
-     *
-     * @param userId
-     * @param price
-     */
-    private void addUserRecord(Long userId, int price, Long fxuser, int order_price, int orderId) {
-        UserRecord ur = new UserRecord();
-        ur.setMlsUserId(userId);
-        ur.setTypes(2);
-        ur.setTypesStr("分润");
-        ur.setPrice(price);
-        ur.setRemarks("id:" + fxuser + "分润，金额：" + price);
-        ur.setOrderId(orderId);
-        userRecordSer.save(ur);
-
-        MlsUserEntity2 mlsUserVo = new MlsUserEntity2();
-        mlsUserVo.setMlsUserId(userId);
-        mlsUserVo.setTodaySales(order_price);
-        mlsUserVo.setGetProfit(price);
-        mlsUserSer.updateMoney(mlsUserVo);
-    }
-
-    /**
-     * 根据金额和比例计算出金额
-     *
-     * @param all 金额
-     * @param bl  比例
-     * @return
-     */
-    private Integer computeFx(BigDecimal all, BigDecimal bl) {
-        return all.multiply(bl).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).intValue();
-        //return all.multiply(bl).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
-    }
-
-    private Boolean fxblIsNull(BigDecimal fx) {
-        if (fx != null && fx.compareTo(BigDecimal.ZERO) > 0) {
-            return true;
-        }
-        return false;
-    }
-
 
     /**
      * 微信订单回调接口
@@ -854,62 +551,42 @@ public class ApiPayController extends ApiBaseAction {
      * @return
      */
     @ApiOperation(value = "微信订单回调接口")
-    @RequestMapping(value = "/notify")
+    @PostMapping("/notify")
     @IgnoreAuth
-    @ResponseBody
-    public String notify(HttpServletRequest request, HttpServletResponse response) throws
+    public String notify(@RequestBody String reponseXml) throws
             IOException, WxPayException {
-        String reqId = UUID.randomUUID().toString();
-        log.info(reqId + "====notify==>返回给微信回调处理结果====>");
-        String resultWxMsg = "";//返回给微信的处理结果
-        String inputLine;
-        String reponseXml = "";
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         response.setHeader("Access-Control-Allow-Origin", "*");
-        //微信给返回的东西
-        try {
-            while ((inputLine = request.getReader().readLine()) != null) {
-                reponseXml += inputLine;
-            }
-            request.getReader().close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            resultWxMsg = setXml("fail", "xml获取失败");
+
+        if (StringUtils.isEmpty(reponseXml)) {
+            return WxPayNotifyResponse.fail("失败");
         }
 
-        if (StringUtils.isNullOrEmpty(reponseXml)) {
-            resultWxMsg = setXml("fail", "xml为空");
-        }
-
-        if (!StringUtils.isNullOrEmpty(resultWxMsg)) {
-            return resultWxMsg;
-        }
-
-        log.info(reqId + "===notify==微信回调返回======================>" + reponseXml);
+        log.info("===notify==微信回调返回======================>" + reponseXml);
         WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(reponseXml);
         String result_code = wxPayOrderNotifyResult.getResultCode();
         if (result_code.equalsIgnoreCase("FAIL")) {
             //订单编号
             String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
-            log.error(reqId + "===notify==订单" + out_trade_no + "支付失败");
-            return setXml("fail", "fail");
+            log.error("===notify==订单" + out_trade_no + "支付失败");
+            return WxPayNotifyResponse.fail("失败");
         } else if (result_code.equalsIgnoreCase("SUCCESS")) {
             //订单编号
             String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
-            log.info(reqId + "===notify==订单" + out_trade_no + "支付成功");
+            log.info("===notify==订单" + out_trade_no + "支付成功");
             try {
                 // 更改订单状态
                 // 业务处理
                 orderStatusLogic(out_trade_no, wxPayOrderNotifyResult);
             } catch (Exception ex) {
                 log.error("=====weixin===notify===error", ex);
-                return setXml("fail", "fail");
+                return WxPayNotifyResponse.fail("失败");
             }
-            return setXml("SUCCESS", "OK");
+            return WxPayNotifyResponse.success("成功");
         }
-        return setXml("SUCCESS", "OK");
+        return WxPayNotifyResponse.success("成功");
     }
 
     private void orderStatusLogic(String out_trade_no, WxPayOrderNotifyResult result) {
