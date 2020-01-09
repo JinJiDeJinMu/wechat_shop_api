@@ -437,7 +437,8 @@ public class DistributionService implements IdistributionService {
                 assert partner != null;
                 partner.setUnbalanced(partner.getUnbalanced() == null ? BigDecimal.ZERO : partner.getUnbalanced().subtract(detailModel.getMoney()));
                 if (item.getParentId().equals(detailModel.getGoldUserId())) {
-                    partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 0 : partner.getTradePerson() - 1);
+                    partner.setStatsPerson((partner.getStatsPerson() == null || partner.getStatsPerson() == 0) ? 0 : partner.getStatsPerson() - 1);
+                    partner.setTradePerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 0 : partner.getTradePerson() - 1);
                     partner.setInvalidOrderNum((partner.getInvalidOrderNum() == null || partner.getInvalidOrderNum() == 0) ? 0 : partner.getInvalidOrderNum() + 1);
                     partner.setRefundOrderNum((partner.getRefundOrderNum() == null || partner.getRefundOrderNum() == 0) ? 0 : partner.getRefundOrderNum() + 1);
                     item.setTradeOrderNum((item.getTradeOrderNum() == null || item.getTradeOrderNum() == 0) ? 0 : item.getTradeOrderNum() - 1);
@@ -451,13 +452,15 @@ public class DistributionService implements IdistributionService {
                 assert partner != null;
                 partner.setUnbalanced(partner.getUnbalanced() == null ? detailModel.getMoney() : partner.getUnbalanced().add(detailModel.getMoney()));
                 if (item.getParentId().equals(detailModel.getGoldUserId())) {
-                    partner.setStatsPerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
+                    partner.setStatsPerson((partner.getStatsPerson() == null || partner.getStatsPerson() == 0) ? 1 : partner.getStatsPerson() + 1);
+                    partner.setTradePerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
                     //绑定用户层级关系编号
                     item.setDevNum(partner.getTradePerson());
                     item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
                     item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
                     //todo:判定符合合伙人逻辑
                     if (partner.getTradePerson() > distrimoney.getFirstPersonCondition()) {
+                        log.info("判定成为合伙人的逻辑");
                         partnerService.determinePartner(distrimoney, partner.getUserId());
                     }
                 }
