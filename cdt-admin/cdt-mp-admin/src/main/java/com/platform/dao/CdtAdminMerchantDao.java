@@ -8,6 +8,6 @@ import com.platform.entity.CdtMerchantEntity;
  *
  * @date 2019-11-15 17:08:05
  */
-public interface CdtMerchantDao extends BaseBizMapper<CdtMerchantEntity> {
+public interface CdtAdminMerchantDao extends BaseBizMapper<CdtMerchantEntity> {
 
 }

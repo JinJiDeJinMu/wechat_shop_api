@@ -1,6 +1,6 @@
 package com.platform.service.impl;
 
-import com.platform.dao.CdtPaytransRecordDao;
+import com.platform.dao.CdtAdminPaytransRecordDao;
 import com.platform.entity.CdtPaytransRecordEntity;
 import com.platform.service.CdtPaytransRecordService;
 import com.platform.service.KeygenService;
@@ -22,7 +22,7 @@ public class CdtPaytransRecordServiceImpl implements CdtPaytransRecordService {
     private KeygenService keygenService;
 
     @Autowired
-    private CdtPaytransRecordDao cdtPaytransRecordDao;
+    private CdtAdminPaytransRecordDao cdtPaytransRecordDao;
 
     @Override
     public CdtPaytransRecordEntity queryObject(Long id) {

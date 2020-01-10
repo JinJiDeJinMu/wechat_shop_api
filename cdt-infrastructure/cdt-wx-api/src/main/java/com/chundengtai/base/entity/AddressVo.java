@@ -4,10 +4,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
 
-
-/**
- * @date 2017-08-15 08:03:39
- */
 public class AddressVo implements Serializable {
     private static final long serialVersionUID = 1L;
 

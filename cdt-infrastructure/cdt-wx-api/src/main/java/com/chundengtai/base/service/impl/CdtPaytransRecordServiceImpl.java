@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @date 2019-12-06 10:27:31
  */
-@Service("cdtPaytransRecordService")
+@Service("cdtPaytransRecordServiceFront")
 public class CdtPaytransRecordServiceImpl implements CdtPaytransRecordService {
     @Autowired
     private CdtPaytransRecordDao cdtPaytransRecordDao;

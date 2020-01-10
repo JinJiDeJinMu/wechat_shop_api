@@ -9,6 +9,6 @@ import com.platform.entity.CdtPaytransRecordEntity;
  * @author
  * @date 2019-12-06 10:27:31
  */
-public interface CdtPaytransRecordDao extends BaseBizMapper<CdtPaytransRecordEntity> {
+public interface CdtAdminPaytransRecordDao extends BaseBizMapper<CdtPaytransRecordEntity> {
 
 }

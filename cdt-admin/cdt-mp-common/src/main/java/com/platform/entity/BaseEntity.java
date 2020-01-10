@@ -5,8 +5,6 @@ import java.util.List;
 
 /**
  * 对业务实体做公共属性
- *
- * @date 2017年11月16日 下午10:43:36
  */
 public class BaseEntity {
     /**
