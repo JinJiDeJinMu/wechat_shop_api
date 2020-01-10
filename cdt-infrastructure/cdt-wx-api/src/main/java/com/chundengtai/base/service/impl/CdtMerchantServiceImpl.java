@@ -3,7 +3,7 @@ package com.chundengtai.base.service.impl;
 import com.chundengtai.base.dao.CdtMerchantDao;
 import com.chundengtai.base.entity.CdtMerchantEntity;
 import com.chundengtai.base.service.CdtMerchantWxService;
-import com.platform.service.KeygenService;
+import com.chundengtai.base.service.KeygenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

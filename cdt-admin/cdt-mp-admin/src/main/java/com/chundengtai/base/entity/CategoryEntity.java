@@ -1,7 +1,5 @@
 package com.chundengtai.base.entity;
 
-import com.platform.entity.Tree;
-
 /**
  * 实体
  * 表名 nideshop_category

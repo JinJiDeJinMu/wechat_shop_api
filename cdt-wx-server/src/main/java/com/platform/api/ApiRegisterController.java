@@ -1,9 +1,9 @@
 package com.platform.api;
 
 import com.chundengtai.base.utils.R;
+import com.chundengtai.base.validator.Assert;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.service.ApiUserService;
-import com.platform.validator.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

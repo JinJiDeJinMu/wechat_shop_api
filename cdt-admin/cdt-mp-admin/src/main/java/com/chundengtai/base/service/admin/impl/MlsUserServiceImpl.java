@@ -1,8 +1,8 @@
 package com.chundengtai.base.service.admin.impl;
 
 import com.chundengtai.base.dao.MlsUserDao;
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.service.admin.MlsUserService;
-import com.platform.entity.MlsUserEntity2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

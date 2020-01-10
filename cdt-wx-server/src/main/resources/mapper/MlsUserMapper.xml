@@ -67,12 +67,13 @@
         DELETE FROM MLS_USER <include refid="where"/>  
     </delete>
     
-    <select id="getById" resultType="com.platform.entity.MlsUserEntity2">
-		SELECT <include refid="columns" />
-		    FROM MLS_USER 
-	        WHERE 
-		MLS_USER_ID = #{mlsUserId} 
-	</select>
+    <select id="getById" resultType="com.chundengtai.base.entity.MlsUserEntity2">
+        SELECT
+        <include refid="columns"/>
+        FROM MLS_USER
+        WHERE
+        MLS_USER_ID = #{mlsUserId}
+    </select>
 	<update id="updateRootId" >
         UPDATE MLS_USER SET	        
 	        ROOT_ID =  #{mlsUserId} 
@@ -114,32 +115,33 @@
         SELECT count(*) FROM MLS_USER 
 		<include refid="where"/>    
     </select>
-    
-    <select id="findByEntity" resultType="com.platform.entity.MlsUserEntity2">
-    	SELECT <include refid="columns" />
-	    FROM MLS_USER 
-		<include refid="where"/>
-		
-		<!-- <if test="@Ognl@isNotEmpty(sortColumns)">
-			ORDER BY ${sortColumns}
-		</if> -->
+
+    <select id="findByEntity" resultType="com.chundengtai.base.entity.MlsUserEntity2">
+        SELECT
+        <include refid="columns"/>
+        FROM MLS_USER
+        <include refid="where"/>
+
+        <!-- <if test="@Ognl@isNotEmpty(sortColumns)">
+            ORDER BY ${sortColumns}
+        </if> -->
     </select>
-	<!--     业务sql      -->
-	<select id="findByDeviceId" resultType="com.platform.entity.MlsUserEntity2">
-    	SELECT <include refid="columns" />,LOGIN_PASSWORD as loginPassword
-	    FROM MLS_USER  where  DEVICE_ID = #{deviceId} LIMIT 1
+    <!--     业务sql      -->
+    <select id="findByDeviceId" resultType="com.chundengtai.base.entity.MlsUserEntity2">
+        SELECT<include refid="columns"/>,LOGIN_PASSWORD as loginPassword
+        FROM MLS_USER where DEVICE_ID = #{deviceId} LIMIT 1
     </select>
-    <select id="findByUserTel" resultType="com.platform.entity.MlsUserEntity2">
-    	SELECT <include refid="columns" />,LOGIN_PASSWORD as loginPassword
-	    FROM MLS_USER where  USER_TEL = #{userTel} LIMIT 1
+    <select id="findByUserTel" resultType="com.chundengtai.base.entity.MlsUserEntity2">
+        SELECT<include refid="columns"/>,LOGIN_PASSWORD as loginPassword
+        FROM MLS_USER where USER_TEL = #{userTel} LIMIT 1
     </select>
-    <select id="findByUserId" resultType="com.platform.entity.MlsUserEntity2">
-    	SELECT <include refid="columns" />,LOGIN_PASSWORD as loginPassword
-	    FROM MLS_USER where  USER_ID = #{userId} LIMIT 1
+    <select id="findByUserId" resultType="com.chundengtai.base.entity.MlsUserEntity2">
+        SELECT<include refid="columns"/>,LOGIN_PASSWORD as loginPassword
+        FROM MLS_USER where USER_ID = #{userId} LIMIT 1
     </select>
-    <select id="findByMerchantId" resultType="com.platform.entity.MlsUserEntity2">
-    	SELECT <include refid="columns" />,LOGIN_PASSWORD as loginPassword
-	    FROM MLS_USER where  merchant_id = #{merchantId} and FID='-1' LIMIT 1
+    <select id="findByMerchantId" resultType="com.chundengtai.base.entity.MlsUserEntity2">
+        SELECT<include refid="columns"/>,LOGIN_PASSWORD as loginPassword
+        FROM MLS_USER where merchant_id = #{merchantId} and FID='-1' LIMIT 1
     </select>
     
     

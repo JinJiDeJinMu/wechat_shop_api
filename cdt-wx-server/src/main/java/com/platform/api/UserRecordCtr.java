@@ -1,9 +1,9 @@
 
 package com.platform.api;
 
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.platform.annotation.APPLoginUser;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.entity.MlsUserEntity2;
 import com.platform.entity.UserRecord;
 import com.platform.service.UserRecordSer;
 import com.platform.util.ApiBaseAction;

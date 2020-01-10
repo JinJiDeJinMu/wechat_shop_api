@@ -1,9 +1,9 @@
 package com.platform.service;
 
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.utils.Query;
 import com.platform.dao.ApiGoodsMapper;
 import com.platform.entity.GoodsVo;
-import com.platform.entity.MlsUserEntity2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

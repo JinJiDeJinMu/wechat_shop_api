@@ -1,11 +1,10 @@
 package com.chundengtai.base.controller;
 
 import com.chundengtai.base.annotation.SysLog;
+import com.chundengtai.base.entity.SysDeptEntity;
+import com.chundengtai.base.service.SysDeptService;
 import com.chundengtai.base.utils.Constant;
 import com.chundengtai.base.utils.R;
-import com.platform.controller.AbstractController;
-import com.platform.entity.SysDeptEntity;
-import com.platform.service.SysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

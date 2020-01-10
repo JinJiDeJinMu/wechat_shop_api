@@ -2,14 +2,14 @@ package com.chundengtai.base.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.chundengtai.base.annotation.SysLog;
+import com.chundengtai.base.entity.SmsConfig;
+import com.chundengtai.base.entity.SysSmsLogEntity;
+import com.chundengtai.base.service.SysConfigService;
+import com.chundengtai.base.service.SysSmsLogService;
 import com.chundengtai.base.utils.Constant;
 import com.chundengtai.base.utils.PageUtils;
 import com.chundengtai.base.utils.Query;
 import com.chundengtai.base.utils.R;
-import com.platform.entity.SmsConfig;
-import com.platform.entity.SysSmsLogEntity;
-import com.platform.service.SysConfigService;
-import com.platform.service.SysSmsLogService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

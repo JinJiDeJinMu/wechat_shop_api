@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.SysUserDao">
-	<select id="queryObject" resultType="com.platform.entity.SysUserEntity">
+<mapper namespace="com.chundengtai.base.dao.SysUserDao">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.SysUserEntity">
 		select u.*,u.merchant_id as merchantId,u.merchant_name as merchantName from sys_user u where u.user_id = #{value}
 	</select>
-	
-	<select id="queryList" resultType="com.platform.entity.SysUserEntity">
-		select u.*,u.merchant_id as merchantId,u.merchant_name as merchantName ,(select d.name from sys_dept d where d.dept_id = u.dept_id) deptName from sys_user u
-		<where>
-			<if test="createUserId != null">
-				and `create_user_id` = #{createUserId} 
-			</if>
+
+    <select id="queryList" resultType="com.chundengtai.base.entity.SysUserEntity">
+        select u.*,u.merchant_id as merchantId,u.merchant_name as merchantName ,(select d.name from sys_dept d where
+        d.dept_id = u.dept_id) deptName from sys_user u
+        <where>
+            <if test="createUserId != null">
+                and `create_user_id` = #{createUserId}
+            </if>
             <if test="username != null and username != ''">
-				and u.`username` like concat('%',#{username},'%')
-			</if>
-		</where>
-		<choose>
+                and u.`username` like concat('%',#{username},'%')
+            </if>
+        </where>
+        <choose>
             <when test="sidx != null and sidx != ''">
 				order by u.${sidx} ${order}
-			</when>
-			<otherwise>
-				order by u.user_id desc
-			</otherwise>
-		</choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
-	</select>
+            </when>
+            <otherwise>
+                order by u.user_id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
 
-	<select id="queryListByBean" resultType="com.platform.entity.UserWindowDto">
-		select
-		id,username name,dept_Id
-		from sys_user
-		WHERE 1=1
+    <select id="queryListByBean" resultType="com.chundengtai.base.entity.UserWindowDto">
+        select
+        id,username name,dept_Id
+        from sys_user
+        WHERE 1=1
         <if test="name != null and name != ''">
-			AND username LIKE concat('%',#{name},'%')
-		</if>
-	</select>
+            AND username LIKE concat('%',#{name},'%')
+        </if>
+    </select>
 
-	<select id="queryTotal" resultType="int">
+    <select id="queryTotal" resultType="int">
 		select count(*) from sys_user
 		<where>
 			<if test="createUserId != null">
@@ -61,19 +62,20 @@
 			LEFT JOIN sys_menu m on rm.menu_id = m.menu_id 
 		where ur.user_id = #{userId}
 	</select>
-	
-	<!-- 查询用户的所有菜单ID --> 
-	<select id="queryAllMenuId" resultType="long">
+
+    <!-- 查询用户的所有菜单ID -->
+    <select id="queryAllMenuId" resultType="long">
 		select distinct rm.menu_id from sys_user_role ur 
 			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
 		where ur.user_id = #{userId}
 	</select>
-	
-	<select id="queryByUserName" resultType="com.platform.entity.SysUserEntity">
+
+    <select id="queryByUserName" resultType="com.chundengtai.base.entity.SysUserEntity">
 		select * from sys_user where username = #{username}
 	</select>
-	
-	<insert id="save" parameterType="com.platform.entity.SysUserEntity" useGeneratedKeys="true" keyProperty="userId">
+
+    <insert id="save" parameterType="com.chundengtai.base.entity.SysUserEntity" useGeneratedKeys="true"
+            keyProperty="userId">
 		insert into sys_user
 		(
 			`user_id`, 
@@ -103,22 +105,22 @@
 			#{merchantName}, #{fx},	#{fx1},	#{fx2},#{pfx},#{allShow}
 		)
 	</insert>
-	
-	<update id="updateMerchantId" parameterType="com.platform.entity.SysUserEntity">
+
+    <update id="updateMerchantId" parameterType="com.chundengtai.base.entity.SysUserEntity">
 		update sys_user  set merchant_id=#{userId} 	where user_id = #{userId} 
 	</update>
-	 
-	<update id="update" parameterType="com.platform.entity.SysUserEntity">
-		update sys_user 
-		<set> 
-			<if test="username != null">`username` = #{username}, </if>
-			<if test="password != null">`password` = #{password}, </if>
-			<if test="email != null">`email` = #{email}, </if>
-			<if test="mobile != null">`mobile` = #{mobile}, </if>
-			<if test="status != null">`status` = #{status}, </if>
-			<if test="deptId != null">`dept_id` = #{deptId}, </if>
-			<if test="merchantName != null">`merchant_name` = #{merchantName}, </if>
-			<if test="fx != null">`fx` = #{fx}, </if>
+
+    <update id="update" parameterType="com.chundengtai.base.entity.SysUserEntity">
+        update sys_user
+        <set>
+            <if test="username != null">`username` = #{username},</if>
+            <if test="password != null">`password` = #{password},</if>
+            <if test="email != null">`email` = #{email},</if>
+            <if test="mobile != null">`mobile` = #{mobile},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+            <if test="merchantName != null">`merchant_name` = #{merchantName},</if>
+            <if test="fx != null">`fx` = #{fx},</if>
 			<if test="fx1 != null">`fx1` = #{fx1}, </if>		
 			<if test="fx2 != null">`fx2` = #{fx2}, </if>
 			<if test="pfx != null">`pfx` = #{pfx}, </if>

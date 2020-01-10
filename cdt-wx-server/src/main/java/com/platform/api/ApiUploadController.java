@@ -1,8 +1,8 @@
 package com.platform.api;
 
+import com.chundengtai.base.oss.OSSFactory;
 import com.chundengtai.base.utils.RRException;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.oss.OSSFactory;
 import com.platform.util.ApiBaseAction;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

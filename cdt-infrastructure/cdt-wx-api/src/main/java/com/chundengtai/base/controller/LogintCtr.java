@@ -3,9 +3,9 @@ package com.chundengtai.base.controller;
 
 
 import com.chundengtai.base.annotation.IgnoreAuth;
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.service.MlsUserSer;
 import com.chundengtai.base.util.ApiBaseAction;
-import com.platform.entity.MlsUserEntity2;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

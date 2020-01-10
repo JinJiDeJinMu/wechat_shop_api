@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
         http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
 
-	<!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的UserRealm.java -->  
-	<bean id="userRealm" class="com.platform.shiro.UserRealm"/>
+    <!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的UserRealm.java -->
+    <bean id="userRealm" class="com.chundengtai.base.shiro.UserRealm"/>
 
     <!--<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">-->
     <bean id="sessionManager" class="com.chundengtai.base.config.CustomSessionManager">
-		<!-- 设置session过期时间为1小时(单位：毫秒)，默认为30分钟 -->
-		<property name="globalSessionTimeout" value="3600000"></property>
-		<property name="sessionValidationSchedulerEnabled" value="true"></property>
-		<property name="sessionIdUrlRewritingEnabled" value="false"></property>
-		<property name="sessionDAO">
-			<bean class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
-			</bean>
+        <!-- 设置session过期时间为1小时(单位：毫秒)，默认为30分钟 -->
+        <property name="globalSessionTimeout" value="3600000"></property>
+        <property name="sessionValidationSchedulerEnabled" value="true"></property>
+        <property name="sessionIdUrlRewritingEnabled" value="false"></property>
+        <property name="sessionDAO">
+            <bean class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+            </bean>
 		</property>
 		<!--<property name="sessionDAO" ref="cluterShiroSessionDao"/>-->
 	</bean>

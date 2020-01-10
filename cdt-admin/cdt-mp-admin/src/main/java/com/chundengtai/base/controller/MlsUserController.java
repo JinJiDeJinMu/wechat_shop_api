@@ -1,10 +1,10 @@
 package com.chundengtai.base.controller;
 
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.service.admin.MlsUserService;
 import com.chundengtai.base.utils.PageUtils;
 import com.chundengtai.base.utils.Query;
 import com.chundengtai.base.utils.R;
-import com.platform.entity.MlsUserEntity2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,6 +1,6 @@
 package com.chundengtai.base.utils;
 
-import com.platform.entity.SysUserEntity;
+import com.chundengtai.base.entity.SysUserEntity;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;

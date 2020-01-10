@@ -1,5 +1,7 @@
 package com.platform.entity;
 
+import com.chundengtai.base.entity.SysRegionEntity;
+
 /**
  * @author lipengjun
  * @email 939961241@qq.com

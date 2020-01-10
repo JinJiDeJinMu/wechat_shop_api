@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.SysLogDao">
+<mapper namespace="com.chundengtai.base.dao.SysLogDao">
 
-	<select id="queryObject" resultType="com.platform.entity.SysLogEntity">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.SysLogEntity">
 		select * from sys_log where id = #{value}
 	</select>
 
-	<select id="queryList" resultType="com.platform.entity.SysLogEntity">
-		select * from sys_log
-		<where>
+    <select id="queryList" resultType="com.chundengtai.base.entity.SysLogEntity">
+        select * from sys_log
+        <where>
             <if test="key != null and key != ''">
-				and `username` like concat('%',#{key},'%') or `operation` like concat('%',#{key},'%')
-			</if>
+                and `username` like concat('%',#{key},'%') or `operation` like concat('%',#{key},'%')
+            </if>
             <if test="operation != null and operation != ''">
-				`operation` like concat('%',#{operation},'%')
-			</if>
-		</where>
-		order by id desc 
+                `operation` like concat('%',#{operation},'%')
+            </if>
+        </where>
+        order by id desc
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
 		</if>
@@ -25,17 +25,17 @@
 	
  	<select id="queryTotal" resultType="int">
 		select count(*) from sys_log
-		<where>
+        <where>
             <if test="key != null and key != ''">
                 `username` like concat('%',#{key},'%') or `operation` like concat('%',#{key},'%')
-			</if>
+            </if>
             <if test="operation != null and operation != ''">
-				and `operation` like concat('%',#{operation},'%')
-			</if>
-		</where>
-	</select>
-	 
-	<insert id="save" parameterType="com.platform.entity.SysLogEntity" useGeneratedKeys="true" keyProperty="id">
+                and `operation` like concat('%',#{operation},'%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.chundengtai.base.entity.SysLogEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into sys_log
 		(
 			`username`, 
@@ -55,18 +55,18 @@
 			#{createDate}
 		)
 	</insert>
-	 
-	<update id="update" parameterType="com.platform.entity.SysLogEntity">
-		update sys_log 
-		<set>
-			<if test="username != null">`username` = #{username}, </if>
-			<if test="operation != null">`operation` = #{operation}, </if>
-			<if test="method != null">`method` = #{method}, </if>
-			<if test="params != null">`params` = #{params}, </if>
-			<if test="ip != null">`ip` = #{ip} </if>
-		</set>
-		where id = #{id}
-	</update>
+
+    <update id="update" parameterType="com.chundengtai.base.entity.SysLogEntity">
+        update sys_log
+        <set>
+            <if test="username != null">`username` = #{username},</if>
+            <if test="operation != null">`operation` = #{operation},</if>
+            <if test="method != null">`method` = #{method},</if>
+            <if test="params != null">`params` = #{params},</if>
+            <if test="ip != null">`ip` = #{ip}</if>
+        </set>
+        where id = #{id}
+    </update>
 	
 	<delete id="delete">
 		delete from sys_log where id = #{value}

@@ -1,10 +1,10 @@
 package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.utils.Base64;
 import com.chundengtai.base.utils.CharUtil;
 import com.platform.annotation.LoginUser;
-import com.platform.entity.MlsUserEntity2;
 import com.platform.entity.UserGoods;
 import com.platform.entity.UserRecord;
 import com.platform.entity.UserVo;

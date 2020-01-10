@@ -3,11 +3,11 @@ package com.chundengtai.base.controller;
 
 import com.chundengtai.base.annotation.APPLoginUser;
 import com.chundengtai.base.annotation.IgnoreAuth;
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.entity.UserRecord;
 import com.chundengtai.base.service.UserRecordSer;
 import com.chundengtai.base.util.ApiBaseAction;
 import com.chundengtai.base.util.ApiPageUtils;
-import com.platform.entity.MlsUserEntity2;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;

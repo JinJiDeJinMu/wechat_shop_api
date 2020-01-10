@@ -12,7 +12,6 @@ import com.chundengtai.base.utils.DateUtils;
 import com.chundengtai.base.utils.Query;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.platform.entity.MlsUserEntity2;
 import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

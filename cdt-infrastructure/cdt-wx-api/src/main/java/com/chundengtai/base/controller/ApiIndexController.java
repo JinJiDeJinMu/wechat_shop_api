@@ -9,7 +9,6 @@ import com.chundengtai.base.util.ApiPageUtils;
 import com.chundengtai.base.utils.Query;
 import com.chundengtai.base.utils.StringUtils;
 import com.github.pagehelper.PageHelper;
-import com.platform.entity.MlsUserEntity2;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

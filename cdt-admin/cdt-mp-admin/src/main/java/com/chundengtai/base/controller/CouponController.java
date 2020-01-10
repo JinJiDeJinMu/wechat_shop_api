@@ -1,6 +1,7 @@
 package com.chundengtai.base.controller;
 
 import com.chundengtai.base.entity.CouponEntity;
+import com.chundengtai.base.entity.SysUserEntity;
 import com.chundengtai.base.service.admin.CouponService;
 import com.chundengtai.base.utils.PageUtils;
 import com.chundengtai.base.utils.Query;
@@ -8,7 +9,6 @@ import com.chundengtai.base.utils.R;
 import com.chundengtai.base.utils.ShiroUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.platform.entity.SysUserEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

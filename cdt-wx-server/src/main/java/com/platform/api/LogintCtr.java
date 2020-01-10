@@ -2,8 +2,8 @@
 package com.platform.api;
 
 
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.entity.MlsUserEntity2;
 import com.platform.service.MlsUserSer;
 import com.platform.util.ApiBaseAction;
 import io.swagger.annotations.Api;

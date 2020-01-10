@@ -2,6 +2,7 @@ package com.chundengtai.base.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chundengtai.base.annotation.LoginUser;
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.entity.UserGoods;
 import com.chundengtai.base.entity.UserRecord;
 import com.chundengtai.base.entity.UserVo;
@@ -14,7 +15,6 @@ import com.chundengtai.base.util.wechat.WechatRefundApiResult;
 import com.chundengtai.base.util.wechat.WechatUtil;
 import com.chundengtai.base.utils.Base64;
 import com.chundengtai.base.utils.CharUtil;
-import com.platform.entity.MlsUserEntity2;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;

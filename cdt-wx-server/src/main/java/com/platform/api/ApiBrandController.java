@@ -1,10 +1,10 @@
 package com.platform.api;
 
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.utils.Query;
 import com.platform.annotation.APPLoginUser;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.BrandVo;
-import com.platform.entity.MlsUserEntity2;
 import com.platform.service.ApiBrandService;
 import com.platform.service.ApiGoodsService;
 import com.platform.util.ApiBaseAction;

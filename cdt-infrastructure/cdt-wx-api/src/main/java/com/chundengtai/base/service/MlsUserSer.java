@@ -2,12 +2,12 @@ package com.chundengtai.base.service;
 
 import com.chundengtai.base.dao.MlsUserMapper;
 import com.chundengtai.base.dao.UserRecordMapper;
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.entity.OrderVo;
 import com.chundengtai.base.entity.UserGoods;
 import com.chundengtai.base.entity.UserRecord;
 import com.chundengtai.base.util.SmsUtils;
 import com.chundengtai.base.utils.CharUtil;
-import com.platform.entity.MlsUserEntity2;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

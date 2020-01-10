@@ -1,8 +1,8 @@
 
 package com.platform.api;
 
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.platform.annotation.APPLoginUser;
-import com.platform.entity.MlsUserEntity2;
 import com.platform.entity.UserVo;
 import com.platform.service.ApiUserService;
 import com.platform.service.MlsUserSer;

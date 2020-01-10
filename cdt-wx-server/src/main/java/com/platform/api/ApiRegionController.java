@@ -1,10 +1,10 @@
 package com.platform.api;
 
+import com.chundengtai.base.cache.RegionCacheUtil;
+import com.chundengtai.base.entity.SysRegionEntity;
 import com.chundengtai.base.utils.StringUtils;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.cache.RegionCacheUtil;
 import com.platform.entity.RegionVo;
-import com.platform.entity.SysRegionEntity;
 import com.platform.util.ApiBaseAction;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

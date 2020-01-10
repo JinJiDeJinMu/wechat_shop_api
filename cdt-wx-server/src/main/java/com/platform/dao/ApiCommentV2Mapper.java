@@ -1,5 +1,6 @@
 package com.platform.dao;
 
+import com.chundengtai.base.dao.BaseDao;
 import com.platform.entity.CommentReq;
 
 /**

@@ -7,8 +7,6 @@ import com.chundengtai.base.entity.*;
 import com.chundengtai.base.utils.DateUtils;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
-import com.platform.entity.MlsUserEntity2;
-import com.platform.service.KeygenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.platform.resolver;
 
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.platform.annotation.APPLoginUser;
-import com.platform.entity.MlsUserEntity2;
 import com.platform.interceptor.AuthorizationInterceptor;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

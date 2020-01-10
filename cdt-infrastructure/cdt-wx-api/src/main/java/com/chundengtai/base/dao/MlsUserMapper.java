@@ -1,8 +1,8 @@
 package com.chundengtai.base.dao;
 
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.entity.UserGoods;
 import com.chundengtai.base.util.EntityDao;
-import com.platform.entity.MlsUserEntity2;
 
 import java.util.List;
 import java.util.Map;

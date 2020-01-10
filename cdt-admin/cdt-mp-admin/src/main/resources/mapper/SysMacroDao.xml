@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.SysMacroDao">
+<mapper namespace="com.chundengtai.base.dao.SysMacroDao">
 
-    <resultMap type="com.platform.entity.SysMacroEntity" id="sysMacroMap">
+    <resultMap type="com.chundengtai.base.entity.SysMacroEntity" id="sysMacroMap">
         <result property="id" column="id"/>
         <result property="parentId" column="parent_id"/>
         <result property="name" column="name"/>
@@ -16,7 +16,7 @@
         <result property="gmtModified" column="gmt_modified"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.SysMacroEntity">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.SysMacroEntity">
 		select
 			`id`,
 			`parent_id`,
@@ -32,7 +32,7 @@
 		where id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.SysMacroEntity">
+    <select id="queryList" resultType="com.chundengtai.base.entity.SysMacroEntity">
         select
         `id`,
         `parent_id`,
@@ -70,7 +70,8 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.SysMacroEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.chundengtai.base.entity.SysMacroEntity" useGeneratedKeys="true"
+            keyProperty="id">
 		insert into sys_macro(
 			parent_id,
 			`name`,
@@ -93,7 +94,7 @@
 			#{gmtModified})
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.SysMacroEntity">
+    <update id="update" parameterType="com.chundengtai.base.entity.SysMacroEntity">
         update sys_macro
         <set>
             <if test="parentId != null">`parent_id` = #{parentId},</if>
@@ -120,7 +121,7 @@
         </foreach>
     </delete>
 
-    <select id="queryMacrosByValue" resultType="com.platform.entity.SysMacroEntity">
+    <select id="queryMacrosByValue" resultType="com.chundengtai.base.entity.SysMacroEntity">
         select
         `id`,
         `parent_id`,

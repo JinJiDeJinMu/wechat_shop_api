@@ -1,5 +1,7 @@
 package com.platform.api;
 
+import com.chundengtai.base.entity.MlsUserEntity2;
+import com.chundengtai.base.oss.OSSFactory;
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.utils.Base64;
 import com.chundengtai.base.utils.*;
@@ -10,7 +12,6 @@ import com.platform.annotation.APPLoginUser;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.*;
-import com.platform.oss.OSSFactory;
 import com.platform.service.*;
 import com.platform.util.*;
 import com.qiniu.util.StringUtils;

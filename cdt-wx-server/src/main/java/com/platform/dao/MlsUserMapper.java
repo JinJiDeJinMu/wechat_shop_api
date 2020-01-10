@@ -1,6 +1,6 @@
 package com.platform.dao;
 
-import com.platform.entity.MlsUserEntity2;
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.platform.entity.UserGoods;
 import com.platform.util.EntityDao;
 

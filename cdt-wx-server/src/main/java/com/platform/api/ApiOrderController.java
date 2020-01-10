@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.chundengtai.base.service.KeygenService;
 import com.chundengtai.base.utils.CharUtil;
 import com.chundengtai.base.utils.Query;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;

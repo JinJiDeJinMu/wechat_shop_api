@@ -2,8 +2,8 @@ package com.chundengtai.base.service.admin.impl;
 
 import com.chundengtai.base.dao.CdtAdminPaytransRecordDao;
 import com.chundengtai.base.entity.CdtPaytransRecordEntity;
+import com.chundengtai.base.service.KeygenService;
 import com.chundengtai.base.service.admin.CdtPaytransRecordService;
-import com.platform.service.KeygenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

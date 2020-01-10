@@ -1,9 +1,9 @@
 package com.platform.service;
 
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.utils.CharUtil;
 import com.platform.dao.MlsUserMapper;
 import com.platform.dao.UserRecordMapper;
-import com.platform.entity.MlsUserEntity2;
 import com.platform.entity.OrderVo;
 import com.platform.entity.UserGoods;
 import com.platform.entity.UserRecord;

@@ -3,7 +3,7 @@ package com.platform.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.platform.cache.RegionCacheUtil;
+import com.chundengtai.base.cache.RegionCacheUtil;
 import com.platform.interceptor.AuthorizationInterceptor;
 import com.platform.resolver.LoginUserHandlerMethodArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;

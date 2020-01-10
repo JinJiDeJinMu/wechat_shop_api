@@ -1,7 +1,5 @@
 package com.chundengtai.base.entity;
 
-import com.platform.entity.SysRegionEntity;
-
 /**
  * @date 2017-08-15 08:03:41
  */

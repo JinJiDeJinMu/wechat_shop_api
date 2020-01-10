@@ -70,7 +70,7 @@
             <mvc:exclude-mapping path="/statics/**"/>
             <mvc:exclude-mapping path="/**/**.html"/>
             <mvc:exclude-mapping path="/**/**.js"/>
-            <bean class="com.platform.interceptor.LogInterceptor"/>
+            <bean class="com.chundengtai.base.interceptor.LogInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 

@@ -1,6 +1,6 @@
 package com.chundengtai.base.utils;
 
-import com.platform.xss.SQLFilter;
+import com.chundengtai.base.xss.SQLFilter;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

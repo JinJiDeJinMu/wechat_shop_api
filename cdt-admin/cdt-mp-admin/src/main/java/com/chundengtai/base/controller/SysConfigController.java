@@ -1,13 +1,12 @@
 package com.chundengtai.base.controller;
 
 import com.chundengtai.base.annotation.SysLog;
+import com.chundengtai.base.entity.SysConfigEntity;
+import com.chundengtai.base.service.SysConfigService;
 import com.chundengtai.base.utils.PageUtils;
 import com.chundengtai.base.utils.Query;
 import com.chundengtai.base.utils.R;
-import com.platform.controller.AbstractController;
-import com.platform.entity.SysConfigEntity;
-import com.platform.service.SysConfigService;
-import com.platform.validator.ValidatorUtils;
+import com.chundengtai.base.validator.ValidatorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.SysRegionDao">
+<mapper namespace="com.chundengtai.base.dao.SysRegionDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.platform.entity.SysRegionEntity" id="regionMap">
+    <resultMap type="com.chundengtai.base.entity.SysRegionEntity" id="regionMap">
         <result property="id" column="id"/>
         <result property="parentId" column="parent_id"/>
         <result property="name" column="name"/>
@@ -65,7 +65,8 @@
         </where>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.SysRegionEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.chundengtai.base.entity.SysRegionEntity" useGeneratedKeys="true"
+            keyProperty="id">
 		insert into sys_region
 		(
 			`parent_id`, 
@@ -82,7 +83,7 @@
 		)
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.SysRegionEntity">
+    <update id="update" parameterType="com.chundengtai.base.entity.SysRegionEntity">
         update sys_region
         <set>
             <if test="parentId != null">`parent_id` = #{parentId},</if>

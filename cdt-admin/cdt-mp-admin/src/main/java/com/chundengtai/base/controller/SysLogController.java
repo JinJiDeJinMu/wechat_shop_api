@@ -1,10 +1,10 @@
 package com.chundengtai.base.controller;
 
+import com.chundengtai.base.entity.SysLogEntity;
+import com.chundengtai.base.service.SysLogService;
 import com.chundengtai.base.utils.PageUtils;
 import com.chundengtai.base.utils.Query;
 import com.chundengtai.base.utils.R;
-import com.platform.entity.SysLogEntity;
-import com.platform.service.SysLogService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

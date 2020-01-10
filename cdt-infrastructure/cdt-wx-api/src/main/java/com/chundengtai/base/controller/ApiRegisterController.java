@@ -3,7 +3,7 @@ package com.chundengtai.base.controller;
 import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.service.ApiUserService;
 import com.chundengtai.base.utils.R;
-import com.platform.validator.Assert;
+import com.chundengtai.base.validator.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

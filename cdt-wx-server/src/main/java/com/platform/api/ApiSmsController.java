@@ -1,9 +1,9 @@
 package com.platform.api;
 
+import com.chundengtai.base.entity.SysSmsLogEntity;
+import com.chundengtai.base.service.SysSmsLogService;
 import com.chundengtai.base.utils.*;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.entity.SysSmsLogEntity;
-import com.platform.service.SysSmsLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

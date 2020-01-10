@@ -6,7 +6,7 @@ import com.chundengtai.base.entity.SmsLogVo;
 import com.chundengtai.base.entity.UserLevelVo;
 import com.chundengtai.base.entity.UserVo;
 import com.chundengtai.base.utils.RRException;
-import com.platform.validator.Assert;
+import com.chundengtai.base.validator.Assert;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

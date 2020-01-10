@@ -1,10 +1,10 @@
 package com.chundengtai.base.controller;
 
+import com.chundengtai.base.constance.ShopShow;
+import com.chundengtai.base.entity.SysUserEntity;
 import com.chundengtai.base.entity.UserCouponEntity;
 import com.chundengtai.base.service.admin.UserCouponService;
 import com.chundengtai.base.utils.*;
-import com.platform.constance.ShopShow;
-import com.platform.entity.SysUserEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

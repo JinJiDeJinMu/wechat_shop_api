@@ -1,6 +1,6 @@
 package com.chundengtai.base.service.admin;
 
-import com.platform.entity.MlsUserEntity2;
+import com.chundengtai.base.entity.MlsUserEntity2;
 
 import java.util.List;
 import java.util.Map;

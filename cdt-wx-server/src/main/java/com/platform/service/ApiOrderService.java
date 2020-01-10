@@ -2,6 +2,7 @@ package com.platform.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chundengtai.base.constant.CacheConstant;
+import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.utils.DateUtils;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.platform.dao.*;
