@@ -65,22 +65,17 @@
     });
 
     /*********************************对String类型原型扩展********************************************/
-    /**
-     * 功能描述:对String 类型原型扩展
-     *
-     * @author 李鹏军
-     */
-    jQuery.extend(String.prototype, {
+     jQuery.extend(String.prototype, {
 
-        /**
-         * String转Date(兼容IE)
-         *
-         * eg:"2017-3-24 08:30:30".toDate();
-         *
-         * @returns {Date}
-         */
-        toDate: function () {
-            return new Date(this.replace("-", "/").replace("-", "/"));
+         /**
+          * String转Date(兼容IE)
+          *
+          * eg:"2017-3-24 08:30:30".toDate();
+          *
+          * @returns {Date}
+          */
+         toDate: function () {
+             return new Date(this.replace("-", "/").replace("-", "/"));
         },
         /**
          * 在字符串末尾追加字符串
@@ -359,11 +354,6 @@
         }
     });
 
-    /**
-     * 功能描述:对Array 类型原型扩展
-     *
-     * @author 李鹏军
-     */
     jQuery.extend(Array.prototype, {
 
         /**

@@ -23,10 +23,6 @@ import java.util.Map;
 
 /**
  * 系统用户
- *
- * @author 李鹏军
-
- * @date 2016年12月18日 上午9:46:09
  */
 @Service("sysUserService")
 public class SysUserServiceImpl implements SysUserService {
