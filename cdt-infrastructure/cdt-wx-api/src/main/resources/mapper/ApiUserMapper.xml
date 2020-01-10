@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.ApiUserMapper">
+<mapper namespace="com.chundengtai.base.dao.ApiUserMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.platform.entity.UserVo" id="userMap">
+    <resultMap type="com.chundengtai.base.entity.UserVo" id="userMap">
         <result property="userId" column="id"/>
         <result property="username" column="username"/>
         <result property="password" column="password"/>
@@ -66,7 +66,7 @@
 		select count(*) from nideshop_user 
 	</select>
 
-    <insert id="save" parameterType="com.platform.entity.UserVo" useGeneratedKeys="true" keyProperty="userId">
+    <insert id="save" parameterType="com.chundengtai.base.entity.UserVo" useGeneratedKeys="true" keyProperty="userId">
 		insert into nideshop_user
 		(
 			`username`, 
@@ -109,7 +109,7 @@
 		)
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.UserVo">
+    <update id="update" parameterType="com.chundengtai.base.entity.UserVo">
         update nideshop_user
         <set>
             <if test="username != null">`username` = #{username},</if>
@@ -138,8 +138,8 @@
         </set>
         where id = #{userId}
     </update>
-    
-    <update id="updatefx" parameterType="com.platform.entity.UserVo">
+
+    <update id="updatefx" parameterType="com.chundengtai.base.entity.UserVo">
         update nideshop_user
         <set>
             <if test="fx1 != null">`fx1` = #{fx1},</if>
@@ -149,7 +149,7 @@
     </update>
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.platform.entity.SmsLogVo" id="smslogMap">
+    <resultMap type="com.chundengtai.base.entity.SmsLogVo" id="smslogMap">
         <result property="id" column="id"/>
         <result property="user_id" column="user_id"/>
         <result property="phone" column="phone"/>
@@ -173,7 +173,7 @@
         where a.user_id = #{user_id} and b.id is null
     </select>
 
-    <insert id="saveSmsCodeLog" parameterType="com.platform.entity.SmsLogVo">
+    <insert id="saveSmsCodeLog" parameterType="com.chundengtai.base.entity.SmsLogVo">
         insert into nideshop_sms_log(
         `id`,
         `user_id`,

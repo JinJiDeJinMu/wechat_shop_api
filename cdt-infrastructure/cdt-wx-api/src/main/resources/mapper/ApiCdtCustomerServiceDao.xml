@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.ApiCdtCustomerServiceDao">
+<mapper namespace="com.chundengtai.base.dao.ApiCdtCustomerServiceDao">
 
-    <resultMap type="com.platform.entity.CdtCustomerServiceVo" id="cdtCustomerServiceMap">
+    <resultMap type="com.chundengtai.base.entity.CdtCustomerServiceVo" id="cdtCustomerServiceMap">
         <result property="id" column="id"/>
         <result property="url" column="url"/>
         <result property="phone" column="phone"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.CdtCustomerServiceVo">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.CdtCustomerServiceVo">
 		select
 			`id`,
     			`url`,
@@ -18,7 +18,7 @@
 		where id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.CdtCustomerServiceVo">
+    <select id="queryList" resultType="com.chundengtai.base.entity.CdtCustomerServiceVo">
         select
         `id`,
         `url`,
@@ -49,7 +49,7 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.CdtCustomerServiceVo">
+    <insert id="save" parameterType="com.chundengtai.base.entity.CdtCustomerServiceVo">
 		insert into cdt_customer_service(
         			`id`,
                     			`url`,
@@ -60,7 +60,7 @@
                     			#{phone}            )
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.CdtCustomerServiceVo">
+    <update id="update" parameterType="com.chundengtai.base.entity.CdtCustomerServiceVo">
         update cdt_customer_service
         <set>
             <if test="url != null">`url` = #{url

@@ -1,4 +1,4 @@
-import com.platform.util.SortInfo;
+import com.chundengtai.base.util.SortInfo;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 

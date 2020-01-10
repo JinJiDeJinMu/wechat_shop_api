@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.ApiCommentPictureMapper">
+<mapper namespace="com.chundengtai.base.dao.ApiCommentPictureMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.platform.entity.CommentPictureVo" id="commentPictureMap">
+    <resultMap type="com.chundengtai.base.entity.CommentPictureVo" id="commentPictureMap">
         <result property="id" column="id"/>
         <result property="comment_id" column="comment_id"/>
         <result property="type" column="type"/>
@@ -39,7 +39,8 @@
 		select count(*) from nideshop_comment_picture where status = 1
 	</select>
 
-    <insert id="save" parameterType="com.platform.entity.CommentPictureVo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.chundengtai.base.entity.CommentPictureVo" useGeneratedKeys="true"
+            keyProperty="id">
 		insert into nideshop_comment_picture
 		(
 			`type`,
@@ -56,7 +57,7 @@
 		)
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.CommentPictureVo">
+    <update id="update" parameterType="com.chundengtai.base.entity.CommentPictureVo">
         update nideshop_comment_picture
         <set>
             <if test="type != null">`type` = #{type},</if>

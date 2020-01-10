@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platform.dao.ApiOrderMapper">
+<mapper namespace="com.chundengtai.base.dao.ApiOrderMapper">
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.platform.entity.OrderVo" id="orderMap">
+    <resultMap type="com.chundengtai.base.entity.OrderVo" id="orderMap">
         <result property="id" column="id"/>
         <result property="order_sn" column="order_sn"/>
         <result property="user_id" column="user_id"/>
@@ -195,7 +195,7 @@
             </if>
         </where>
 	</select>
-    <insert id="save" parameterType="com.platform.entity.OrderVo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.chundengtai.base.entity.OrderVo" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_order
 		(
 			`order_sn`,
@@ -292,7 +292,7 @@
 		)
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.OrderVo">
+    <update id="update" parameterType="com.chundengtai.base.entity.OrderVo">
         update nideshop_order
         <set>
             <if test="order_sn != null">`order_sn` = #{order_sn},</if>
@@ -350,7 +350,7 @@
 		where a.order_sn = #{value}
 	</select>
 
-    <update id="updateStatus" parameterType="com.platform.entity.OrderVo">
+    <update id="updateStatus" parameterType="com.chundengtai.base.entity.OrderVo">
         update nideshop_order
         <set>
             <if test="pay_status != null">`pay_status` = #{pay_status},</if>

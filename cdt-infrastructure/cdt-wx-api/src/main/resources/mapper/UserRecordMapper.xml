@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.platform.dao.UserRecordMapper">
+<mapper namespace="com.chundengtai.base.dao.UserRecordMapper">
 
-	<!-- 用于select查询公用抽取的列 -->
-	<sql id="columns">
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
 		REPORT_ID as reportId,MLS_USER_ID as mlsUserId,TYPES ,TYPES_STR as typesStr,PRICE ,REMARKS,C_TIME
 		as ctime,ORDER_ID as orderId
 	</sql>
 
-	<insert id="insert" useGeneratedKeys="true"	keyProperty="reportId">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="reportId">
 		INSERT INTO USER_RECORD (MLS_USER_ID,TYPES ,TYPES_STR ,	PRICE ,REMARKS, ORDER_ID) 
 		VALUES (#{mlsUserId} , #{types} ,#{typesStr} ,#{price} ,#{remarks} ,#{orderId})
 	</insert>
@@ -20,27 +20,27 @@
 			#{reportId} -->
 	</update>
 
-	<delete id="deleteById">
+    <delete id="deleteById">
 		DELETE FROM USER_RECORD WHERE
 		REPORT_ID = #{reportId}
 	</delete>
 
-	<delete id="removeByEntity">
-		DELETE FROM USER_RECORD
-		<include refid="where" />
-	</delete>
+    <delete id="removeByEntity">
+        DELETE FROM USER_RECORD
+        <include refid="where"/>
+    </delete>
 
-	<select id="getById" resultType="com.platform.entity.UserRecord">
-		SELECT
-		<include refid="columns" />
-		FROM USER_RECORD
-		WHERE
-		REPORT_ID = #{reportId}
-	</select>
+    <select id="getById" resultType="com.chundengtai.base.entity.UserRecord">
+        SELECT
+        <include refid="columns"/>
+        FROM USER_RECORD
+        WHERE
+        REPORT_ID = #{reportId}
+    </select>
 
-	<sql id="where">
-		<where>
-			<if test="reportId != null">
+    <sql id="where">
+        <where>
+            <if test="reportId != null">
 				AND REPORT_ID = #{reportId}
 			</if>
 			<if test="mlsUserId != null">
@@ -60,17 +60,17 @@
 		<include refid="where" />
 	</select>
 
-	<select id="findByEntity"
-		resultType="com.platform.entity.UserRecord">
-		SELECT
-		<include refid="columns" />
-		FROM USER_RECORD
-		<include refid="where" />
-		ORDER BY C_TIME desc
-		<if test="offset != null and size != null">
-			limit #{offset}, #{size}
-		</if>
-	</select>
+    <select id="findByEntity"
+            resultType="com.chundengtai.base.entity.UserRecord">
+        SELECT
+        <include refid="columns"/>
+        FROM USER_RECORD
+        <include refid="where"/>
+        ORDER BY C_TIME desc
+        <if test="offset != null and size != null">
+            limit #{offset}, #{size}
+        </if>
+    </select>
 	<!-- 业务sql -->
 </mapper>
 

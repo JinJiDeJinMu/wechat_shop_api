@@ -21,13 +21,13 @@
     <mvc:resources mapping="doc.html" location="classpath:/META-INF/resources/"/>
     <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
 
-    <bean id="authorizationInterceptor" class="com.platform.interceptor.AuthorizationInterceptor"/>
+    <bean id="authorizationInterceptor" class="com.chundengtai.base.interceptor.AuthorizationInterceptor"/>
     <mvc:annotation-driven>
         <mvc:argument-resolvers>
-            <bean class="com.platform.resolver.LoginUserHandlerMethodArgumentResolver">
+            <bean class="com.chundengtai.base.resolver.LoginUserHandlerMethodArgumentResolver">
                 <property name="userService" ref="apiUserService"></property>
             </bean>
-            <bean class="com.platform.resolver.AppLoginUserHandlerMethodArgumentResolver">
+            <bean class="com.chundengtai.base.resolver.AppLoginUserHandlerMethodArgumentResolver">
             </bean>
         </mvc:argument-resolvers>
         <mvc:message-converters register-defaults="true">

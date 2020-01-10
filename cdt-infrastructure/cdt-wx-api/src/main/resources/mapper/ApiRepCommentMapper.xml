@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.ApiRepCommentMapper">
+<mapper namespace="com.chundengtai.base.dao.ApiRepCommentMapper">
 
-    <resultMap type="com.platform.entity.RepCommentVo" id="repCommentMap">
+    <resultMap type="com.chundengtai.base.entity.RepCommentVo" id="repCommentMap">
         <result property="id" column="id"/>
         <result property="commentId" column="comment_id"/>
         <result property="userId" column="user_id"/>
@@ -12,7 +12,7 @@
         <result property="addTime" column="add_time"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.RepCommentVo">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.RepCommentVo">
 		select
 			`id`,
     			`comment_id`,
@@ -24,7 +24,7 @@
 		where id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.RepCommentVo">
+    <select id="queryList" resultType="com.chundengtai.base.entity.RepCommentVo">
         select
         `id`,
         `comment_id`,
@@ -58,7 +58,7 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.RepCommentVo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.chundengtai.base.entity.RepCommentVo" useGeneratedKeys="true" keyProperty="id">
 		insert into rep_comment(
                     			`comment_id`,
                     			`user_id`,
@@ -73,7 +73,7 @@
                     			#{addTime}            )
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.RepCommentVo">
+    <update id="update" parameterType="com.chundengtai.base.entity.RepCommentVo">
         update rep_comment
         <set>
             <if test="commentId != null">`comment_id` = #{commentId

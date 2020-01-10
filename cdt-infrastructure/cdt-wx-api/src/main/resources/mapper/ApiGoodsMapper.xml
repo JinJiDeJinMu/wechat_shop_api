@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.ApiGoodsMapper">
+<mapper namespace="com.chundengtai.base.dao.ApiGoodsMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.platform.entity.GoodsVo" id="goodsMap">
+    <resultMap type="com.chundengtai.base.entity.GoodsVo" id="goodsMap">
         <result property="id" column="id"/>
         <result property="category_id" column="category_id"/>
         <result property="goods_sn" column="goods_sn"/>
@@ -275,8 +275,8 @@
     <select id="queryMaxId" resultType="java.lang.Integer" parameterType="map">
         SELECT MAX(id) FROM nideshop_goods
     </select>
-    
-    <insert id="save" parameterType="com.platform.entity.GoodsVo">
+
+    <insert id="save" parameterType="com.chundengtai.base.entity.GoodsVo">
         insert into nideshop_goods
         (
 	        `id`,
@@ -395,7 +395,7 @@
         SELECT count(1) FROM nideshop_goods  WHERE is_secKill=#{is_secKill} and is_delete = 0 and is_on_sale = 1
     </select>
 
-    <update id="updateBrowse" parameterType="com.platform.entity.GoodsVo">
+    <update id="updateBrowse" parameterType="com.chundengtai.base.entity.GoodsVo">
         update nideshop_goods
         <set>
             `browse` =browse+1

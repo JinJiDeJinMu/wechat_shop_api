@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.GroupBuyingMapper">
+<mapper namespace="com.chundengtai.base.dao.GroupBuyingMapper">
 
-    <resultMap type="com.platform.entity.GroupBuyingVo" id="BaseResultMap">
+    <resultMap type="com.chundengtai.base.entity.GroupBuyingVo" id="BaseResultMap">
         <result property="id" column="id"/>
         <result property="goodsId" column="goods_id"/>
         <result property="goodsName" column="goods_name"/>
@@ -12,7 +12,7 @@
         <result property="types" column="types"/>
         <result property="merchantId" column="merchant_id"/>
         <result property="endTime" column="end_time"/>
-        
+
     </resultMap>
 
     <sql id="Example_Where_Clause" >
@@ -83,17 +83,17 @@
   	</sql>
 
 
-    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.platform.entity.GroupBuyingVo" >
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.chundengtai.base.entity.GroupBuyingVo">
         select
-        <if test="distinct" >
+        <if test="distinct">
             distinct
         </if>
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from group_buying
-        <if test="_parameter != null" >
-            <include refid="Example_Where_Clause" />
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
         </if>
-        <if test="orderByClause != null" >
+        <if test="orderByClause != null">
             order by ${orderByClause}
         </if>
         <if test="pageStart!=null and pageStart gt -1" >
@@ -110,10 +110,10 @@
         delete from group_buying
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.platform.entity.GroupBuyingVo" >
+    <delete id="deleteByExample" parameterType="com.chundengtai.base.entity.GroupBuyingVo">
         delete from group_buying
-        <if test="_parameter != null" >
-            <include refid="Example_Where_Clause" />
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
         </if>
     </delete>
     <delete id="deleteBatch">
@@ -122,7 +122,7 @@
           #{id}
 </foreach>
     </delete>
-    <insert id="insert" parameterType="com.platform.entity.GroupBuyingVo">
+    <insert id="insert" parameterType="com.chundengtai.base.entity.GroupBuyingVo">
 		insert into group_buying(
           `id`,
           `goods_id`,
@@ -143,17 +143,17 @@
 	</insert>
 
 
-    <insert id="insertSelective" parameterType="com.platform.entity.GroupBuyingVo">
+    <insert id="insertSelective" parameterType="com.chundengtai.base.entity.GroupBuyingVo">
         insert into group_buying
-        <trim prefix="(" suffix=")" suffixOverrides="," >
-          <if test="id != null">
-            `id`,
-          </if>
-          <if test="goodsId != null">
-            `goods_id`,
-          </if>
-          <if test="goodsName != null">
-            `goods_name`,
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                `id`,
+            </if>
+            <if test="goodsId != null">
+                `goods_id`,
+            </if>
+            <if test="goodsName != null">
+                `goods_name`,
           </if>
           <if test="groupNum != null">
             `group_num`,
@@ -186,9 +186,9 @@
             </if>
         </trim>
     </insert>
-    
-    
-    <insert id="save" parameterType="com.platform.entity.GroupBuyingVo">
+
+
+    <insert id="save" parameterType="com.chundengtai.base.entity.GroupBuyingVo">
 		insert into group_buying
 		(
 			`id`,
@@ -210,20 +210,21 @@
             #{endTime}  
 		)
 	</insert>
-    
 
-    <select id="countByExample" parameterType="com.platform.entity.GroupBuyingVo" resultType="java.lang.Integer" >
+
+    <select id="countByExample" parameterType="com.chundengtai.base.entity.GroupBuyingVo"
+            resultType="java.lang.Integer">
         select count(*) from group_buying
-        <if test="_parameter != null" >
-            <include refid="Example_Where_Clause" />
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
         </if>
     </select>
-    
-    <update id="update" parameterType="com.platform.entity.OrderVo">
+
+    <update id="update" parameterType="com.chundengtai.base.entity.OrderVo">
         update group_buying
         set `group_num` = #{groupNum}
         <if test="types != null">
-           , `types` = #{types}
+            , `types` = #{types}
         </if>
         where `id` = #{id}
     </update>
@@ -266,17 +267,17 @@
         </if>
     </update>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.platform.entity.GroupBuyingVo">
+    <update id="updateByPrimaryKeySelective" parameterType="com.chundengtai.base.entity.GroupBuyingVo">
         update group_buying
         <set>
-          <if test="goodsId != null">
-            `goods_id` = #{goodsId},
-          </if>
-          <if test="goodsName != null">
-            `goods_name` = #{goodsName},
-          </if>
-          <if test="groupNum != null">
-            `group_num` = #{groupNum},
+            <if test="goodsId != null">
+                `goods_id` = #{goodsId},
+            </if>
+            <if test="goodsName != null">
+                `goods_name` = #{goodsName},
+            </if>
+            <if test="groupNum != null">
+                `group_num` = #{groupNum},
           </if>
           <if test="successNum != null">
             `success_num` = #{successNum},
@@ -287,7 +288,7 @@
         </set>
         where id = #{id}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.platform.entity.GroupBuyingVo" >
+    <update id="updateByPrimaryKey" parameterType="com.chundengtai.base.entity.GroupBuyingVo">
         update group_buying
         <set>
             `goods_id` = #{goodsId},
@@ -297,18 +298,18 @@
             `types` = #{types}
         </set>
         where id = #{id,jdbcType=BIGINT}
-  </update>
+    </update>
 
 
-    <select id="queryList" resultType="com.platform.entity.GroupBuyingVo">
+    <select id="queryList" resultType="com.chundengtai.base.entity.GroupBuyingVo">
         select
-          `id`,
-          `goods_id`,
-          `goods_name`,
-          `group_num`,
-          `success_num`,
-          `types`,
-          `end_time`
+        `id`,
+        `goods_id`,
+        `goods_name`,
+        `group_num`,
+        `success_num`,
+        `types`,
+        `end_time`
         from group_buying
         WHERE 1=1
         <if test="goodsId != null ">
@@ -345,7 +346,7 @@
 		where id = #{id}
 	</select>
 
-    <select id="queryLoseList" resultType="com.platform.entity.GroupBuyingVo">
+    <select id="queryLoseList" resultType="com.chundengtai.base.entity.GroupBuyingVo">
         select
         `id`,
         `goods_id`,

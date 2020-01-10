@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.ApiUserLevelMapper">
+<mapper namespace="com.chundengtai.base.dao.ApiUserLevelMapper">
 
-	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.platform.entity.UserLevelVo" id="userLevelMap">
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.chundengtai.base.entity.UserLevelVo" id="userLevelMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="description" column="description"/>
     </resultMap>
 
-	<select id="queryObject" resultType="com.platform.entity.UserLevelVo">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.UserLevelVo">
 		select * from nideshop_user_level where id = #{value}
 	</select>
 
-	<select id="queryList" resultType="com.platform.entity.UserLevelVo">
-		select * from nideshop_user_level
+    <select id="queryList" resultType="com.chundengtai.base.entity.UserLevelVo">
+        select * from nideshop_user_level
         <choose>
             <when test="sidx != null and sidx != ''">
                 order by ${sidx} ${order}
             </when>
-			<otherwise>
+            <otherwise>
                 order by id desc
-			</otherwise>
+            </otherwise>
         </choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
-	</select>
-	
- 	<select id="queryTotal" resultType="int">
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
 		select count(*) from nideshop_user_level 
 	</select>
-	 
-	<insert id="save" parameterType="com.platform.entity.UserLevelVo" useGeneratedKeys="true" keyProperty="id">
+
+    <insert id="save" parameterType="com.chundengtai.base.entity.UserLevelVo" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_user_level
 		(
 			`name`, 
@@ -45,17 +45,17 @@
 			#{description}
 		)
 	</insert>
-	 
-	<update id="update" parameterType="com.platform.entity.UserLevelVo">
-		update nideshop_user_level 
-		<set>
-			<if test="name != null">`name` = #{name}, </if>
-			<if test="description != null">`description` = #{description}</if>
-		</set>
-		where id = #{id}
-	</update>
-	
-	<delete id="delete">
+
+    <update id="update" parameterType="com.chundengtai.base.entity.UserLevelVo">
+        update nideshop_user_level
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="description != null">`description` = #{description}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
 		delete from nideshop_user_level where id = #{value}
 	</delete>
 	

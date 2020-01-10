@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.ApiExpressOrderMapper">
+<mapper namespace="com.chundengtai.base.dao.ApiExpressOrderMapper">
 
-    <resultMap type="com.platform.entity.ExpressOrderVo" id="ExpressOrderMap">
+    <resultMap type="com.chundengtai.base.entity.ExpressOrderVo" id="ExpressOrderMap">
         <result property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="country" column="country"/>
@@ -22,14 +22,14 @@
         <result property="getGoodsExpress" column="getGoodsExpress"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.ExpressOrderVo">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.ExpressOrderVo">
 		select
 			*
 		from nideshop_express_order
 		where id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.ExpressOrderVo">
+    <select id="queryList" resultType="com.chundengtai.base.entity.ExpressOrderVo">
         select
         *
         from nideshop_express_order
@@ -58,7 +58,7 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.ExpressOrderVo">
+    <insert id="save" parameterType="com.chundengtai.base.entity.ExpressOrderVo">
 		insert into nideshop_express_order(
         			`id`,
                     			`user_id`,
@@ -97,12 +97,13 @@
                     			            )
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.ExpressOrderVo">
+    <update id="update" parameterType="com.chundengtai.base.entity.ExpressOrderVo">
         update nideshop_express_order
         <set>
             <if test="userId != null">`user_id` = #{userId
                         },
-            </if> <if test="orderId != null">`order_id` = #{orderId
+            </if>
+            <if test="orderId != null">`order_id` = #{orderId
                         },
             </if>
             <if test="country != null">`country` = #{country

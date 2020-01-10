@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.GroupBuyingDetailedMapper">
+<mapper namespace="com.chundengtai.base.dao.GroupBuyingDetailedMapper">
 
-    <resultMap type="com.platform.entity.GroupBuyingDetailedVo" id="BaseResultMap">
+    <resultMap type="com.chundengtai.base.entity.GroupBuyingDetailedVo" id="BaseResultMap">
         <result property="id" column="id"/>
         <result property="groupBuyingId" column="group_buying_id"/>
         <result property="userId" column="user_id"/>
@@ -80,17 +80,18 @@
   	</sql>
 
 
-    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.platform.entity.GroupBuyingDetailedVo" >
+    <select id="selectByExample" resultMap="BaseResultMap"
+            parameterType="com.chundengtai.base.entity.GroupBuyingDetailedVo">
         select
-        <if test="distinct" >
+        <if test="distinct">
             distinct
         </if>
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from group_buying_detailed
-        <if test="_parameter != null" >
-            <include refid="Example_Where_Clause" />
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
         </if>
-        <if test="orderByClause != null" >
+        <if test="orderByClause != null">
             order by ${orderByClause}
         </if>
         <if test="pageStart!=null and pageStart gt -1" >
@@ -107,10 +108,10 @@
         delete from group_buying_detailed
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.platform.entity.GroupBuyingDetailedVo" >
+    <delete id="deleteByExample" parameterType="com.chundengtai.base.entity.GroupBuyingDetailedVo">
         delete from group_buying_detailed
-        <if test="_parameter != null" >
-            <include refid="Example_Where_Clause" />
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
         </if>
     </delete>
     <delete id="deleteBatch">
@@ -119,7 +120,7 @@
           #{id}
 </foreach>
     </delete>
-    <insert id="save" parameterType="com.platform.entity.GroupBuyingDetailedVo">
+    <insert id="save" parameterType="com.chundengtai.base.entity.GroupBuyingDetailedVo">
 		insert into group_buying_detailed(
           `group_buying_id`,
           `user_id`,
@@ -135,17 +136,17 @@
 	</insert>
 
 
-    <insert id="insertSelective" parameterType="com.platform.entity.GroupBuyingDetailedVo">
+    <insert id="insertSelective" parameterType="com.chundengtai.base.entity.GroupBuyingDetailedVo">
         insert into group_buying_detailed
-        <trim prefix="(" suffix=")" suffixOverrides="," >
-          <if test="id != null">
-            `id`,
-          </if>
-          <if test="groupBuyingId != null">
-            `group_buying_id`,
-          </if>
-          <if test="userId != null">
-            `user_id`,
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                `id`,
+            </if>
+            <if test="groupBuyingId != null">
+                `group_buying_id`,
+            </if>
+            <if test="userId != null">
+                `user_id`,
           </if>
           <if test="userName != null">
             `user_name`,
@@ -179,10 +180,11 @@
         </trim>
     </insert>
 
-    <select id="countByExample" parameterType="com.platform.entity.GroupBuyingDetailedVo" resultType="java.lang.Integer" >
+    <select id="countByExample" parameterType="com.chundengtai.base.entity.GroupBuyingDetailedVo"
+            resultType="java.lang.Integer">
         select count(*) from group_buying_detailed
-        <if test="_parameter != null" >
-            <include refid="Example_Where_Clause" />
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
         </if>
     </select>
     <update id="updateByExampleSelective" parameterType="map" >
@@ -222,17 +224,17 @@
         </if>
     </update>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.platform.entity.GroupBuyingDetailedVo">
+    <update id="updateByPrimaryKeySelective" parameterType="com.chundengtai.base.entity.GroupBuyingDetailedVo">
         update group_buying_detailed
         <set>
-          <if test="groupBuyingId != null">
-            `group_buying_id` = #{groupBuyingId},
-          </if>
-          <if test="userId != null">
-            `user_id` = #{userId},
-          </if>
-          <if test="userName != null">
-            `user_name` = #{userName},
+            <if test="groupBuyingId != null">
+                `group_buying_id` = #{groupBuyingId},
+            </if>
+            <if test="userId != null">
+                `user_id` = #{userId},
+            </if>
+            <if test="userName != null">
+                `user_name` = #{userName},
           </if>
           <if test="userImg != null">
             `user_img` = #{userImg},
@@ -243,7 +245,7 @@
         </set>
         where id = #{id}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.platform.entity.GroupBuyingDetailedVo" >
+    <update id="updateByPrimaryKey" parameterType="com.chundengtai.base.entity.GroupBuyingDetailedVo">
         update group_buying_detailed
         <set>
             `group_buying_id` = #{groupBuyingId},
@@ -253,17 +255,17 @@
             `pay_time` = #{payTime}
         </set>
         where id = #{id,jdbcType=BIGINT}
-  </update>
+    </update>
 
 
-    <select id="queryList" resultType="com.platform.entity.GroupBuyingDetailedVo">
+    <select id="queryList" resultType="com.chundengtai.base.entity.GroupBuyingDetailedVo">
         select
-          `id`,
-          `group_buying_id`,
-          `user_id`,
-          `user_name`,
-          `user_img`,
-          `pay_time`
+        `id`,
+        `group_buying_id`,
+        `user_id`,
+        `user_name`,
+        `user_img`,
+        `pay_time`
         from group_buying_detailed
         WHERE 1=1
         <if test="group_buying_id != null ">
