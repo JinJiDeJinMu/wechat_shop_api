@@ -2,10 +2,7 @@ package com.platform.entity;
 
 /**
  * 审批范围dto
- *
- * @date 2017年11月16日 下午10:43:36
  */
-
 public class UserWindowDto {
     /**
      * 主键id 可能是：用户id，角色id，组织id

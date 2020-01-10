@@ -2,7 +2,6 @@ package com.platform.entity;
 
 
 /**
- * @date 2017年6月18日 上午9:26:39
  */
 public class SysMenuEntity extends Tree {
 

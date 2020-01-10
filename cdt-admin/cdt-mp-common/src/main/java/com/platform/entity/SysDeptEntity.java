@@ -6,10 +6,6 @@ import java.util.List;
 
 /**
  * 部门管理
- *
- * @author liepngjun
-
- * @date 2017-09-17 23:58:47
  */
 public class SysDeptEntity implements Serializable {
 	private static final long serialVersionUID = 1L;

@@ -2,8 +2,6 @@ package com.platform.entity;
 
 /**
  * 动态表信息
- *
- * @date 2017年11月16日 下午10:43:36
  */
 public class TableInfo {
     public static final String TAB_FIELDS = "fields";

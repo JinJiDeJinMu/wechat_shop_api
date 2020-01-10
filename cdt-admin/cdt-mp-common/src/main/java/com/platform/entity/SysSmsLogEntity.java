@@ -6,7 +6,6 @@ import java.util.Date;
 /**
  * 发送短信日志
  * 表名 sys_sms_log
-
  */
 public class SysSmsLogEntity implements Serializable {
     private static final long serialVersionUID = 1L;

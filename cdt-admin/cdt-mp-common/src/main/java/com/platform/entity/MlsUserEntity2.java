@@ -3,10 +3,9 @@ package com.platform.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-
 /**
- * 类名称：MlsUser<br> 
- * 类描述：分销用户<br>
+ * 类名称：MlsUser
+ * 类描述：分销用户
  */
 public class MlsUserEntity2 implements Serializable{
 	private static final long serialVersionUID = 1L;

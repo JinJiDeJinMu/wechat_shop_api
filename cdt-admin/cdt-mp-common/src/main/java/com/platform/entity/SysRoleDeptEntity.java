@@ -5,8 +5,6 @@ import java.io.Serializable;
 
 /**
  * 角色与部门对应关系
- *
- * @date 2017年9月18日 上午9:18:38
  */
 public class SysRoleDeptEntity implements Serializable {
     private static final long serialVersionUID = 1L;
