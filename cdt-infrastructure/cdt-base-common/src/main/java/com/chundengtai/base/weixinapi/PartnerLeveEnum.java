@@ -7,7 +7,7 @@ package com.chundengtai.base.weixinapi;
  * 类 名 称    :合伙人等级枚举类
  * 功能描述    :
  * 业务描述    :
- * 作 者 名    :@Author Royal(方圆)
+ * 作 者 名    :@Author amtf
  * 开发日期    :2020/1/2 下午2:23
  * Created    :IntelliJ IDEA
  * **************************************************************

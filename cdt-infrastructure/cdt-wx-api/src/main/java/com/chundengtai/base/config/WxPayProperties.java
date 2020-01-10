@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * 类 名 称    :微信支付属性配置
  * 功能描述    :
  * 业务描述    :
- * 作 者 名    :@Author Royal(方圆)
+ * 作 者 名    :@Author amtf
  * 开发日期    :
  * Created     :IntelliJ IDEA
  * **************************************************************

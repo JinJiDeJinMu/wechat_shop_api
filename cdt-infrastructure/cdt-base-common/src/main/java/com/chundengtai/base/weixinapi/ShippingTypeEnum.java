@@ -7,7 +7,7 @@ package com.chundengtai.base.weixinapi;
  * 类 名 称    :
  * 功能描述    :
  * 业务描述    :
- * 作 者 名    :@Author Royal(方圆)
+ * 作 者 名    :@Author amtf
  * 开发日期    :2018/10/24 0024-下午 18:01
  * Created     :IntelliJ IDEA
  * **************************************************************
