@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.CommentV2Dao">
+<mapper namespace="com.chundengtai.base.dao.CommentV2Dao">
 
-    <resultMap type="com.platform.entity.CommentV2Entity" id="CommentV2Map">
+    <resultMap type="com.chundengtai.base.entity.CommentV2Entity" id="CommentV2Map">
         <result property="id" column="id"/>
         <result property="orderNo" column="order_no"/>
         <result property="goodId" column="good_id"/>
@@ -15,7 +15,7 @@
         <result property="createTime" column="create_time"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.CommentV2Entity">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.CommentV2Entity">
 		select
 			`id`,
     			`order_no`,
@@ -30,7 +30,7 @@
 		where id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.CommentV2Entity">
+    <select id="queryList" resultType="com.chundengtai.base.entity.CommentV2Entity">
         select
         `id`,
         `order_no`,
@@ -67,7 +67,7 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.CommentV2Entity">
+    <insert id="save" parameterType="com.chundengtai.base.entity.CommentV2Entity">
 		insert into cdt_product_comment(
         			`id`,
                     			`order_no`,
@@ -90,7 +90,7 @@
                     			            )
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.CommentV2Entity">
+    <update id="update" parameterType="com.chundengtai.base.entity.CommentV2Entity">
         update cdt_product_comment
         <set>
             <if test="orderNo != null">`order_no` = #{orderNo},

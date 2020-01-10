@@ -14,14 +14,17 @@
      	http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
 
     <context:component-scan base-package="com.platform,com.chundengtai.base"/>
+
     <context:annotation-config/>
     <mvc:default-servlet-handler/>
+
     <aop:aspectj-autoproxy proxy-target-class="true"/>
     <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
     <mvc:resources mapping="doc.html" location="classpath:/META-INF/resources/"/>
     <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
 
     <bean id="authorizationInterceptor" class="com.chundengtai.base.interceptor.AuthorizationInterceptor"/>
+    <bean id="fastJsonConfigExt" class="com.chundengtai.base.transfer.DefaultFastJsonConfig"/>
     <mvc:annotation-driven>
         <mvc:argument-resolvers>
             <bean class="com.chundengtai.base.resolver.LoginUserHandlerMethodArgumentResolver">
@@ -71,8 +74,6 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
-    <bean id="fastJsonConfigExt" class="com.chundengtai.base.transfer.DefaultFastJsonConfig"/>
-
     <!-- Velocity视图解析器    默认视图  -->
     <bean id="velocityViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
         <property name="contentType" value="text/html;charset=UTF-8"/>
@@ -81,7 +82,6 @@
         <property name="dateToolAttribute" value="date"/>
         <property name="numberToolAttribute" value="number"/>
         <property name="toolboxConfigLocation" value="/WEB-INF/velocity-toolbox.xml"/>
-        <!--是否使用spring对宏定义的支持-->
         <property name="exposeRequestAttributes" value="true"/>
         <property name="requestContextAttribute" value="rc"/>
         <property name="order" value="0"/>

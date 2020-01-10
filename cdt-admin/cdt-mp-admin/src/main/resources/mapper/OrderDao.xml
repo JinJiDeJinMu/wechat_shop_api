@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.OrderDao">
+<mapper namespace="com.chundengtai.base.dao.OrderDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.platform.entity.OrderEntity" id="orderMap">
+    <resultMap type="com.chundengtai.base.entity.OrderEntity" id="orderMap">
         <result property="id" column="id"/>
         <result property="orderSn" column="order_sn"/>
         <result property="userId" column="user_id"/>
@@ -49,14 +49,14 @@
         <result property="goodsType" column="goods_type"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.OrderEntity">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.OrderEntity">
 		select o.*,u.username,u.real_name 
         from nideshop_order o
         left join nideshop_user u on o.user_id = u.id
         where o.id = #{value}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.OrderEntity">
+    <select id="queryList" resultType="com.chundengtai.base.entity.OrderEntity">
         SELECT
         o.id AS id,o.order_sn as orderSn,o.evaluate_status as evaluateStatus,u.username AS username,u.real_name as
         realName,o.order_type as orderType,o.goods_type as goodsType,
@@ -106,7 +106,7 @@
         </if>
     </select>
 
-    <select id="queryGroupList" resultType="com.platform.entity.GroupBuyingEntity">
+    <select id="queryGroupList" resultType="com.chundengtai.base.entity.GroupBuyingEntity">
         SELECT `id`, `goods_id`, `goods_name`, `group_num`, `success_num`, `types`, `merchant_id` FROM `group_buying`
         WHERE 1=1
         <if test="goodsName != null and goodsName != ''">
@@ -201,7 +201,7 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.OrderEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.chundengtai.base.entity.OrderEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_order
 		(
 			`order_sn`, 
@@ -281,7 +281,7 @@
 		)
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.OrderEntity">
+    <update id="update" parameterType="com.chundengtai.base.entity.OrderEntity">
         update nideshop_order
         <set>
             <if test="orderSn != null">order_sn = #{orderSn},</if>

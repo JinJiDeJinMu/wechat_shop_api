@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.OrdercashApplyDao">
+<mapper namespace="com.chundengtai.base.dao.OrdercashApplyDao">
 
-    <resultMap type="com.platform.entity.OrdercashApplyEntity" id="ordercashApplyMap">
+    <resultMap type="com.chundengtai.base.entity.OrdercashApplyEntity" id="ordercashApplyMap">
         <result property="orderId" column="order_id"/>
         <result property="orderSn" column="order_sn"/>
         <result property="merchantId" column="merchant_id"/>
@@ -20,7 +20,7 @@
         <result property="operatorName" column="operator_name"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.OrdercashApplyEntity">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.OrdercashApplyEntity">
 		select
 			`order_id`,
     			`order_sn`,
@@ -40,7 +40,7 @@
 		where order_id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.OrdercashApplyEntity">
+    <select id="queryList" resultType="com.chundengtai.base.entity.OrdercashApplyEntity">
         select
         `order_id`,
         `order_sn`,
@@ -82,7 +82,7 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.OrdercashApplyEntity">
+    <insert id="save" parameterType="com.chundengtai.base.entity.OrdercashApplyEntity">
 		insert into nideshop_ordercash_apply(
         			`order_id`,
     			`order_sn`,
@@ -114,7 +114,7 @@
                     			)
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.OrdercashApplyEntity">
+    <update id="update" parameterType="com.chundengtai.base.entity.OrdercashApplyEntity">
         update nideshop_ordercash_apply
         <set>
             <if test="orderSn != null">`order_sn` = #{orderSn
@@ -175,7 +175,7 @@
         update nideshop_ordercash_apply set status = 1 where order_id=#{id}
     </update>
 
-    <select id="query" resultType="com.platform.entity.OrdercashApplyEntity">
+    <select id="query" resultType="com.chundengtai.base.entity.OrdercashApplyEntity">
         select
          `order_id`,
         `order_sn`,

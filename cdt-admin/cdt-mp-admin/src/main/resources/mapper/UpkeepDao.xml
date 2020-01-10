@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.UpkeepDao">
+<mapper namespace="com.chundengtai.base.dao.UpkeepDao">
 
     <!-- <resultMap type="com.platform.entity.UpkeepEntity" id="UpKeepMap">
          <result property="id" column="id"/>
@@ -12,7 +12,7 @@
          <result property="uid" column="uid"/>
      </resultMap>-->
 
-    <select id="queryObject" resultType="com.platform.entity.UpkeepEntity">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.UpkeepEntity">
 		select
 			id as id,
 			customer_id as customerId,
@@ -29,7 +29,7 @@
 
 
 	</select>
-    <select id="queryList" resultType="com.platform.entity.UpkeepEntity">
+    <select id="queryList" resultType="com.chundengtai.base.entity.UpkeepEntity">
         select
         id as id,
         customer_id as customerId,
@@ -84,7 +84,7 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.UpkeepEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.chundengtai.base.entity.UpkeepEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_upkeep(
 			`customer_id`,
 			`c_type`,
@@ -105,7 +105,7 @@
 			)
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.UpkeepEntity">
+    <update id="update" parameterType="com.chundengtai.base.entity.UpkeepEntity">
         update nideshop_upkeep
         <set>
             <if test="customerId != null">`customer_id` = #{customerId},</if>

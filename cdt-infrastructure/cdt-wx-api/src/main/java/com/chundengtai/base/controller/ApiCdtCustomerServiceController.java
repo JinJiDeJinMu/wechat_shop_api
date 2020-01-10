@@ -7,7 +7,7 @@ import com.chundengtai.base.entity.GoodsVo;
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.ApiCdtCustomerServiceService;
 import com.chundengtai.base.service.ApiGoodsService;
-import com.chundengtai.base.service.CdtMerchantService;
+import com.chundengtai.base.service.CdtMerchantWxService;
 import com.chundengtai.base.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +19,6 @@ import java.util.Map;
 
 /**
  * 客服管理表Controller
- *
- * @date 2019-11-25 19:27:34
  */
 @RestController
 @RequestMapping("/api/v2/cdtcustomerservice")
@@ -29,7 +27,7 @@ public class ApiCdtCustomerServiceController {
     private ApiCdtCustomerServiceService cdtCustomerServiceService;
 
     @Autowired
-    private CdtMerchantService cdtMerchantService;
+    private CdtMerchantWxService cdtMerchantService;
 
     @Autowired
     private ApiGoodsService apiGoodsService;

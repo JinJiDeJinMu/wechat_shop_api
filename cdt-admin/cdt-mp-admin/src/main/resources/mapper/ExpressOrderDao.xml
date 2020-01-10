@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.ExpressOrderDao">
+<mapper namespace="com.chundengtai.base.dao.ExpressOrderDao">
 
-    <resultMap type="com.platform.entity.ExpressOrderEntity" id="ExpressOrderMap">
+    <resultMap type="com.chundengtai.base.entity.ExpressOrderEntity" id="ExpressOrderMap">
         <result property="id" column="id"/>
         <result property="oederId" column="oeder_id"/>
         <result property="userId" column="user_id"/>
@@ -23,14 +23,14 @@
         <result property="getGoodsExpress" column="getGoodsExpress"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.ExpressOrderEntity">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.ExpressOrderEntity">
 		select
 			*
 		from nideshop_express_order
 		where id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.ExpressOrderEntity">
+    <select id="queryList" resultType="com.chundengtai.base.entity.ExpressOrderEntity">
         select
         *
         from nideshop_express_order
@@ -58,14 +58,15 @@
             AND name LIKE concat('%',#{name},'%')
         </if>
     </select>
-    <select id="queryOrderId" resultType="com.platform.entity.ExpressOrderEntity">
+    <select id="queryOrderId" resultType="com.chundengtai.base.entity.ExpressOrderEntity">
          select
        *
         from nideshop_express_order
         where order_id = #{orderId}
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.ExpressOrderEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.chundengtai.base.entity.ExpressOrderEntity" useGeneratedKeys="true"
+            keyProperty="id">
 		insert into nideshop_express_order(
     			oeder_id,
     			user_id,
@@ -98,7 +99,7 @@
                     			#{expressNo}            )
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.ExpressOrderEntity">
+    <update id="update" parameterType="com.chundengtai.base.entity.ExpressOrderEntity">
         update nideshop_express_order
         <set>
             <if test="oederId != null">`oeder_id` = #{oederId

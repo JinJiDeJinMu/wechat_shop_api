@@ -4,7 +4,7 @@ import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.entity.CdtMerchantEntity;
 import com.chundengtai.base.entity.CdtMt;
 import com.chundengtai.base.result.Result;
-import com.chundengtai.base.service.CdtMerchantService;
+import com.chundengtai.base.service.CdtMerchantWxService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ import java.util.Date;
 public class ApiCdtMerchantController {
 
     @Autowired
-    private CdtMerchantService cdtMerchantService;
+    private CdtMerchantWxService cdtMerchantService;
 
     @PostMapping("/save")
     @ResponseBody

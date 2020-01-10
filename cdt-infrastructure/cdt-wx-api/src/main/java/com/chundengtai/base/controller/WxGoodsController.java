@@ -83,7 +83,7 @@ public class WxGoodsController extends ApiBaseAction {
     @Autowired
     private MlsUserSer mlsUserSer;
     @Autowired
-    private CdtMerchantService cdtMerchantService;
+    private CdtMerchantWxService cdtMerchantService;
 
     //上传文件集合   
     private List<File> file;

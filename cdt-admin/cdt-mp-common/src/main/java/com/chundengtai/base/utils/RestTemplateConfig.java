@@ -7,8 +7,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * 名称：RestTemplateConfig <br>
- * 描述：<br>
+ * 名称：RestTemplateConfig
  */
 @Configuration
 public class RestTemplateConfig {

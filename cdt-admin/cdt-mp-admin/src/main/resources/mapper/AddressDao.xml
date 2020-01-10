@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.AddressDao">
+<mapper namespace="com.chundengtai.base.dao.AddressDao">
 
-    <resultMap type="com.platform.entity.AddressEntity" id="addressMap">
+    <resultMap type="com.chundengtai.base.entity.AddressEntity" id="addressMap">
         <result property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="userName" column="user_name"/>
@@ -16,7 +16,7 @@
         <result property="detailInfo" column="detail_Info"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.AddressEntity">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.AddressEntity">
 		select
         nideshop_address.id,
 		nideshop_address.user_id,
@@ -33,7 +33,7 @@
 		where nideshop_address.id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.AddressEntity">
+    <select id="queryList" resultType="com.chundengtai.base.entity.AddressEntity">
         select
         nideshop_address.id,
         nideshop_address.user_id,
@@ -85,7 +85,8 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.AddressEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.chundengtai.base.entity.AddressEntity" useGeneratedKeys="true"
+            keyProperty="id">
 		insert into nideshop_address(
 			`user_id`,
 			`user_name`,
@@ -108,7 +109,7 @@
 			#{detailInfo})
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.AddressEntity">
+    <update id="update" parameterType="com.chundengtai.base.entity.AddressEntity">
         update nideshop_address
         <set>
             <if test="userId != null">`user_id` = #{userId},</if>

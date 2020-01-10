@@ -3,7 +3,7 @@ package com.chundengtai.base.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chundengtai.base.bean.CommentPicture;
 import com.chundengtai.base.dao.CommentPictureMapper;
-import com.chundengtai.base.service.CommentPictureService;
+import com.chundengtai.base.service.CommentNewPictureService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2019-12-25
  */
 @Service
-public class CommentPictureServiceImpl extends ServiceImpl<CommentPictureMapper, CommentPicture> implements CommentPictureService {
+public class CommentPictureServiceImpl extends ServiceImpl<CommentPictureMapper, CommentPicture> implements CommentNewPictureService {
 
 }

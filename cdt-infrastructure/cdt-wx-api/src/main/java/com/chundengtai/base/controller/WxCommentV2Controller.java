@@ -46,7 +46,7 @@ public class WxCommentV2Controller extends ApiBaseAction {
     private CdtProductCommentService cdtProductCommentService;
 
     @Autowired
-    private CommentPictureService commentPictureService;
+    private CommentNewPictureService commentPictureService;
 
     /**
      * 获取评价列表（在商品详情里面）

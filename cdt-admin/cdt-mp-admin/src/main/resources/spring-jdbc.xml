@@ -17,7 +17,6 @@
     <context:property-placeholder location="classpath*:cdt.properties"/>
 
     <!-- 支持异步方法执行 -->
-
     <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <!-- 核心线程数 -->
         <property name="corePoolSize" value="${task.core_pool_size}"/>
@@ -28,6 +27,7 @@
         <!-- 线程池维护线程所允许的空闲时间，默认为60s -->
         <property name="keepAliveSeconds" value="${task.keep_alive_seconds}"/>
     </bean>
+
     <task:annotation-driven executor="taskExecutor"/>
 
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
@@ -137,7 +137,7 @@
             <list>
                 <ref bean="stat-filter"/>
                 <!--过滤永真条件 防止注入-->
-                <!--<ref bean="wall-filter"/>-->
+                <ref bean="wall-filter"/>
             </list>
         </property>
         <property name="connectionInitSqls" value="set names utf8mb4;"/>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.BrandDao">
+<mapper namespace="com.chundengtai.base.dao.BrandDao">
 
-    <resultMap type="com.platform.entity.BrandEntity" id="brandMap">
+    <resultMap type="com.chundengtai.base.entity.BrandEntity" id="brandMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="listPicUrl" column="list_pic_url"/>
@@ -18,7 +18,7 @@
         <result property="newSortOrder" column="new_sort_order"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.BrandEntity">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.BrandEntity">
 		select
 			`id`,
 			`name`,
@@ -36,7 +36,7 @@
 		where id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.BrandEntity">
+    <select id="queryList" resultType="com.chundengtai.base.entity.BrandEntity">
         select
         `id`,
         `name`,
@@ -82,7 +82,7 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.BrandEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.chundengtai.base.entity.BrandEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_brand(
 			`name`,
 			`list_pic_url`,
@@ -109,7 +109,7 @@
 			#{newSortOrder},#{merchantId})
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.BrandEntity">
+    <update id="update" parameterType="com.chundengtai.base.entity.BrandEntity">
         update nideshop_brand
         <set>
             <if test="name != null">`name` = #{name},</if>

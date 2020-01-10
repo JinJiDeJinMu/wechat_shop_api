@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.KeywordsDao">
+<mapper namespace="com.chundengtai.base.dao.KeywordsDao">
 
-    <resultMap type="com.platform.entity.KeywordsEntity" id="keywordsMap">
+    <resultMap type="com.chundengtai.base.entity.KeywordsEntity" id="keywordsMap">
         <result property="id" column="id"/>
         <result property="keyword" column="keyword"/>
         <result property="isHot" column="is_hot"/>
@@ -14,7 +14,7 @@
         <result property="type" column="type"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.KeywordsEntity">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.KeywordsEntity">
 		select
 			`id`,
 			`keyword`,
@@ -28,7 +28,7 @@
 		where id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.KeywordsEntity">
+    <select id="queryList" resultType="com.chundengtai.base.entity.KeywordsEntity">
         select
         `id`,
         `keyword`,
@@ -64,7 +64,8 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.KeywordsEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.chundengtai.base.entity.KeywordsEntity" useGeneratedKeys="true"
+            keyProperty="id">
 		insert into nideshop_keywords(
 			`keyword`,
 			`is_hot`,
@@ -83,7 +84,7 @@
 			#{type})
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.KeywordsEntity">
+    <update id="update" parameterType="com.chundengtai.base.entity.KeywordsEntity">
         update nideshop_keywords
         <set>
             <if test="keyword != null">`keyword` = #{keyword},</if>

@@ -18,8 +18,6 @@ import java.util.Map;
 
 /**
  * 消息公告Controller
- *
- * @date 2019-11-25 11:38:00
  */
 @Controller
 @RequestMapping("api/newsBulletin")

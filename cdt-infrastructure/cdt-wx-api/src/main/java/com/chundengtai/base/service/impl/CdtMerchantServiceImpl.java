@@ -2,7 +2,7 @@ package com.chundengtai.base.service.impl;
 
 import com.chundengtai.base.dao.CdtMerchantDao;
 import com.chundengtai.base.entity.CdtMerchantEntity;
-import com.chundengtai.base.service.CdtMerchantService;
+import com.chundengtai.base.service.CdtMerchantWxService;
 import com.platform.service.KeygenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.Map;
  * @date 2019-11-15 17:08:05
  */
 @Service("cdtMerchantServiceFront")
-public class CdtMerchantServiceImpl implements CdtMerchantService {
+public class CdtMerchantServiceImpl implements CdtMerchantWxService {
     @Autowired
     private CdtMerchantDao cdtMerchantDao;
     @Autowired

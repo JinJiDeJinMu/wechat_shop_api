@@ -20,8 +20,6 @@ import java.util.*;
 
 /**
  * API优惠券管理
- *
- * @date 2017-03-23 15:31
  */
 @Api(tags = "优惠券")
 @RestController

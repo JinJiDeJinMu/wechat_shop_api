@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.AttributeCategoryDao">
+<mapper namespace="com.chundengtai.base.dao.AttributeCategoryDao">
 
-    <resultMap type="com.platform.entity.AttributeCategoryEntity" id="attributeCategoryMap">
+    <resultMap type="com.chundengtai.base.entity.AttributeCategoryEntity" id="attributeCategoryMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="enabled" column="enabled"/>
@@ -13,7 +13,7 @@
         <result property="showPosition" column="show_position"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.AttributeCategoryEntity">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.AttributeCategoryEntity">
 		select
 			*
 		from nideshop_attribute_category
@@ -21,7 +21,7 @@
 	</select>
 
 
-    <select id="queryList" resultType="com.platform.entity.AttributeCategoryEntity">
+    <select id="queryList" resultType="com.chundengtai.base.entity.AttributeCategoryEntity">
         select
         *
         from nideshop_attribute_category
@@ -50,7 +50,7 @@
 		WHERE 1=1
 	</select>
 
-    <insert id="save" parameterType="com.platform.entity.AttributeCategoryEntity">
+    <insert id="save" parameterType="com.chundengtai.base.entity.AttributeCategoryEntity">
 		insert into nideshop_attribute_category(
         			`id`,
                     			`name`,
@@ -69,7 +69,7 @@
                     			#{showPosition}            )
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.AttributeCategoryEntity">
+    <update id="update" parameterType="com.chundengtai.base.entity.AttributeCategoryEntity">
         update nideshop_attribute_category
         <set>
             <if test="name != null">`name` = #{name},</if>

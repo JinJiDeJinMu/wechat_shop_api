@@ -34,9 +34,6 @@ import java.util.*;
 /**
  * <p>Title: 微信退款工具类</p>
  * <p>Description: 微信退款工具类，通过充值客户端的不同初始化不同的工具类，得到相应微信退款相关的appid和muchid</p>
- *
- * @author xubo
- * @date 2017年6月6日  下午5:05:03
  */
 public class WechatUtil {
     private static Log logger = LogFactory.getLog(WechatUtil.class);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.CustomerDao">
-    <resultMap type="com.platform.entity.CustomerEntity" id="CustomerMap">
+<mapper namespace="com.chundengtai.base.dao.CustomerDao">
+    <resultMap type="com.chundengtai.base.entity.CustomerEntity" id="CustomerMap">
         <result property="id" column="id"/>
         <result property="uname" column="uname"/>
         <result property="gender" column="gender"/>
@@ -18,7 +18,7 @@
         <result property="mobile2" column="mobile2"/>
         <result property="job" column="job"/>
         <result property="end_date" column="end_date"/>
-        <association property="addressEntity" javaType="com.platform.entity.AddressEntity">
+        <association property="addressEntity" javaType="com.chundengtai.base.entity.AddressEntity">
             <result property="id" column="aid"/>
             <result property="userId" column="user_id"/>
             <result property="userName" column="user_name"/>
@@ -34,8 +34,8 @@
 
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.CustomerEntity"
-            parameterType="com.platform.entity.CustomerEntity">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.CustomerEntity"
+            parameterType="com.chundengtai.base.entity.CustomerEntity">
         select
         id,
         u_name as uname,
@@ -225,7 +225,8 @@
         </where>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.CustomerEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.chundengtai.base.entity.CustomerEntity" useGeneratedKeys="true"
+            keyProperty="id">
 		insert into nideshop_customer(
 		`u_name`,
 		`gender`,
@@ -250,7 +251,7 @@
 		#{job})
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.CustomerEntity">
+    <update id="update" parameterType="com.chundengtai.base.entity.CustomerEntity">
         update nideshop_customer
         <set>
             <if test="uname != null">`u_name` = #{uname},</if>

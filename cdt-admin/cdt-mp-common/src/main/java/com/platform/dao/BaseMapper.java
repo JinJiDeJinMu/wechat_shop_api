@@ -10,10 +10,6 @@ import java.util.Map;
  *
  * @param <T> example类
  * @param <E> entity类
- *
- * @author xuyang
- * @email 295640759@qq.com
- * @date 2018年8月9日 上午9:31:36
  */
 public interface BaseMapper<T, E> {
 

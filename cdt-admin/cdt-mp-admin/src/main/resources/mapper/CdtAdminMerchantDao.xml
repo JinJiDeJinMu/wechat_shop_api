@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.CdtAdminMerchantDao">
+<mapper namespace="com.chundengtai.base.dao.CdtAdminMerchantDao">
 
-    <resultMap type="com.platform.entity.CdtMerchantEntity" id="cdtMerchantMap">
+    <resultMap type="com.chundengtai.base.entity.CdtMerchantEntity" id="cdtMerchantMap">
         <result property="id" column="id"/>
         <result property="key" column="idkey"/>
         <result property="shopName" column="shop_name"/>
@@ -35,7 +35,7 @@
         <result property="isDistribution" column="is_distribution"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.CdtMerchantEntity">
+    <select id="queryObject" resultType="com.chundengtai.base.entity.CdtMerchantEntity">
 		select
 			`id`,
 			`shop_name`,
@@ -69,7 +69,7 @@
 		where id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.CdtMerchantEntity">
+    <select id="queryList" resultType="com.chundengtai.base.entity.CdtMerchantEntity">
         select
         `id`,
         `id` as idkey,
@@ -130,7 +130,7 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.CdtMerchantEntity">
+    <insert id="save" parameterType="com.chundengtai.base.entity.CdtMerchantEntity">
 		insert into cdt_merchant(
 			`id`,
 			`shop_name`,
@@ -189,7 +189,7 @@
 			#{isDistribution})
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.CdtMerchantEntity">
+    <update id="update" parameterType="com.chundengtai.base.entity.CdtMerchantEntity">
         update cdt_merchant
         <set>
             <if test="shopName != null">`shop_name` = #{shopName},</if>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.GoodsDao">
+<mapper namespace="com.chundengtai.base.dao.GoodsDao">
 
-    <resultMap type="com.platform.entity.GoodsEntity" id="goodsMap">
+    <resultMap type="com.chundengtai.base.entity.GoodsEntity" id="goodsMap">
         <result property="id" column="id"/>
         <result property="categoryId" column="category_id"/>
         <result property="goodsSn" column="goods_sn"/>
@@ -56,7 +56,7 @@
 		select * from nideshop_goods where id = #{value}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.GoodsEntity">
+    <select id="queryList" resultType="com.chundengtai.base.entity.GoodsEntity">
         select
         nideshop_goods.id,
         nideshop_goods.category_id,
@@ -155,7 +155,7 @@
         AND nideshop_goods.is_Delete = #{isDelete}
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.GoodsEntity">
+    <insert id="save" parameterType="com.chundengtai.base.entity.GoodsEntity">
         insert into nideshop_goods
         (
         `id`,
@@ -256,7 +256,7 @@
         )
     </insert>
 
-    <update id="update" parameterType="com.platform.entity.GoodsEntity">
+    <update id="update" parameterType="com.chundengtai.base.entity.GoodsEntity">
         update nideshop_goods
         <set>
             <if test="categoryId != null">`category_id` = #{categoryId},</if>

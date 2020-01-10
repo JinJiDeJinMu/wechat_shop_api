@@ -12,8 +12,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 /**
  * 有@LoginUser注解的方法参数，注入当前登录用户
- *
- * @date 2017-03-23 22:02
  */
 public class AppLoginUserHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
