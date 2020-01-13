@@ -2,6 +2,7 @@ package com.chundengtai.base.controller;
 
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.facade.IdistributionFacade;
+import com.chundengtai.base.result.R;
 import com.chundengtai.base.service.OrderService;
 import com.chundengtai.base.util.CommonUtil;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
@@ -34,21 +35,11 @@ public class CdtDistributionTestController {
 
 
     @GetMapping("/referreRelation")
-    public void referreRelation(long userId, String referrerEncpyt) {
+    public R referreRelation(long userId, String referrerEncpyt) {
 
         idistributionFacade.referreRelation(userId, referrerEncpyt);
-    }
 
-    @GetMapping("/recordDistributeLog")
-    public void recordDistributeLog(Integer userId, Order order) {
-
-        idistributionFacade.recordDistributeLog(userId, order);
-    }
-
-    @GetMapping("/notifyOrderStatus")
-    public void notifyOrderStatus(Integer userId, Order order, GoodsTypeEnum goodsTypeEnum) {
-
-        idistributionFacade.notifyOrderStatus(userId, order, goodsTypeEnum);
+        return R.ok();
     }
 
     @GetMapping("/order")
@@ -60,7 +51,7 @@ public class CdtDistributionTestController {
     }
 
     @GetMapping("/pay")
-    public void payOrder(Integer orderId) {
+    public R payOrder(Integer orderId) {
 
         Order order = orderService.getById(orderId);
         order.setOrderStatus(OrderStatusEnum.PAYED_ORDER.getCode());
@@ -70,10 +61,11 @@ public class CdtDistributionTestController {
             idistributionFacade.recordDistributeLog(order.getUserId(), order);
         }
 
+        return R.ok();
     }
 
     @GetMapping("/changeorder")
-    public void changeOrderstatus(Integer orderId) {
+    public R changeOrderstatus(Integer orderId) {
 
         Order order = orderService.getById(orderId);
         order.setOrderStatus(OrderStatusEnum.COMPLETED_ORDER.getCode());
@@ -83,6 +75,7 @@ public class CdtDistributionTestController {
             idistributionFacade.notifyOrderStatus(order.getUserId(), order, GoodsTypeEnum.getEnumByKey(order.getGoodsType()));
         }
 
+        return R.ok();
     }
 
     public Order getOrder(Integer userId, Integer goodType) {
