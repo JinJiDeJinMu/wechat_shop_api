@@ -442,11 +442,13 @@ public class DistributionService implements IdistributionService {
                 assert partner != null;
                 partner.setUnbalanced(partner.getUnbalanced() == null ? detailModel.getMoney() : partner.getUnbalanced().add(detailModel.getMoney()));
                 if (item.getParentId().equals(detailModel.getGoldUserId())) {
-                    //partner.setStatsPerson((partner.getStatsPerson() == null || partner.getStatsPerson() == 0) ? 1 : partner.getStatsPerson() + 1);
-                    partner.setTradePerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
-                    //绑定用户层级关系编号
-                    item.setDevNum(partner.getTradePerson());
-                    item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
+                    if (!item.getIsTrade().equals(TrueOrFalseEnum.TRUE.getCode())) {
+                        //partner.setStatsPerson((partner.getStatsPerson() == null || partner.getStatsPerson() == 0) ? 1 : partner.getStatsPerson() + 1);
+                        partner.setTradePerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
+                        //绑定用户层级关系编号
+                        item.setDevNum(partner.getTradePerson());
+                        item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
+                    }
                     item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
                     //todo:判定符合合伙人逻辑
                     if (partner.getTradePerson() > getDistrimoney().getFirstPersonCondition()) {
