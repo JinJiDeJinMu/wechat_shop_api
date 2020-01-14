@@ -428,12 +428,13 @@ public class DistributionService implements IdistributionService {
                 partner.setUnbalanced(partner.getUnbalanced() == null ? BigDecimal.ZERO : partner.getUnbalanced().subtract(detailModel.getMoney()));
                 if (item.getParentId().equals(detailModel.getGoldUserId())) {
                     partner.setStatsPerson((partner.getStatsPerson() == null || partner.getStatsPerson() == 0) ? 0 : partner.getStatsPerson() - 1);
-                    partner.setTradePerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 0 : partner.getTradePerson() - 1);
+
                     partner.setInvalidOrderNum((partner.getInvalidOrderNum() == null || partner.getInvalidOrderNum() == 0) ? 0 : partner.getInvalidOrderNum() + 1);
                     partner.setRefundOrderNum((partner.getRefundOrderNum() == null || partner.getRefundOrderNum() == 0) ? 0 : partner.getRefundOrderNum() + 1);
                     item.setTradeOrderNum((item.getTradeOrderNum() == null || item.getTradeOrderNum() == 0) ? 0 : item.getTradeOrderNum() - 1);
                     if (item.getTradeOrderNum() == 1) {
                         //绑定用户层级关系编号
+                        partner.setTradePerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 0 : partner.getTradePerson() - 1);
                         item.setDevNum(partner.getTradePerson());
                         item.setIsTrade(TrueOrFalseEnum.FALSE.getCode());
                     }
