@@ -72,7 +72,7 @@ public class CdtDistributionTestController {
         order.setConfirmTime(new Date());
         Boolean result = orderService.updateById(order);
         if (result) {
-            idistributionFacade.notifyOrderStatus(order.getUserId(), order, GoodsTypeEnum.getEnumByKey(order.getGoodsType()));
+            idistributionFacade.notifyOrderStatus(order.getUserId(), order, GoodsTypeEnum.WRITEOFF_ORDER);
         }
 
         return R.ok();
