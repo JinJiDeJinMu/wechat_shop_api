@@ -232,6 +232,20 @@ public class WxOrderController extends ApiBaseAction {
         return toResponsFail("测试提取合伙人订单");
     }
 
+    @Autowired
+    private IdistributionService idistributionService;
+
+    @Autowired
+    private IpartnerService ipartnerService;
+
+    @GetMapping("Testdistribution.do")
+    @IgnoreAuth
+    public Object TestdistributionService() {
+
+        ipartnerService.getPartnerInfo(idistributionService.getDistrimoney(), 128);
+        return toResponsFail("测试提取合伙人订单");
+    }
+
     /**
      * 获取订单列表
      */
