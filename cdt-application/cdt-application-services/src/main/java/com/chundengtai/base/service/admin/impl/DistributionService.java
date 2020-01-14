@@ -443,7 +443,7 @@ public class DistributionService implements IdistributionService {
                 assert partner != null;
                 partner.setUnbalanced(partner.getUnbalanced() == null ? detailModel.getMoney() : partner.getUnbalanced().add(detailModel.getMoney()));
                 if (item.getParentId().equals(detailModel.getGoldUserId())) {
-                    if (!item.getIsTrade().equals(TrueOrFalseEnum.TRUE.getCode())) {
+                    if (item.getIsTrade() == null || !item.getIsTrade().equals(TrueOrFalseEnum.TRUE.getCode())) {
                         //partner.setStatsPerson((partner.getStatsPerson() == null || partner.getStatsPerson() == 0) ? 1 : partner.getStatsPerson() + 1);
                         partner.setTradePerson((partner.getTradePerson() == null || partner.getTradePerson() == 0) ? 1 : partner.getTradePerson() + 1);
                         //绑定用户层级关系编号
