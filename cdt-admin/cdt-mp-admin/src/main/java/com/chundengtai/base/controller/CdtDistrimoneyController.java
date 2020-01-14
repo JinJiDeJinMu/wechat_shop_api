@@ -2,6 +2,7 @@ package com.chundengtai.base.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtDistrimoney;
+import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.service.CdtDistrimoneyService;
 import com.chundengtai.base.transfer.BaseForm;
@@ -12,6 +13,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 @RestController
@@ -27,6 +30,9 @@ import java.util.Map;
 public class CdtDistrimoneyController {
     @Autowired
     public CdtDistrimoneyService cdtDistrimoneyService;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
 
     /**
@@ -124,6 +130,10 @@ public class CdtDistrimoneyController {
         paramModel.setToken(token);
         paramModel.setId(id);
         boolean result = cdtDistrimoneyService.updateById(paramModel);
+        if (result) {
+            redisTemplate.delete(CacheConstant.SERVICE_CDT_DISTRIMONEY);
+            redisTemplate.opsForValue().set(CacheConstant.SERVICE_CDT_DISTRIMONEY, paramModel, 30, TimeUnit.DAYS);
+        }
         return R.ok(result);
     }
 
