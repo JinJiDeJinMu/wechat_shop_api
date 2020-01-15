@@ -1,4 +1,4 @@
-package com.chundengtai.base.service.admin.impl;
+package com.chundengtai.base.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -337,6 +337,7 @@ public class DistributionService implements IdistributionService {
                         break;
                 }
                 BigDecimal partnerMoney = order.getAllPrice().multiply(percent);
+                log.warn("用户id:" + user.getId() + "=========>" + partner.getUserId());
                 recordEarning(user.getId(), partner.getUserId(), partnerMoney, order, 1);
             }
         } catch (Exception ex) {

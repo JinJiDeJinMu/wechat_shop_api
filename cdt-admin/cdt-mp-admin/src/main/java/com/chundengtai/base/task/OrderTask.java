@@ -5,7 +5,7 @@ import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.service.CdtDistridetailService;
 import com.chundengtai.base.service.OrderService;
-import com.chundengtai.base.service.admin.impl.DistributionService;
+import com.chundengtai.base.service.impl.DistributionService;
 import com.chundengtai.base.utils.DateTimeConvert;
 import com.chundengtai.base.weixinapi.DistributionStatus;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
