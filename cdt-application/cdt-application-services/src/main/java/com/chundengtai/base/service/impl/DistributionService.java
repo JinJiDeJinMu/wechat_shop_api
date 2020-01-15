@@ -405,6 +405,9 @@ public class DistributionService implements IdistributionService {
         );
 
         List<CdtDistridetail> batListDetail = new ArrayList<>();
+
+        //设置订单更新过滤，去掉重复
+        List<String> orders = new ArrayList<>();
         BiConsumer<CdtDistridetail, Order> userSumeryOp = (CdtDistridetail detailModel, Order orderModel) -> {
             CdtDistributionLevel item = distributionLevelService.getOne(new QueryWrapper<CdtDistributionLevel>().lambda()
                     .eq(CdtDistributionLevel::getUserId, detailModel.getUserId()));
@@ -456,14 +459,16 @@ public class DistributionService implements IdistributionService {
                         item.setDevNum(partner.getTradePerson());
                         item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
                     }
-                    item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
-                    //todo:判定符合合伙人逻辑
-                    if (partner.getTradePerson() > getDistrimoney().getFirstPersonCondition()) {
-                        log.info("判定成为合伙人的逻辑");
-                        partnerService.determinePartner(getDistrimoney(), partner.getUserId());
+                    if (!orders.contains(orderModel.getOrderSn())) {
+                        item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
+                        //todo:判定符合合伙人逻辑
+                        if (partner.getTradePerson() > getDistrimoney().getFirstPersonCondition()) {
+                            log.info("判定成为合伙人的逻辑");
+                            partnerService.determinePartner(getDistrimoney(), partner.getUserId());
+                        }
+                        orders.add(orderModel.getOrderSn());
                     }
                 }
-
             }
             boolean rows = cdtUserSummaryService.updateById(partner);
             log.warn("==userSumeryOp====更新用户统计有效下线=====>" + rows);
