@@ -7,8 +7,6 @@ import java.util.Map;
 
 /**
  * 评价图片Service接口
- *
- * @date 2017-08-29 14:45:55
  */
 public interface CommentPictureService {
 

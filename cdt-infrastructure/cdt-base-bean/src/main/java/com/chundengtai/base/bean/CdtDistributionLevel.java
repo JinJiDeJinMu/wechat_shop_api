@@ -16,70 +16,80 @@ import java.util.Date;
  * </p>
  *
  * @author Royal
- * @since 2019-12-31
+ * @since 2020-01-15
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class CdtDistributionLevel implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * id
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+  /**
+   * id
+   */
+  @TableId(value = "id" , type = IdType.AUTO)
+  private Long id;
 
-    /**
-     * 用户id
-     */
-    private Integer userId;
+  /**
+   * 用户id
+   */
+  private Integer userId;
 
-    /**
-     * 用户所赚的钱
-     */
-    private BigDecimal money;
+  /**
+   * 用户所赚的钱
+   */
+  private BigDecimal money;
 
-    /**
-     * 推荐人id
-     */
-    private Integer parentId;
+  /**
+   * 推荐人id
+   */
+  private Integer parentId;
 
-    /**
-     * 分销层级
-     */
-    private Integer fxLevel;
+  /**
+   * 分销层级
+   */
+  private Integer fxLevel;
 
-    /**
-     * 顺序标号 记录上级发展的下线标号
-     */
-    private Integer devNum;
+  /**
+   * group_id
+   */
+  private Integer groupId;
 
-    /**
-     * 是否有效成交 0-false,1-true
-     */
-    private Integer isTrade;
+  /**
+   * 绑定标识号
+   */
+  private Integer statNum;
 
-    /**
-     * 成功订单数
-     */
-    private Integer tradeOrderNum;
+  /**
+   * 有效顺序标号 记录上级发展的下线标号
+   */
+  private Integer devNum;
 
-    /**
-     * 发起人id
-     */
-    private Integer sponsorId;
+  /**
+   * 是否有效成交 0-false,1-true
+   */
+  private Integer isTrade;
 
-    /**
-     * 创建时间
-     */
-    private Date createdTime;
+  /**
+   * 成功订单数
+   */
+  private Integer tradeOrderNum;
 
-    /**
-     * 校验token
-     */
-    private String token;
+  /**
+   * 发起人id
+   */
+  private Integer sponsorId;
+
+  /**
+   * 创建时间
+   */
+  private Date createdTime;
+
+  /**
+   * 校验token
+   */
+  private String token;
 
 
 }

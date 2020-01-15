@@ -7,8 +7,6 @@ import java.util.Map;
 
 /**
  * 热闹关键词表Service接口
- *
- * @date 2017-08-25 21:23:41
  */
 public interface KeywordsService {
 

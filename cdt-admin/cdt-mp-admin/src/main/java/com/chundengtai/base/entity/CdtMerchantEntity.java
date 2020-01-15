@@ -8,12 +8,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * 商家实体
- * 表名 cdt_merchant
- *
- * @date 2019-11-15 17:08:05
- */
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor

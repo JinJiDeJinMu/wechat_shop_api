@@ -21,11 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service实现类
- *
- * @date 2017-08-21 21:19:49
- */
 @Service("goodsService")
 public class GoodsServiceImpl implements GoodsService {
     @Autowired

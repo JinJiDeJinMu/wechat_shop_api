@@ -9,11 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service实现类
- *
- * @date 2017-08-16 17:22:46
- */
 @Service("addressService")
 public class AddressServiceImpl implements AddressService {
     @Autowired

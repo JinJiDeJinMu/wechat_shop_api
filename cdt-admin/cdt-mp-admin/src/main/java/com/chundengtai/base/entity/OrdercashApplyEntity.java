@@ -5,12 +5,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * 实体
- * 表名 ordercash_apply
- *
- * @date 2019-12-11 11:29:38
- */
 public class OrdercashApplyEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     /**

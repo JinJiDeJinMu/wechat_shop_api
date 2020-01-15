@@ -5,11 +5,7 @@ import com.chundengtai.base.entity.TopicEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service接口
- *
- * @date 2017-08-20 14:10:08
- */
+
 public interface TopicService {
 
     /**

@@ -5,11 +5,6 @@ import com.chundengtai.base.entity.CouponGoodsEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 优惠券关联商品Service接口
- *
- * @date 2017-08-29 21:50:17
- */
 public interface CouponGoodsService {
 
     /**

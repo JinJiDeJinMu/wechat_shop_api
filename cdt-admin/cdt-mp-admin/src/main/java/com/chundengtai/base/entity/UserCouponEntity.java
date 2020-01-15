@@ -7,8 +7,6 @@ import java.util.Date;
 /**
  * 实体
  * 表名 nideshop_user_coupon
- *
- * @date 2017-08-19 15:40:33
  */
 public class UserCouponEntity implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -1,11 +1,5 @@
 package com.chundengtai.base.entity;
 
-/**
- * 实体
- * 表名 nideshop_category
- *
- * @date 2017-08-21 15:32:31
- */
 public class CategoryEntity extends Tree<CategoryEntity> {
 
     //主键

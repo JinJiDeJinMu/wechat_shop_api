@@ -10,11 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 商家Service实现类
- *
- * @date 2019-11-15 17:08:05
- */
 @Service("cdtMerchantService")
 public class CdtMerchantServiceImpl implements CdtMerchantService {
     @Autowired

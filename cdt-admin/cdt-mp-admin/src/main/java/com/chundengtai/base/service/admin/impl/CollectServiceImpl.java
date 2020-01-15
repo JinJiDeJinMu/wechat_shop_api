@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-
 @Service("collectService")
 public class CollectServiceImpl implements CollectService {
     @Autowired

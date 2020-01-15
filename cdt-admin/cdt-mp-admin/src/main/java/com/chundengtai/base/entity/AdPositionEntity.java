@@ -2,13 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-
-/**
- * 实体
- * 表名 nideshop_ad_position
- *
- * @date 2017-08-19 12:02:42
- */
 public class AdPositionEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

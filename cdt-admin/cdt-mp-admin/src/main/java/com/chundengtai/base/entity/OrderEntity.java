@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-
-/**
- * @date 2017-08-13 10:41:09
- */
 public class OrderEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

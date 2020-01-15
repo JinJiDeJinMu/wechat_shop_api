@@ -6,8 +6,6 @@ import java.math.BigDecimal;
 /**
  * 实体
  * 表名 nideshop_topic
- *
- * @date 2017-08-20 14:10:08
  */
 public class TopicEntity implements Serializable {
     private static final long serialVersionUID = 1L;

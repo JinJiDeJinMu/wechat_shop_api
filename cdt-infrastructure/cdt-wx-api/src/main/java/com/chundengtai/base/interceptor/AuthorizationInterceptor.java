@@ -1,7 +1,6 @@
 package com.chundengtai.base.interceptor;
 
 import com.chundengtai.base.annotation.IgnoreAuth;
-import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.entity.UserVo;
 import com.chundengtai.base.service.ApiUserService;
 import com.chundengtai.base.service.MlsUserSer;
@@ -65,12 +64,12 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         }
         if (request.getAttribute(LOGIN_USER_KEY) == null) {
             if (openId.startsWith("weglapp_")) {//app登录
-                MlsUserEntity2 mlsUser = mlsUserSer.getEntityMapper().findByDeviceId(openId);
-                if (mlsUser == null && annotation == null) {
-                    throw new ApiRRException("请先登录", 401);
-                }
-                //设置userId到request里，后续根据userId，获取用户信息
-                request.setAttribute(LOGIN_USER_KEY, mlsUser);
+//                MlsUserEntity2 mlsUser = mlsUserSer.getEntityMapper().findByDeviceId(openId);
+//                if (mlsUser == null && annotation == null) {
+//                    throw new ApiRRException("请先登录", 401);
+//                }
+//                //设置userId到request里，后续根据userId，获取用户信息
+//                request.setAttribute(LOGIN_USER_KEY, mlsUser);
             } else {
                 UserVo userVo = userService.queryByOpenId(openId);
                 if (userVo == null && annotation == null) {

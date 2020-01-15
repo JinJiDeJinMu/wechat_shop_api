@@ -1,4 +1,4 @@
-package com.chundengtai.base.service.admin.impl;
+package com.chundengtai.base.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -176,8 +176,8 @@ public class DistributionService implements IdistributionService {
                 if (userInfo.getFirstLeader().equals(0)) {
                     condition.set(User::getFirstLeader, parentId);
                     try {
-                        //绑定链路关系 //记录标号信息
-                        bindLinkRelation(event, parentId);
+                        //绑定链路关系 //记录标号信息 //绑定合伙合伙人标识信息
+                        bindLinkRelation(event, model, parentId);
                     } catch (Exception ex) {
                         log.error("绑定链路关系异常");
                         ex.printStackTrace();
@@ -198,7 +198,7 @@ public class DistributionService implements IdistributionService {
         }
     }
 
-    private void bindLinkRelation(DistributionEvent event, Long parentId) {
+    private void bindLinkRelation(DistributionEvent event, CdtDistributionLevel model, Long parentId) {
         int count = cdtUserSummaryService.count(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, event.getUserId().intValue()));
         if (count > 0) {
             return;
@@ -226,8 +226,15 @@ public class DistributionService implements IdistributionService {
             linkNode.add(event.getUserId().intValue());
             userSummary.setChainRoad(gson.toJson(linkNode));
             cdtUserSummary.setStatsPerson(cdtUserSummary.getStatsPerson() + 1);
+
             boolean result2 = cdtUserSummaryService.updateById(cdtUserSummary);
+
+            //判定上级是否为合伙人
+            if (cdtUserSummary.getIsPartner().equals(TrueOrFalseEnum.TRUE.getCode())) {
+                model.setGroupId(cdtUserSummary.getUserId());
+            }
         }
+        model.setStatNum(cdtUserSummary.getStatsPerson());
         boolean rows = cdtUserSummaryService.save(userSummary);
     }
 
@@ -337,6 +344,7 @@ public class DistributionService implements IdistributionService {
                         break;
                 }
                 BigDecimal partnerMoney = order.getAllPrice().multiply(percent);
+                log.warn("用户id:" + user.getId() + "=====对应合伙人====>" + partner.getUserId());
                 recordEarning(user.getId(), partner.getUserId(), partnerMoney, order, 1);
             }
         } catch (Exception ex) {
@@ -399,6 +407,9 @@ public class DistributionService implements IdistributionService {
         );
 
         List<CdtDistridetail> batListDetail = new ArrayList<>();
+
+        //设置订单更新过滤，去掉重复
+        List<String> orders = new ArrayList<>();
         BiConsumer<CdtDistridetail, Order> userSumeryOp = (CdtDistridetail detailModel, Order orderModel) -> {
             CdtDistributionLevel item = distributionLevelService.getOne(new QueryWrapper<CdtDistributionLevel>().lambda()
                     .eq(CdtDistributionLevel::getUserId, detailModel.getUserId()));
@@ -450,14 +461,16 @@ public class DistributionService implements IdistributionService {
                         item.setDevNum(partner.getTradePerson());
                         item.setIsTrade(TrueOrFalseEnum.TRUE.getCode());
                     }
-                    item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
-                    //todo:判定符合合伙人逻辑
-                    if (partner.getTradePerson() > getDistrimoney().getFirstPersonCondition()) {
-                        log.info("判定成为合伙人的逻辑");
-                        partnerService.determinePartner(getDistrimoney(), partner.getUserId());
+                    if (!orders.contains(orderModel.getOrderSn())) {
+                        item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
+                        //todo:判定符合合伙人逻辑
+                        if (partner.getTradePerson() > getDistrimoney().getFirstPersonCondition()) {
+                            log.info("======userSumeryOp======判定成为合伙人的逻辑");
+                            partnerService.determinePartner(getDistrimoney(), partner.getUserId());
+                        }
+                        orders.add(orderModel.getOrderSn());
                     }
                 }
-
             }
             boolean rows = cdtUserSummaryService.updateById(partner);
             log.warn("==userSumeryOp====更新用户统计有效下线=====>" + rows);

@@ -2,13 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-
-/**
- * 优惠券关联商品实体
- * 表名 nideshop_coupon_goods
- *
- * @date 2017-08-29 21:50:17
- */
 public class CouponGoodsEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

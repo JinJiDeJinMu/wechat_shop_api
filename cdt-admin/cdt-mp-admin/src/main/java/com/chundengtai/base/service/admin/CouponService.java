@@ -6,11 +6,6 @@ import com.chundengtai.base.utils.R;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service接口
- *
- * @date 2017-08-19 12:53:26
- */
 public interface CouponService {
 
     /**

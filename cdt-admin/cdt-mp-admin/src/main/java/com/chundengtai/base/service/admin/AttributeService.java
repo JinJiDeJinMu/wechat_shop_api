@@ -5,9 +5,6 @@ import com.chundengtai.base.entity.AttributeEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @date 2017-08-13 10:41:11
- */
 public interface AttributeService {
 
     AttributeEntity queryObject(Integer id);

@@ -5,11 +5,6 @@ import com.chundengtai.base.entity.CategoryEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service接口
- *
- * @date 2017-08-21 15:32:31
- */
 public interface CategoryService {
 
     /**

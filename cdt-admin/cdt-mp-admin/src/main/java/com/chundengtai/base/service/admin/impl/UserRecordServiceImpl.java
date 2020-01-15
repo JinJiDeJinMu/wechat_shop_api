@@ -9,9 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by zhouhaisheng on 2019/3/2.
- */
 @Service
 public class UserRecordServiceImpl implements UserRecordService {
 

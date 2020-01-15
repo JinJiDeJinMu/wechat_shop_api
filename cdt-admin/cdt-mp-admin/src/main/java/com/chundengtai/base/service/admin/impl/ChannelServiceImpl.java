@@ -9,11 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service实现类
- *
- * @date 2017-08-22 19:19:56
- */
 @Service("channelService")
 public class ChannelServiceImpl implements ChannelService {
     @Autowired

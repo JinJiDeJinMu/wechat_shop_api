@@ -5,10 +5,6 @@ import com.chundengtai.base.entity.UserRecordEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by zhouhaisheng on 2019/3/2.
- */
-
 public interface UserRecordService {
     /**
      * 分页查询

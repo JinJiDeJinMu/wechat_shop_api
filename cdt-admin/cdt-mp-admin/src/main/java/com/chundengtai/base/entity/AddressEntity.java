@@ -6,8 +6,6 @@ import java.io.Serializable;
 /**
  * 实体
  * 表名 nideshop_address
- *
- * @date 2017-10-02 14:11:24
  */
 public class AddressEntity implements Serializable {
     private static final long serialVersionUID = 1L;

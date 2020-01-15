@@ -9,11 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service实现类
- *
- * @date 2017-08-17 16:13:27
- */
 @Service("attributeCategoryService")
 public class AttributeCategoryServiceImpl implements AttributeCategoryService {
     @Autowired

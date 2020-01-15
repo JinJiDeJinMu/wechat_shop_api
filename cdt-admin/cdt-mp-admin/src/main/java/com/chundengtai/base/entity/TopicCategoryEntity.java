@@ -6,8 +6,6 @@ import java.io.Serializable;
 /**
  * 实体
  * 表名 nideshop_topic_category
- *
- * @date 2017-08-20 15:41:56
  */
 public class TopicCategoryEntity implements Serializable {
     private static final long serialVersionUID = 1L;

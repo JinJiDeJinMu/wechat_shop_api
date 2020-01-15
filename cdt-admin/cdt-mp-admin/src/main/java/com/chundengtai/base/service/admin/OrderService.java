@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @date 2017-08-13 10:41:09
- */
 public interface OrderService {
 
     OrderEntity queryObject(Integer id);

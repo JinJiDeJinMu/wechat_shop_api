@@ -5,9 +5,6 @@ import com.chundengtai.base.entity.GoodsAttributeEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @date 2017-08-13 10:41:08
- */
 public interface GoodsAttributeService {
 
     GoodsAttributeEntity queryObject(Integer id);

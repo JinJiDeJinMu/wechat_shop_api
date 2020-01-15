@@ -5,8 +5,6 @@ import java.io.Serializable;
 
 /**
  * 规格表
- *
- * @date 2017-08-13 10:41:10
  */
 public class SpecificationEntity implements Serializable {
     private static final long serialVersionUID = 1L;

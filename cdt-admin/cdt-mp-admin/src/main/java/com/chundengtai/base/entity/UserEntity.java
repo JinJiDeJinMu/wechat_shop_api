@@ -8,8 +8,6 @@ import java.util.Date;
 
 /**
  * 会员实体
- *
- * @date 2017-08-16 15:02:28
  */
 
 public class UserEntity implements Serializable {

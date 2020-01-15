@@ -2,12 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-/**
- * 客服管理表实体
- * 表名 cdt_customer_service
- *
- * @date 2019-11-25 19:27:34
- */
 public class CdtCustomerServiceEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

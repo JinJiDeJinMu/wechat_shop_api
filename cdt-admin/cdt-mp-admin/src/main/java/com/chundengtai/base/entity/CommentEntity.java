@@ -3,13 +3,6 @@ package com.chundengtai.base.entity;
 import java.io.Serializable;
 import java.util.List;
 
-
-/**
- * 实体
- * 表名 nideshop_comment
- *
- * @date 2017-08-28 17:03:40
- */
 public class CommentEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

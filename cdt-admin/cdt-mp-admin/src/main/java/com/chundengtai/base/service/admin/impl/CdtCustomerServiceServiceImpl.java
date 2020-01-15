@@ -10,11 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 
-/**
- * 客服管理表Service实现类
- *
- * @date 2019-11-25 19:27:34
- */
 @Service("cdtCustomerServiceService")
 public class CdtCustomerServiceServiceImpl implements CdtCustomerServiceService {
     @Autowired

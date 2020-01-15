@@ -1,4 +1,4 @@
-package com.chundengtai.base.service.admin.impl;
+package com.chundengtai.base.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -54,6 +54,16 @@ public class PartnerService implements IpartnerService {
      */
     @Override
     public CdtUserSummary getPartnerInfo(CdtDistrimoney distrimoney, int userId) {
+        //根据用户层级关系绑定表里面的groupid来判定 是否为合伙人下线
+        CdtDistributionLevel currentNode = distributionLevelService.getOne(new QueryWrapper<CdtDistributionLevel>().lambda().eq(CdtDistributionLevel::getUserId, userId));
+        if (currentNode.getGroupId() != null && !currentNode.getGroupId().equals(0)) {
+            CdtUserSummary result = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
+                    .eq(CdtUserSummary::getUserId, currentNode.getGroupId()).eq(CdtUserSummary::getIsPartner, TrueOrFalseEnum.TRUE.getCode()));
+            if (result != null) {
+                return result;
+            }
+        }
+
         //读取链路关系
         CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
                 .eq(CdtUserSummary::getUserId, userId));
@@ -121,6 +131,11 @@ public class PartnerService implements IpartnerService {
 
                 //用户所在的层级是在合伙人界限内还是外
                 if (levelModel.getDevNum() < distrimoney.getFirstPersonCondition()) {
+                    log.warn("====levelModel.getDevNum()====界限外===" + levelModel.getDevNum());
+                    //continue;
+                }
+                if (levelModel.getStatNum() < distrimoney.getFirstPersonCondition()) {
+                    log.warn("====levelModel.getStatNum()====界限内===" + levelModel.getDevNum());
                     continue;
                 }
                 //用户排在第21及之后的话那么合伙人奖励直接给到当前的这个合伙人

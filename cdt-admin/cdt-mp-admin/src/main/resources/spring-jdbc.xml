@@ -157,12 +157,12 @@
     <bean id="wall-filter-config" class="com.alibaba.druid.wall.WallConfig">
         <property name="multiStatementAllow" value="true"/>
     </bean>
-    <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"></bean>
+    <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"/>
     <bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut" scope="prototype">
         <property name="patterns">
             <list>
-                <value>com.platform.controller.*</value>
-                <value>com.platform.service.*</value>
+                <value>com.chundengtai.base.controller.*</value>
+                <value>com.chundengtai.base.service.*</value>
             </list>
         </property>
     </bean>
@@ -171,9 +171,7 @@
     </aop:config>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource">
-            <ref bean="dataSource"/>
-        </property>
+        <property name="dataSource" ref="dataSource"/>
     </bean>
 
     <!-- JDBC配置 -->
@@ -183,7 +181,7 @@
     </bean>
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.platform.dao,com.platform.*.dao,com.chundengtai.base.dao"/>
+        <property name="basePackage" value="com.chundengtai.base.dao"/>
     </bean>
 
     <!--sqlSession-->
@@ -192,7 +190,7 @@
         <!--sql映射文件-->
         <property name="mapperLocations" value="classpath*:mapper/*.xml"/>
         <!--别名设置-->
-        <property name="typeAliasesPackage" value="com.platform.entity,com.chundengtai.base.bean"/>
+        <property name="typeAliasesPackage" value="com.chundengtai.base.bean"/>
         <!--setting配置-->
         <property name="configuration">
             <bean class="com.baomidou.mybatisplus.core.MybatisConfiguration">
@@ -278,7 +276,7 @@
     <!-- 配置切面 -->
     <aop:config>
         <aop:pointcut id="transactionPointcut"
-                      expression="(execution(* com.platform.service..*.*(..)))or (execution(* com.chundengtai.base.service..*.*(..)))"/>
+                      expression="execution(* com.chundengtai.base.service..*.*(..))"/>
         <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
     </aop:config>
 

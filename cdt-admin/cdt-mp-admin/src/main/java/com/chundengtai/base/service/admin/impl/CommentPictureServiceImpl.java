@@ -11,8 +11,6 @@ import java.util.Map;
 
 /**
  * 评价图片Service实现类
- *
- * @date 2017-08-29 14:45:55
  */
 @Service("commentPictureService")
 public class CommentPictureServiceImpl implements CommentPictureService {

@@ -7,8 +7,6 @@ import java.util.Map;
 
 /**
  * Service接口
- *
- * @date 2017-09-04 21:42:24
  */
 public interface ShippingService {
 

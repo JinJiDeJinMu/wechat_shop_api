@@ -2,7 +2,6 @@ package com.chundengtai.base.controller;
 
 import com.chundengtai.base.annotation.SysLog;
 import com.chundengtai.base.dao.SysUserDao;
-import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.entity.SysUserEntity;
 import com.chundengtai.base.service.SysUserRoleService;
 import com.chundengtai.base.service.SysUserService;
@@ -113,8 +112,8 @@ public class SysUserController extends AbstractController {
     public R save(@RequestBody SysUserEntity user) {
         ValidatorUtils.validateEntity(user, AddGroup.class);
         int count=sysUserDao.mlsUseCount(user.getMobile());
-        if(count>0) {
-        	return R.error("手机号已被注册");
+        if (count > 0) {
+            return R.error("手机号已被注册");
         }
         user.setCreateUserId(getUserId());
         if (!user.getRoleIdList().contains(Long.valueOf(5)) && user.getMerchantId() == null) {
@@ -122,18 +121,18 @@ public class SysUserController extends AbstractController {
         }
         sysUserService.save(user);
         //sysUserDao.updateMerchantId(user);
-        
-        MlsUserEntity2 mlsUserVo=new MlsUserEntity2();
-        mlsUserVo.setUserTel(user.getMobile());
-        mlsUserVo.setFx(user.getFx());
-        mlsUserVo.setFx1(user.getFx1());
-        mlsUserVo.setFx2(user.getFx2());
-        mlsUserVo.setPfx(user.getPfx());
-        mlsUserVo.setFid(-1L);
-        mlsUserVo.setRootId(user.getUserId());
-        mlsUserVo.setMerchantId(user.getMerchantId());
-        mlsUserVo.setAllShow(user.getAllShow());
-        sysUserDao.insertMlsUse(mlsUserVo);
+
+//        MlsUserEntity2 mlsUserVo=new MlsUserEntity2();
+//        mlsUserVo.setUserTel(user.getMobile());
+//        mlsUserVo.setFx(user.getFx());
+//        mlsUserVo.setFx1(user.getFx1());
+//        mlsUserVo.setFx2(user.getFx2());
+//        mlsUserVo.setPfx(user.getPfx());
+//        mlsUserVo.setFid(-1L);
+//        mlsUserVo.setRootId(user.getUserId());
+//        mlsUserVo.setMerchantId(user.getMerchantId());
+//        mlsUserVo.setAllShow(user.getAllShow());
+//        sysUserDao.insertMlsUse(mlsUserVo);
         return R.ok();
     }
 
@@ -149,15 +148,15 @@ public class SysUserController extends AbstractController {
         user.setCreateUserId(getUserId());
 
         sysUserService.update(user);
-        MlsUserEntity2 mlsUserVo=new MlsUserEntity2();
-        mlsUserVo.setFx(user.getFx());
-        mlsUserVo.setFx1(user.getFx1());
-        mlsUserVo.setFx2(user.getFx2());
-        mlsUserVo.setPfx(user.getPfx());
-        mlsUserVo.setRootId(user.getUserId());
-        mlsUserVo.setAllShow(user.getAllShow());
-        sysUserDao.updateMlsUse(mlsUserVo);
-        
+//        MlsUserEntity2 mlsUserVo=new MlsUserEntity2();
+//        mlsUserVo.setFx(user.getFx());
+//        mlsUserVo.setFx1(user.getFx1());
+//        mlsUserVo.setFx2(user.getFx2());
+//        mlsUserVo.setPfx(user.getPfx());
+//        mlsUserVo.setRootId(user.getUserId());
+//        mlsUserVo.setAllShow(user.getAllShow());
+//        sysUserDao.updateMlsUse(mlsUserVo);
+
         return R.ok();
     }
 

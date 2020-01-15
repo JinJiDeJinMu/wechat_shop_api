@@ -5,9 +5,7 @@ import com.chundengtai.base.entity.CollectEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @date 2017-08-13 10:41:06
- */
+
 public interface CollectService {
 
     CollectEntity queryObject(Integer id);

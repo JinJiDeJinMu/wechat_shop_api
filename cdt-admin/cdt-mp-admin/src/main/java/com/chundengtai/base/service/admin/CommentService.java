@@ -5,11 +5,6 @@ import com.chundengtai.base.entity.CommentEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service接口
- *
- * @date 2017-08-28 17:03:40
- */
 public interface CommentService {
 
     /**

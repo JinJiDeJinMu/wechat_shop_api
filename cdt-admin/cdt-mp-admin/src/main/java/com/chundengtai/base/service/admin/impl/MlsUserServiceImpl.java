@@ -11,8 +11,6 @@ import java.util.Map;
 
 /**
  * Service实现类
- *
- * @date 2017-08-16 15:02:28
  */
 @Service("mlsUserService")
 public class MlsUserServiceImpl implements MlsUserService {

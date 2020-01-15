@@ -9,11 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 优惠券关联商品Service实现类
- *
- * @date 2017-08-29 21:50:17
- */
 @Service("couponGoodsService")
 public class CouponGoodsServiceImpl implements CouponGoodsService {
     @Autowired

@@ -5,8 +5,6 @@ import com.chundengtai.base.entity.UserLevelEntity;
 
 /**
  * Dao
- *
- * @date 2017-08-16 16:52:22
  */
 public interface UserLevelDao extends BaseBizMapper<UserLevelEntity> {
 

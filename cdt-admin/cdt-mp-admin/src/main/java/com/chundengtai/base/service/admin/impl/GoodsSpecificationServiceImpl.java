@@ -11,8 +11,6 @@ import java.util.Map;
 
 /**
  * 商品对应规格表值表Service实现类
- *
- * @date 2017-08-31 11:15:55
  */
 @Service("goodsSpecificationService")
 public class GoodsSpecificationServiceImpl implements GoodsSpecificationService {

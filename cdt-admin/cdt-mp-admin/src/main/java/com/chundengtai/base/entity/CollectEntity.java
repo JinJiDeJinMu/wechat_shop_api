@@ -5,10 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
 
-
-/**
- * @date 2017-08-13 10:41:06
- */
 public class CollectEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

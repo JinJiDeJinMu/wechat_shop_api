@@ -5,11 +5,6 @@ import com.chundengtai.base.entity.AddressEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service接口
- *
- * @date 2017-08-16 17:22:46
- */
 public interface AddressService {
 
     /**

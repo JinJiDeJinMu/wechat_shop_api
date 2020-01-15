@@ -242,7 +242,7 @@ public class WxOrderController extends ApiBaseAction {
     @IgnoreAuth
     public Object TestdistributionService() {
 
-        ipartnerService.getPartnerInfo(idistributionService.getDistrimoney(), 128);
+        ipartnerService.getPartnerInfo(idistributionService.getDistrimoney(), 127);
         return toResponsFail("测试提取合伙人订单");
     }
 

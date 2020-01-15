@@ -5,11 +5,6 @@ import com.chundengtai.base.entity.BrandEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service接口
- *
- * @date 2017-08-19 17:59:15
- */
 public interface BrandService {
 
     /**

@@ -77,8 +77,7 @@ public class ApiGoodsController extends ApiBaseAction {
     private ApiUserCouponService apiUserCouponService;
     @Autowired
     private ApiCartService cartService;
-    @Autowired
-    private MlsUserSer mlsUserSer;
+
     @Autowired
     private CdtMerchantWxService cdtMerchantService;
 

@@ -9,10 +9,6 @@ import java.util.Date;
 
 /**
  * 系统流水日志实体
- * 表名 cdt_paytrans_record
- *
- * @author
- * @date 2019-12-06 10:27:31
  */
 @Data
 @NoArgsConstructor
