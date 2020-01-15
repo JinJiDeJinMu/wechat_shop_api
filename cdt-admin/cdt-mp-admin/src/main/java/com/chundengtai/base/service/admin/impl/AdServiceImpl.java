@@ -9,11 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service实现类
- *
- * @date 2017-08-19 09:37:35
- */
 @Service("adService")
 public class AdServiceImpl implements AdService {
     @Autowired

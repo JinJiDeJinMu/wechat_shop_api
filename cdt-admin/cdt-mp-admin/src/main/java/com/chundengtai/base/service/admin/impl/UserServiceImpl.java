@@ -10,11 +10,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service实现类
- *
- * @date 2017-08-16 15:02:28
- */
 @Service("userService")
 public class UserServiceImpl implements UserService {
     @Autowired

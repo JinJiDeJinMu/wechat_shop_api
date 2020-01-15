@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-
 @Service("footprintService")
 public class FootprintServiceImpl implements FootprintService {
     @Autowired

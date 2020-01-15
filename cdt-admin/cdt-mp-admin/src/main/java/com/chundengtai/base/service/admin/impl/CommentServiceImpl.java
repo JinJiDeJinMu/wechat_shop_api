@@ -14,8 +14,6 @@ import java.util.Map;
 
 /**
  * 用户评价Service实现类
- *
- * @date 2017-08-28 17:03:40
  */
 @Service("commentService")
 public class CommentServiceImpl implements CommentService {

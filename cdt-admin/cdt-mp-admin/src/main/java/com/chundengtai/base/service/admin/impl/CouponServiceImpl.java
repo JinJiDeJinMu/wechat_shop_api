@@ -19,11 +19,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service实现类
- *
- * @date 2017-08-19 12:53:26
- */
 @Service("couponService")
 public class CouponServiceImpl implements CouponService {
     @Autowired

@@ -17,8 +17,6 @@ import java.util.Map;
 
 /**
  * Service实现类
- *
- * @date 2017-08-30 14:31:21
  */
 @Service("productService")
 public class ProductServiceImpl implements ProductService {

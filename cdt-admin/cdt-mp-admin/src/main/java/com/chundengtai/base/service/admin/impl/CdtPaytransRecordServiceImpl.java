@@ -10,12 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-
-/**
- * 系统流水日志Service实现类
- *
- * @date 2019-12-06 10:27:31
- */
 @Service("cdtPaytransRecordService")
 public class CdtPaytransRecordServiceImpl implements CdtPaytransRecordService {
     @Autowired

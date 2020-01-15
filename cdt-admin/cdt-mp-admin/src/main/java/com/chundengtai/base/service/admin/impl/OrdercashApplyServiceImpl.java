@@ -15,8 +15,6 @@ import java.util.Map;
 
 /**
  * Service实现类
- *
- * @date 2019-12-11 11:29:38
  */
 @Service("ordercashApplyService")
 @Slf4j

@@ -11,8 +11,6 @@ import java.util.Map;
 
 /**
  * 热闹关键词表Service实现类
- *
- * @date 2017-08-25 21:23:41
  */
 @Service("keywordsService")
 public class KeywordsServiceImpl implements KeywordsService {

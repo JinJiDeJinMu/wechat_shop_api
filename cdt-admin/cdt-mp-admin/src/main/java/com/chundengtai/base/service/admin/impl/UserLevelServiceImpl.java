@@ -9,11 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service实现类
- *
- * @date 2017-08-16 16:52:22
- */
 @Service("userLevelService")
 public class UserLevelServiceImpl implements UserLevelService {
     @Autowired

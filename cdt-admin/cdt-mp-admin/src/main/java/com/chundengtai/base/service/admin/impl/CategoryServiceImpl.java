@@ -10,11 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service实现类
- *
- * @date 2017-08-21 15:32:31
- */
 @Service("categoryService")
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
