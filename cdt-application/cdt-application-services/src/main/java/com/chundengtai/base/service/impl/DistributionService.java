@@ -337,7 +337,7 @@ public class DistributionService implements IdistributionService {
                         break;
                 }
                 BigDecimal partnerMoney = order.getAllPrice().multiply(percent);
-                log.warn("用户id:" + user.getId() + "=========>" + partner.getUserId());
+                log.warn("用户id:" + user.getId() + "=====对应合伙人====>" + partner.getUserId());
                 recordEarning(user.getId(), partner.getUserId(), partnerMoney, order, 1);
             }
         } catch (Exception ex) {
