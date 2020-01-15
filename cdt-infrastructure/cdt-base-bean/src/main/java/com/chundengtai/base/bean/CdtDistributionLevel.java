@@ -51,10 +51,18 @@ public class CdtDistributionLevel implements Serializable {
    */
   private Integer fxLevel;
 
+  /**
+   * group_id
+   */
   private Integer groupId;
 
   /**
-   * 顺序标号 记录上级发展的下线标号
+   * 绑定标识号
+   */
+  private Integer statNum;
+
+  /**
+   * 有效顺序标号 记录上级发展的下线标号
    */
   private Integer devNum;
 

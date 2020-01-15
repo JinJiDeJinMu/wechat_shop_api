@@ -226,6 +226,7 @@ public class DistributionService implements IdistributionService {
             linkNode.add(event.getUserId().intValue());
             userSummary.setChainRoad(gson.toJson(linkNode));
             cdtUserSummary.setStatsPerson(cdtUserSummary.getStatsPerson() + 1);
+
             boolean result2 = cdtUserSummaryService.updateById(cdtUserSummary);
 
             //判定上级是否为合伙人
@@ -233,6 +234,7 @@ public class DistributionService implements IdistributionService {
                 model.setGroupId(cdtUserSummary.getUserId());
             }
         }
+        model.setStatNum(cdtUserSummary.getStatsPerson());
         boolean rows = cdtUserSummaryService.save(userSummary);
     }
 
@@ -463,7 +465,7 @@ public class DistributionService implements IdistributionService {
                         item.setTradeOrderNum(item.getTradeOrderNum() == null ? 1 : item.getTradeOrderNum() + 1);
                         //todo:判定符合合伙人逻辑
                         if (partner.getTradePerson() > getDistrimoney().getFirstPersonCondition()) {
-                            log.info("判定成为合伙人的逻辑");
+                            log.info("======userSumeryOp======判定成为合伙人的逻辑");
                             partnerService.determinePartner(getDistrimoney(), partner.getUserId());
                         }
                         orders.add(orderModel.getOrderSn());

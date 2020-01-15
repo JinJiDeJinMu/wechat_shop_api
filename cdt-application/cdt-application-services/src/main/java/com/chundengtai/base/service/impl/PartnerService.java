@@ -131,6 +131,11 @@ public class PartnerService implements IpartnerService {
 
                 //用户所在的层级是在合伙人界限内还是外
                 if (levelModel.getDevNum() < distrimoney.getFirstPersonCondition()) {
+                    log.warn("====levelModel.getDevNum()====界限外===" + levelModel.getDevNum());
+                    //continue;
+                }
+                if (levelModel.getStatNum() < distrimoney.getFirstPersonCondition()) {
+                    log.warn("====levelModel.getStatNum()====界限内===" + levelModel.getDevNum());
                     continue;
                 }
                 //用户排在第21及之后的话那么合伙人奖励直接给到当前的这个合伙人
