@@ -54,6 +54,16 @@ public class PartnerService implements IpartnerService {
      */
     @Override
     public CdtUserSummary getPartnerInfo(CdtDistrimoney distrimoney, int userId) {
+        //根据用户层级关系绑定表里面的groupid来判定 是否为合伙人下线
+        CdtDistributionLevel currentNode = distributionLevelService.getOne(new QueryWrapper<CdtDistributionLevel>().lambda().eq(CdtDistributionLevel::getUserId, userId));
+        if (currentNode.getGroupId() != null && !currentNode.getGroupId().equals(0)) {
+            CdtUserSummary result = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
+                    .eq(CdtUserSummary::getUserId, currentNode.getGroupId()).eq(CdtUserSummary::getIsPartner, TrueOrFalseEnum.TRUE.getCode()));
+            if (result != null) {
+                return result;
+            }
+        }
+
         //读取链路关系
         CdtUserSummary cdtUserSummary = cdtUserSummaryService.getOne(new QueryWrapper<CdtUserSummary>().lambda()
                 .eq(CdtUserSummary::getUserId, userId));

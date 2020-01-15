@@ -162,8 +162,6 @@ public class DistributionService implements IdistributionService {
             } else {
                 model.setSponsorId(parentId.intValue());
             }
-            //获取
-
 
             //绑定user表层架关系
             boolean resultRows = userService.update(new UpdateWrapper<User>().lambda().set(User::getIsDistribut, TrueOrFalseEnum.TRUE.getCode())
@@ -178,7 +176,7 @@ public class DistributionService implements IdistributionService {
                 if (userInfo.getFirstLeader().equals(0)) {
                     condition.set(User::getFirstLeader, parentId);
                     try {
-                        //绑定链路关系 //记录标号信息
+                        //绑定链路关系 //记录标号信息 //绑定合伙合伙人标识信息
                         bindLinkRelation(event, model, parentId);
                     } catch (Exception ex) {
                         log.error("绑定链路关系异常");
@@ -230,7 +228,7 @@ public class DistributionService implements IdistributionService {
             cdtUserSummary.setStatsPerson(cdtUserSummary.getStatsPerson() + 1);
             boolean result2 = cdtUserSummaryService.updateById(cdtUserSummary);
 
-            //判定是否成为合伙人
+            //判定上级是否为合伙人
             if (cdtUserSummary.getIsPartner().equals(TrueOrFalseEnum.TRUE.getCode())) {
                 model.setGroupId(cdtUserSummary.getUserId());
             }
