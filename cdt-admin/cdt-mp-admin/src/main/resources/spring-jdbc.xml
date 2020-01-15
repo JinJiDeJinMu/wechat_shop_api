@@ -181,7 +181,7 @@
     </bean>
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.platform.dao,com.platform.*.dao,com.chundengtai.base.dao"/>
+        <property name="basePackage" value="com.chundengtai.base.dao"/>
     </bean>
 
     <!--sqlSession-->
@@ -190,7 +190,7 @@
         <!--sql映射文件-->
         <property name="mapperLocations" value="classpath*:mapper/*.xml"/>
         <!--别名设置-->
-        <property name="typeAliasesPackage" value="com.platform.entity,com.chundengtai.base.bean"/>
+        <property name="typeAliasesPackage" value="com.chundengtai.base.bean"/>
         <!--setting配置-->
         <property name="configuration">
             <bean class="com.baomidou.mybatisplus.core.MybatisConfiguration">
