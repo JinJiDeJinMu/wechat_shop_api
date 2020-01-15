@@ -2,13 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-
-/**
- * 实体
- * 表名 nideshop_brand
- *
- * @date 2017-08-19 17:59:15
- */
 public class BrandEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

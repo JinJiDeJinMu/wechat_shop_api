@@ -8,8 +8,6 @@ import java.util.Map;
 
 /**
  * 消息公告Service接口
- *
- * @date 2019-11-25 11:38:00
  */
 public interface CdtNewsBulletinService {
 

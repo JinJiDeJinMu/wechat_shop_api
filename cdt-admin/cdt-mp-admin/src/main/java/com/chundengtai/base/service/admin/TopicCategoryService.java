@@ -5,11 +5,6 @@ import com.chundengtai.base.entity.TopicCategoryEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service接口
- *
- * @date 2017-08-20 15:41:56
- */
 public interface TopicCategoryService {
 
     /**

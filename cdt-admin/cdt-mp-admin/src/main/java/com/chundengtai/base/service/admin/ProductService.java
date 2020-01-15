@@ -5,11 +5,6 @@ import com.chundengtai.base.entity.ProductEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service接口
- *
- * @date 2017-08-30 14:31:21
- */
 public interface ProductService {
 
     /**

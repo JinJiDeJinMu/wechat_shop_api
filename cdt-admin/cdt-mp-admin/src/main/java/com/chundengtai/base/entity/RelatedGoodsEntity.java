@@ -2,10 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-
-/**
- * @date 2017-08-13 10:41:09
- */
 public class RelatedGoodsEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

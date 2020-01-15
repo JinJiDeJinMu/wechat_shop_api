@@ -7,8 +7,6 @@ import java.util.Map;
 
 /**
  * Service接口
- *
- * @date 2017-08-22 19:19:56
  */
 public interface ChannelService {
 

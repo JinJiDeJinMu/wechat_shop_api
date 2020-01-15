@@ -5,12 +5,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-/**
- * 实体
- * 表名 nideshop_express_order
- *
- * @date 2019-12-05 16:43:50
- */
 @NoArgsConstructor
 @Data
 public class ExpressOrderEntity implements Serializable {

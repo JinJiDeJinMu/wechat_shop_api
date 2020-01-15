@@ -2,13 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-
-/**
- * 实体
- * 表名 nideshop_attribute
- *
- * @date 2017-08-17 16:48:17
- */
 public class AttributeEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

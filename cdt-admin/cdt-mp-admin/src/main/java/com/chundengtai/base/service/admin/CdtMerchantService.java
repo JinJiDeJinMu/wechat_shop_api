@@ -7,8 +7,6 @@ import java.util.Map;
 
 /**
  * 商家Service接口
- *
- * @date 2019-11-15 17:08:05
  */
 public interface CdtMerchantService {
 

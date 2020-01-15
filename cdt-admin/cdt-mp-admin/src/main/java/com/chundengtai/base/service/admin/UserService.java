@@ -5,11 +5,6 @@ import com.chundengtai.base.entity.UserEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service接口
- *
- * @date 2017-08-16 15:02:28
- */
 public interface UserService {
 
     /**

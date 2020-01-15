@@ -7,8 +7,6 @@ import java.util.Date;
 /**
  * 实体
  * 表名 nideshop_ad
- *
- * @date 2017-08-19 09:37:35
  */
 public class AdEntity implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -5,10 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
 
-
-/**
- * @date 2017-08-13 10:41:10
- */
 public class SearchHistoryEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

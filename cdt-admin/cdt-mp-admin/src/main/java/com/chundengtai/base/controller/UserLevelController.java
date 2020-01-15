@@ -12,11 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @date 2017-08-16 16:52:22
- */
 @RestController
 @RequestMapping("userlevel")
 public class UserLevelController {

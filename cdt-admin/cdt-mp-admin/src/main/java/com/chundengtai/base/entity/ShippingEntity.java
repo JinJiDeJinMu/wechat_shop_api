@@ -2,13 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-
-/**
- * 实体
- * 表名 nideshop_shipping
- *
- * @date 2017-09-04 21:42:24
- */
 public class ShippingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

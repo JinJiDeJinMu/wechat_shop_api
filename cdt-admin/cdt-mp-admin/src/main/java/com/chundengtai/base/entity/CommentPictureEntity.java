@@ -5,9 +5,6 @@ import java.io.Serializable;
 
 /**
  * 评价图片实体
- * 表名 nideshop_comment_picture
- *
- * @date 2017-08-29 14:45:55
  */
 public class CommentPictureEntity implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -4,13 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-
-/**
- * 实体
- * 表名 nideshop_coupon
- *
- * @date 2017-08-19 12:53:26
- */
 public class CouponEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

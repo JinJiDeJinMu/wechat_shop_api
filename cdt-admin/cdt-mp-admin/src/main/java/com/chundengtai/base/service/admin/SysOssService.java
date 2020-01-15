@@ -7,8 +7,6 @@ import java.util.Map;
 
 /**
  * 文件上传Service
- *
- * @date 2017-03-25 12:13:26
  */
 public interface SysOssService {
 

@@ -2,12 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-/**
- * 实体
- * 表名 group_buying
- *
- * @date 2019-06-13 22:00:12
- */
 public class GroupBuyingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

@@ -5,9 +5,6 @@ import com.chundengtai.base.entity.SearchHistoryEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @date 2017-08-13 10:41:10
- */
 public interface SearchHistoryService {
 
     SearchHistoryEntity queryObject(Integer id);

@@ -4,9 +4,6 @@ import java.io.Serializable;
 
 /**
  * 消息公告实体
- * 表名 cdt_news_bulletin
- *
- * @date 2019-11-25 11:38:00
  */
 public class CdtNewsBulletinEntity implements Serializable {
     private static final long serialVersionUID = 1L;

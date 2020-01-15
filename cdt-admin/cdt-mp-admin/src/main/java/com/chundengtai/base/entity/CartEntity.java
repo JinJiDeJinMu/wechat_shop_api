@@ -3,10 +3,6 @@ package com.chundengtai.base.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
-/**
- * @date 2017-08-13 10:41:06
- */
 public class CartEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

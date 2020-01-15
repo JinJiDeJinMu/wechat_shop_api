@@ -7,8 +7,6 @@ import java.util.Map;
 
 /**
  * 商品对应规格表值表Service接口
- *
- * @date 2017-08-31 11:15:55
  */
 public interface GoodsSpecificationService {
 

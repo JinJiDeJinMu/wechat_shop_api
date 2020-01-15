@@ -6,8 +6,6 @@ import java.io.Serializable;
 /**
  * 实体
  * 表名 nideshop_user_level
- *
- * @date 2017-08-16 16:52:22
  */
 public class UserLevelEntity implements Serializable {
     private static final long serialVersionUID = 1L;

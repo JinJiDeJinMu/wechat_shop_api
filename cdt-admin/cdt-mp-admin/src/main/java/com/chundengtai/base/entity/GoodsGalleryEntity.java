@@ -6,8 +6,6 @@ import java.io.Serializable;
 /**
  * 商品顶部轮播图
  * 表名 nideshop_goods_gallery
- *
- * @date 2017-08-23 14:41:43
  */
 public class GoodsGalleryEntity implements Serializable {
     private static final long serialVersionUID = 1L;

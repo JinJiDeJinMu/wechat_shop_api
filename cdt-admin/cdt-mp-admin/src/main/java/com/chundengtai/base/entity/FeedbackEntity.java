@@ -3,13 +3,6 @@ package com.chundengtai.base.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-
-/**
- * 实体
- * 表名 nideshop_feedback
- *
- * @date 2017-08-23 15:03:25
- */
 public class FeedbackEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

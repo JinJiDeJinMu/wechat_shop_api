@@ -2,13 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-
-/**
- * 热闹关键词表实体
- * 表名 nideshop_keywords
- *
- * @date 2017-08-25 21:23:41
- */
 public class KeywordsEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

@@ -5,11 +5,6 @@ import com.chundengtai.base.entity.AdPositionEntity;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service接口
- *
- * @date 2017-08-19 12:02:42
- */
 public interface AdPositionService {
 
     /**

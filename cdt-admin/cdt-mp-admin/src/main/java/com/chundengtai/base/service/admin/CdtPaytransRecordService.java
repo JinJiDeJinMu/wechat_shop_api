@@ -8,8 +8,6 @@ import java.util.Map;
 
 /**
  * 系统流水日志Service接口
- *
- * @date 2019-12-06 10:27:31
  */
 public interface CdtPaytransRecordService {
 

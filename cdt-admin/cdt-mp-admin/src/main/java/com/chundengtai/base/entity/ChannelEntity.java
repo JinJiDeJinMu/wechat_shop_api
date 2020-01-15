@@ -2,13 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-
-/**
- * 实体
- * 表名 nideshop_channel
- *
- * @date 2017-08-22 19:19:56
- */
 public class ChannelEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
