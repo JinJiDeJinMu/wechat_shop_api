@@ -54,13 +54,13 @@ public class Generator {
             @Override
             public void initMap() {
                 Map<String, Object> map = new HashMap<String, Object>();
-                map.put("abc", this.getConfig().getGlobalConfig().getAuthor() + "-mp");
+                map.put("abc" , this.getConfig().getGlobalConfig().getAuthor() + "-mp");
                 this.setMap(map);
             }
         };
 
-        String htmlTemplate = "/template/admin-html.vm";
-        // 自定义输出配置
+        String htmlTemplate = "/template/adminhtml.vm";
+//        // 自定义输出配置
         List<FileOutConfig> focList = new ArrayList<>();
         // 自定义配置会被优先输出
         focList.add(new FileOutConfig(htmlTemplate) {

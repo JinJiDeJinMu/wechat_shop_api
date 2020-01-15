@@ -162,6 +162,8 @@ public class DistributionService implements IdistributionService {
             } else {
                 model.setSponsorId(parentId.intValue());
             }
+            //获取
+
 
             //绑定user表层架关系
             boolean resultRows = userService.update(new UpdateWrapper<User>().lambda().set(User::getIsDistribut, TrueOrFalseEnum.TRUE.getCode())
@@ -177,7 +179,7 @@ public class DistributionService implements IdistributionService {
                     condition.set(User::getFirstLeader, parentId);
                     try {
                         //绑定链路关系 //记录标号信息
-                        bindLinkRelation(event, parentId);
+                        bindLinkRelation(event, model, parentId);
                     } catch (Exception ex) {
                         log.error("绑定链路关系异常");
                         ex.printStackTrace();
@@ -198,7 +200,7 @@ public class DistributionService implements IdistributionService {
         }
     }
 
-    private void bindLinkRelation(DistributionEvent event, Long parentId) {
+    private void bindLinkRelation(DistributionEvent event, CdtDistributionLevel model, Long parentId) {
         int count = cdtUserSummaryService.count(new QueryWrapper<CdtUserSummary>().lambda().eq(CdtUserSummary::getUserId, event.getUserId().intValue()));
         if (count > 0) {
             return;
@@ -227,6 +229,11 @@ public class DistributionService implements IdistributionService {
             userSummary.setChainRoad(gson.toJson(linkNode));
             cdtUserSummary.setStatsPerson(cdtUserSummary.getStatsPerson() + 1);
             boolean result2 = cdtUserSummaryService.updateById(cdtUserSummary);
+
+            //判定是否成为合伙人
+            if (cdtUserSummary.getIsPartner().equals(TrueOrFalseEnum.TRUE.getCode())) {
+                model.setGroupId(cdtUserSummary.getUserId());
+            }
         }
         boolean rows = cdtUserSummaryService.save(userSummary);
     }

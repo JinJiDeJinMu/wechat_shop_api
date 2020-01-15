@@ -9,6 +9,7 @@
         <result column="money" property="money"/>
         <result column="parent_id" property="parentId"/>
         <result column="fx_level" property="fxLevel"/>
+        <result column="group_id" property="groupId"/>
         <result column="dev_num" property="devNum"/>
         <result column="is_trade" property="isTrade"/>
         <result column="trade_order_num" property="tradeOrderNum"/>
@@ -19,7 +20,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, money, parent_id, fx_level, dev_num, is_trade, trade_order_num, sponsor_id, created_time, token
+        id, user_id, money, parent_id, fx_level, group_id, dev_num, is_trade, trade_order_num, sponsor_id, created_time, token
     </sql>
 
 </mapper>
