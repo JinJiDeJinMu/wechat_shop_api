@@ -13,10 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-
-/**
- * @date 2017-08-13 10:41:08
- */
 @RestController
 @RequestMapping("footprint")
 public class FootprintController {

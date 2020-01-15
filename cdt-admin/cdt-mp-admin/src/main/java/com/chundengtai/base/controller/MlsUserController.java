@@ -11,11 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @date 2017-08-16 15:02:28
- */
 @RestController
 @RequestMapping("mlsuser")
 public class MlsUserController {

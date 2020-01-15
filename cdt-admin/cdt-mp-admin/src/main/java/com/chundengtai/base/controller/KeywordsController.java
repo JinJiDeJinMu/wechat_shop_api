@@ -14,8 +14,6 @@ import java.util.Map;
 
 /**
  * 热闹关键词表Controller
- *
- * @date 2017-08-25 21:23:41
  */
 @RestController
 @RequestMapping("keywords")

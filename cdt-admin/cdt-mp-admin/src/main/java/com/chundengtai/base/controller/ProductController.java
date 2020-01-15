@@ -15,11 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @date 2017-08-30 14:31:21
- */
 @RestController
 @RequestMapping("product")
 public class ProductController extends BaseController {

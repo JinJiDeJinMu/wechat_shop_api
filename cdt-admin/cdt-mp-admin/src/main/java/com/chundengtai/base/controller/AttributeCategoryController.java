@@ -12,11 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @date 2017-08-17 16:13:27
- */
 @RestController
 @RequestMapping("attributecategory")
 public class AttributeCategoryController {

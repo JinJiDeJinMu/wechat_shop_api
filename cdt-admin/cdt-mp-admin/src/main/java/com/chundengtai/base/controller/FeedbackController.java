@@ -13,11 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @date 2017-08-23 15:03:25
- */
 @RestController
 @RequestMapping("feedback")
 public class FeedbackController {

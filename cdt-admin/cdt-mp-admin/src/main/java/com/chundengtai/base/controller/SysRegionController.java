@@ -18,8 +18,6 @@ import java.util.Map;
 
 /**
  * 地址管理Controller
- *
- * @date 2017-11-04 11:19:31
  */
 @RestController
 @RequestMapping("sys/region")

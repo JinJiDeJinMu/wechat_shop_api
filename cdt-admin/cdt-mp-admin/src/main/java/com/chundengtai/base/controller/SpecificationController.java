@@ -19,8 +19,6 @@ import java.util.Map;
 
 /**
  * 规格表
- *
- * @date 2017-08-13 10:41:10
  */
 @RestController
 @RequestMapping("specification")

@@ -14,11 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @date 2017-08-28 17:03:40
- */
 @RestController
 @RequestMapping("comment")
 public class CommentController {

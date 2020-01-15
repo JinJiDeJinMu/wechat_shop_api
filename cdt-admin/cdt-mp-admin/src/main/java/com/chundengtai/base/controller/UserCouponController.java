@@ -12,11 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @date 2017-08-19 15:40:33
- */
 @RestController
 @RequestMapping("usercoupon")
 public class UserCouponController {

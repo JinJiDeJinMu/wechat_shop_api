@@ -5,8 +5,6 @@ import java.util.List;
 
 /**
  * 角色与菜单对应关系
- *
- * @date 2016年9月18日 上午9:42:30
  */
 public interface SysRoleMenuService {
 

@@ -7,8 +7,6 @@ import java.util.Map;
 
 /**
  * 发送短信日志Service
- *
- * @date 2017-12-16 23:38:05
  */
 public interface SysSmsLogService {
 

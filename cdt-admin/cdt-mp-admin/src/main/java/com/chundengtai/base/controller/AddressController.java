@@ -13,11 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @date 2017-08-16 17:22:46
- */
 @RestController
 @RequestMapping("address")
 public class AddressController {

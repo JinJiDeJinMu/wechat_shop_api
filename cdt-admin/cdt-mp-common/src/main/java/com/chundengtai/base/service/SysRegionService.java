@@ -8,8 +8,6 @@ import java.util.Map;
 
 /**
  * Service接口
- *
- * @date 2017-11-04 11:19:31
  */
 public interface SysRegionService {
 

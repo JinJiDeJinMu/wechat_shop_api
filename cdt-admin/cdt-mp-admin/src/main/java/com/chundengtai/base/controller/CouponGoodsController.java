@@ -14,8 +14,6 @@ import java.util.Map;
 
 /**
  * 优惠券关联商品Controller
- *
- * @date 2017-08-29 21:50:17
  */
 @RestController
 @RequestMapping("coupongoods")

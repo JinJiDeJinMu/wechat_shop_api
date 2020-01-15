@@ -12,11 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @date 2017-08-17 16:48:17
- */
 @RestController
 @RequestMapping("attribute")
 public class AttributeController {

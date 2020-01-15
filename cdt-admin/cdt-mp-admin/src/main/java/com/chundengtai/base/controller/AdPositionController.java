@@ -12,11 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @date 2017-08-19 12:02:42
- */
 @RestController
 @RequestMapping("adposition")
 public class AdPositionController {

@@ -18,9 +18,6 @@ import java.util.Map;
 
 /**
  * 部门管理Controller
- *
- * @author liepngjun
- * @date 2017-09-17 23:58:47
  */
 @RestController
 @RequestMapping("/sys/dept")
