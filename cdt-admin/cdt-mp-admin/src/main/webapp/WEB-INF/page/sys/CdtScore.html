@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    #parse("sys/header.html")
+</head>
+<body>
+<div id="app" v-cloak>
+    <div v-show="showList">
+        <Row :gutter="16">
+            <el-card class="filter-container" shadow="never">
+                <div>
+                    <i class="el-icon-search"></i>
+                    <span>筛选搜索</span>
+                    <el-button
+                            style="float: right"
+                            @click="getList()"
+                            type="primary"
+                            size="small">
+                        查询结果
+                    </el-button>
+                    <el-button
+                            style="float: right;margin-right: 15px"
+                            @click="handleResetSearch()"
+                            size="small">
+                        重置
+                    </el-button>
+                    <el-button
+                            style="float: right;margin-right: 15px"
+                            @click="add()"
+                            size="small">
+                        新建
+                    </el-button>
+                </div>
+                <div style="margin-top: 15px">
+                    <el-form :inline="true" :model="baseForm.data" size="small" label-width="140px">
+                        <el-form-item label="id">
+                            <el-input style="width: 203px" v-model="baseForm.data.id"
+                                      placeholder="id"></el-input>
+                        </el-form-item>
+                        <el-form-item label="类型">
+                            <el-select v-model="baseForm.data.type" placeholder="类型">
+                                <el-option value="0" label="正常">正常</el-option>
+                                <el-option value="1" label="禁用">禁用</el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </el-card>
+        </Row>
+        <div class="table-container">
+            <el-table ref="productTable" :data="list" style="width: 100%" @selection-change="handleSelectionChange"
+                      v-loading="listLoading"
+                      border>
+                <el-table-column type="selection" width="60" align="center"></el-table-column>
+                <el-table-column label="id" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.id}}</template>
+                </el-table-column>
+                <el-table-column label="积分数" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.score}}</template>
+                </el-table-column>
+                <el-table-column label="描述" width="120" align="center">
+                    <template slot-scope="scope">{{scope.row.detail}}</template>
+                </el-table-column>
+                <el-table-column label="积分价钱" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.money}}</template>
+                </el-table-column>
+                <el-table-column label="抵消金额" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.offsetMoney}}</template>
+                </el-table-column>
+                <el-table-column label="类型" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.type|scoreType}}</template>
+                </el-table-column>
+                <el-table-column label="创建时间" width="160" align="center">
+                    <template slot-scope="scope">{{scope.row.createTime|dateFormat}}</template>
+                </el-table-column>
+
+                <!-- <el-table-column label="审核状态" width="100" align="center">
+<template slot-scope="scope">
+<p>{{scope.row.verifyStatus | verifyStatusFilter}}</p>
+<p>
+<el-button
+type="text"
+@click="handleShowVerifyDetail(scope.index, scope.row)">审核详情
+</el-button>
+</p>
+</template>
+</el-table-column> -->
+                <el-table-column label="操作" width="160" align="center">
+                    <template slot-scope="scope">
+                        <p>
+
+                            <el-button size="mini" @click="handleUpdateProduct(scope.$index, scope.row)">编辑
+                            </el-button>
+
+                            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
+                            </el-button>
+                        </p>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="batch-operate-container">
+            #if($shiro.hasPermission("cdtScore:delete"))
+            <el-select size="small" v-model="operateType" placeholder="批量操作">
+                <el-option v-for="item in operates" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+            </el-select>
+            <el-button style="margin-left: 20px" class="search-button" @click="handleBatchOperate()" type="primary"
+                       size="small">
+                确定
+            </el-button>
+            #end
+        </div>
+        <div class="pagination-container">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                           layout="total, sizes,prev, pager, next,jumper"
+                           :page-size="baseForm.pageSize" :page-sizes="[10,20,30,50,100]"
+                           :current-page.sync="baseForm.pageIndex" :total="total">
+            </el-pagination>
+        </div>
+    </div>
+
+    <Card v-show="!showList">
+        <p slot="title">{{title}}</p>
+        <el-form :model="baseForm.data"
+                 :rules="ruleValidate"
+                 ref="formValidate"
+                 @keyup.enter.native="dataFormSubmit('formValidate')"
+                 label-width="80px">
+            <el-form-item label="积分数" prop="score" :rules=" [
+            { required: true, message: '请输入积分数', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.score"
+                          placeholder="积分数"></el-input>
+            </el-form-item>
+            <el-form-item label="描述" prop="detail" :rules=" [
+            { required: true, message: '请输入描述', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.detail"
+                          placeholder="描述"></el-input>
+            </el-form-item>
+            <el-form-item label="积分价钱" prop="money" :rules=" [
+            { required: true, message: '请输入积分价钱', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.money"
+                          placeholder="积分价钱"></el-input>
+            </el-form-item>
+            <el-form-item label="抵消金额" prop="offsetMoney" :rules=" [
+            { required: true, message: '请输入抵消金额', trigger: 'blur' }
+          ]">
+                <el-input style="width: 203px" v-model="baseForm.data.offsetMoney"
+                          placeholder="抵消金额"></el-input>
+            </el-form-item>
+
+            <el-form-item label="状态" prop="type">
+                <el-select v-model="baseForm.data.type" placeholder="类型">
+                    <el-option value="0" label="正常">正常</el-option>
+                    <el-option value="1" label="禁用">禁用</el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item style="text-align: center">
+                <el-button size="medium" @click="showList = true">取消</el-button>
+                <el-button type="primary" size="medium" @click="dataFormSubmit('formValidate')">确定</el-button>
+            </el-form-item>
+        </el-form>
+    </Card>
+</div>
+
+<script src="${rc.contextPath}/js/sys/CdtScore.js?time=${date.systemTime}"></script>
+</body>
+</html>
+
+
+

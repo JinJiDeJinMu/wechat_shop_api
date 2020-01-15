@@ -1,9 +1,12 @@
 package com.chundengtai.base.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.annotation.LoginUser;
+import com.chundengtai.base.bean.CdtScoreFlow;
+import com.chundengtai.base.bean.CdtUserScore;
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.entity.CdtPaytransRecordEntity;
@@ -11,6 +14,7 @@ import com.chundengtai.base.entity.OrderGoodsVo;
 import com.chundengtai.base.entity.OrderVo;
 import com.chundengtai.base.entity.UserVo;
 import com.chundengtai.base.facade.IdistributionFacade;
+import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.service.*;
 import com.chundengtai.base.util.ApiBaseAction;
 import com.chundengtai.base.util.wechat.WechatUtil;
@@ -79,6 +83,15 @@ public class WxPayController extends ApiBaseAction {
 
     @Autowired
     private IdistributionFacade distributionFacade;
+
+    @Autowired
+    private CdtScoreFlowService cdtScoreFlowService;
+
+    @Autowired
+    private CdtScoreService cdtScoreService;
+
+    @Autowired
+    private CdtUserScoreService cdtUserScoreService;
 
     /**
      * 获取支付的请求参数
@@ -197,6 +210,91 @@ public class WxPayController extends ApiBaseAction {
         return toResponsFail("下单失败");
     }
 
+    @ApiOperation(value = "积分支付")
+    @GetMapping("payscore")
+    public Object payScore(@LoginUser UserVo loginUser, Integer scoreflowId) {
+        String reqId = UUID.randomUUID().toString();
+
+        CdtScoreFlow cdtScoreFlow = cdtScoreFlowService.getById(scoreflowId);
+        if (cdtScoreFlow == null) {
+            return toResponsObject(400, "积分购买订单已经取消", "");
+        }
+        if (cdtScoreFlow.getPayStatus().equals(PayTypeEnum.PAYED.getCode())) {
+            return toResponsObject(400, "积分购买订单已支付，请不要重复操作", "");
+        }
+        String describe = cdtScoreService.getById(cdtScoreFlow.getScoreId()).getDetail();
+        String token = cdtScoreFlow.getToken();
+
+        cdtScoreFlow.setToken(null);
+        cdtScoreFlow.setPayStatus(null);
+        cdtScoreFlow.setCreateTime(null);
+        cdtScoreFlow.setId(null);
+        cdtScoreFlow.setPayTime(null);
+        String token_flag = gettoken(cdtScoreFlow);
+        if (token_flag.equalsIgnoreCase(token)) {
+            WxPayUnifiedOrderRequest payRequest = WxPayUnifiedOrderRequest.newBuilder()
+                    .body("未名严选校园电商-支付").detail(describe)
+                    .totalFee(cdtScoreFlow.getMoney().multiply(new BigDecimal(100)).intValue())
+                    .spbillCreateIp(getClientIp())
+                    .notifyUrl(ResourceUtil.getConfigByName("wx.scorenotifyUrl"))
+                    .tradeType(WxPayConstants.TradeType.JSAPI)
+                    .openid(loginUser.getWeixin_openid())
+                    .outTradeNo(cdtScoreFlow.getFlowSn())
+                    .build();
+            payRequest.setSignType(WxPayConstants.SignType.MD5);
+
+            cdtScoreFlow = cdtScoreFlowService.getById(scoreflowId);
+            WxPayUnifiedOrderResult wxPayUnifiedOrderResult = null;
+            try {
+                wxPayUnifiedOrderResult = wxPayService.unifiedOrder(payRequest);
+                log.info(wxPayUnifiedOrderResult.toString());
+            } catch (WxPayException e) {
+                e.printStackTrace();
+                return toResponsFail("下单失败,网关参数异常,error=" + e.getMessage());
+            }
+            Map<Object, Object> resultObj = new TreeMap();
+            try {
+                String wxResutlJson = JSON.toJSONString(wxPayUnifiedOrderResult);
+                if (wxPayUnifiedOrderResult.getReturnCode().equalsIgnoreCase("FAIL")) {
+                    log.info(reqId + "=====>微信支付请求失败返回1:" + System.lineSeparator() + wxResutlJson);
+                    return toResponsFail("支付失败," + wxPayUnifiedOrderResult.getReturnMsg());
+                } else if (wxPayUnifiedOrderResult.getReturnCode().equalsIgnoreCase("SUCCESS")) {
+                    // 返回数据
+                    String result_code = wxPayUnifiedOrderResult.getReturnCode();
+                    String err_code_des = wxPayUnifiedOrderResult.getErrCodeDes();
+                    if (result_code.equalsIgnoreCase("FAIL")) {
+                        log.info(reqId + "=====>微信支付请求失败返回2:" + System.lineSeparator() + wxResutlJson);
+                        return toResponsFail("支付失败," + err_code_des);
+                    } else if (result_code.equalsIgnoreCase("SUCCESS")) {
+                        log.info(reqId + "=====>微信支付请求成功返回:" + System.lineSeparator() + wxResutlJson);
+                        String prepayId = wxPayUnifiedOrderResult.getPrepayId();
+                        resultObj.put("appId", wxPayUnifiedOrderResult.getAppid());
+                        resultObj.put("timeStamp", DateUtils.timeToStr(System.currentTimeMillis() / 1000, DateUtils.DATE_TIME_PATTERN));
+                        resultObj.put("nonceStr", wxPayUnifiedOrderResult.getNonceStr());
+                        resultObj.put("package", "prepay_id=" + prepayId);
+                        resultObj.put("signType", "MD5");
+                        String paySign = WechatUtil.arraySign(resultObj, ResourceUtil.getConfigByName("wx.paySignKey"));
+                        resultObj.put("paySign", paySign);
+                        // 业务处理
+                        // 付款中
+                        cdtScoreFlow.setPayStatus(PayTypeEnum.PAYING.getCode());
+                        cdtScoreFlowService.updateById(cdtScoreFlow);
+
+                        //redis设置订单状态
+                        redisTemplate.opsForValue().set(cdtScoreFlow.getFlowSn(), "51", 1, TimeUnit.DAYS);
+                        return toResponsObject(0, "微信统一订单下单成功", resultObj);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error(reqId + "=====>微信支付请求异常返回:" + e.getMessage());
+                return toResponsFail("下单失败,error=" + e.getMessage());
+            }
+
+        }
+        return toResponsObject(400, "下单失败", "");
+
+    }
     /**
      * 微信查询订单状态
      */
@@ -251,14 +349,6 @@ public class WxPayController extends ApiBaseAction {
         String trade_state = MapUtils.getString("trade_state", resultUn);
 
         if ("SUCCESS".equals(trade_state)) {
-            // 更改订单状态
-            // 业务处理
-//            OrderVo orderInfo = new OrderVo();
-//            orderInfo.setId(orderId);
-//            orderInfo.setPay_status(2);
-//            orderInfo.setOrder_status(201);
-//            orderInfo.setShipping_status(0);
-//            orderInfo.setPay_time(new Date());
             orderSetPayedStatus(order);
             cdtOrderService.updateById(order);
             return toResponsMsgSuccess("支付成功");
@@ -297,14 +387,13 @@ public class WxPayController extends ApiBaseAction {
             IOException, WxPayException {
         String reqId = UUID.randomUUID().toString();
         log.info(reqId + "====notify==>返回给微信回调处理结果====>");
-        String resultWxMsg = "";//返回给微信的处理结果
+        String resultWxMsg = "";
         String inputLine;
         String reponseXml = "";
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         response.setHeader("Access-Control-Allow-Origin", "*");
-        //微信给返回的东西
         try {
             while ((inputLine = request.getReader().readLine()) != null) {
                 reponseXml += inputLine;
@@ -347,6 +436,72 @@ public class WxPayController extends ApiBaseAction {
         }
         return setXml("SUCCESS", "OK");
     }
+
+
+    /**
+     * 微信积分订单回调接口
+     *
+     * @return
+     */
+    @ApiOperation(value = "微信积分订单回调接口")
+    @RequestMapping(value = "/scorenotify")
+    @IgnoreAuth
+    @ResponseBody
+    public String scorenotify(HttpServletRequest request, HttpServletResponse response) throws
+            IOException, WxPayException {
+        String reqId = UUID.randomUUID().toString();
+        log.info(reqId + "====scorenotify==>返回给微信回调处理结果====>");
+        String resultWxMsg = "";
+        String inputLine;
+        String reponseXml = "";
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        try {
+            while ((inputLine = request.getReader().readLine()) != null) {
+                reponseXml += inputLine;
+            }
+            request.getReader().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultWxMsg = setXml("fail", "xml获取失败");
+        }
+
+        if (StringUtils.isNullOrEmpty(reponseXml)) {
+            resultWxMsg = setXml("fail", "xml为空");
+        }
+
+        if (!StringUtils.isNullOrEmpty(resultWxMsg)) {
+            return resultWxMsg;
+        }
+
+        log.info(reqId + "===scorenotify==微信回调返回======================>" + reponseXml);
+        WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(reponseXml);
+        String result_code = wxPayOrderNotifyResult.getResultCode();
+        if (result_code.equalsIgnoreCase("FAIL")) {
+            //订单编号
+            String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
+            log.error(reqId + "===scorenotify==订单" + out_trade_no + "支付失败");
+            return setXml("fail", "fail");
+        } else if (result_code.equalsIgnoreCase("SUCCESS")) {
+            //订单编号
+            String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
+            log.info(reqId + "===scorenotify==订单" + out_trade_no + "支付成功");
+            try {
+                // 更改订单状态
+                // 业务处理
+                // orderStatusLogic(out_trade_no, wxPayOrderNotifyResult);
+                scoreFlowSetStatus(out_trade_no);
+            } catch (Exception ex) {
+                log.error("=====weixin===scorenotify===error", ex);
+                return setXml("fail", "fail");
+            }
+            return setXml("SUCCESS", "OK");
+        }
+        return setXml("SUCCESS", "OK");
+    }
+
 
     private void orderStatusLogic(String out_trade_no, WxPayOrderNotifyResult result) {
         Order orderItem = cdtOrderService.getOne(new QueryWrapper<Order>().lambda().eq(Order::getOrderSn, out_trade_no));
@@ -399,6 +554,39 @@ public class WxPayController extends ApiBaseAction {
         orderItem.setShippingStatus(ShippingTypeEnum.NOSENDGOODS.getCode());
     }
 
+    private void scoreFlowSetStatus(String out_trade_no) {
+        CdtScoreFlow cdtScoreFlow = cdtScoreFlowService.getOne(new LambdaQueryWrapper<CdtScoreFlow>()
+                .eq(CdtScoreFlow::getFlowSn, out_trade_no));
+        if (cdtScoreFlow != null) {
+            cdtScoreFlow.setPayTime(new Date());
+            cdtScoreFlow.setPayStatus(PayTypeEnum.PAYED.getCode());
+            boolean result = cdtScoreFlowService.updateById(cdtScoreFlow);
+            //更新用户积分信息
+            if (result) {
+                long userId = cdtScoreFlow.getUserId();
+                CdtUserScore cdtUserScore = cdtUserScoreService.getById(userId);
+                if (cdtUserScore == null) {
+                    CdtUserScore userScore = new CdtUserScore();
+                    userScore.setId(userId);
+                    userScore.setScore(cdtScoreFlow.getScoreSum());
+                    userScore.setToken(gettoken(userScore));
+                    userScore.setCreateTime(new Date());
+                    cdtUserScoreService.save(userScore);
+                } else {
+                    //存在更新积分数
+                    Integer score = cdtUserScore.getScore() + cdtScoreFlow.getScoreSum();
+                    cdtUserScore.setScore(score);
+
+                    cdtUserScore.setCreateTime(null);
+                    cdtUserScore.setToken(null);
+                    cdtUserScore.setToken(gettoken(cdtUserScore));
+                    cdtUserScore.setCreateTime(new Date());
+                    cdtUserScoreService.updateById(cdtUserScore);
+                }
+            }
+        }
+    }
+
     public static String setXml(String return_code, String return_msg) {
         return "<xml><return_code><![CDATA[" + return_code + "]]></return_code><return_msg><![CDATA[" + return_msg + "]]></return_msg></xml>";
     }
@@ -406,6 +594,17 @@ public class WxPayController extends ApiBaseAction {
     //模拟微信回调接口
     public static String callbakcXml(String orderNum) {
         return "<xml><appid><![CDATA[wx2421b1c4370ec43b]]></appid><attach><![CDATA[支付测试]]></attach><bank_type><![CDATA[CFT]]></bank_type><fee_type><![CDATA[CNY]]></fee_type> <is_subscribe><![CDATA[Y]]></is_subscribe><mch_id><![CDATA[10000100]]></mch_id><nonce_str><![CDATA[5d2b6c2a8db53831f7eda20af46e531c]]></nonce_str><openid><![CDATA[oUpF8uMEb4qRXf22hE3X68TekukE]]></openid> <out_trade_no><![CDATA[" + orderNum + "]]></out_trade_no>  <result_code><![CDATA[SUCCESS]]></result_code> <return_code><![CDATA[SUCCESS]]></return_code><sign><![CDATA[B552ED6B279343CB493C5DD0D78AB241]]></sign><sub_mch_id><![CDATA[10000100]]></sub_mch_id> <time_end><![CDATA[20140903131540]]></time_end><total_fee>1</total_fee><trade_type><![CDATA[JSAPI]]></trade_type><transaction_id><![CDATA[1004400740201409030005092168]]></transaction_id></xml>";
+    }
+
+    public String gettoken(Object object) {
+        Map chain = null;
+        try {
+            chain = BeanJwtUtil.javabean2map(object);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String token = JavaWebToken.createJavaWebToken(chain);
+        return token;
     }
 
 }
