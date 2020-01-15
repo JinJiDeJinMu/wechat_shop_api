@@ -2,7 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-
 /**
  * 商品对应规格表值表实体
  */

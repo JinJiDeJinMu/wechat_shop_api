@@ -4,12 +4,9 @@ package com.chundengtai.base.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-
-
 /**
  * 会员实体
  */
-
 public class UserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

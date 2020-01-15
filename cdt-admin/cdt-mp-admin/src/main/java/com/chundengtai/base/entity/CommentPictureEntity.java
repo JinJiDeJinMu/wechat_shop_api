@@ -2,7 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-
 /**
  * 评价图片实体
  */

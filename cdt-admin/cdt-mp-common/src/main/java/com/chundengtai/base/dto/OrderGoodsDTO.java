@@ -3,10 +3,6 @@ package com.chundengtai.base.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
-/**
- * @date 2017-08-15 08:03:40
- */
 public class OrderGoodsDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 

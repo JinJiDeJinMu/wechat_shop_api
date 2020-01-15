@@ -2,8 +2,6 @@ package com.chundengtai.base.entity;
 
 
 import java.io.Serializable;
-
-
 /**
  * 类名称：UserRecord<br>
  * 类描述：<br>

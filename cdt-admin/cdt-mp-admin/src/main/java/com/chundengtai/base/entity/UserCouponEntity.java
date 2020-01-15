@@ -2,8 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-
-
 /**
  * 实体
  * 表名 nideshop_user_coupon
