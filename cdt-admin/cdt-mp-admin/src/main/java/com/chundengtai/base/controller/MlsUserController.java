@@ -63,8 +63,8 @@ public class MlsUserController {
      */
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Integer id) {
-        MlsUserEntity2 user = mlsUserService.queryObject(id);
-        return R.ok().put("user", user);
+        //MlsUserEntity2 user = mlsUserService.queryObject(id);
+        return R.ok().put("user" , null);
     }
 
 //    /**

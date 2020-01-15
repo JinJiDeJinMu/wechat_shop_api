@@ -1,7 +1,6 @@
 package com.platform.api;
 
 import com.chundengtai.base.constant.CacheConstant;
-import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.service.SysConfigService;
 import com.chundengtai.base.utils.*;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
@@ -23,7 +22,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -596,128 +598,128 @@ public class ApiPayController extends ApiBaseAction {
     }
 
 
-    /**
-     * 计算分润
-     * @param userId        用户Id
-     * @param fx_money        分销的分润金额
-     * @param order_price    订单金额
-     * @param orderId        订单ID
-     */
-    @ApiOperation(value = "微信订单回调接口")
-    @RequestMapping(value = "/fx", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
-    @IgnoreAuth
-    public void fx(Long userId, BigDecimal fx_money, BigDecimal orderPrice, int orderId, Long merchantId) {
-        if (userId == null || userId == 0L || fx_money.compareTo(BigDecimal.ZERO) == 0) {
-            System.out.println("*****分润参数错误userId=" + userId + ",fx_money=" + fx_money);
-            return;
-        }
-
-
-        Map<String, Object> map = mlsUserSer.getEntityMapper().getSysUserByMid(new Long(merchantId));
-        if (map == null) {
-            System.out.println("==============分销报错：" + merchantId + "=====没有找到供应商");
-            return;
-        }
-        Integer order_price = orderPrice.multiply(new BigDecimal("100")).intValue();
-        //MlsUserEntity2 user = mlsUserSer.queryObject(userId);
-        MlsUserEntity2 user = mlsUserSer.getEntityMapper().getById(userId);
-        if (user == null) {
-            System.out.println("==============分销报错：" + userId + "=====没有找到用户");
-            return;
-        }
-        BigDecimal fx = new BigDecimal(map.get("FX").toString());//上级分销比例
-        BigDecimal fx1 = new BigDecimal(map.get("FX1").toString());//上级分销比例
-        BigDecimal fx2 = new BigDecimal(map.get("FX2").toString());//上上级分销比例
-        BigDecimal pfx = new BigDecimal(map.get("PFX").toString());//平台分销比例
-        Integer fx1_money = 0;//上级分润金额
-        Integer fx2_money = 0;//上上级分润金额
-        Integer pfx_money = 0;//上上级分润金额
-        Integer user_money = 0;//本人分润金额
-        Integer brand_money = 0;//供应商金额
-        Long fid1 = 0L;//上级
-        Long fid2 = 0L;//上上级
-
-        //读取系统分润比例
-//    	String sys_fx = sysConfigService.getValue("sys_fx", null);
-//    	if(StringUtils.isNotBlank(sys_fx)) {
-//    		sys_fx_money = computeFx(orderPrice, new BigDecimal(sys_fx));
-//    		addUserRecord(0L, sys_fx_money, userId, order_price, orderId);//0L固定留给平台ID
-//    	}
-
-        //分人分润=总金额-系统分润（默认0）
-        //个人分润金额包括自己的分润、上级分润和上上级分润
-        //第一情况：没有上级或者上上级的情况分润给个人(现在使用)
-        //第二情况：没有上级或者上上级的情况分润给系统
-
-        //获得上级和上上级ID
-        fid1 = user.getFid();
-        if (fid1 != null && fid1 > 0) {
-            MlsUserEntity2 fuser = mlsUserSer.queryObject(fid1);
-            if (fuser != null) {
-                fid2 = fuser.getFid();
-            }
-        }
-        //判断是否存在上级和上上级增加分润比例
-        if (fxblIsNull(fx1) == true && fid1 != null && fid1 > 0) {
-            fx1_money = computeFx(fx_money, fx1);
-            addUserRecord(fid1, fx1_money, userId, order_price, orderId);
-        }
-        if (fxblIsNull(fx2) == true && fid2 != null && fid2 > 0) {
-            fx2_money = computeFx(fx_money, fx2);
-            addUserRecord(fid2, fx2_money, userId, order_price, orderId);
-        }
-        //计算平台分佣比例
-        if (fxblIsNull(pfx)) {
-            pfx_money = computeFx(fx_money, pfx);
-            addUserRecord(0L, pfx_money, userId, order_price, orderId);
-        }
-        //计算自己的分润比例
-        user_money = computeFx(fx_money, fx);
-        addUserRecord(user.getMlsUserId(), user_money, userId, order_price, orderId);
-        //计算供应商金额
-        brand_money = order_price - user_money - fx1_money - fx2_money - pfx_money;
-        //查询供应商ID
-        MlsUserEntity2 u = mlsUserSer.getEntityMapper().findByMerchantId(merchantId);
-        addUserRecord(u.getMlsUserId(), brand_money, userId, order_price, orderId);//1L固定留给供应商ID，多商户版本填写他的MLS_USER_ID
-    }
-
-    /**
-     * 增加分润记录
-     * @param userId
-     * @param price
-     */
-    private void addUserRecord(Long userId, int price, Long fxuser, int order_price, int orderId) {
-        UserRecord ur = new UserRecord();
-        ur.setMlsUserId(userId);
-        ur.setTypes(2);
-        ur.setTypesStr("分润");
-        ur.setPrice(price);
-        ur.setRemarks("id:" + fxuser + "分润，金额：" + price);
-        ur.setOrderId(orderId);
-        userRecordSer.save(ur);
-
-        MlsUserEntity2 mlsUserVo = new MlsUserEntity2();
-        mlsUserVo.setMlsUserId(userId);
-        mlsUserVo.setTodaySales(order_price);
-        mlsUserVo.setGetProfit(price);
-        mlsUserSer.updateMoney(mlsUserVo);
-    }
-
-    /**
-     * 根据金额和比例计算出金额
-     * @param all 金额
-     * @param bl 比例
-     * @return
-     */
-    private Integer computeFx(BigDecimal all, BigDecimal bl) {
-        return all.multiply(bl).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).intValue();
-        //return all.multiply(bl).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
-    }
-
-    private Boolean fxblIsNull(BigDecimal fx) {
-        if (fx != null && fx.compareTo(BigDecimal.ZERO) > 0) {
-            return true;
-        }
-        return false;
-    }
+//    /**
+//     * 计算分润
+//     * @param userId        用户Id
+//     * @param fx_money        分销的分润金额
+//     * @param order_price    订单金额
+//     * @param orderId        订单ID
+//     */
+//    @ApiOperation(value = "微信订单回调接口")
+//    @RequestMapping(value = "/fx", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+//    @IgnoreAuth
+//    public void fx(Long userId, BigDecimal fx_money, BigDecimal orderPrice, int orderId, Long merchantId) {
+//        if (userId == null || userId == 0L || fx_money.compareTo(BigDecimal.ZERO) == 0) {
+//            System.out.println("*****分润参数错误userId=" + userId + ",fx_money=" + fx_money);
+//            return;
+//        }
+//
+//
+//        Map<String, Object> map = mlsUserSer.getEntityMapper().getSysUserByMid(new Long(merchantId));
+//        if (map == null) {
+//            System.out.println("==============分销报错：" + merchantId + "=====没有找到供应商");
+//            return;
+//        }
+//        Integer order_price = orderPrice.multiply(new BigDecimal("100")).intValue();
+//        //MlsUserEntity2 user = mlsUserSer.queryObject(userId);
+//        MlsUserEntity2 user = mlsUserSer.getEntityMapper().getById(userId);
+//        if (user == null) {
+//            System.out.println("==============分销报错：" + userId + "=====没有找到用户");
+//            return;
+//        }
+//        BigDecimal fx = new BigDecimal(map.get("FX").toString());//上级分销比例
+//        BigDecimal fx1 = new BigDecimal(map.get("FX1").toString());//上级分销比例
+//        BigDecimal fx2 = new BigDecimal(map.get("FX2").toString());//上上级分销比例
+//        BigDecimal pfx = new BigDecimal(map.get("PFX").toString());//平台分销比例
+//        Integer fx1_money = 0;//上级分润金额
+//        Integer fx2_money = 0;//上上级分润金额
+//        Integer pfx_money = 0;//上上级分润金额
+//        Integer user_money = 0;//本人分润金额
+//        Integer brand_money = 0;//供应商金额
+//        Long fid1 = 0L;//上级
+//        Long fid2 = 0L;//上上级
+//
+//        //读取系统分润比例
+////    	String sys_fx = sysConfigService.getValue("sys_fx", null);
+////    	if(StringUtils.isNotBlank(sys_fx)) {
+////    		sys_fx_money = computeFx(orderPrice, new BigDecimal(sys_fx));
+////    		addUserRecord(0L, sys_fx_money, userId, order_price, orderId);//0L固定留给平台ID
+////    	}
+//
+//        //分人分润=总金额-系统分润（默认0）
+//        //个人分润金额包括自己的分润、上级分润和上上级分润
+//        //第一情况：没有上级或者上上级的情况分润给个人(现在使用)
+//        //第二情况：没有上级或者上上级的情况分润给系统
+//
+//        //获得上级和上上级ID
+//        fid1 = user.getFid();
+//        if (fid1 != null && fid1 > 0) {
+//            MlsUserEntity2 fuser = mlsUserSer.queryObject(fid1);
+//            if (fuser != null) {
+//                fid2 = fuser.getFid();
+//            }
+//        }
+//        //判断是否存在上级和上上级增加分润比例
+//        if (fxblIsNull(fx1) == true && fid1 != null && fid1 > 0) {
+//            fx1_money = computeFx(fx_money, fx1);
+//            addUserRecord(fid1, fx1_money, userId, order_price, orderId);
+//        }
+//        if (fxblIsNull(fx2) == true && fid2 != null && fid2 > 0) {
+//            fx2_money = computeFx(fx_money, fx2);
+//            addUserRecord(fid2, fx2_money, userId, order_price, orderId);
+//        }
+//        //计算平台分佣比例
+//        if (fxblIsNull(pfx)) {
+//            pfx_money = computeFx(fx_money, pfx);
+//            addUserRecord(0L, pfx_money, userId, order_price, orderId);
+//        }
+//        //计算自己的分润比例
+//        user_money = computeFx(fx_money, fx);
+//        addUserRecord(user.getMlsUserId(), user_money, userId, order_price, orderId);
+//        //计算供应商金额
+//        brand_money = order_price - user_money - fx1_money - fx2_money - pfx_money;
+//        //查询供应商ID
+//        MlsUserEntity2 u = mlsUserSer.getEntityMapper().findByMerchantId(merchantId);
+//        addUserRecord(u.getMlsUserId(), brand_money, userId, order_price, orderId);//1L固定留给供应商ID，多商户版本填写他的MLS_USER_ID
+//    }
+//
+//    /**
+//     * 增加分润记录
+//     * @param userId
+//     * @param price
+//     */
+//    private void addUserRecord(Long userId, int price, Long fxuser, int order_price, int orderId) {
+//        UserRecord ur = new UserRecord();
+//        ur.setMlsUserId(userId);
+//        ur.setTypes(2);
+//        ur.setTypesStr("分润");
+//        ur.setPrice(price);
+//        ur.setRemarks("id:" + fxuser + "分润，金额：" + price);
+//        ur.setOrderId(orderId);
+//        userRecordSer.save(ur);
+//
+////        MlsUserEntity2 mlsUserVo = new MlsUserEntity2();
+////        mlsUserVo.setMlsUserId(userId);
+////        mlsUserVo.setTodaySales(order_price);
+////        mlsUserVo.setGetProfit(price);
+////        mlsUserSer.updateMoney(mlsUserVo);
+//    }
+//
+//    /**
+//     * 根据金额和比例计算出金额
+//     * @param all 金额
+//     * @param bl 比例
+//     * @return
+//     */
+//    private Integer computeFx(BigDecimal all, BigDecimal bl) {
+//        return all.multiply(bl).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).intValue();
+//        //return all.multiply(bl).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
+//    }
+//
+//    private Boolean fxblIsNull(BigDecimal fx) {
+//        if (fx != null && fx.compareTo(BigDecimal.ZERO) > 0) {
+//            return true;
+//        }
+//        return false;
+//    }
 }

@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.entity.LoginInfo;
-import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.entity.UserVo;
 import com.chundengtai.base.facade.IdistributionFacade;
 import com.chundengtai.base.service.ApiUserService;
@@ -123,15 +122,16 @@ public class ApiAuthController extends ApiBaseAction {
                 }
             }
             userService.save(userVo);
-            MlsUserEntity2 fmlsUser = new MlsUserEntity2();
-            if (loginInfo.getPromoterId() != 0) {
-                MlsUserEntity2 mlsuser = this.mlsUserSer.getEntityMapper().findByUserId(new Long(loginInfo.getPromoterId()));
-                fmlsUser.setFid(mlsuser.getMlsUserId());
-            }
-            fmlsUser.setUserId(userVo.getUserId());
-            fmlsUser.setNickname(userVo.getUsername());
-            fmlsUser.setLoginPassword(userVo.getAvatar());//放头像了
-            this.mlsUserSer.insUser(fmlsUser);
+//            MlsUserEntity2 fmlsUser = new MlsUserEntity2();
+//            if (loginInfo.getPromoterId() != 0) {
+//                MlsUserEntity2 mlsuser = this.mlsUserSer.getEntityMapper().findByUserId(new Long(loginInfo.getPromoterId()));
+//                fmlsUser.setFid(mlsuser.getMlsUserId());
+//            }
+//            fmlsUser.setUserId(userVo.getUserId());
+//            fmlsUser.setNickname(userVo.getUsername());
+//            fmlsUser.setLoginPassword(userVo.getAvatar());//放头像了
+//            this.mlsUserSer.insUser(fmlsUser);
+
 //            if(loginInfo.getPromoterId()!=0) {//非邀请用户
 //            	MlsUserEntity2 mlsUser = new MlsUserEntity2 ();
 //            	mlsUser.setUserId(Long.valueOf(loginInfo.getPromoterId()));

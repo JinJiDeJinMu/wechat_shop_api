@@ -5,7 +5,6 @@ import com.chundengtai.base.dao.UserRecordMapper;
 import com.chundengtai.base.entity.MlsUserEntity2;
 import com.chundengtai.base.entity.OrderVo;
 import com.chundengtai.base.entity.UserGoods;
-import com.chundengtai.base.entity.UserRecord;
 import com.chundengtai.base.util.SmsUtils;
 import com.chundengtai.base.utils.CharUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -80,22 +78,22 @@ public class MlsUserSer {
      * 更新分销佣金
      */
     public void upUserProfit(OrderVo orderVo) {
-        if (orderVo.getPromoter_id() == 0) return;
-        if (orderVo.getOrder_price().intValue() == 0) return;
-        UserRecord userRecord = new UserRecord();
-        userRecord.setMlsUserId(Long.valueOf(orderVo.getPromoter_id()));
-        userRecord.setTypes(2);
-        userRecord.setTypesStr("交易分佣");
-        userRecord.setPrice(orderVo.getBrokerage().multiply(BigDecimal.valueOf(100)).intValue());
-        userRecord.setRemarks(orderVo.getGoods_name());
-        userRecordDao.insert(userRecord);
-
-        MlsUserEntity2 mlsUserVo = new MlsUserEntity2();
-        mlsUserVo.setMlsUserId(userRecord.getMlsUserId());
-        mlsUserVo.setGetProfit(userRecord.getPrice());
-        mlsUserVo.setTodaySales(orderVo.getGoods_price().multiply(BigDecimal.valueOf(100)).intValue());
-
-        mlsUserDao.updateMoney(mlsUserVo);
+//        if (orderVo.getPromoter_id() == 0) return;
+//        if (orderVo.getOrder_price().intValue() == 0) return;
+//        UserRecord userRecord = new UserRecord();
+//        userRecord.setMlsUserId(Long.valueOf(orderVo.getPromoter_id()));
+//        userRecord.setTypes(2);
+//        userRecord.setTypesStr("交易分佣");
+//        userRecord.setPrice(orderVo.getBrokerage().multiply(BigDecimal.valueOf(100)).intValue());
+//        userRecord.setRemarks(orderVo.getGoods_name());
+//        userRecordDao.insert(userRecord);
+//
+//        MlsUserEntity2 mlsUserVo = new MlsUserEntity2();
+//        mlsUserVo.setMlsUserId(userRecord.getMlsUserId());
+//        mlsUserVo.setGetProfit(userRecord.getPrice());
+//        mlsUserVo.setTodaySales(orderVo.getGoods_price().multiply(BigDecimal.valueOf(100)).intValue());
+//
+//        mlsUserDao.updateMoney(mlsUserVo);
 
     }
 

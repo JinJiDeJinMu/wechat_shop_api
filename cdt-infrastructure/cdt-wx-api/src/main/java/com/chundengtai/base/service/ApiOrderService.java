@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.dao.*;
 import com.chundengtai.base.entity.*;
-import com.chundengtai.base.utils.DateUtils;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -97,13 +96,16 @@ public class ApiOrderService {
         String postscript = jsonParam.getString("postscript");//留言
         Long promoterId = jsonParam.getLong("promoterId");// 获取推荐人id
         log.info("=====================获取推荐人id:" + promoterId);
-        if (0 == promoterId.intValue()) {
-            MlsUserEntity2 mlsuser = mlsUserSer.getEntityMapper().findByUserId(loginUser.getUserId());
-            promoterId = mlsuser.getFid();
-        } else {
-            MlsUserEntity2 mlsuser = mlsUserSer.getEntityMapper().findByUserId(promoterId);
-            promoterId = mlsuser.getMlsUserId();
-        }
+
+//        if (0 == promoterId.intValue()) {
+//            MlsUserEntity2 mlsuser = mlsUserSer.getEntityMapper().findByUserId(loginUser.getUserId());
+//            promoterId = mlsuser.getFid();
+//        } else {
+//            MlsUserEntity2 mlsuser = mlsUserSer.getEntityMapper().findByUserId(promoterId);
+//            promoterId = mlsuser.getMlsUserId();
+//        }
+
+
         AddressVo addressVo = apiAddressMapper.queryObject(jsonParam.getInteger("addressId"));//收货地址
 
         //需要一个总订单ID,付款的时候计算全部价格
@@ -112,7 +114,7 @@ public class ApiOrderService {
         if (type.equals("cart")) {//购物车提交
             //查询所有购物车根据供应商分类
             Map<String, Object> param = new HashMap<String, Object>();
-            param.put("user_id", loginUser.getUserId());
+            param.put("user_id" , loginUser.getUserId());
             List<CartVo> mrchantList = apiCartMapper.queryMrchantGroup(param);
             //不同供应商产品集合
             List<List<CartVo>> newMrchantList = new ArrayList<List<CartVo>>();
@@ -524,15 +526,15 @@ public class ApiOrderService {
             newur.setOrderId(orderId);
             userRecordSer.save(newur);
 
-            MlsUserEntity2 mlsUserVo = new MlsUserEntity2();
-            mlsUserVo.setMlsUserId(ur.getMlsUserId());
-            mlsUserVo.setTodaySales(orderPrice);
-            if (DateUtils.format(new Date()).equals(DateUtils.format(payTime))) {//如果支付是今天，则扣除今天的金额
-                mlsUserVo.setGetProfit(ur.getPrice());
-            } else {
-                mlsUserVo.setGetProfit(0);
-            }
-            mlsUserSer.getEntityMapper().cancelMoney(mlsUserVo);
+//            MlsUserEntity2 mlsUserVo = new MlsUserEntity2();
+//            mlsUserVo.setMlsUserId(ur.getMlsUserId());
+//            mlsUserVo.setTodaySales(orderPrice);
+//            if (DateUtils.format(new Date()).equals(DateUtils.format(payTime))) {//如果支付是今天，则扣除今天的金额
+//                mlsUserVo.setGetProfit(ur.getPrice());
+//            } else {
+//                mlsUserVo.setGetProfit(0);
+//            }
+//            mlsUserSer.getEntityMapper().cancelMoney(mlsUserVo);
         }
     }
 }
