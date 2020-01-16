@@ -212,6 +212,7 @@ public class WxPayController extends ApiBaseAction {
 
     @ApiOperation(value = "积分支付")
     @GetMapping("payscore")
+    @IgnoreAuth
     public Object payScore(@LoginUser UserVo loginUser, Integer scoreflowId) {
         String reqId = UUID.randomUUID().toString();
 
@@ -232,6 +233,7 @@ public class WxPayController extends ApiBaseAction {
         cdtScoreFlow.setPayTime(null);
         String token_flag = gettoken(cdtScoreFlow);
         if (token_flag.equalsIgnoreCase(token)) {
+            log.info("=====token校验成功");
             WxPayUnifiedOrderRequest payRequest = WxPayUnifiedOrderRequest.newBuilder()
                     .body("未名严选校园电商-支付").detail(describe)
                     .totalFee(cdtScoreFlow.getMoney().multiply(new BigDecimal(100)).intValue())

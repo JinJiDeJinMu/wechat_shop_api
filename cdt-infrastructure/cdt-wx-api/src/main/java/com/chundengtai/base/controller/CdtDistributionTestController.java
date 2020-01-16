@@ -1,5 +1,6 @@
 package com.chundengtai.base.controller;
 
+import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.facade.IdistributionFacade;
 import com.chundengtai.base.result.R;
@@ -35,6 +36,7 @@ public class CdtDistributionTestController {
 
 
     @GetMapping("/referreRelation")
+    @IgnoreAuth
     public R referreRelation(long userId, String referrerEncpyt) {
 
         idistributionFacade.referreRelation(userId, referrerEncpyt);
@@ -43,6 +45,7 @@ public class CdtDistributionTestController {
     }
 
     @GetMapping("/order")
+    @IgnoreAuth
     public Order order(Integer userId, Integer goodType) {
 
         Order order = getOrder(userId, goodType);
@@ -51,6 +54,7 @@ public class CdtDistributionTestController {
     }
 
     @GetMapping("/pay")
+    @IgnoreAuth
     public R payOrder(Integer orderId) {
 
         Order order = orderService.getById(orderId);
@@ -65,6 +69,7 @@ public class CdtDistributionTestController {
     }
 
     @GetMapping("/changeorder")
+    @IgnoreAuth
     public R changeOrderstatus(Integer orderId) {
 
         Order order = orderService.getById(orderId);
