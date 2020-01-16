@@ -51,9 +51,13 @@ public class CdtDistributionTestController {
     @IgnoreAuth
     public Result order(Integer userId, Integer goodType) {
 
-        Order order = getOrder(userId, goodType);
-        orderService.save(order);
-        return Result.success(order);
+        try {
+            Order order = getOrder(userId, goodType);
+            orderService.save(order);
+            return Result.success(order);
+        } catch (Exception e) {
+            return Result.failure("返回失败");
+        }
     }
 
     @GetMapping("/pay")
@@ -61,15 +65,18 @@ public class CdtDistributionTestController {
     @IgnoreAuth
     public Result payOrder(Integer orderId) {
 
-        Order order = orderService.getById(orderId);
-        order.setOrderStatus(OrderStatusEnum.PAYED_ORDER.getCode());
-        order.setPayStatus(PayTypeEnum.PAYED.getCode());
-        boolean result = orderService.updateById(order);
-        if (result) {
-            idistributionFacade.recordDistributeLog(order.getUserId(), order);
+        try {
+            Order order = orderService.getById(orderId);
+            order.setOrderStatus(OrderStatusEnum.PAYED_ORDER.getCode());
+            order.setPayStatus(PayTypeEnum.PAYED.getCode());
+            boolean result = orderService.updateById(order);
+            if (result) {
+                idistributionFacade.recordDistributeLog(order.getUserId(), order);
+            }
+            return Result.success(result);
+        } catch (Exception e) {
+            return Result.failure("返回失败");
         }
-
-        return Result.success(result);
     }
 
     @GetMapping("/changeorder")
