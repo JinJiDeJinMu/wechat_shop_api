@@ -20,7 +20,6 @@
             fill: currentColor;
             overflow: hidden;
         }
-
         .login-form-layout {
             position: absolute;
             left: 0;
@@ -28,11 +27,9 @@
             width: 360px;
             margin: 140px auto;
         }
-
         .login-title {
             text-align: center;
         }
-
         .login-center-layout {
             background: #409EFF;
             width: auto;
@@ -167,7 +164,7 @@
                     data: data,
                     dataType: "json",
                     success: function (res) {
-                        if (res.code == 0) {//登录成功
+                        if (res.code == 0) {
                             parent.location.href = 'index.html';
                         } else {
                             vue.refreshCode();
