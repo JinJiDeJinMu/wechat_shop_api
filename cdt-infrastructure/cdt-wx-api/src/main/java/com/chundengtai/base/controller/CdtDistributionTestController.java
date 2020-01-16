@@ -12,6 +12,7 @@ import com.chundengtai.base.weixinapi.PayTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
@@ -25,7 +26,7 @@ import java.util.UUID;
  * @Version 1.0
  **/
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/api/test")
 public class CdtDistributionTestController {
 
     @Autowired
@@ -36,6 +37,7 @@ public class CdtDistributionTestController {
 
 
     @GetMapping("/referreRelation")
+    @ResponseBody
     @IgnoreAuth
     public R referreRelation(long userId, String referrerEncpyt) {
 
@@ -45,6 +47,7 @@ public class CdtDistributionTestController {
     }
 
     @GetMapping("/order")
+    @ResponseBody
     @IgnoreAuth
     public Order order(Integer userId, Integer goodType) {
 
@@ -54,6 +57,7 @@ public class CdtDistributionTestController {
     }
 
     @GetMapping("/pay")
+    @ResponseBody
     @IgnoreAuth
     public R payOrder(Integer orderId) {
 
@@ -69,6 +73,7 @@ public class CdtDistributionTestController {
     }
 
     @GetMapping("/changeorder")
+    @ResponseBody
     @IgnoreAuth
     public R changeOrderstatus(Integer orderId) {
 
