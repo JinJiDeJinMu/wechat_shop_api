@@ -143,10 +143,11 @@ public class DistributionService implements IdistributionService {
                 return;
             }
 
+
             //判断两人关系是否已经绑定
             Integer count = distributionLevelService.count(new QueryWrapper<CdtDistributionLevel>().lambda()
                     .eq(CdtDistributionLevel::getUserId, event.getUserId())
-                    .eq(CdtDistributionLevel::getParentId, parentId)
+                    //.eq(CdtDistributionLevel::getParentId, parentId)
             );
             if (count >= 1) {
                 return;
@@ -170,6 +171,11 @@ public class DistributionService implements IdistributionService {
             log.warn("====开通推荐的分销合伙人按钮====>" + resultRows);
 
             User userInfo = userService.getOne(new QueryWrapper<User>().lambda().eq(User::getId, event.getUserId()));
+            //防止链路中的源头被推荐
+            if (userInfo.getFirstLeader().equals(0) && userInfo.getIsDistribut().equals(TrueOrFalseEnum.TRUE.getCode())) {
+                return;
+            }
+
             log.warn("用户id====>" + event.getUserId());
             if (userInfo.getSecondLeader().equals(0)) {
                 LambdaUpdateWrapper<User> condition = new LambdaUpdateWrapper<>();
