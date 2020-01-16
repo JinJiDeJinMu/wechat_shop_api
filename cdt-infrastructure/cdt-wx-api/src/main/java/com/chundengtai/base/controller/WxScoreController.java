@@ -1,5 +1,6 @@
 package com.chundengtai.base.controller;
 
+import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.annotation.LoginUser;
 import com.chundengtai.base.bean.CdtScore;
 import com.chundengtai.base.bean.CdtScoreFlow;
@@ -40,6 +41,7 @@ public class WxScoreController extends ApiBaseAction {
     private CdtScoreFlowService cdtScoreFlowService;
 
     @PostMapping("buyscore.do")
+    @IgnoreAuth
     public Result buyScore(@LoginUser UserVo loginUser, Integer scoreId) {
 
         if (loginUser == null) {

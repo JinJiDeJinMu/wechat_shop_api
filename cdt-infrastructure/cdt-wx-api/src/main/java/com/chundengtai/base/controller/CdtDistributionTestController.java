@@ -1,8 +1,9 @@
 package com.chundengtai.base.controller;
 
+import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.facade.IdistributionFacade;
-import com.chundengtai.base.result.R;
+import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.OrderService;
 import com.chundengtai.base.util.CommonUtil;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
@@ -11,6 +12,7 @@ import com.chundengtai.base.weixinapi.PayTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
@@ -24,7 +26,7 @@ import java.util.UUID;
  * @Version 1.0
  **/
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/api/test")
 public class CdtDistributionTestController {
 
     @Autowired
@@ -35,23 +37,29 @@ public class CdtDistributionTestController {
 
 
     @GetMapping("/referreRelation")
-    public R referreRelation(long userId, String referrerEncpyt) {
+    @ResponseBody
+    @IgnoreAuth
+    public Result referreRelation(long userId, String referrerEncpyt) {
 
         idistributionFacade.referreRelation(userId, referrerEncpyt);
 
-        return R.ok();
+        return Result.success();
     }
 
     @GetMapping("/order")
-    public Order order(Integer userId, Integer goodType) {
+    @ResponseBody
+    @IgnoreAuth
+    public Result order(Integer userId, Integer goodType) {
 
         Order order = getOrder(userId, goodType);
         orderService.save(order);
-        return order;
+        return Result.success(order);
     }
 
     @GetMapping("/pay")
-    public R payOrder(Integer orderId) {
+    @ResponseBody
+    @IgnoreAuth
+    public Result payOrder(Integer orderId) {
 
         Order order = orderService.getById(orderId);
         order.setOrderStatus(OrderStatusEnum.PAYED_ORDER.getCode());
@@ -61,11 +69,13 @@ public class CdtDistributionTestController {
             idistributionFacade.recordDistributeLog(order.getUserId(), order);
         }
 
-        return R.ok();
+        return Result.success(result);
     }
 
     @GetMapping("/changeorder")
-    public R changeOrderstatus(Integer orderId) {
+    @ResponseBody
+    @IgnoreAuth
+    public Result changeOrderstatus(Integer orderId) {
 
         Order order = orderService.getById(orderId);
         order.setOrderStatus(OrderStatusEnum.COMPLETED_ORDER.getCode());
@@ -75,7 +85,7 @@ public class CdtDistributionTestController {
             idistributionFacade.notifyOrderStatus(order.getUserId(), order, GoodsTypeEnum.WRITEOFF_ORDER);
         }
 
-        return R.ok();
+        return Result.success(result);
     }
 
     public Order getOrder(Integer userId, Integer goodType) {
