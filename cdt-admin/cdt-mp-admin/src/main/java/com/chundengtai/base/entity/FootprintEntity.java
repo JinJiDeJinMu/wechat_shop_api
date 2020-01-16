@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 public class FootprintEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-
     //主键
     private Integer id;
     //会员Id

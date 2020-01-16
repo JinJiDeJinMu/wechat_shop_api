@@ -14,13 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @author zhouhaisheng
- * @email
- * @date
- */
 @RestController
 @RequestMapping("userRecord")
 public class UserRecordController {

@@ -9,10 +9,6 @@ import java.util.Map;
 
 /**
  * 部门管理
- *
- * @author liepngjun
-
- * @date 2017-09-17 23:58:47
  */
 public interface SysDeptService {
 

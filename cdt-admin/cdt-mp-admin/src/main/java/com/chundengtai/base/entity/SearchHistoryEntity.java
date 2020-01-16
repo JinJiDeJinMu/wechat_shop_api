@@ -12,7 +12,6 @@ public class SearchHistoryEntity implements Serializable {
     private Integer id;
     //关键字
     private String keyword;
-    //搜索来源，如PC、小程序、APP等
     private String from;
     //搜索时间
     private Long addTime;

@@ -14,11 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @date 2017-08-21 15:32:31
- */
 @RestController
 @RequestMapping("category")
 public class CategoryController {

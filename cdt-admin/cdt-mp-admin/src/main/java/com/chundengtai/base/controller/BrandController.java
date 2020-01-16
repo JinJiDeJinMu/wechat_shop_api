@@ -14,11 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @date 2017-08-19 17:59:15
- */
 @RestController
 @RequestMapping("brand")
 public class BrandController extends BaseController {

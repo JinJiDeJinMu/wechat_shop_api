@@ -12,11 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller
- *
- * @date 2017-08-20 14:10:08
- */
 @RestController
 @RequestMapping("topic")
 public class TopicController {

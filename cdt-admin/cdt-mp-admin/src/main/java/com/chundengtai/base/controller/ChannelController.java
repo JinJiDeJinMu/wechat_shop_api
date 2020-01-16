@@ -14,8 +14,6 @@ import java.util.Map;
 
 /**
  * Controller
- *
- * @date 2017-08-22 19:19:56
  */
 @RestController
 @RequestMapping("channel")

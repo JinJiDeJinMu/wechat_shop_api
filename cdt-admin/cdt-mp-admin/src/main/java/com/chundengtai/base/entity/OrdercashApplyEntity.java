@@ -1,6 +1,5 @@
 package com.chundengtai.base.entity;
 
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -11,13 +10,9 @@ public class OrdercashApplyEntity implements Serializable {
      * 提交审核订单ID
      */
     private Integer orderId;
-    /**
-     *
-     */
+
     private String orderSn;
-    /**
-     *
-     */
+
     private Long merchantId;
 
     private String merchantName;
@@ -36,13 +31,9 @@ public class OrdercashApplyEntity implements Serializable {
     private Long applyId;
 
     private String applyName;
-    /**
-     *
-     */
+
     private Date applyTime;
-    /**
-     *
-     */
+
     private Date endTime;
     /**
      * 默认是0：申请，1：审核通过，2：驳回，3:其他

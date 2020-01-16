@@ -10,9 +10,6 @@ import java.util.List;
 public class CommentV2Entity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    /**
-     *
-     */
     private Integer id;
     /**
      * 订单id

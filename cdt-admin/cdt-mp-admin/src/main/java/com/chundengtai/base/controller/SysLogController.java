@@ -17,8 +17,6 @@ import java.util.Map;
 
 /**
  * 系统日志Controller
- *
- * @date 2017-03-08 10:40:56
  */
 @Controller
 @RequestMapping("/sys/log")

@@ -14,11 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
-/**
- * Controller
- *
- * @date 2017-08-16 15:02:28
- */
 @RestController
 @RequestMapping("user")
 public class UserController {

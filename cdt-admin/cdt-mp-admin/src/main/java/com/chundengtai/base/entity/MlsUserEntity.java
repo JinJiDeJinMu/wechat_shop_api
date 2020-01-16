@@ -3,7 +3,6 @@ package com.chundengtai.base.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-
 /**
  * 类名称：MlsUser<br>
  * 类描述：分销用户<br>

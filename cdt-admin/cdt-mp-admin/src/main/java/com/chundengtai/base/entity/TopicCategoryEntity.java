@@ -2,11 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-
-/**
- * 实体
- * 表名 nideshop_topic_category
- */
 public class TopicCategoryEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

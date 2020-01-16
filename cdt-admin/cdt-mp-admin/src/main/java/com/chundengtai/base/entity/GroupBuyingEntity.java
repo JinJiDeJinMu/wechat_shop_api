@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class GroupBuyingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-
     //主键
     private String id;
     //商品ID

@@ -27,8 +27,6 @@ import java.util.Map;
 
 /**
  * 文件上传Controller
- *
- * @date 2017-03-25 12:13:26
  */
 @RestController
 @RequestMapping("sys/oss")

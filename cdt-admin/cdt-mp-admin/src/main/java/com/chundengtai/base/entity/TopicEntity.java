@@ -3,10 +3,6 @@ package com.chundengtai.base.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- * 实体
- * 表名 nideshop_topic
- */
 public class TopicEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

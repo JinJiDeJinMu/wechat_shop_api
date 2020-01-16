@@ -12,9 +12,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-
-/**
- */
 @Data
 @NoArgsConstructor
 @ApiModel(value = "订单实体dto", description = "订单实体dto类")

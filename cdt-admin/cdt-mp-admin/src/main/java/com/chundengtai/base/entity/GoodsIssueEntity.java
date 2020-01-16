@@ -2,7 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-
 /**
  * 实体
  * 表名 nideshop_goods_issue

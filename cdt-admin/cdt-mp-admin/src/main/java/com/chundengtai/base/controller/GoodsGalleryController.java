@@ -14,8 +14,6 @@ import java.util.Map;
 
 /**
  * Controller
- *
- * @date 2017-08-23 14:41:43
  */
 @RestController
 @RequestMapping("goodsgallery")

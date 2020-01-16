@@ -4,22 +4,14 @@ import java.io.Serializable;
 
 public class KeywordsEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    //
     private Integer id;
-    //
     private String keyword;
-    //
     private Integer isHot;
-    //
     private Integer isDefault;
-    //
     private Integer isShow;
-    //
     private Integer sortOrder;
     //关键词的跳转链接
     private String schemeUrl;
-    //
     private Integer type;
 
     /**

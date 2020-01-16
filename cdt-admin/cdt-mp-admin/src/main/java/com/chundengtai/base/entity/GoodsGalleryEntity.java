@@ -2,7 +2,6 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 
-
 /**
  * 商品顶部轮播图
  * 表名 nideshop_goods_gallery

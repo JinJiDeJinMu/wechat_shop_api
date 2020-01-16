@@ -17,8 +17,6 @@ import java.util.Map;
 
 /**
  * 评价表Controller
- *
- * @date 2019-11-26 11:27:34
  */
 @RestController
 @RequestMapping("commentv2")
