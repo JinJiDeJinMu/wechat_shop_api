@@ -53,7 +53,7 @@ public class FeedbackController {
     @RequestMapping("/save")
     @RequiresPermissions("feedback:save")
     public R save(@RequestBody FeedbackEntity feedback) {
-        feedback.setMerchant_id(ShiroUtils.getUserEntity().getMerchantId().intValue());
+        feedback.setMerchant_id(ShiroUtils.getUserEntity().getMerchantId());
         feedbackService.save(feedback);
 
         return R.ok();

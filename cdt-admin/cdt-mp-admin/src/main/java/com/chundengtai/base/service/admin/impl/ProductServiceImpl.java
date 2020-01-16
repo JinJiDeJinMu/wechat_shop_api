@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service实现类
- */
 @Service("productService")
 public class ProductServiceImpl implements ProductService {
     @Autowired

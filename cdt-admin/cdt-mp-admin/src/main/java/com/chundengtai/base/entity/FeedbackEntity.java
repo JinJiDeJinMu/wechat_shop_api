@@ -1,8 +1,13 @@
 package com.chundengtai.base.entity;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Date;
 
+@NoArgsConstructor
+@Data
 public class FeedbackEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -38,95 +43,4 @@ public class FeedbackEntity implements Serializable {
     //商户ID
     private Long merchant_id;
 
-    /**
-     * 设置：主键
-     */
-    public void setMsgId(Integer msgId) {
-        this.msgId = msgId;
-    }
-
-    /**
-     * 获取：主键
-     */
-    public Integer getMsgId() {
-        return msgId;
-    }
-
-
-    /**
-     * 设置：会员Id
-     */
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    /**
-     * 获取：会员Id
-     */
-    public Integer getUserId() {
-        return userId;
-    }
-
-    /**
-     * 设置：会员名称
-     */
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    /**
-     * 获取：会员名称
-     */
-    public String getUserName() {
-        return userName;
-    }
-
-
-    public Date getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(Date addTime) {
-        this.addTime = addTime;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public Integer getFeedType() {
-        return feedType;
-    }
-
-    public void setFeedType(Integer feedType) {
-        this.feedType = feedType;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public long getMerchant_id() {
-        return merchant_id;
-    }
-
-    public void setMerchant_id(long merchant_id) {
-        this.merchant_id = merchant_id;
-    }
 }
