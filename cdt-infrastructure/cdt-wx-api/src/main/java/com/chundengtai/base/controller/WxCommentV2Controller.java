@@ -118,6 +118,7 @@ public class WxCommentV2Controller extends ApiBaseAction {
             @RequestParam String imageList
     ) {
         List<String> list = JSONObject.parseArray(imageList, String.class);
+        log.info("=====评论" + list);
         CdtProductComment commentReq = new CdtProductComment();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
         commentReq.setCreateTime(new Date());
