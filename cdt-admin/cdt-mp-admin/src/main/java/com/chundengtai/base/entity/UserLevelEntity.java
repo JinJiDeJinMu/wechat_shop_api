@@ -1,10 +1,7 @@
 package com.chundengtai.base.entity;
 
 import java.io.Serializable;
-/**
- * 实体
- * 表名 nideshop_user_level
- */
+
 public class UserLevelEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

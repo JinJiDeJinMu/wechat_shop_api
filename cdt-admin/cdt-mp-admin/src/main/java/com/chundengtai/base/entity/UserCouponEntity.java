@@ -2,10 +2,7 @@ package com.chundengtai.base.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-/**
- * 实体
- * 表名 nideshop_user_coupon
- */
+
 public class UserCouponEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
