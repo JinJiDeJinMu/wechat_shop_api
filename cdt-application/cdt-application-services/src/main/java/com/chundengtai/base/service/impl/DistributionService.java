@@ -143,7 +143,6 @@ public class DistributionService implements IdistributionService {
                 return;
             }
 
-
             //判断两人关系是否已经绑定
             Integer count = distributionLevelService.count(new QueryWrapper<CdtDistributionLevel>().lambda()
                     .eq(CdtDistributionLevel::getUserId, event.getUserId())
