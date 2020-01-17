@@ -1,5 +1,8 @@
 package com.chundengtai.base.entity;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -7,9 +10,9 @@ import java.util.List;
 /**
  * 客户实体
  */
+@NoArgsConstructor
+@Data
 public class CustomerEntity implements Serializable {
-    private static final long serialVersionUID = 1L;
-
     //主键
     private Integer id;
     //会员姓名
@@ -43,140 +46,4 @@ public class CustomerEntity implements Serializable {
     private AddressEntity addressEntity;
     //客户维护历史
     private List<UpkeepEntity> upkeepEntity;
-
-    public String getEnd_date() {
-        return end_date;
-    }
-
-    public void setEnd_date(String end_date) {
-        this.end_date = end_date;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    public String getMobile2() {
-        return mobile2;
-    }
-
-    public void setMobile2(String mobile2) {
-        this.mobile2 = mobile2;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUname() {
-        return uname;
-    }
-
-    public void setUname(String uname) {
-        this.uname = uname;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public int getAddressUserId() {
-        return addressUserId;
-    }
-
-    public void setAddressUserId(int addressUserId) {
-        this.addressUserId = addressUserId;
-    }
-
-    public String getUpkeepState() {
-        return upkeepState;
-    }
-
-    public void setUpkeepState(String upkeepState) {
-        this.upkeepState = upkeepState;
-    }
-
-    public String getCustomerState() {
-        return customerState;
-    }
-
-    public void setCustomerState(String customerState) {
-        this.customerState = customerState;
-    }
-
-    public String getRemarks() {
-        return remarks;
-    }
-
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
-    }
-
-    public Date getCtime() {
-        return ctime;
-    }
-
-    public void setCtime(Date ctime) {
-        this.ctime = ctime;
-    }
-
-    public Integer getUid() {
-        return uid;
-    }
-
-    public void setUid(Integer uid) {
-        this.uid = uid;
-    }
-
-    public String getJob() {
-        return job;
-    }
-
-    public void setJob(String job) {
-        this.job = job;
-    }
-
-    public AddressEntity getAddressEntity() {
-        return addressEntity;
-    }
-
-    public void setAddressEntity(AddressEntity addressEntity) {
-        this.addressEntity = addressEntity;
-    }
-
-    public List<UpkeepEntity> getUpkeepEntity() {
-        return upkeepEntity;
-    }
-
-    public void setUpkeepEntity(List<UpkeepEntity> upkeepEntity) {
-        this.upkeepEntity = upkeepEntity;
-    }
 }
