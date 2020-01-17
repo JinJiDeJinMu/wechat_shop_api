@@ -49,7 +49,7 @@ public class CdtScoreFlow implements Serializable {
     /**
      * 积分总数
      */
-    private Integer scoreSum;
+    private Long scoreSum;
 
     /**
      * 充值金额

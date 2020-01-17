@@ -493,7 +493,6 @@ public class WxPayController extends ApiBaseAction {
             try {
                 // 更改订单状态
                 // 业务处理
-                // orderStatusLogic(out_trade_no, wxPayOrderNotifyResult);
                 scoreFlowSetStatus(out_trade_no);
             } catch (Exception ex) {
                 log.error("=====weixin===scorenotify===error", ex);
@@ -571,21 +570,59 @@ public class WxPayController extends ApiBaseAction {
                     CdtUserScore userScore = new CdtUserScore();
                     userScore.setId(userId);
                     userScore.setScore(cdtScoreFlow.getScoreSum());
+                    userScore.setTotalScore(cdtScoreFlow.getScoreSum());
+                    //计算等级
+                    userScore.setLevel(changeUserLevel(cdtScoreFlow.getScoreSum()));
                     userScore.setToken(gettoken(userScore));
                     userScore.setCreateTime(new Date());
                     cdtUserScoreService.save(userScore);
                 } else {
                     //存在更新积分数
-                    Integer score = cdtUserScore.getScore() + cdtScoreFlow.getScoreSum();
-                    cdtUserScore.setScore(score);
-
+                    String token = cdtUserScore.getToken();
                     cdtUserScore.setCreateTime(null);
                     cdtUserScore.setToken(null);
-                    cdtUserScore.setToken(gettoken(cdtUserScore));
-                    cdtUserScore.setCreateTime(new Date());
-                    cdtUserScoreService.updateById(cdtUserScore);
+
+                    String token_flag = gettoken(cdtUserScore);
+                    if (token.equalsIgnoreCase(token_flag)) {
+                        Long score = cdtUserScore.getScore() + cdtScoreFlow.getScoreSum();
+                        Long totalScore = cdtUserScore.getTotalScore() + cdtScoreFlow.getScoreSum();
+                        cdtUserScore.setScore(score);
+                        cdtUserScore.setTotalScore(totalScore);
+                        cdtUserScore.setToken(gettoken(cdtUserScore));
+                        cdtUserScore.setCreateTime(new Date());
+                        cdtUserScore.setId(userId);
+                        cdtUserScore.setLevel(changeUserLevel(totalScore));
+                        cdtUserScoreService.updateById(cdtUserScore);
+                    }
                 }
             }
+        }
+
+    }
+
+    /**
+     * 判断等级
+     *
+     * @param totalScore
+     */
+    public Integer changeUserLevel(Long totalScore) {
+
+        if (totalScore > 0 && totalScore <= 10000) {
+            return 1;
+        } else if (totalScore > 10000 && totalScore <= 200000) {
+            return 2;
+        } else if (totalScore > 200000 && totalScore <= 500000) {
+            return 3;
+        } else if (totalScore > 500000 && totalScore <= 1000000) {
+            return 4;
+        } else if (totalScore > 1000000 && totalScore <= 2000000) {
+            return 5;
+        } else if (totalScore > 2000000 && totalScore <= 5000000) {
+            return 6;
+        } else if (totalScore > 5000000 && totalScore < 10000000) {
+            return 7;
+        } else {
+            return 8;
         }
     }
 

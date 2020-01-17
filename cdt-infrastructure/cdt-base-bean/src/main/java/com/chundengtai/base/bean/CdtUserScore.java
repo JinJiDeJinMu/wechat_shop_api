@@ -30,7 +30,14 @@ public class CdtUserScore implements Serializable {
     /**
      * 总积分
      */
-    private Integer score;
+    private Long score;
+
+    /**
+     * 历史总积分
+     */
+    private Long totalScore;
+
+    private Integer level;
 
     /**
      * 创建时间

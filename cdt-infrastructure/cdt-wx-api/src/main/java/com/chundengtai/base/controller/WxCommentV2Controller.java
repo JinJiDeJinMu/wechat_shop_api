@@ -1,6 +1,7 @@
 package com.chundengtai.base.controller;
 
 import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chundengtai.base.annotation.IgnoreAuth;
@@ -20,6 +21,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -117,8 +119,10 @@ public class WxCommentV2Controller extends ApiBaseAction {
             @RequestParam Integer starLevel,
             @RequestParam String imageList
     ) {
+        System.out.println(imageList);
         List<String> list = JSONObject.parseArray(imageList, String.class);
         log.info("=====评论" + list);
+        System.out.println(list);
         CdtProductComment commentReq = new CdtProductComment();
         commentReq.setCommentTime(Long.valueOf(System.currentTimeMillis() / 1000));
         commentReq.setCreateTime(new Date());
@@ -143,7 +147,8 @@ public class WxCommentV2Controller extends ApiBaseAction {
                 CommentPicture pictureVo = new CommentPicture();
                 pictureVo.setType(0);
                 pictureVo.setCommentId(insertId);
-                pictureVo.setPicUrl(list.get(j));
+                String ss = list.get(j).replaceAll("\"", "");
+                pictureVo.setPicUrl(StringEscapeUtils.unescapeJava(ss));
                 pictureVo.setSortOrder(j + 1);
                 commentPictureService.save(pictureVo);
             }
@@ -167,6 +172,7 @@ public class WxCommentV2Controller extends ApiBaseAction {
             e.printStackTrace();
         }
 
+        System.out.println("====" + url);
         return url;
     }
 
@@ -304,4 +310,23 @@ public class WxCommentV2Controller extends ApiBaseAction {
     }
 
 
+    public static void main(String[] args) {
+
+        String s = "[\"\\\"https:\\\\/\\\\/chundengtai.oss-cn-hangzhou.aliyuncs.com\\\\/goodscomment\\\\/\\\\/wmyanxuan\\\\/20200116\\\\/1912365274d0fd.jpg\\\"\",\"\\\"https:\\\\/\\\\/chundengtai.oss-cn-hangzhou.aliyuncs.com\\\\/goodscomment\\\\/\\\\/wmyanxuan\\\\/20200116\\\\/19124040747667.jpg\\\"\"]\n";
+
+
+        System.out.println(s);
+        List<String> list = JSONArray.parseArray(s, String.class);
+
+        System.out.println(list);
+
+
+        list.forEach(e -> {
+            System.out.println(e.replaceAll("\"", ""));
+            String ee = e.replaceAll("\"", "");
+            StringBuffer stringBuffer = new StringBuffer(ee);
+            System.out.println(StringEscapeUtils.unescapeJava(ee));
+        });
+
+    }
 }

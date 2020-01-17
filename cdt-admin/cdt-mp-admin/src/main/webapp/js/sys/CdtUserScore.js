@@ -1,6 +1,8 @@
 const defaultModel = {
     id: null,
     score: null,
+    totalScore: null,
+    level: null,
     createTime: null,
     token: null,
 };

@@ -37,12 +37,10 @@ public class CdtUserScoreController {
         if (params.getData().getId() != null) {
             conditon.eq("id", params.getData().getId());
         }
-        //Integer=====
         if (params.getData().getScore() != null) {
             conditon.eq("score", params.getData().getScore());
         }
-        //Date=====
-        //String=====
+
         if (params.getData().getToken() != null) {
             conditon.eq("token", params.getData().getToken());
         }

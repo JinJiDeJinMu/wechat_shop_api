@@ -34,7 +34,7 @@ public class CdtScore implements Serializable {
     /**
      * 积分数
      */
-    private Integer score;
+    private Long score;
 
     /**
      * 描述

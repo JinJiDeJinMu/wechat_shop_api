@@ -6,13 +6,15 @@
     <resultMap id="BaseResultMap" type="com.chundengtai.base.bean.CdtUserScore">
         <id column="id" property="id"/>
         <result column="score" property="score"/>
+        <result column="total_score" property="totalScore"/>
+        <result column="level" property="level"/>
         <result column="create_time" property="createTime"/>
         <result column="token" property="token"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, score, create_time, token
+        id, score, total_score, level,create_time, token
     </sql>
 
 </mapper>
