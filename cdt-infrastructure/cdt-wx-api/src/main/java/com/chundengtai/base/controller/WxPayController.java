@@ -62,12 +62,6 @@ public class WxPayController extends ApiBaseAction {
     private ApiOrderGoodsService orderGoodsService;
 
     @Autowired
-    private SysConfigService sysConfigService;
-
-    @Autowired
-    private ApiGoodsService apiGoodsService;
-
-    @Autowired
     private WxPayService wxPayService;
 
     @Autowired
@@ -213,7 +207,7 @@ public class WxPayController extends ApiBaseAction {
 
         CdtScoreFlow cdtScoreFlow = cdtScoreFlowService.getById(scoreflowId);
         if (cdtScoreFlow == null) {
-            return toResponsObject(400, "积分购买订单已经取消", "");
+            return toResponsObject(400, "积分购买订单不存在", "");
         }
         if (cdtScoreFlow.getPayStatus().equals(PayTypeEnum.PAYED.getCode())) {
             return toResponsObject(400, "积分购买订单已支付，请不要重复操作", "");
@@ -257,7 +251,6 @@ public class WxPayController extends ApiBaseAction {
                     log.info(reqId + "=====>微信支付请求失败返回1:" + System.lineSeparator() + wxResutlJson);
                     return toResponsFail("支付失败," + wxPayUnifiedOrderResult.getReturnMsg());
                 } else if (wxPayUnifiedOrderResult.getReturnCode().equalsIgnoreCase("SUCCESS")) {
-                    // 返回数据
                     String result_code = wxPayUnifiedOrderResult.getReturnCode();
                     String err_code_des = wxPayUnifiedOrderResult.getErrCodeDes();
                     if (result_code.equalsIgnoreCase("FAIL")) {
@@ -364,6 +357,73 @@ public class WxPayController extends ApiBaseAction {
             } else {
                 return toResponsFail("查询失败,error=" + trade_state);
             }
+
+        } else {
+            return toResponsFail("查询失败,error=" + trade_state);
+        }
+
+        return toResponsFail("查询失败，未知错误");
+    }
+
+    @ApiOperation(value = "微信积分订单查询接口")
+    @GetMapping("/queryscore")
+    @IgnoreAuth
+    @ResponseBody
+    public Object queryScore(@LoginUser UserVo loginUser, Integer scoreflowId) {
+
+        if (scoreflowId == null) {
+            return toResponsFail("订单不存在");
+        }
+        CdtScoreFlow cdtScoreFlow = cdtScoreFlowService.getById(scoreflowId);
+        if (cdtScoreFlow == null) {
+            return toResponsFail("订单不存在");
+        }
+        //处理订单的redis状态
+        String value = stringRedisTemplate.opsForValue().get(cdtScoreFlow.getFlowSn());
+        if (value != null && "51".equals(value)) {
+            stringRedisTemplate.delete(cdtScoreFlow.getFlowSn());
+        } else {
+            //异步回调已结操作过
+            return toResponsMsgSuccess("已完成");
+        }
+
+        if (cdtScoreFlow.getPayStatus() == 2) {
+            return toResponsMsgSuccess("支付成功");
+        }
+        Map<Object, Object> parame = new TreeMap<Object, Object>();
+        parame.put("appid", ResourceUtil.getConfigByName("wx.appId"));
+        // 商家账号。
+        parame.put("mch_id", ResourceUtil.getConfigByName("wx.mchId"));
+        String randomStr = CharUtil.getRandomNum(18).toUpperCase();
+        // 随机字符串
+        parame.put("nonce_str", randomStr);
+        // 商户订单编号
+        parame.put("out_trade_no", cdtScoreFlow.getFlowSn());
+        String sign = WechatUtil.arraySign(parame, ResourceUtil.getConfigByName("wx.paySignKey"));
+        // 数字签证
+        parame.put("sign", sign);
+
+        String xml = MapUtils.convertMap2Xml(parame);
+        Map<String, Object> resultUn = null;
+        try {
+            resultUn = XmlUtil.xmlStrToMap(WechatUtil.requestOnce(ResourceUtil.getConfigByName("wx.orderquery"), xml));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return toResponsFail("查询失败,error=" + e.getMessage());
+        }
+        // 响应报文
+        String return_code = MapUtils.getString("return_code", resultUn);
+        String return_msg = MapUtils.getString("return_msg", resultUn);
+
+        if (!"SUCCESS".equals(return_code)) {
+            return toResponsFail("查询失败,error=" + return_msg);
+        }
+        String trade_state = MapUtils.getString("trade_state", resultUn);
+
+        if ("SUCCESS".equals(trade_state)) {
+
+            return toResponsMsgSuccess("支付成功");
+        } else if ("USERPAYING".equals(trade_state)) {
 
         } else {
             return toResponsFail("查询失败,error=" + trade_state);
