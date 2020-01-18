@@ -243,10 +243,7 @@
         <Tabs value="name1">
             <Tab-Pane label="通用信息" name="name1">
                 <i-form ref="formValidate" :model="goods" :rules="ruleValidate" :label-width="100">
-                    <!--<Form-item label="商品类型" prop="categoryId">-->
-                    <!--<i-input v-model="goods.categoryName" @on-click="categoryTree" icon="eye" readonly="readonly"-->
-                    <!--placeholder="商品类型"/>-->
-                    <!--</Form-item>-->
+
                     <Form-item label="商品序列号" prop="goodsSn">
                         <i-input v-model="goods.goodsSn" placeholder="商品序列号,必须填写"/>
                     </Form-item>
@@ -271,7 +268,11 @@
                     <!--</i-select>-->
                     <!--</Form-item>-->
 
-                    <Form-item label="商品类型" prop="isSecKill" style="width: 268px;">
+                    <Form-item label="商品类型" prop="categoryId">
+                        <i-input v-model="goods.categoryName" @on-click="categoryTree" icon="eye" readonly="readonly"
+                                 placeholder="商品类型"/>
+                    </Form-item>
+                    <Form-item label="商品服务类型" prop="isSecKill" style="width: 268px;">
                         <i-select v-model="goods.isSecKill">
                             <i-option value="1">普通商品</i-option>
                             <!--<i-option value="2">秒杀</i-option>-->
