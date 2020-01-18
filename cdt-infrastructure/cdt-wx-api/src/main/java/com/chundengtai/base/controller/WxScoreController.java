@@ -12,14 +12,18 @@ import com.chundengtai.base.service.CdtScoreService;
 import com.chundengtai.base.util.ApiBaseAction;
 import com.chundengtai.base.util.CommonUtil;
 import com.chundengtai.base.utils.BeanJwtUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,7 +44,20 @@ public class WxScoreController extends ApiBaseAction {
     @Autowired
     private CdtScoreFlowService cdtScoreFlowService;
 
-    @PostMapping("buyscore.do")
+
+    @GetMapping("/score.json")
+    @IgnoreAuth
+    public Result ScoreList(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                            @RequestParam(value = "size", defaultValue = "10") Integer size) {
+
+        PageHelper.startPage(page, size);
+        List<CdtScore> cdtScoreList = cdtScoreService.list();
+        PageInfo pageInfo = new PageInfo(cdtScoreList);
+        return Result.success(pageInfo);
+
+    }
+
+    @GetMapping("buyscore.do")
     @IgnoreAuth
     public Result buyScore(@LoginUser UserVo loginUser, Integer scoreId) {
 

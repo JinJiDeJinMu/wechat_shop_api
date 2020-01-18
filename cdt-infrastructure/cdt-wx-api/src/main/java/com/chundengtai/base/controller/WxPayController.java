@@ -1,12 +1,10 @@
 package com.chundengtai.base.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.annotation.LoginUser;
 import com.chundengtai.base.bean.CdtScoreFlow;
-import com.chundengtai.base.bean.CdtUserScore;
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.entity.CdtPaytransRecordEntity;
@@ -35,10 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -91,7 +86,7 @@ public class WxPayController extends ApiBaseAction {
     private CdtScoreService cdtScoreService;
 
     @Autowired
-    private CdtUserScoreService cdtUserScoreService;
+    private UserScoreService userScoreService;
 
     /**
      * 获取支付的请求参数
@@ -213,7 +208,7 @@ public class WxPayController extends ApiBaseAction {
     @ApiOperation(value = "积分支付")
     @GetMapping("payscore")
     @IgnoreAuth
-    public Object payScore(@LoginUser UserVo loginUser, Integer scoreflowId) {
+    public Object payScore(@LoginUser UserVo loginUser, @RequestParam("scoreflowId") String scoreflowId) {
         String reqId = UUID.randomUUID().toString();
 
         CdtScoreFlow cdtScoreFlow = cdtScoreFlowService.getById(scoreflowId);
@@ -244,12 +239,13 @@ public class WxPayController extends ApiBaseAction {
                     .outTradeNo(cdtScoreFlow.getFlowSn())
                     .build();
             payRequest.setSignType(WxPayConstants.SignType.MD5);
-
+            System.out.println(payRequest);
             cdtScoreFlow = cdtScoreFlowService.getById(scoreflowId);
             WxPayUnifiedOrderResult wxPayUnifiedOrderResult = null;
             try {
                 wxPayUnifiedOrderResult = wxPayService.unifiedOrder(payRequest);
                 log.info(wxPayUnifiedOrderResult.toString());
+                System.out.println(wxPayUnifiedOrderResult.toString());
             } catch (WxPayException e) {
                 e.printStackTrace();
                 return toResponsFail("下单失败,网关参数异常,error=" + e.getMessage());
@@ -493,7 +489,7 @@ public class WxPayController extends ApiBaseAction {
             try {
                 // 更改订单状态
                 // 业务处理
-                scoreFlowSetStatus(out_trade_no);
+                userScoreService.addUserScore(out_trade_no);
             } catch (Exception ex) {
                 log.error("=====weixin===scorenotify===error", ex);
                 return setXml("fail", "fail");
@@ -555,76 +551,6 @@ public class WxPayController extends ApiBaseAction {
         orderItem.setShippingStatus(ShippingTypeEnum.NOSENDGOODS.getCode());
     }
 
-    private void scoreFlowSetStatus(String out_trade_no) {
-        CdtScoreFlow cdtScoreFlow = cdtScoreFlowService.getOne(new LambdaQueryWrapper<CdtScoreFlow>()
-                .eq(CdtScoreFlow::getFlowSn, out_trade_no));
-        if (cdtScoreFlow != null) {
-            cdtScoreFlow.setPayTime(new Date());
-            cdtScoreFlow.setPayStatus(PayTypeEnum.PAYED.getCode());
-            boolean result = cdtScoreFlowService.updateById(cdtScoreFlow);
-            //更新用户积分信息
-            if (result) {
-                long userId = cdtScoreFlow.getUserId();
-                CdtUserScore cdtUserScore = cdtUserScoreService.getById(userId);
-                if (cdtUserScore == null) {
-                    CdtUserScore userScore = new CdtUserScore();
-                    userScore.setId(userId);
-                    userScore.setScore(cdtScoreFlow.getScoreSum());
-                    userScore.setTotalScore(cdtScoreFlow.getScoreSum());
-                    //计算等级
-                    userScore.setLevel(changeUserLevel(cdtScoreFlow.getScoreSum()));
-                    userScore.setToken(gettoken(userScore));
-                    userScore.setCreateTime(new Date());
-                    cdtUserScoreService.save(userScore);
-                } else {
-                    //存在更新积分数
-                    String token = cdtUserScore.getToken();
-                    cdtUserScore.setCreateTime(null);
-                    cdtUserScore.setToken(null);
-
-                    String token_flag = gettoken(cdtUserScore);
-                    if (token.equalsIgnoreCase(token_flag)) {
-                        Long score = cdtUserScore.getScore() + cdtScoreFlow.getScoreSum();
-                        Long totalScore = cdtUserScore.getTotalScore() + cdtScoreFlow.getScoreSum();
-                        cdtUserScore.setScore(score);
-                        cdtUserScore.setTotalScore(totalScore);
-                        cdtUserScore.setToken(gettoken(cdtUserScore));
-                        cdtUserScore.setCreateTime(new Date());
-                        cdtUserScore.setId(userId);
-                        cdtUserScore.setLevel(changeUserLevel(totalScore));
-                        cdtUserScoreService.updateById(cdtUserScore);
-                    }
-                }
-            }
-        }
-
-    }
-
-    /**
-     * 判断等级
-     *
-     * @param totalScore
-     */
-    public Integer changeUserLevel(Long totalScore) {
-
-        if (totalScore > 0 && totalScore <= 10000) {
-            return 1;
-        } else if (totalScore > 10000 && totalScore <= 200000) {
-            return 2;
-        } else if (totalScore > 200000 && totalScore <= 500000) {
-            return 3;
-        } else if (totalScore > 500000 && totalScore <= 1000000) {
-            return 4;
-        } else if (totalScore > 1000000 && totalScore <= 2000000) {
-            return 5;
-        } else if (totalScore > 2000000 && totalScore <= 5000000) {
-            return 6;
-        } else if (totalScore > 5000000 && totalScore < 10000000) {
-            return 7;
-        } else {
-            return 8;
-        }
-    }
 
     public static String setXml(String return_code, String return_msg) {
         return "<xml><return_code><![CDATA[" + return_code + "]]></return_code><return_msg><![CDATA[" + return_msg + "]]></return_msg></xml>";
