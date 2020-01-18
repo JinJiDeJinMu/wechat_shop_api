@@ -120,19 +120,6 @@ public class SysUserController extends AbstractController {
             return R.error("非超级管理员必须选择绑定的店铺");
         }
         sysUserService.save(user);
-        //sysUserDao.updateMerchantId(user);
-
-//        MlsUserEntity2 mlsUserVo=new MlsUserEntity2();
-//        mlsUserVo.setUserTel(user.getMobile());
-//        mlsUserVo.setFx(user.getFx());
-//        mlsUserVo.setFx1(user.getFx1());
-//        mlsUserVo.setFx2(user.getFx2());
-//        mlsUserVo.setPfx(user.getPfx());
-//        mlsUserVo.setFid(-1L);
-//        mlsUserVo.setRootId(user.getUserId());
-//        mlsUserVo.setMerchantId(user.getMerchantId());
-//        mlsUserVo.setAllShow(user.getAllShow());
-//        sysUserDao.insertMlsUse(mlsUserVo);
         return R.ok();
     }
 
@@ -146,16 +133,10 @@ public class SysUserController extends AbstractController {
         ValidatorUtils.validateEntity(user, UpdateGroup.class);
 
         user.setCreateUserId(getUserId());
-
+        String password = user.getPassword();
+        user.setPassword(new Sha256Hash(password).toHex());
         sysUserService.update(user);
-//        MlsUserEntity2 mlsUserVo=new MlsUserEntity2();
-//        mlsUserVo.setFx(user.getFx());
-//        mlsUserVo.setFx1(user.getFx1());
-//        mlsUserVo.setFx2(user.getFx2());
-//        mlsUserVo.setPfx(user.getPfx());
-//        mlsUserVo.setRootId(user.getUserId());
-//        mlsUserVo.setAllShow(user.getAllShow());
-//        sysUserDao.updateMlsUse(mlsUserVo);
+
 
         return R.ok();
     }

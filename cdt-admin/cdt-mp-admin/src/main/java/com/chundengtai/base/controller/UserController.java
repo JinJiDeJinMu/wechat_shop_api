@@ -111,8 +111,7 @@ public class UserController {
     @RequestMapping("/update")
     @RequiresPermissions("user:update")
     public R update(@RequestBody UserEntity user) {
-        //user.setUsername(Base64.encode(user.getUsername()));
-        user.setPassword(Base64.encode(user.getPassword()));
+        user.setUsername(Base64.encode(user.getUsername()));
         userService.update(user);
 
         return R.ok();
