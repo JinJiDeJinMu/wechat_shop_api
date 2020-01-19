@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -58,25 +59,15 @@ public class WxScoreController extends ApiBaseAction {
 
     @GetMapping("buyscore.do")
     @IgnoreAuth
-    public Result buyScore(@LoginUser UserVo loginUser, Integer scoreId) {
+    public Result buyScore(@LoginUser UserVo loginUser, String money, long score) {
         if (loginUser == null) {
             return Result.failure("请先登录");
-        }
-        CdtScore cdtScore = cdtScoreService.getById(scoreId);
-        if (cdtScore == null) {
-            return Result.failure("积分套餐不存在");
-        }
-        if (cdtScore.getType() == 1) {
-            return Result.failure("积分套餐已失效");
         }
         CdtScoreFlow cdtScoreFlow = new CdtScoreFlow();
 
         cdtScoreFlow.setFlowSn(CommonUtil.generateOrderNumber());
-        cdtScoreFlow.setScoreId(scoreId);
-        cdtScoreFlow.setScoreSum(cdtScore.getScore());
+        cdtScoreFlow.setScore(score);
         cdtScoreFlow.setUserId(loginUser.getUserId());
-        cdtScoreFlow.setMoney(cdtScore.getMoney());
-        cdtScoreFlow.setOffsetMoney(cdtScore.getOffsetMoney());
         try {
             Map chain = BeanJwtUtil.javabean2map(cdtScoreFlow);
             String token = JavaWebToken.createJavaWebToken(chain);
@@ -84,6 +75,7 @@ public class WxScoreController extends ApiBaseAction {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        cdtScoreFlow.setMoney(new BigDecimal(money));
         cdtScoreFlow.setCreateTime(new Date());
         boolean result = cdtScoreFlowService.save(cdtScoreFlow);
         if (result) {

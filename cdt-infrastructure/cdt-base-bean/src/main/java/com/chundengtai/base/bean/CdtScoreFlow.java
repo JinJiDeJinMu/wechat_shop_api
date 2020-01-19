@@ -42,24 +42,14 @@ public class CdtScoreFlow implements Serializable {
     private String flowSn;
 
     /**
-     * 积分id
-     */
-    private Integer scoreId;
-
-    /**
      * 积分总数
      */
-    private Long scoreSum;
+    private Long score;
 
     /**
      * 充值金额
      */
     private BigDecimal money;
-
-    /**
-     * 抵消金额
-     */
-    private BigDecimal offsetMoney;
 
     /**
      * 支付状态

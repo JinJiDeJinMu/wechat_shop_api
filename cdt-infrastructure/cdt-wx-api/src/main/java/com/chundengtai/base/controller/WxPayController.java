@@ -202,7 +202,7 @@ public class WxPayController extends ApiBaseAction {
     @ApiOperation(value = "积分支付")
     @GetMapping("payscore")
     @IgnoreAuth
-    public Object payScore(@LoginUser UserVo loginUser, @RequestParam("scoreflowId") String scoreflowId) {
+    public Object payScore(@LoginUser UserVo loginUser, @RequestParam("scoreflowId") Integer scoreflowId) {
         String reqId = UUID.randomUUID().toString();
 
         CdtScoreFlow cdtScoreFlow = cdtScoreFlowService.getById(scoreflowId);
@@ -212,19 +212,23 @@ public class WxPayController extends ApiBaseAction {
         if (cdtScoreFlow.getPayStatus().equals(PayTypeEnum.PAYED.getCode())) {
             return toResponsObject(400, "积分购买订单已支付，请不要重复操作", "");
         }
-        String describe = cdtScoreService.getById(cdtScoreFlow.getScoreId()).getDetail();
         String token = cdtScoreFlow.getToken();
 
+        BigDecimal money = cdtScoreFlow.getMoney();
+
+        cdtScoreFlow.setMoney(null);
         cdtScoreFlow.setToken(null);
         cdtScoreFlow.setPayStatus(null);
         cdtScoreFlow.setCreateTime(null);
         cdtScoreFlow.setId(null);
         cdtScoreFlow.setPayTime(null);
         String token_flag = gettoken(cdtScoreFlow);
+        cdtScoreFlow.setMoney(money);
         if (token_flag.equalsIgnoreCase(token)) {
             log.info("=====token校验成功");
+            System.out.println("token校验成功");
             WxPayUnifiedOrderRequest payRequest = WxPayUnifiedOrderRequest.newBuilder()
-                    .body("未名严选校园电商-支付").detail(describe)
+                    .body("未名严选校园电商-支付").detail(String.valueOf(cdtScoreFlow.getMoney()) + "积分")
                     .totalFee(cdtScoreFlow.getMoney().multiply(new BigDecimal(100)).intValue())
                     .spbillCreateIp(getClientIp())
                     .notifyUrl(ResourceUtil.getConfigByName("wx.scorenotifyUrl"))
@@ -283,7 +287,7 @@ public class WxPayController extends ApiBaseAction {
             }
 
         }
-        return toResponsObject(400, "下单失败", "");
+        return toResponsObject(400, "校验失败", "");
 
     }
     /**

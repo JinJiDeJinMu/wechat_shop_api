@@ -97,14 +97,6 @@ public class ApiOrderService {
         Long promoterId = jsonParam.getLong("promoterId");// 获取推荐人id
         log.info("=====================获取推荐人id:" + promoterId);
 
-//        if (0 == promoterId.intValue()) {
-//            MlsUserEntity2 mlsuser = mlsUserSer.getEntityMapper().findByUserId(loginUser.getUserId());
-//            promoterId = mlsuser.getFid();
-//        } else {
-//            MlsUserEntity2 mlsuser = mlsUserSer.getEntityMapper().findByUserId(promoterId);
-//            promoterId = mlsuser.getMlsUserId();
-//        }
-
 
         AddressVo addressVo = apiAddressMapper.queryObject(jsonParam.getInteger("addressId"));//收货地址
 

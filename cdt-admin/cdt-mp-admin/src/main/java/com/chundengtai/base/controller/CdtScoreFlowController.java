@@ -46,21 +46,15 @@ public class CdtScoreFlowController {
             conditon.eq("flow_sn", params.getData().getFlowSn());
         }
         //Integer=====
-        if (params.getData().getScoreId() != null) {
-            conditon.eq("score_id", params.getData().getScoreId());
-        }
         //Integer=====
-        if (params.getData().getScoreSum() != null) {
-            conditon.eq("score_sum", params.getData().getScoreSum());
+        if (params.getData().getScore() != null) {
+            conditon.eq("score_sum", params.getData().getScore());
         }
         //BigDecimal=====
         if (params.getData().getMoney() != null) {
             conditon.eq("money", params.getData().getMoney());
         }
-        //BigDecimal=====
-        if (params.getData().getOffsetMoney() != null) {
-            conditon.eq("offset_money", params.getData().getOffsetMoney());
-        }
+
         //Integer=====
         if (params.getData().getPayStatus() != null) {
             conditon.eq("pay_status", params.getData().getPayStatus());

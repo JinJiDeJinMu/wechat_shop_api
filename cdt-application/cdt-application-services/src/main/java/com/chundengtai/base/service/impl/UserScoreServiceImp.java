@@ -48,10 +48,10 @@ public class UserScoreServiceImp implements UserScoreService {
                 if (cdtUserScore == null) {
                     CdtUserScore userScore = new CdtUserScore();
                     userScore.setId(userId);
-                    userScore.setScore(cdtScoreFlow.getScoreSum());
-                    userScore.setTotalScore(cdtScoreFlow.getScoreSum());
+                    userScore.setScore(cdtScoreFlow.getScore());
+                    userScore.setTotalScore(cdtScoreFlow.getScore());
                     //计算等级
-                    userScore.setLevel(changeUserLevel(cdtScoreFlow.getScoreSum()));
+                    userScore.setLevel(changeUserLevel(cdtScoreFlow.getScore()));
                     userScore.setToken(gettoken(userScore));
                     userScore.setCreateTime(new Date());
                     cdtUserScoreService.save(userScore);
@@ -63,8 +63,8 @@ public class UserScoreServiceImp implements UserScoreService {
 
                     String token_flag = gettoken(cdtUserScore);
                     if (token.equalsIgnoreCase(token_flag)) {
-                        Long score = cdtUserScore.getScore() + cdtScoreFlow.getScoreSum();
-                        Long totalScore = cdtUserScore.getTotalScore() + cdtScoreFlow.getScoreSum();
+                        Long score = cdtUserScore.getScore() + cdtScoreFlow.getScore();
+                        Long totalScore = cdtUserScore.getTotalScore() + cdtScoreFlow.getScore();
                         cdtUserScore.setScore(score);
                         cdtUserScore.setTotalScore(totalScore);
                         cdtUserScore.setToken(gettoken(cdtUserScore));
