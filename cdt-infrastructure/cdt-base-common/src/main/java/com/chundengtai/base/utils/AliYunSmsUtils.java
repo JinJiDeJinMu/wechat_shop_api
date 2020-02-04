@@ -70,9 +70,8 @@ public class AliYunSmsUtils {
         hashMap.put("name","zhs");
         hashMap.put("code","123456");
         String js = JSON.toJSONString(hashMap);
-        CommonResponse response = AliYunSmsUtils.sendMessage("15669959631","未名严选","SMS_183150732","{\"name\":\"测试\",\"code\":\"1111\"}");
+        CommonResponse response = AliYunSmsUtils.send("15669959631",js);
         JSONObject jsonObject = JSONObject.parseObject(response.getData());
         System.out.println(jsonObject);
-        System.out.println(js);
     }
 }

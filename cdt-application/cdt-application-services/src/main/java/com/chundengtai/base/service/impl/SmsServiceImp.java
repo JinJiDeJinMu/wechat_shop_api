@@ -19,7 +19,6 @@ public class SmsServiceImp implements SmsService {
 
     @Override
     public void sendSms(String PhoneNumbers, HashMap<String, Object> hashMap) {
-
         CommonResponse commonResponse = AliYunSmsUtils.send(PhoneNumbers, JSON.toJSONString(hashMap));
         if(commonResponse != null){
             JSONObject result = JSONObject.parseObject(commonResponse.getData());
