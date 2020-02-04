@@ -149,6 +149,17 @@
             <version>2.8.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+       <!-- <dependency>
+            <groupId>com.chundengtai.base</groupId>
+            <artifactId>cdt-mp-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>-->
+
 
     </dependencies>
 

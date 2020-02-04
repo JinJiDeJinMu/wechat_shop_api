@@ -10,6 +10,7 @@ import com.chundengtai.base.utils.AliYunSmsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
+import java.util.HashMap;
 
 public class SmsServiceImp implements SmsService {
 
@@ -17,12 +18,11 @@ public class SmsServiceImp implements SmsService {
     private CdtSmsLogService cdtSmsLogService;
 
     @Override
-    public void sendSms(String PhoneNumbers, String TemplateCode, String TemplateParam) {
+    public void sendSms(String PhoneNumbers, HashMap<String, Object> hashMap) {
 
-        CommonResponse commonResponse = AliYunSmsUtils.sendMessage(PhoneNumbers, TemplateCode, TemplateParam);
+        CommonResponse commonResponse = AliYunSmsUtils.send(PhoneNumbers, JSON.toJSONString(hashMap));
         if(commonResponse != null){
-            String data = commonResponse.getData();
-            JSONObject result = (JSONObject) JSON.toJSON(data);
+            JSONObject result = JSONObject.parseObject(commonResponse.getData());
             String[] phones = PhoneNumbers.split(",");
             for (int i = 0; i < phones.length; i++) {
                 CdtSmsLog cdtSmsLog = new CdtSmsLog();
@@ -30,8 +30,8 @@ public class SmsServiceImp implements SmsService {
                 cdtSmsLog.setSmsCode(result.get("Code").toString());
                 cdtSmsLog.setSmsMessage(result.get("Message").toString());
                 cdtSmsLog.setSmsSn(result.get("BizId").toString());
-                cdtSmsLog.setTemplateId(TemplateCode);
-                cdtSmsLog.setContent(TemplateParam);
+                cdtSmsLog.setTemplateId("");
+                cdtSmsLog.setContent("");
                 cdtSmsLog.setCreateTime(new Date());
                 cdtSmsLogService.save(cdtSmsLog);
             }
