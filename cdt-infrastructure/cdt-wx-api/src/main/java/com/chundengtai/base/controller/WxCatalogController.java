@@ -58,22 +58,21 @@ public class WxCatalogController extends ApiBaseAction {
         params.put("parent_id", 0);
         //查询列表数据
         List<CategoryVo> data = categoryService.queryList(params);
-        //
         CategoryVo currentCategory = null;
-        if (null != id) {
-            currentCategory = categoryService.queryObject(id);
-        }
-        if (null == currentCategory && null != data && data.size() != 0) {
-            currentCategory = data.get(0);
-        } else {
-            currentCategory = new CategoryVo();
-        }
-
-        //获取子分类数据
-        if (null != currentCategory && null != currentCategory.getId()) {
-            params.put("parent_id", currentCategory.getId());
-            currentCategory.setSubCategoryList(categoryService.queryList(params));
-        }
+//        if (null != id) {
+//            currentCategory = categoryService.queryObject(id);
+//        }
+//        if (null == currentCategory && null != data && data.size() != 0) {
+//            currentCategory = data.get(0).cl;
+//        } else {
+//            currentCategory = new CategoryVo();
+//        }
+//
+//        //获取子分类数据
+//        if (null != currentCategory && null != currentCategory.getId()) {
+//            params.put("parent_id", currentCategory.getId());
+//            currentCategory.setSubCategoryList(categoryService.queryList(params));
+//        }
 
         resultObj.put("categoryList", data);
         resultObj.put("currentCategory", currentCategory);
