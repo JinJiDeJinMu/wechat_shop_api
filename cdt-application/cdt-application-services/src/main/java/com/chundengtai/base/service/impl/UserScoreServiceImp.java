@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
@@ -63,8 +64,8 @@ public class UserScoreServiceImp implements UserScoreService {
 
                     String token_flag = gettoken(cdtUserScore);
                     if (token.equalsIgnoreCase(token_flag)) {
-                        Long score = cdtUserScore.getScore() + cdtScoreFlow.getScore();
-                        Long totalScore = cdtUserScore.getTotalScore() + cdtScoreFlow.getScore();
+                        BigDecimal score = cdtUserScore.getScore().add(cdtScoreFlow.getScore());
+                        BigDecimal totalScore = cdtUserScore.getTotalScore().add(cdtScoreFlow.getScore());
                         cdtUserScore.setScore(score);
                         cdtUserScore.setTotalScore(totalScore);
                         cdtUserScore.setToken(gettoken(cdtUserScore));
@@ -78,27 +79,27 @@ public class UserScoreServiceImp implements UserScoreService {
         }
 
     }
-
     /**
      * 判断等级
      *
      * @param totalScore
      */
-    public Integer changeUserLevel(Long totalScore) {
+    public Integer changeUserLevel(BigDecimal totalScore) {
+        Integer score = totalScore.intValue();
 
-        if (totalScore > 0 && totalScore <= 10000) {
+        if (score > 0 && score <= 10000) {
             return 1;
-        } else if (totalScore > 10000 && totalScore <= 200000) {
+        } else if (score > 10000 && score <= 200000) {
             return 2;
-        } else if (totalScore > 200000 && totalScore <= 500000) {
+        } else if (score > 200000 && score <= 500000) {
             return 3;
-        } else if (totalScore > 500000 && totalScore <= 1000000) {
+        } else if (score > 500000 && score <= 1000000) {
             return 4;
-        } else if (totalScore > 1000000 && totalScore <= 2000000) {
+        } else if (score > 1000000 && score <= 2000000) {
             return 5;
-        } else if (totalScore > 2000000 && totalScore <= 5000000) {
+        } else if (score > 2000000 && score <= 5000000) {
             return 6;
-        } else if (totalScore > 5000000 && totalScore < 10000000) {
+        } else if (score > 5000000 && score < 10000000) {
             return 7;
         } else {
             return 8;

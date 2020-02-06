@@ -60,14 +60,14 @@ public class WxScoreController extends ApiBaseAction {
 
     @GetMapping("buyscore.do")
     @IgnoreAuth
-    public Result buyScore(@LoginUser UserVo loginUser, String money, long score) {
+    public Result buyScore(@LoginUser UserVo loginUser, String money, String score) {
         if (loginUser == null) {
             return Result.failure("请先登录");
         }
         CdtScoreFlow cdtScoreFlow = new CdtScoreFlow();
 
         cdtScoreFlow.setFlowSn(CommonUtil.generateOrderNumber());
-        cdtScoreFlow.setScore(score);
+        cdtScoreFlow.setScore(new BigDecimal(score));
         cdtScoreFlow.setUserId(loginUser.getUserId());
         try {
             Map chain = BeanJwtUtil.javabean2map(cdtScoreFlow);
@@ -76,7 +76,8 @@ public class WxScoreController extends ApiBaseAction {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        cdtScoreFlow.setMoney(new BigDecimal(money));
+        //cdtScoreFlow.setMoney(new BigDecimal(money));
+        cdtScoreFlow.setMoney(new BigDecimal(0.01));
         cdtScoreFlow.setCreateTime(new Date());
         boolean result = cdtScoreFlowService.save(cdtScoreFlow);
         if (result) {

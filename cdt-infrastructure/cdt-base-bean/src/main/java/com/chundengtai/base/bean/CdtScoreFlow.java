@@ -44,7 +44,7 @@ public class CdtScoreFlow implements Serializable {
     /**
      * 积分总数
      */
-    private Long score;
+    private BigDecimal score;
 
     /**
      * 充值金额

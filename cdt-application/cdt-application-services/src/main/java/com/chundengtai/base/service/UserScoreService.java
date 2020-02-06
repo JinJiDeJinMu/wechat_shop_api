@@ -12,5 +12,4 @@ public interface UserScoreService {
      * 添加用户积分
      */
     void addUserScore(String ScoreFlowSn);
-
 }
