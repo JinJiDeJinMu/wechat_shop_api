@@ -60,7 +60,7 @@ public class ApiFootprintController extends ApiBaseAction {
         Map<String, Object> resultObj = new HashMap<String, Object>();
 
         //查询列表数据
-        PageHelper.startPage(0, 10, false);
+        PageHelper.startPage(page, size, false);
         List<FootprintVo> footprintVos = footprintService.queryListFootprint(loginUser.getUserId() + "");
 
         ApiPageUtils pageUtil = new ApiPageUtils(footprintVos, 0, size, page);
