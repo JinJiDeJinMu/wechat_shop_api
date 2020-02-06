@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.annotation.LoginUser;
+import com.chundengtai.base.bean.CdtUserScore;
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.entity.*;
@@ -31,6 +32,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.DecimalMin;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
@@ -81,6 +83,12 @@ public class ApiPayController extends ApiBaseAction {
     @Autowired
     private IdistributionFacade distributionFacade;
 
+    @Autowired
+    private UserScoreService userScoreService;
+
+    @Autowired
+    private CdtUserScoreService cdtUserScoreService;
+
     /**
      * 获取支付的请求参数
      */
@@ -112,9 +120,30 @@ public class ApiPayController extends ApiBaseAction {
                 detail = detail.substring(0, detail.length() - 1);
             }
         }
+        //查询用户积分
+        Integer fee = orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue();
+        CdtUserScore cdtUserScore = cdtUserScoreService.getById(orderInfo.getUser_id());
+        if(cdtUserScore != null){
+          Integer score = (cdtUserScore.getScore().intValue())*100;
+          if(score < fee){
+              cdtUserScore.setScore(new BigDecimal(0));
+              cdtUserScoreService.updateById(cdtUserScore);
+              fee = fee - score;
+              log.info("积分不够"+fee);
+          }else{
+              BigDecimal s = new BigDecimal(score - fee).divide(new BigDecimal(100));
+              cdtUserScore.setScore(s);
+              cdtUserScoreService.updateById(cdtUserScore);
+              //更改订单已付款状态
+              orderStatusLogicByScore(orderInfo.getOrder_sn(),orderInfo.getActual_price());
+              log.info("积分足够"+s);
+              return toResponsObject(200, "订单积分抵扣下单成功", orderInfo);
+          }
+        }
+
         WxPayUnifiedOrderRequest payRequest = WxPayUnifiedOrderRequest.newBuilder()
                 .body("未名严选校园电商-支付").detail(detail)
-                .totalFee(orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue())
+                .totalFee(fee)
                 .spbillCreateIp(getClientIp())
                 .notifyUrl(ResourceUtil.getConfigByName("wx.notifyUrl"))
                 .tradeType(WxPayConstants.TradeType.JSAPI)
@@ -619,6 +648,39 @@ public class ApiPayController extends ApiBaseAction {
                 payrecord.setMemo(result.getPromotionDetail());
                 payrecord.setPayState(PayTypeEnum.PAYED.getCode());
                 payrecord.setResText(result.getXmlString());
+                paytransRecordService.save(payrecord);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void orderStatusLogicByScore(String out_trade_no, BigDecimal money) {
+        Order orderItem = cdtOrderService.getOne(new QueryWrapper<Order>().lambda().eq(Order::getOrderSn, out_trade_no));
+        if (orderItem == null) {
+            orderItem = cdtOrderService.getOne(new QueryWrapper<Order>().lambda().eq(Order::getAllOrderId, out_trade_no));
+
+            orderItem.setAllOrderId(out_trade_no);
+        } else {
+            orderItem.setOrderSn(out_trade_no);
+        }
+        orderSetPayedStatus(orderItem);
+        orderItem.setPayTime(new Date());
+        boolean rows = cdtOrderService.updateById(orderItem);
+        log.warn("=====此次更新影响===行数====" + rows);
+        try {
+            if (rows) {
+                distributionFacade.recordDistributeLog(orderItem.getUserId(), orderItem);
+                CdtPaytransRecordEntity payrecord = new CdtPaytransRecordEntity();
+                payrecord.setMchOrderNo(orderItem.getOrderSn());
+                payrecord.setAmount(money);
+                payrecord.setTradePrice(money);
+                payrecord.setAppId("");
+                payrecord.setCreateDate(new Date());
+                payrecord.setPayType(PayTypeEnum.PAYED.getCode());
+                payrecord.setMemo(null);
+                payrecord.setPayState(PayTypeEnum.PAYED.getCode());
+                payrecord.setResText(null);
                 paytransRecordService.save(payrecord);
             }
         } catch (Exception ex) {

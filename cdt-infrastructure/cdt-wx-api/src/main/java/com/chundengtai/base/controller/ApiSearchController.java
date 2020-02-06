@@ -122,9 +122,10 @@ public class ApiSearchController extends ApiBaseAction {
     @ApiImplicitParams({@ApiImplicitParam(name = "keyword", value = "关键字", paramType = "path", required = true)})
     @IgnoreAuth
     @GetMapping("search")
-    public Result<Object> search(@LoginUser UserVo loginUser, String keyword,
+    public Result<Object> search(@LoginUser UserVo loginUser, @RequestParam("keyword") String keyword,
                                  @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
                                  @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize) {
+        System.out.println("1111111");
         Map param = new HashMap();
         param.put("keyword", keyword);
         param.put("page", pageIndex);

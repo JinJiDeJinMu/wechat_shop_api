@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -30,12 +31,12 @@ public class CdtUserScore implements Serializable {
     /**
      * 总积分
      */
-    private Long score;
+    private BigDecimal score;
 
     /**
      * 历史总积分
      */
-    private Long totalScore;
+    private BigDecimal totalScore;
 
     private Integer level;
 
