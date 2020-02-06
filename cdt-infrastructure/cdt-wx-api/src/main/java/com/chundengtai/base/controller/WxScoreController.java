@@ -45,6 +45,7 @@ public class WxScoreController extends ApiBaseAction {
     @Autowired
     private CdtScoreFlowService cdtScoreFlowService;
 
+
     @GetMapping("/score.json")
     @IgnoreAuth
     public Result ScoreList(@RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -83,4 +84,16 @@ public class WxScoreController extends ApiBaseAction {
         }
         return Result.failure("积分充值订单创建失败");
     }
+
+    @GetMapping("myScore.json")
+    @IgnoreAuth
+    public Result myScore(@LoginUser UserVo loginUser) {
+        if (loginUser == null) {
+            return Result.failure("请先登录");
+        }
+
+        CdtScore score = cdtScoreService.getById(loginUser.getUserId());
+        return Result.success(score);
+    }
+
 }
