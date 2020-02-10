@@ -185,7 +185,7 @@ let vue = new Vue({
             if (!this.checkSelected()) {
                 return;
             }
-            this.$confirm('是否要进行该批量操作?', '提示', {
+            this.$confirm('是否要进行审核操作?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'

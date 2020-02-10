@@ -24,6 +24,7 @@ const defaultListQuery = {
     sidx: '',
     order: 'asc',
     name: '',
+    mark: '',
     goodSn: ''
 };
 var setting = {
@@ -68,7 +69,8 @@ var vm = new Vue({
             categoryName: '',
             purchaseType: 1,
             merchantId: '',
-            schoolName: ''
+            schoolName: '',
+            mark: ''
         },
         ruleValidate: {
             goodsSn: [{
@@ -241,7 +243,7 @@ var vm = new Vue({
             this.listLoading = false;
             Ajax.request({
                 url: "../goods/list?limit=" + this.listQuery.limit + "&page=" + this.listQuery.page + "&sidx=" + this.listQuery
-                    .sidx + "&name=" + this.listQuery.name + "&order=" + this.listQuery.order,
+                    .sidx + "&name=" + this.listQuery.name + "&order=" + this.listQuery.mark +"&mark=" + this.listQuery.mark,
                 async: true,
                 successCallback: function (r) {
                     console.log(r)
@@ -515,7 +517,8 @@ var vm = new Vue({
                 categoryName: '',
                 purchaseType: 1,
                 extraPrice: 0,
-                schoolName: ''
+                schoolName: '',
+                mark:''
             };
             $('#goodsDesc').editable('setHTML', '');
             vm.getCategory();

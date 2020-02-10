@@ -54,6 +54,9 @@
                 <i-col span="4">
                     <i-input v-model="listQuery.name" @on-enter="query" placeholder="名称"/>
                 </i-col>
+                <i-col span="4">
+                    <i-input v-model="listQuery.mark" @on-enter="query" placeholder="标记信息"/>
+                </i-col>
                 <i-button @click="query">查询</i-button>
             </div>
             <div class="buttons-group">
@@ -257,6 +260,9 @@
                     </Form-item>
                     <Form-item label="关键字" prop="keywords">
                         <i-input v-model="goods.keywords" placeholder="关键字,字段长度不能超过255"/>
+                    </Form-item>
+                    <Form-item label="标记" prop="mark">
+                        <i-input v-model="goods.mark" placeholder="字段长度不能超过255"/>
                     </Form-item>
                     <Form-item label="简明介绍" prop="goodsBrief">
                         <i-input v-model="goods.goodsBrief" placeholder="简明介绍,字段长度不能超过255"/>

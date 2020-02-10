@@ -50,6 +50,7 @@
         <result property="groupPrice" column="group_price"/>
         <result property="purchaseType" column="purchase_type"/>
         <result property="schoolName" column="school_name"/>
+        <result property="mark" column="mark"/>
     </resultMap>
 
     <select id="queryObject" resultMap="goodsMap">
@@ -119,6 +120,9 @@
         <if test="name != null and name != ''">
             AND nideshop_goods.name LIKE concat('%',#{name},'%')
         </if>
+        <if test="mark != null and mark != ''">
+            AND nideshop_goods.mark LIKE concat('%',#{mark},'%')
+        </if>
         <if test="merchantId != null and merchantId != ''">
             AND nideshop_goods.merchant_id =#{merchantId}
         </if>
@@ -145,6 +149,9 @@
         ${filterSql}
         <if test="name != null and name != ''">
             AND name LIKE concat('%',#{name},'%')
+        </if>
+        <if test="mark != null and mark != ''">
+            AND nideshop_goods.mark LIKE concat('%',#{mark},'%')
         </if>
         <if test="merchantId != null and merchantId != ''">
             AND nideshop_goods.merchant_id =#{merchantId}
@@ -203,7 +210,8 @@
         `success_people`,
         `group_price`,
         `purchase_type`,
-        `school_name`
+        `school_name`,
+        `mark`
         )
         values
         (
@@ -252,7 +260,8 @@
         #{successPeople},
         #{groupPrice},
         #{purchaseType},
-        #{schoolName}
+        #{schoolName},
+        #{mark}
         )
     </insert>
 
@@ -304,6 +313,7 @@
             <if test="purchaseType != null">`purchase_type` = #{purchaseType},</if>
             <if test="merchantId != null">`merchant_id` = #{merchantId},</if>
             <if test="schoolName != null">`school_name` = #{schoolName},</if>
+            <if test="mark != null">`mark` = #{mark},</if>
         </set>
         where id = #{id}
     </update>

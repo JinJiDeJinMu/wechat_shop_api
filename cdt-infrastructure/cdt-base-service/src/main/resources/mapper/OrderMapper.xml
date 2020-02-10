@@ -50,6 +50,7 @@
         <result column="group_buying_id" property="groupBuyingId"/>
         <result column="goods_type" property="goodsType"/>
         <result column="goods_num" property="goodsNum"/>
+        <result column="is_apply" property="isApply"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->

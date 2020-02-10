@@ -5,7 +5,7 @@ public enum CashApplyENUM {
 
     NO_ADMIN_NOSHIRO("不是超级管理员，没有权限!"),
     NO_ADMIN_NO("管理员不能申请提现订单!"),
-    MERCHANT_NOOPEN_CASH("商家未开通提现功能或者提现功能被冻结!"),
+    MERCHANT_NOOPEN_CASH("商家不存在或者没有绑定提现账号!"),
     ORDER_CASH_EXISTEN("申请提现订单已存在!"),
     ORDER_CASH_NOEXISTEN("申请提现订单不存在!"),
     ORDER_CASH_NOAPPLY("该订单状态未完成，不能提交申请!"),

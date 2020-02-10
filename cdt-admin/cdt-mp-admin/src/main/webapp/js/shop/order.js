@@ -184,12 +184,9 @@ var vm = new Vue({
             vm.reload();
         },
         review: function () {
-            var id = getSelectedRow("#jqGrid");
-            if (id == null) {
-                return;
-            }
+
             Ajax.request({
-                url: "../ordercashapply/save/" + id,
+                url: "../ordercashapply/save",
                 async: true,
                 successCallback: function (r) {
                 }

@@ -47,6 +47,7 @@
         <result property="realName" column="real_name"/>
         <result property="merchantId" column="merchant_id"/>
         <result property="goodsType" column="goods_type"/>
+        <result property="goodsType" column="goods_type"/>
     </resultMap>
 
     <select id="queryObject" resultType="com.chundengtai.base.entity.OrderEntity">

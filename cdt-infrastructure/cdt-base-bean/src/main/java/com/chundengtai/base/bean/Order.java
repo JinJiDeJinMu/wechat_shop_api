@@ -253,5 +253,10 @@ public class Order implements Serializable {
      */
     private Integer secondLeader;
 
+    /**
+     * 体现状态
+     */
+    private Integer isApply;
+
 
 }

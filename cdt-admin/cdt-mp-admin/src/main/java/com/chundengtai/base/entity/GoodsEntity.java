@@ -122,6 +122,16 @@ public class GoodsEntity implements Serializable {
     private Integer successPeople;//成团时间 单位分钟
     private BigDecimal groupPrice;//团购价格(元)
 
+    private String mark;
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
+    }
+
     public Integer getPurchaseType() {
         return purchaseType;
     }

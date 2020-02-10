@@ -91,7 +91,9 @@ let vm = new Vue({
     el: '#rrapp',
     data: {
         showList: true,
+        userList:true,
         title: null,
+        users:[],
         cdtMerchant: {
             shopLogo: '',
             shopPhotos: ''
@@ -119,7 +121,12 @@ let vm = new Vue({
             if (key == null) {
                 return;
             }
-            Ajax.request({
+            vm.showList = false;
+            vm.userList = false;
+            vm.title = "修改";
+            vm.getUsers();
+            vm.getInfo(key)
+            /*Ajax.request({
                 url: "../cdtmerchant/open/" + key + "/1",
                 async: true,
                 successCallback: function (r) {
@@ -128,7 +135,8 @@ let vm = new Vue({
                     }
                     vm.reload();
                 }
-            });
+            });*/
+
         },
         close: function () {
             var id = getSelectedRow("#jqGrid");
@@ -156,6 +164,7 @@ let vm = new Vue({
             console.log('更新数据----' + key)
             vm.getInfo(key)
         },
+
         saveOrUpdate: function (event) {
             if (vm.cdtMerchant.shopName.length > 50) {
                 alert("名称过长");
@@ -206,6 +215,15 @@ let vm = new Vue({
                     vm.cdtMerchant = r.cdtMerchant;
                     vm.cdtMerchant.key = id;
                     console.log('数据-读取 key2---' + r.cdtMerchant.key)
+                }
+            });
+        },
+        getUsers: function () {
+            Ajax.request({
+                url: "../user/queryAll",
+                async: true,
+                successCallback: function (r) {
+                    vm.users = r.list;
                 }
             });
         },

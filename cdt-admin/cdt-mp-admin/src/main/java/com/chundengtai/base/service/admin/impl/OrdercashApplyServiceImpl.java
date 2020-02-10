@@ -1,9 +1,12 @@
 package com.chundengtai.base.service.admin.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.chundengtai.base.dao.OrdercashApplyDao;
 import com.chundengtai.base.entity.OrdercashApplyEntity;
 import com.chundengtai.base.entity.UserEntity;
 import com.chundengtai.base.service.admin.OrdercashApplyService;
+import com.chundengtai.base.util.wechat.WechatRefundApiResult;
+import com.chundengtai.base.util.wechat.WechatUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -81,7 +86,7 @@ public class OrdercashApplyServiceImpl implements OrdercashApplyService {
     @Override
     public boolean wechatMoneyToUser(UserEntity userEntity, Double amount) {
 
-        /*if(userEntity == null || userEntity.getMerchantId() == null){
+        if(userEntity == null || userEntity.getMerchantId() == null){
             log.info("UserEntity is null or MerchantId is null or RealName is null");
             return false;
         }
@@ -99,7 +104,7 @@ public class OrdercashApplyServiceImpl implements OrdercashApplyService {
         if("SUCCESS".equals(ret.getResult_code())) {
             redisTemplate.delete("backtx" + userEntity.getMerchantId());
             return true;
-        }*/
+        }
         return false;
     }
 

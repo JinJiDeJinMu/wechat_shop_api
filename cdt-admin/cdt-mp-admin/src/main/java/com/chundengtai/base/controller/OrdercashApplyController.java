@@ -1,25 +1,28 @@
 package com.chundengtai.base.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.chundengtai.base.bean.Order;
+import com.chundengtai.base.bean.User;
 import com.chundengtai.base.constance.CashApplyENUM;
 import com.chundengtai.base.constance.ShopShow;
-import com.chundengtai.base.entity.CdtMerchantEntity;
-import com.chundengtai.base.entity.OrderEntity;
-import com.chundengtai.base.entity.OrdercashApplyEntity;
-import com.chundengtai.base.entity.UserEntity;
+import com.chundengtai.base.entity.*;
+import com.chundengtai.base.service.OrderService;
 import com.chundengtai.base.service.admin.CdtMerchantService;
-import com.chundengtai.base.service.admin.OrderService;
 import com.chundengtai.base.service.admin.OrdercashApplyService;
 import com.chundengtai.base.service.admin.UserService;
-import com.chundengtai.base.utils.PageUtils;
-import com.chundengtai.base.utils.Query;
-import com.chundengtai.base.utils.R;
-import com.chundengtai.base.utils.ShiroUtils;
+import com.chundengtai.base.utils.*;
+import com.chundengtai.base.weixinapi.OrderStatusEnum;
+import com.chundengtai.base.weixinapi.OrderType;
+import com.chundengtai.base.weixinapi.PayTypeEnum;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +43,14 @@ public class OrdercashApplyController {
     @Autowired
     private CdtMerchantService cdtMerchantService;
 
-    @Autowired
-    private OrderService orderService;
+    /*@Autowired
+    private OrderService orderService;*/
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OrderService orderService;
 
     /**
      * 查看列表
@@ -79,47 +85,47 @@ public class OrdercashApplyController {
     /**
      * 保存
      */
-    @RequestMapping("/save/{id}")
+    @RequestMapping("/save")
     @ResponseBody
-    public R save(@PathVariable Integer id) {
+    public R save() {
 
-        OrdercashApplyEntity ordercashApply = ordercashApplyService.queryObject(id);
-        if (null != ordercashApply) {
-            return R.error(CashApplyENUM.ORDER_CASH_EXISTEN.getMsg());
-        }
+        SysUserEntity sysUserEntity = ShiroUtils.getUserEntity();
 
-        OrderEntity orderEntity = orderService.queryObject(id);
-        if (orderEntity == null || orderEntity.getMerchantId() == null) {
-            return R.error(CashApplyENUM.ORDER_CASH_NOEXISTEN.getMsg());
+        if (ShiroUtils.getUserEntity().getMerchantId() == ShopShow.ADMINISTRATOR.getCode()) {
+           return R.error(CashApplyENUM.NO_ADMIN_NO.getMsg());
         }
-
-        if (orderEntity.getMerchantId() < 0) {
-            return R.error(CashApplyENUM.NO_ADMIN_NO.getMsg());
-        }
-        //查询商家是否开通功能
-        CdtMerchantEntity cdtMerchantEntity = cdtMerchantService.queryObject(orderEntity.getMerchantId());
-        if (null == cdtMerchantEntity || cdtMerchantEntity.getCashStatus() != 1) {
+        CdtMerchantEntity cdtMerchantEntity = cdtMerchantService.queryObject(sysUserEntity.getMerchantId());
+        if (null == cdtMerchantEntity || cdtMerchantEntity.getUserId() == null) {
             return R.error(CashApplyENUM.MERCHANT_NOOPEN_CASH.getMsg());
         }
-        //提现规则
 
-        if (orderEntity.getPayStatus() == 2 && orderEntity.getOrderStatus() == 402) {
-            OrdercashApplyEntity ordercashApplyEntity = new OrdercashApplyEntity();
-            ordercashApplyEntity.setOrderId(id);
-            ordercashApplyEntity.setOrderSn(orderEntity.getOrderSn());
-            ordercashApplyEntity.setPayTime(orderEntity.getPayTime());
-            ordercashApplyEntity.setActualPrice(orderEntity.getActualPrice());
-            ordercashApplyEntity.setMerchantId(orderEntity.getMerchantId());
-            ordercashApplyEntity.setMerchantName(cdtMerchantEntity.getShopName());
-            ordercashApplyEntity.setApplyId(ShiroUtils.getUserEntity().getUserId());
-            ordercashApplyEntity.setApplyName(ShiroUtils.getUserEntity().getUsername());
-            ordercashApplyEntity.setApplyTime(new Date());
+        UserEntity user = userService.queryObject(cdtMerchantEntity.getUserId());
+        List<Order> orderArrayList = orderService.list(new LambdaQueryWrapper<Order>()
+        .in(Order::getOrderStatus, OrderStatusEnum.COMPLETED_ORDER,OrderStatusEnum.PINGLUN_ORDER)
+        .eq(Order::getIsApply,0).eq(Order::getMerchantId,sysUserEntity.getMerchantId())
+        .eq(Order::getPayStatus, PayTypeEnum.PAYED));
+        if(orderArrayList != null){
+            orderArrayList.forEach(e ->{
+                long num = 7;
+                long daysNum = Duration.between(DateTimeConvert.date2LocalDateTime(e.getConfirmTime()), LocalDateTime.now()).toDays();
+                if (daysNum > num) {
+                    OrdercashApplyEntity ordercashApplyEntity = new OrdercashApplyEntity();
+                    ordercashApplyEntity.setOrderId(e.getId());
+                    ordercashApplyEntity.setOrderSn(e.getOrderSn());
+                    ordercashApplyEntity.setPayTime(e.getPayTime());
+                    ordercashApplyEntity.setActualPrice(e.getActualPrice());
+                    ordercashApplyEntity.setMerchantId(e.getMerchantId());
+                    ordercashApplyEntity.setMerchantName(cdtMerchantEntity.getShopName());
+                    ordercashApplyEntity.setApplyId(cdtMerchantEntity.getUserId().longValue());
+                    ordercashApplyEntity.setApplyName(user.getRealName());
+                    ordercashApplyEntity.setApplyTime(new Date());
 
-            ordercashApplyService.save(ordercashApplyEntity);
-            return R.ok(CashApplyENUM.ORDER_CASH_APPLYSUCCESS.getMsg());
+                    ordercashApplyService.save(ordercashApplyEntity);
 
+                }
+            });
         }
-        return R.error(CashApplyENUM.ORDER_CASH_NOAPPLY.getMsg());
+        return R.error(CashApplyENUM.ORDER_CASH_APPLYSUCCESS.getMsg());
     }
 
     /**
