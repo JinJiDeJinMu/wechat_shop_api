@@ -70,18 +70,8 @@ $(function () {
                 }
             },
             {
-                label: '提现功能', name: 'cashStatus', index: 'cash_status', width: 80,
-                formatter: function (value) {
-                    if (value === 0) {
-                        return "未开通";
-                    } else if (value === 1) {
-                        return "已开通";
-                    } else if (value === 2) {
-                        return "已冻结";
-                    } else {
-                        return "其他";
-                    }
-                }
+                label: '提现账户', name: 'userId', index: 'user_id', width: 80
+
             }
         ]
     });
@@ -126,17 +116,6 @@ let vm = new Vue({
             vm.title = "修改";
             vm.getUsers();
             vm.getInfo(key)
-            /*Ajax.request({
-                url: "../cdtmerchant/open/" + key + "/1",
-                async: true,
-                successCallback: function (r) {
-                    if (r.code == 0) {
-                        alert("开通成功");
-                    }
-                    vm.reload();
-                }
-            });*/
-
         },
         close: function () {
             var id = getSelectedRow("#jqGrid");

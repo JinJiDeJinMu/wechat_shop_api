@@ -1,15 +1,16 @@
 const defaultModel = {
-    id: null,
-    orderSn: null,
-    status: null,
-    money: null,
-    weixinOpenid: null,
-    userName: null,
-    realName: null,
-    applyTime: null,
-    operator: null,
-    updateTime: null,
-    remark: null,
+    id:null,
+    orderSn:null,
+    merchantId:null,
+    merchantName:null,
+    money:null,
+    userId:null,
+    wxopenId:null,
+    userName:null,
+    applyTime:null,
+    endTime:null,
+    status:null,
+    remarks:null,
 };
 let vue = new Vue({
     el: '#app',
@@ -72,35 +73,29 @@ let vue = new Vue({
             var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
             return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
         },
-        statusType(value) {
-            if (value === 0) {
-                return '未审核'
-            } else if (value === 1) {
-                return '已通过'
+        formatPayType(value) {
+            if (value === 1) {
+                return '支付宝';
+            } else if (value === 2) {
+                return '微信';
+            } else {
+                return '未支付';
             }
         },
-        OrderStatusType(value) {
-            if (value === 398) {
-                return '未满七天';
-            } else if (value === 399) {
-                return '已退订';
-            } else if (value === 400) {
-                return '未完成';
-            } else if (value === 402) {
-                return '已完成';
-            } else if (value === 403) {
-                return '审核中'
-            } else if (value === 404) {
-                return '审核失败'
-            } else if (value === 406) {
-                return '已提现'
+        type(value) {
+            if (value === 0) {
+                return '未审核';
+            } else if (value === 1) {
+                return '审核通过';
+            } else if(value === 2){
+                return '审核失败';
             }
-            return value;
         }
     },
     methods: {
+
         saveOrUpdate: function (event) {
-            var url = this.baseForm.data.id == null ? "../cdtDistridetailApply/saveModel.json" : "../cdtDistridetailApply/updateModel.json";
+            var url = this.baseForm.data.id == null ? "../orderApply/saveModel.json" : "../orderApply/updateModel.json";
             var params = JSON.stringify(this.baseForm.data);
             let that = this;
             Ajax.request({
@@ -117,19 +112,18 @@ let vue = new Vue({
                 }
             });
         },
-        reviewModel: function (ids) {
+        deleteModel: function (ids) {
             if (ids == null) {
                 return;
             }
             let that = this;
             Ajax.request({
                 type: "POST",
-                url: "../cdtDistridetailApply/reviewModel.json",
+                url: "../orderApply/deleteModel.json",
                 contentType: "application/json",
                 params: JSON.stringify(ids),
                 successCallback: function (res) {
                     alert('操作成功', function (index) {
-                       /* this.handleResetSearch();*/
                         that.reload();
                     });
                 }
@@ -138,10 +132,28 @@ let vue = new Vue({
         getModel: function (id) {
             let that = this;
             Ajax.request({
-                url: "../cdtDistridetailApply/getModel/" + id + ".json",
+                url: "../orderApply/getModel/" + id + ".json",
                 async: true,
                 successCallback: function (res) {
                     that.baseForm.data = res.data;
+                }
+            });
+        },
+        reviewModel: function (ids) {
+            if (ids == null) {
+                return;
+            }
+            let that = this;
+            Ajax.request({
+                type: "POST",
+                url: "../orderApply/reviewModel.json",
+                contentType: "application/json",
+                params: JSON.stringify(ids),
+                successCallback: function (res) {
+                    alert('操作成功', function (index) {
+                        this.handleResetSearch();
+                        that.reload();
+                    });
                 }
             });
         },
@@ -151,7 +163,7 @@ let vue = new Vue({
             let that = this;
             Ajax.request({
                 type: "POST",
-                url: "../cdtDistridetailApply/list.json",
+                url: "../orderApply/list.json",
                 contentType: "application/json",
                 params: JSON.stringify(params),
                 async: true,
@@ -164,8 +176,8 @@ let vue = new Vue({
             });
         },
         getSelectRowIds() {
-            var ids = [];
-            for (var i = 0; i < this.multipleSelection.length; i++) {
+            let ids = [];
+            for (let i = 0; i < this.multipleSelection.length; i++) {
                 ids.push(this.multipleSelection[i].id);
             }
             return ids;

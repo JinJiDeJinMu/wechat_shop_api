@@ -186,7 +186,7 @@ var vm = new Vue({
         review: function () {
 
             Ajax.request({
-                url: "../ordercashapply/save",
+                url: "../orderApply/saveModel.json",
                 async: true,
                 successCallback: function (r) {
                 }

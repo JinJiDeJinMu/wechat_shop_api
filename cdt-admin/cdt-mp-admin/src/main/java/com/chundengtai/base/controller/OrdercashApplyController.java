@@ -167,23 +167,16 @@ public class OrdercashApplyController {
     /**
      * 审核提现
      *
-     * @param id
      * @return
      */
-    @RequestMapping("/review/{id}")
+    @RequestMapping("/review")
     @Transactional
-    public R review(@PathVariable("id") Integer id) {
+    public R review() {
 
         if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
             return R.ok(CashApplyENUM.NO_ADMIN_NOSHIRO.getMsg());
         }
-        //判断订单是否已存在
-        OrdercashApplyEntity ordercashApplyEntity = ordercashApplyService.queryObject(id);
-
-        if (null == ordercashApplyEntity) {
-            return R.ok(CashApplyENUM.ORDER_CASH_NOEXISTEN.getMsg());
-        }
-
+       /* ordercashApplyService.
         //查询商家是否开通功能
         CdtMerchantEntity cdtMerchantEntity = cdtMerchantService.queryObject(ordercashApplyEntity.getMerchantId());
         if (cdtMerchantEntity.getCashStatus() != 1) {
@@ -205,11 +198,11 @@ public class OrdercashApplyController {
                 return R.ok(CashApplyENUM.ORDER_CASH_SUCCESS.getMsg());
             }
             return R.ok(CashApplyENUM.WHAT_PAY_ERROR.getMsg());
-        }
+        }*/
         return R.ok(CashApplyENUM.ORDER_CASH_REBACK.getMsg());
     }
 
-    @RequestMapping("/reject/{id}")
+    @RequestMapping("/reject")
     public R reject(@PathVariable Integer id) {
 
         if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {

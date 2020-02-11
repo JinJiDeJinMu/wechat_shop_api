@@ -44,14 +44,15 @@ $(function () {
             },
             {label: '审核人id', name: 'operator', index: 'operator', align: 'center', width: 80, hidden: true},
             {label: '审核人', name: 'operatorName', index: 'operator_name', align: 'center', width: 80},
+            {label: '备注', name: 'remarks', index: 'remarks', align: 'center', width: 80},
 
-            {
+           /* {
                 label: '操作', width: 120, align: 'center', sortable: false, formatter: function (value, col, row) {
                     return '<button class="btn btn-outline btn-info" onclick="vm.review(' + row.orderId + ',' + row.status + ')"><i class="fa fa-info-circle"></i>&nbsp;审核</button>' +
                         '<button class="btn btn-outline btn-primary" style="margin-top: 0px;" onclick="vm.reject(' + row.orderId + ',' + row.status + ')")"><i class="fa fa-print"></i>&nbsp;驳回</button>';
 
                 }
-            }
+            }*/
         ]
     });
 });
@@ -85,20 +86,14 @@ var vm = new Vue({
                 page: page
             }).trigger("reloadGrid");
         },
-        review: function (id, status) {
-            if (status == 0) {
+        review: function () {
                 Ajax.request({
-                    url: "../ordercashapply/review/" + id,
+                    url: "../ordercashapply/review",
                     async: true,
                     successCallback: function (r) {
                         vm.reload();
                     }
                 });
-            } else {
-                alert("订单提现已通过或者驳回！");
-                return;
-            }
-
         },
         reject: function (id, status) {
             if (status == 0) {
