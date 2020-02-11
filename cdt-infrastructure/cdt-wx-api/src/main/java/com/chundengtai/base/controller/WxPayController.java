@@ -214,16 +214,13 @@ public class WxPayController extends ApiBaseAction {
         }
         String token = cdtScoreFlow.getToken();
 
-        BigDecimal money = cdtScoreFlow.getMoney();
-
-        cdtScoreFlow.setMoney(null);
         cdtScoreFlow.setToken(null);
         cdtScoreFlow.setPayStatus(null);
         cdtScoreFlow.setCreateTime(null);
         cdtScoreFlow.setId(null);
         cdtScoreFlow.setPayTime(null);
         String token_flag = gettoken(cdtScoreFlow);
-        cdtScoreFlow.setMoney(money);
+
         if (token_flag.equalsIgnoreCase(token)) {
             log.info("=====token校验成功");
             System.out.println("token校验成功");
@@ -287,6 +284,7 @@ public class WxPayController extends ApiBaseAction {
             }
 
         }
+        log.info("=====token校验失败");
         return toResponsObject(400, "校验失败", "");
 
     }
