@@ -212,18 +212,6 @@ public class WxPayController extends ApiBaseAction {
         if (cdtScoreFlow.getPayStatus().equals(PayTypeEnum.PAYED.getCode())) {
             return toResponsObject(400, "积分购买订单已支付，请不要重复操作", "");
         }
-        String token = cdtScoreFlow.getToken();
-
-        cdtScoreFlow.setToken(null);
-        cdtScoreFlow.setPayStatus(null);
-        cdtScoreFlow.setCreateTime(null);
-        cdtScoreFlow.setId(null);
-        cdtScoreFlow.setPayTime(null);
-        String token_flag = gettoken(cdtScoreFlow);
-
-        if (token_flag.equalsIgnoreCase(token)) {
-            log.info("=====token校验成功");
-            System.out.println("token校验成功");
             WxPayUnifiedOrderRequest payRequest = WxPayUnifiedOrderRequest.newBuilder()
                     .body("未名严选校园电商-支付").detail(String.valueOf(cdtScoreFlow.getMoney()) + "积分")
                     .totalFee(cdtScoreFlow.getMoney().multiply(new BigDecimal(100)).intValue())
@@ -283,9 +271,7 @@ public class WxPayController extends ApiBaseAction {
                 return toResponsFail("下单失败,error=" + e.getMessage());
             }
 
-        }
-        log.info("=====token校验失败");
-        return toResponsObject(400, "校验失败", "");
+        return toResponsObject(400, "下单失败", "");
 
     }
     /**

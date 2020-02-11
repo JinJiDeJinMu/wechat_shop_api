@@ -69,13 +69,7 @@ public class WxScoreController extends ApiBaseAction {
         cdtScoreFlow.setFlowSn(CommonUtil.generateOrderNumber());
         cdtScoreFlow.setScore(new BigDecimal(score));
         cdtScoreFlow.setUserId(loginUser.getUserId());
-        try {
-            Map chain = BeanJwtUtil.javabean2map(cdtScoreFlow);
-            String token = JavaWebToken.createJavaWebToken(chain);
-            cdtScoreFlow.setToken(token);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         //cdtScoreFlow.setMoney(new BigDecimal(money));
         cdtScoreFlow.setMoney(new BigDecimal(0.01));
         cdtScoreFlow.setCreateTime(new Date());
