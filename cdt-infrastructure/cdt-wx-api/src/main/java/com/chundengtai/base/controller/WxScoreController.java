@@ -70,8 +70,8 @@ public class WxScoreController extends ApiBaseAction {
         cdtScoreFlow.setScore(new BigDecimal(score));
         cdtScoreFlow.setUserId(loginUser.getUserId());
 
-        //cdtScoreFlow.setMoney(new BigDecimal(money));
-        cdtScoreFlow.setMoney(new BigDecimal(0.01));
+        cdtScoreFlow.setMoney(new BigDecimal(money));
+
         cdtScoreFlow.setCreateTime(new Date());
         boolean result = cdtScoreFlowService.save(cdtScoreFlow);
         if (result) {
