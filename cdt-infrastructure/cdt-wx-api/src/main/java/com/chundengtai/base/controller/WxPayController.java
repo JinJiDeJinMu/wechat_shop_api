@@ -491,39 +491,22 @@ public class WxPayController extends ApiBaseAction {
      * @return
      */
     @ApiOperation(value = "微信积分订单回调接口")
-    @RequestMapping(value = "/scorenotify")
+    @RequestMapping(value = "/scorenotify",produces = "application/xml;charset=UTF-8")
     @IgnoreAuth
     @ResponseBody
-    public String scorenotify(HttpServletRequest request, HttpServletResponse response) throws
+    public String scorenotify(@RequestBody String reponseXml) throws
             IOException, WxPayException {
         String reqId = UUID.randomUUID().toString();
         log.info(reqId + "====scorenotify==>返回给微信回调处理结果====>");
-        String resultWxMsg = "";
-        String inputLine;
-        String reponseXml = "";
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         response.setHeader("Access-Control-Allow-Origin", "*");
-        try {
-            while ((inputLine = request.getReader().readLine()) != null) {
-                reponseXml += inputLine;
-            }
-            request.getReader().close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            resultWxMsg = setXml("fail", "xml获取失败");
-        }
 
-        if (StringUtils.isNullOrEmpty(reponseXml)) {
-            resultWxMsg = setXml("fail", "xml为空");
-        }
-
-        if (!StringUtils.isNullOrEmpty(resultWxMsg)) {
+        if (org.springframework.util.StringUtils.isEmpty(reponseXml)) {
             return WxPayNotifyResponse.fail("失败");
         }
-
-        log.info(reqId + "===scorenotify==微信回调返回======================>" + reponseXml);
+        log.info("===notify==微信回调返回======================>" + reponseXml);
         WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(reponseXml);
         String result_code = wxPayOrderNotifyResult.getResultCode();
         if (result_code.equalsIgnoreCase("FAIL")) {
@@ -543,7 +526,7 @@ public class WxPayController extends ApiBaseAction {
                 log.error("=====weixin===scorenotify===error", ex);
                 return WxPayNotifyResponse.fail("失败");
             }
-            log.info("回调完成==="+setXml("SUCCESS", "OK"));
+            log.info("最新回调完成==="+WxPayNotifyResponse.success("成功"));
             return WxPayNotifyResponse.success("成功");
         }
         return WxPayNotifyResponse.success("成功");
