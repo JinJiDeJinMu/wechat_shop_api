@@ -36,9 +36,9 @@ public class UserScoreServiceImp implements UserScoreService {
     @Override
     public void addUserScore(String ScoreFlowSn) {
         CdtScoreFlow cdtScoreFlow = cdtScoreFlowService.getOne(new LambdaQueryWrapper<CdtScoreFlow>()
-                .eq(CdtScoreFlow::getFlowSn, ScoreFlowSn));
+                .eq(CdtScoreFlow::getFlowSn, ScoreFlowSn).eq(CdtScoreFlow::getPayStatus,1));
 
-        if (cdtScoreFlow != null) {
+        if (cdtScoreFlow != null || !cdtScoreFlow.getPayStatus().equals(2)) {
             cdtScoreFlow.setPayTime(new Date());
             cdtScoreFlow.setPayStatus(PayTypeEnum.PAYED.getCode());
             boolean result = cdtScoreFlowService.updateById(cdtScoreFlow);
