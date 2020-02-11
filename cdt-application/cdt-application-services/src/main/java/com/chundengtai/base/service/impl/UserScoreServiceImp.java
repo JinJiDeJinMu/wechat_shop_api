@@ -55,6 +55,7 @@ public class UserScoreServiceImp implements UserScoreService {
                     userScore.setLevel(changeUserLevel(cdtScoreFlow.getScore()));
                     userScore.setToken(gettoken(userScore));
                     userScore.setCreateTime(new Date());
+                    log.info("userScore==="+cdtUserScore +"=id="+cdtUserScore.getId());
                     cdtUserScoreService.save(userScore);
                 } else {
                     //存在更新积分数
