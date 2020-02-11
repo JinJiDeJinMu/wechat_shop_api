@@ -21,6 +21,7 @@ import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.PayTypeEnum;
 import com.chundengtai.base.weixinapi.ShippingTypeEnum;
+import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
@@ -519,7 +520,7 @@ public class WxPayController extends ApiBaseAction {
         }
 
         if (!StringUtils.isNullOrEmpty(resultWxMsg)) {
-            return resultWxMsg;
+            return WxPayNotifyResponse.fail("失败");
         }
 
         log.info(reqId + "===scorenotify==微信回调返回======================>" + reponseXml);
@@ -529,7 +530,7 @@ public class WxPayController extends ApiBaseAction {
             //订单编号
             String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
             log.error(reqId + "===scorenotify==订单" + out_trade_no + "支付失败");
-            return setXml("fail", "fail");
+            return WxPayNotifyResponse.fail("失败");
         } else if (result_code.equalsIgnoreCase("SUCCESS")) {
             //订单编号
             String out_trade_no = wxPayOrderNotifyResult.getOutTradeNo();
@@ -538,14 +539,14 @@ public class WxPayController extends ApiBaseAction {
                 // 更改订单状态
                 // 业务处理
                 userScoreService.addUserScore(out_trade_no);
-                log.info("回调完成==="+setXml("SUCCESS", "OK"));
-                return setXml("SUCCESS", "OK");
             } catch (Exception ex) {
                 log.error("=====weixin===scorenotify===error", ex);
-                return setXml("fail", "fail");
+                return WxPayNotifyResponse.fail("失败");
             }
+            log.info("回调完成==="+setXml("SUCCESS", "OK"));
+            return WxPayNotifyResponse.success("成功");
         }
-        return setXml("SUCCESS", "OK");
+        return WxPayNotifyResponse.success("成功");
     }
 
 
