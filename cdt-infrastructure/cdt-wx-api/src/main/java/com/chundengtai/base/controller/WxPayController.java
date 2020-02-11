@@ -538,11 +538,12 @@ public class WxPayController extends ApiBaseAction {
                 // 更改订单状态
                 // 业务处理
                 userScoreService.addUserScore(out_trade_no);
+                log.info("回调完成==="+setXml("SUCCESS", "OK"));
+                return setXml("SUCCESS", "OK");
             } catch (Exception ex) {
                 log.error("=====weixin===scorenotify===error", ex);
                 return setXml("fail", "fail");
             }
-            return setXml("SUCCESS", "OK");
         }
         return setXml("SUCCESS", "OK");
     }
