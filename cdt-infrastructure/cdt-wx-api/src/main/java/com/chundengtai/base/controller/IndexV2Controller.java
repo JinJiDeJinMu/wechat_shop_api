@@ -128,7 +128,7 @@ public class IndexV2Controller extends ApiBaseAction {
             }
             resultObj.put("productList", newCategoryList);
             log.info("indexv2数据库读取数据");
-            redisTemplate.opsForValue().set("indexV2", resultObj, 10, TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set("indexV2", resultObj, 5, TimeUnit.MINUTES);
         }
         return Result.success(resultObj);
     }
