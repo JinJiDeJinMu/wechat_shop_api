@@ -4,11 +4,13 @@ import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.annotation.LoginUser;
 import com.chundengtai.base.bean.CdtScore;
 import com.chundengtai.base.bean.CdtScoreFlow;
+import com.chundengtai.base.bean.CdtUserScore;
 import com.chundengtai.base.entity.UserVo;
 import com.chundengtai.base.jwt.JavaWebToken;
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.CdtScoreFlowService;
 import com.chundengtai.base.service.CdtScoreService;
+import com.chundengtai.base.service.CdtUserScoreService;
 import com.chundengtai.base.util.ApiBaseAction;
 import com.chundengtai.base.util.CommonUtil;
 import com.chundengtai.base.utils.BeanJwtUtil;
@@ -44,6 +46,9 @@ public class WxScoreController extends ApiBaseAction {
 
     @Autowired
     private CdtScoreFlowService cdtScoreFlowService;
+
+    @Autowired
+    private CdtUserScoreService cdtUserScoreService;
 
 
     @GetMapping("/score.json")
@@ -87,8 +92,8 @@ public class WxScoreController extends ApiBaseAction {
             return Result.failure("请先登录");
         }
 
-        CdtScore score = cdtScoreService.getById(loginUser.getUserId());
-        return Result.success(score);
+        CdtUserScore cdtUserScore = cdtUserScoreService.getById(loginUser.getUserId());
+        return Result.success(cdtUserScore);
     }
 
 }
