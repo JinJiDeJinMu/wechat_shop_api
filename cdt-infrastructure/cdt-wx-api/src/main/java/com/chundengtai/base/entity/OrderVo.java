@@ -518,14 +518,12 @@ public class OrderVo implements Serializable {
         //如果订单已付款，没有发货，则可退款操作
         if (order_status.equals(OrderStatusEnum.PAYED_ORDER.getCode())) {
             handleOption.put("cancel", true);
-            handleOption.put("logistics", true);
         }
 
         //如果订单已经发货，没有收货，则可收货操作和退款、退货操作
         if (order_status.equals(OrderStatusEnum.SHIPPED_ORDER.getCode())) {
             handleOption.put("confirm", true);
             handleOption.put("return", true);
-            handleOption.put("logistics", true);
         }
 
         //订单待收货状态
