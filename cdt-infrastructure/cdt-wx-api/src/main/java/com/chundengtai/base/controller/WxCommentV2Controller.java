@@ -249,15 +249,15 @@ public class WxCommentV2Controller extends ApiBaseAction {
         return Result.success(resultModel);
     }
 
-    @RequestMapping("query")
+    @ApiOperation(value = "查询订单评论")
+    @GetMapping("query")
     @IgnoreAuth
-    public Result<Object> querycomment(@LoginUser UserVo loginUser, Integer orderNo){
-        if(loginUser == null){
+    public Result<Object> querycomment(Integer orderNo){
+       /* if(loginUser == null){
             return Result.failure();
-        }
+        }*/
         List<CdtProductComment> commentList = cdtProductCommentService.list(new LambdaQueryWrapper<CdtProductComment>()
-        .eq(CdtProductComment::getOrderNo,orderNo)
-        .eq(CdtProductComment::getUserId,loginUser.getUserId()));
+        .eq(CdtProductComment::getOrderNo,orderNo));
         commentList = commentList.stream().sorted(Comparator.comparing(CdtProductComment::getId).reversed()).collect(Collectors.toList());
 
         return Result.success(commentList);
