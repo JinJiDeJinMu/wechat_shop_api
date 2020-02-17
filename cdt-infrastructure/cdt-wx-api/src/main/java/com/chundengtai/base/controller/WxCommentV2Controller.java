@@ -265,6 +265,7 @@ public class WxCommentV2Controller extends ApiBaseAction {
         commentReq.setCommentPictureList(commentPictureList);
         UserVo userVo = userService.queryObject(loginUser.getUserId());
         userVo.setNickname(Base64.decode(userVo.getNickname()));
+        commentReq.setUserInfo(userVo);
         return Result.success(commentReq);
     }
 
