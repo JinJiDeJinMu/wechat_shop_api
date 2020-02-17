@@ -490,6 +490,7 @@ public class OrderVo implements Serializable {
         handleOption.put("delete", false);//删除操作
         handleOption.put("pay", false);//支付操作
         handleOption.put("comment", false);//评论操作
+        handleOption.put("lookcomment", false);//查看评论操作
         handleOption.put("delivery", false);//确认收货操作
         handleOption.put("confirm", false);//完成订单操作
         handleOption.put("return", false); //退换货操作
@@ -545,6 +546,10 @@ public class OrderVo implements Serializable {
 
         if (order_status.equals(OrderStatusEnum.COMPLETED_ORDER.getCode())) {
             handleOption.put("comment", true);
+            handleOption.put("logistics", true);
+        }
+        if(order_status.equals(OrderStatusEnum.PINGLUN_ORDER.getCode())){
+            handleOption.put("lookcomment",true);
             handleOption.put("logistics", true);
         }
         return handleOption;

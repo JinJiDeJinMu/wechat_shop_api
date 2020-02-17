@@ -5,8 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chundengtai.base.annotation.IgnoreAuth;
+import com.chundengtai.base.annotation.LoginUser;
+import com.chundengtai.base.bean.CdtDistridetail;
 import com.chundengtai.base.bean.CdtProductComment;
 import com.chundengtai.base.bean.CommentPicture;
+import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.entity.CommentReq;
 import com.chundengtai.base.entity.RepCommentVo;
 import com.chundengtai.base.entity.UserVo;
@@ -16,6 +19,7 @@ import com.chundengtai.base.service.*;
 import com.chundengtai.base.util.ApiBaseAction;
 import com.chundengtai.base.utils.Base64;
 import com.chundengtai.base.utils.RRException;
+import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.chundengtai.base.weixinapi.WeixinContants;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -49,6 +53,9 @@ public class WxCommentV2Controller extends ApiBaseAction {
 
     @Autowired
     private CommentNewPictureService commentPictureService;
+
+    @Autowired
+    private OrderService orderService;
 
     /**
      * 获取评价列表（在商品详情里面）
@@ -151,6 +158,11 @@ public class WxCommentV2Controller extends ApiBaseAction {
                 pictureVo.setPicUrl(StringEscapeUtils.unescapeJava(ss));
                 pictureVo.setSortOrder(j + 1);
                 commentPictureService.save(pictureVo);
+                Order order = orderService.getById(orderNo);
+                if(order !=null){
+                    order.setOrderStatus(OrderStatusEnum.PINGLUN_ORDER.getCode());
+                    orderService.save(order);
+                }
             }
         }
         Map resultModel = new HashMap();
@@ -235,6 +247,20 @@ public class WxCommentV2Controller extends ApiBaseAction {
         }
         resultModel.put("repCommentList", repCommentVos);
         return Result.success(resultModel);
+    }
+
+    @RequestMapping("query")
+    @IgnoreAuth
+    public Result<Object> querycomment(@LoginUser UserVo loginUser, Integer orderNo){
+        if(loginUser == null){
+            return Result.failure();
+        }
+        List<CdtProductComment> commentList = cdtProductCommentService.list(new LambdaQueryWrapper<CdtProductComment>()
+        .eq(CdtProductComment::getOrderNo,orderNo)
+        .eq(CdtProductComment::getUserId,loginUser.getUserId()));
+        commentList = commentList.stream().sorted(Comparator.comparing(CdtProductComment::getId).reversed()).collect(Collectors.toList());
+
+        return Result.success(commentList);
     }
 
     /**
