@@ -161,7 +161,7 @@ public class WxCommentV2Controller extends ApiBaseAction {
                 Order order = orderService.getById(orderNo);
                 if(order !=null){
                     order.setOrderStatus(OrderStatusEnum.PINGLUN_ORDER.getCode());
-                    orderService.save(order);
+                    orderService.updateById(order);
                 }
             }
         }
