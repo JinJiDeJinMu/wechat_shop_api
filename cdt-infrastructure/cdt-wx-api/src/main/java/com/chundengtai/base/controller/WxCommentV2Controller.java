@@ -263,6 +263,8 @@ public class WxCommentV2Controller extends ApiBaseAction {
         List<CommentPicture> commentPictureList = commentPictureService.list(new LambdaQueryWrapper<CommentPicture>()
                 .eq(CommentPicture::getCommentId, comment.getId()));
         commentReq.setCommentPictureList(commentPictureList);
+        UserVo userVo = userService.queryObject(loginUser.getUserId());
+        userVo.setNickname(Base64.decode(userVo.getNickname()));
         return Result.success(commentReq);
     }
 
