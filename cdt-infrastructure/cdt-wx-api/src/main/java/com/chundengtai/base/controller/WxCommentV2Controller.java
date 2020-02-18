@@ -158,12 +158,12 @@ public class WxCommentV2Controller extends ApiBaseAction {
                 pictureVo.setPicUrl(StringEscapeUtils.unescapeJava(ss));
                 pictureVo.setSortOrder(j + 1);
                 commentPictureService.save(pictureVo);
-                Order order = orderService.getById(orderNo);
-                if(order !=null){
-                    order.setOrderStatus(OrderStatusEnum.PINGLUN_ORDER.getCode());
-                    orderService.updateById(order);
-                }
             }
+        }
+        Order order = orderService.getById(orderNo);
+        if(order !=null){
+            order.setOrderStatus(OrderStatusEnum.PINGLUN_ORDER.getCode());
+            orderService.updateById(order);
         }
         Map resultModel = new HashMap();
         resultModel.put("comment_id", insertId);
