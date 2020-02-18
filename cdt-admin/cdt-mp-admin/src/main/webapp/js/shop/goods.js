@@ -303,7 +303,7 @@ var vm = new Vue({
             });
         },
         //批量上架
-        BatchEnsale(ids){
+        BatchEnsale：function(ids){
                     Ajax.request({
                              type: "POST",
                              url: "../goods/enSale",
@@ -318,7 +318,7 @@ var vm = new Vue({
               });
          },
          //批量下架
-          BatchUnsale(ids){
+          BatchUnsale: function(ids){
                              Ajax.request({
                                       type: "POST",
                                       url: "../goods/unSale",
