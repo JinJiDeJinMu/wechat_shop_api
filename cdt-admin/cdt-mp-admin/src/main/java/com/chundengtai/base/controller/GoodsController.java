@@ -73,7 +73,7 @@ public class GoodsController extends BaseController {
             goods.setMerchantId(sysUserEntity.getMerchantId());
         }
         goods.setBrowse(1);
-        System.out.println("1111" + goods);
+        goods.setMerchantId(-1L);
         goodsService.save(goods);
         return R.ok();
     }
