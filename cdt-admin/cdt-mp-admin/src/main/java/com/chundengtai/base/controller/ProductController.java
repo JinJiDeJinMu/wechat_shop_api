@@ -1,7 +1,10 @@
 package com.chundengtai.base.controller;
 
+import com.chundengtai.base.bean.Goods;
 import com.chundengtai.base.constance.ShopShow;
+import com.chundengtai.base.entity.GoodsEntity;
 import com.chundengtai.base.entity.ProductEntity;
+import com.chundengtai.base.service.admin.GoodsService;
 import com.chundengtai.base.service.admin.ProductService;
 import com.chundengtai.base.utils.PageUtils;
 import com.chundengtai.base.utils.Query;
@@ -20,6 +23,9 @@ import java.util.Map;
 public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private GoodsService goodsService;
 
     /**
      * 查看列表
@@ -67,7 +73,13 @@ public class ProductController extends BaseController {
     @RequiresPermissions("product:update")
     public R update(@RequestBody ProductEntity product) {
         productService.update(product);
-
+        GoodsEntity goods = goodsService.queryObject(product.getGoodsId());
+        if(goods != null){
+            goods.setRetailPrice(product.getRetailPrice());
+            goods.setMarketPrice(product.getMarketPrice());
+            goods.setGoodsNumber(product.getGoodsNumber());
+            goodsService.update(goods);
+        }
         return R.ok();
     }
 
