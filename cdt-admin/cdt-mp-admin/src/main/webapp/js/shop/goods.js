@@ -280,10 +280,12 @@ var vm = new Vue({
                 let ids = this.getSelectRowIds();
                 switch (this.operateType) {
                     case this.operates[0].value:
-                        this.updatePublishStatus(1, ids);
+                        //this.updatePublishStatus(1, ids);
+                        this.BatchEnsalen(ids);
                         break;
                     case this.operates[1].value:
-                        this.updatePublishStatus(0, ids);
+                        //this.updatePublishStatus(0, ids);
+                        this.BatchUnsalen(ids);
                         break;
                     case this.operates[2].value:
                         this.updateNewStatus(1, ids);
@@ -300,6 +302,36 @@ var vm = new Vue({
                 this.getList();
             });
         },
+        //批量上架
+        BatchEnsale(ids){
+                    Ajax.request({
+                             type: "POST",
+                             url: "../goods/enSale",
+                             params: JSON.stringify(item),
+                             contentType: "application/json",
+                             type: 'POST',
+                             successCallback: function () {
+                                 alert('提交成功', function (index) {
+                                     vm.reload();
+                                 });
+                             }
+              });
+         }
+         //批量下架
+          BatchUnsale(ids){
+                             Ajax.request({
+                                      type: "POST",
+                                      url: "../goods/unSale",
+                                      params: JSON.stringify(item),
+                                      contentType: "application/json",
+                                      type: 'POST',
+                                      successCallback: function () {
+                                          alert('提交成功', function (index) {
+                                              vm.reload();
+                                          });
+                                      }
+                       });
+                  }
         handleSizeChange(val) {
             this.listQuery.page = 1;
             this.listQuery.limit = val;
@@ -383,7 +415,6 @@ var vm = new Vue({
                 item = getSelectedRow("#jqGrid");
                 return;
             }
-
             Ajax.request({
                 type: "POST",
                 url: "../goods/enSale",
@@ -424,11 +455,6 @@ var vm = new Vue({
                 item = getSelectedRow("#jqGrid");
                 return;
             }
-            this.$confirm('确定要下架选中的商品?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
                 Ajax.request({
                     type: "POST",
                     url: "../goods/unSale",
@@ -441,7 +467,7 @@ var vm = new Vue({
                         });
                     }
                 });
-            });
+
         },
         batDel: function () {
             if (!this.checkSelected()) {

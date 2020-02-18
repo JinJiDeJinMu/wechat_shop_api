@@ -2,6 +2,7 @@ package com.chundengtai.base.controller;
 
 import com.chundengtai.base.bean.School;
 import com.chundengtai.base.constance.ShopShow;
+import com.chundengtai.base.dao.GoodsMapper;
 import com.chundengtai.base.entity.GoodsEntity;
 import com.chundengtai.base.entity.SysUserEntity;
 import com.chundengtai.base.service.SchoolService;
@@ -29,6 +30,7 @@ public class GoodsController extends BaseController {
 
     @Autowired
     private SchoolService schoolService;
+
 
     /**
      * 查看列表
@@ -163,9 +165,14 @@ public class GoodsController extends BaseController {
      * 上架
      */
     @RequestMapping("/enSale")
-    public R enSale(@RequestBody Integer id) {
-        goodsService.enSale(id);
-
+    public R enSale(@RequestBody Integer[] ids) {
+        try {
+            for (int i = 0; i < ids.length; i++) {
+                goodsService.enSale(ids[i]);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return R.ok();
     }
 
@@ -173,9 +180,14 @@ public class GoodsController extends BaseController {
      * 下架
      */
     @RequestMapping("/unSale")
-    public R unSale(@RequestBody Integer id) {
-        goodsService.unSale(id);
-
+    public R unSale(@RequestBody Integer[] ids) {
+        try {
+            for (int i = 0; i < ids.length; i++) {
+                goodsService.unSale(ids[i]);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return R.ok();
     }
 

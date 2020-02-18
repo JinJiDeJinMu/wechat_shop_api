@@ -77,7 +77,7 @@ public interface GoodsService {
      * @param id
      * @return
      */
-    int enSale(Integer id);
+    void enSale(Integer id);
 
     /**
      * 下架
@@ -85,5 +85,5 @@ public interface GoodsService {
      * @param id
      * @return
      */
-    int unSale(Integer id);
+    void unSale(Integer id);
 }

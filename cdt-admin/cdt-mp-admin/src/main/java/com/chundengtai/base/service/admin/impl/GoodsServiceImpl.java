@@ -192,28 +192,26 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public int enSale(Integer id) {
+    public void enSale(Integer id) {
         SysUserEntity user = ShiroUtils.getUserEntity();
         GoodsEntity goodsEntity = queryObject(id);
-        if (1 == goodsEntity.getIsOnSale()) {
-            throw new RRException("此商品已处于上架状态！");
+        if(1 != goodsEntity.getIsOnSale()){
+            goodsEntity.setIsOnSale(1);
+            goodsEntity.setUpdateUserId(user.getUserId());
+            goodsEntity.setUpdateTime(new Date());
+            goodsDao.update(goodsEntity);
         }
-        goodsEntity.setIsOnSale(1);
-        goodsEntity.setUpdateUserId(user.getUserId());
-        goodsEntity.setUpdateTime(new Date());
-        return goodsDao.update(goodsEntity);
     }
 
     @Override
-    public int unSale(Integer id) {
+    public void unSale(Integer id) {
         SysUserEntity user = ShiroUtils.getUserEntity();
         GoodsEntity goodsEntity = queryObject(id);
-        if (0 == goodsEntity.getIsOnSale()) {
-            throw new RRException("此商品已处于下架状态！");
+        if (0 != goodsEntity.getIsOnSale()) {
+            goodsEntity.setIsOnSale(0);
+            goodsEntity.setUpdateUserId(user.getUserId());
+            goodsEntity.setUpdateTime(new Date());
+            goodsDao.update(goodsEntity);
         }
-        goodsEntity.setIsOnSale(0);
-        goodsEntity.setUpdateUserId(user.getUserId());
-        goodsEntity.setUpdateTime(new Date());
-        return goodsDao.update(goodsEntity);
     }
 }
