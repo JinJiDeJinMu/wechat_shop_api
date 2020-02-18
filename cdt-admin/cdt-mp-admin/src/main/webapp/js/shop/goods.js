@@ -307,13 +307,12 @@ var vm = new Vue({
                     Ajax.request({
                              type: "POST",
                              url: "../goods/enSale",
-                             params: JSON.stringify(item),
+                             params: JSON.stringify(ids),
                              contentType: "application/json",
                              type: 'POST',
                              successCallback: function () {
-                                 alert('提交成功', function (index) {
-                                     vm.reload();
-                                 });
+                                 alert('上架成功')
+                                  vm.reload();
                              }
               });
          },
@@ -322,13 +321,12 @@ var vm = new Vue({
                              Ajax.request({
                                       type: "POST",
                                       url: "../goods/unSale",
-                                      params: JSON.stringify(item),
+                                      params: JSON.stringify(ids),
                                       contentType: "application/json",
                                       type: 'POST',
                                       successCallback: function () {
-                                          alert('提交成功', function (index) {
+                                          alert('下架成功')
                                               vm.reload();
-                                          });
                                       }
                        });
                   },
