@@ -316,7 +316,7 @@ var vm = new Vue({
                                  });
                              }
               });
-         }
+         },
          //批量下架
           BatchUnsale(ids){
                              Ajax.request({
@@ -331,7 +331,7 @@ var vm = new Vue({
                                           });
                                       }
                        });
-                  }
+                  },
         handleSizeChange(val) {
             this.listQuery.page = 1;
             this.listQuery.limit = val;
