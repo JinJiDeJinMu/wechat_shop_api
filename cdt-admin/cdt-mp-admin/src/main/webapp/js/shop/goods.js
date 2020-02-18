@@ -415,7 +415,7 @@ var vm = new Vue({
             }
             Ajax.request({
                 type: "POST",
-                url: "../goods/enSale",
+                url: "../goods/en",
                 params: JSON.stringify(item),
                 contentType: "application/json",
                 type: 'POST',
@@ -455,7 +455,7 @@ var vm = new Vue({
             }
                 Ajax.request({
                     type: "POST",
-                    url: "../goods/unSale",
+                    url: "../goods/un",
                     contentType: "application/json",
                     params: JSON.stringify(item),
                     successCallback: function (r) {

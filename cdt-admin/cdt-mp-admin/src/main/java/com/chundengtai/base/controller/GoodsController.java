@@ -162,7 +162,7 @@ public class GoodsController extends BaseController {
     }
 
     /**
-     * 上架
+     * 批量上架
      */
     @RequestMapping("/enSale")
     public R enSale(@RequestBody Integer[] ids) {
@@ -177,7 +177,7 @@ public class GoodsController extends BaseController {
     }
 
     /**
-     * 下架
+     * 批量下架
      */
     @RequestMapping("/unSale")
     public R unSale(@RequestBody Integer[] ids) {
@@ -188,6 +188,18 @@ public class GoodsController extends BaseController {
         }catch (Exception e){
             e.printStackTrace();
         }
+        return R.ok();
+    }
+
+    @RequestMapping("/en")
+    public R en(@RequestBody Integer id){
+        goodsService.enSale(id);
+        return R.ok();
+    }
+
+    @RequestMapping("/un")
+    public R un(@RequestBody Integer id){
+        goodsService.unSale(id);
         return R.ok();
     }
 
