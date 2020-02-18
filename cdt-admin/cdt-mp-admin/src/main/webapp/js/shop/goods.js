@@ -303,7 +303,7 @@ var vm = new Vue({
             });
         },
         //批量上架
-        BatchEnsale：function(ids){
+        BatchEnsale: function(ids){
                     Ajax.request({
                              type: "POST",
                              url: "../goods/enSale",
