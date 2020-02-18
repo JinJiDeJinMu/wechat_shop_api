@@ -281,11 +281,11 @@ var vm = new Vue({
                 switch (this.operateType) {
                     case this.operates[0].value:
                         //this.updatePublishStatus(1, ids);
-                        this.BatchEnsalen(ids);
+                        this.BatchEnsale(ids);
                         break;
                     case this.operates[1].value:
                         //this.updatePublishStatus(0, ids);
-                        this.BatchUnsalen(ids);
+                        this.BatchUnsale(ids);
                         break;
                     case this.operates[2].value:
                         this.updateNewStatus(1, ids);
