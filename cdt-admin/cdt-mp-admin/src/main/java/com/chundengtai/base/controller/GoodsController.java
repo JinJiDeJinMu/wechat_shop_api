@@ -75,8 +75,9 @@ public class GoodsController extends BaseController {
         if (sysUserEntity.getCreateUserId().intValue() != ShopShow.ADMINISTRATOR.getCode()) {
             goods.setMerchantId(sysUserEntity.getMerchantId());
         }
-        if(goods.getGoodsImgList().size() >0) {
-            GoodsGalleryEntity goodsGalleryEntity = goods.getGoodsImgList().get(0);
+        int size = goods.getGoodsImgList().size();
+        if( size>0) {
+            GoodsGalleryEntity goodsGalleryEntity = goods.getGoodsImgList().get(size-1);
             String imgUrl = goodsGalleryEntity.getImgUrl();
             goods.setPrimaryPicUrl(imgUrl);
         }
