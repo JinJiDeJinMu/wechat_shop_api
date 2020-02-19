@@ -92,7 +92,7 @@ var vm = new Vue({
                 }
             ],
 
-            listPicUrl: [{
+            /*listPicUrl: [{
                 required: true,
                 message: '首页列表页图片不能为空',
                 trigger: 'blur'
@@ -101,7 +101,7 @@ var vm = new Vue({
                 required: true,
                 message: '产品主图不能为空',
                 trigger: 'blur'
-            }]
+            }]*/
         },
         q: {
             name: ''
