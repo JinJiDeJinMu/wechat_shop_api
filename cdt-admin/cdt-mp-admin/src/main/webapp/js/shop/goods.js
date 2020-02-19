@@ -664,13 +664,17 @@ var vm = new Vue({
                 alert('产品名称过长');
                 return false;
             }
-            if (vm.goods.listPicUrl == '') {
+            /*if (vm.goods.listPicUrl == '') {
                 alert('商品列表图必须上传');
                 return false;
             }
             if (vm.goods.primaryPicUrl == '') {
                 alert('商品主图必须上传');
                 return false;
+            }*/
+            if(vm.uploadList == ""){
+              alert('商品列表图必须上传');
+              return false;
             }
             var url = vm.goods.id == null ? "../goods/save" : "../goods/update";
             vm.goods.goodsDesc = $('#goodsDesc').editable('getHTML');
