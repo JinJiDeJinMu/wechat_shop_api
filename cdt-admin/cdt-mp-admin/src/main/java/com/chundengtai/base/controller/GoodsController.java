@@ -4,6 +4,7 @@ import com.chundengtai.base.bean.School;
 import com.chundengtai.base.constance.ShopShow;
 import com.chundengtai.base.dao.GoodsMapper;
 import com.chundengtai.base.entity.GoodsEntity;
+import com.chundengtai.base.entity.GoodsGalleryEntity;
 import com.chundengtai.base.entity.SysUserEntity;
 import com.chundengtai.base.service.SchoolService;
 import com.chundengtai.base.service.admin.GoodsService;
@@ -73,6 +74,11 @@ public class GoodsController extends BaseController {
         SysUserEntity sysUserEntity = ShiroUtils.getUserEntity();
         if (sysUserEntity.getCreateUserId().intValue() != ShopShow.ADMINISTRATOR.getCode()) {
             goods.setMerchantId(sysUserEntity.getMerchantId());
+        }
+        if(goods.getGoodsImgList().size() >0) {
+            GoodsGalleryEntity goodsGalleryEntity = goods.getGoodsImgList().get(0);
+            String imgUrl = goodsGalleryEntity.getImgUrl();
+            goods.setPrimaryPicUrl(imgUrl);
         }
         goods.setBrowse(1);
         goods.setMerchantId(-1L);
