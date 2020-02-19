@@ -418,10 +418,37 @@
                             </Form-item>
                         </i-col>
                     </Row>
+                    <template>
+                        <div class="upload-list" v-for="item in uploadList">
+                            <template v-if="item.status === 'finished'||item.imgUrl!=''">
+                                <img :src="item.imgUrl"/>
+                                <div class="upload-list-cover">
+                                    <Icon type="ios-eye-outline" @click.native="handleView(item.imgUrl)"></Icon>
+                                    <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
+                            </template>
+                        </div>
+                        <Upload ref="upload" :show-upload-list="false" :default-file-list="uploadList"
+                                :on-success="handleSuccess"
+                                :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError"
+                                :on-exceeded-size="handleMaxSize"
+                                :before-upload="handleBeforeUpload" multiple type="drag" action="../sys/oss/upload"
+                                style="display: inline-block;width:58px;">
+                            <div style="width: 58px;height:58px;line-height: 58px;">
+                                <Icon type="camera" size="20"></Icon>
+                            </div>
+                        </Upload>
+                        <Modal title="查看图片" v-model="visible">
+                            <img :src="imgName" v-if="visible" style="width: 100%"/>
+                        </Modal>
+                    </template>
                 </i-form>
             </Tab-Pane>
             <Tab-Pane label="详细描述" name="name2">
-                <template>
+               <!-- <template>
                     <div class="upload-list" v-for="item in uploadList">
                         <template v-if="item.status === 'finished'||item.imgUrl!=''">
                             <img :src="item.imgUrl"/>
@@ -447,7 +474,7 @@
                     <Modal title="查看图片" v-model="visible">
                         <img :src="imgName" v-if="visible" style="width: 100%"/>
                     </Modal>
-                </template>
+                </template>-->
                 <div id="goodsDesc"></div>
             </Tab-Pane>
             <Tab-Pane label="其他信息" name="name3">
