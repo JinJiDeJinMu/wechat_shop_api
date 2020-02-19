@@ -77,7 +77,7 @@ public class GoodsController extends BaseController {
         }
         int size = goods.getGoodsImgList().size();
         if( size>0) {
-            GoodsGalleryEntity goodsGalleryEntity = goods.getGoodsImgList().get(size-1);
+            GoodsGalleryEntity goodsGalleryEntity = goods.getGoodsImgList().get(0);
             String imgUrl = goodsGalleryEntity.getImgUrl();
             goods.setPrimaryPicUrl(imgUrl);
         }
@@ -93,6 +93,12 @@ public class GoodsController extends BaseController {
     @RequestMapping("/update")
     @RequiresPermissions("goods:update")
     public R update(@RequestBody GoodsEntity goods) {
+        int size = goods.getGoodsImgList().size();
+        if( size>0) {
+            GoodsGalleryEntity goodsGalleryEntity = goods.getGoodsImgList().get(size-1);
+            String imgUrl = goodsGalleryEntity.getImgUrl();
+            goods.setPrimaryPicUrl(imgUrl);
+        }
         goodsService.update(goods);
         return R.ok();
     }
