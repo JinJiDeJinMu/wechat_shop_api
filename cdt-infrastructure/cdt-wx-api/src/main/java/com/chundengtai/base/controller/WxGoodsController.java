@@ -1,8 +1,10 @@
 package com.chundengtai.base.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chundengtai.base.annotation.APPLoginUser;
 import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.annotation.LoginUser;
+import com.chundengtai.base.bean.GoodsCarousel;
 import com.chundengtai.base.entity.*;
 import com.chundengtai.base.oss.OSSFactory;
 import com.chundengtai.base.result.Result;
@@ -83,6 +85,9 @@ public class WxGoodsController extends ApiBaseAction {
     private MlsUserSer mlsUserSer;
     @Autowired
     private CdtMerchantWxService cdtMerchantService;
+
+    @Autowired
+    private GoodsCarouselService goodsCarouselService;
 
     //上传文件集合   
     private List<File> file;
@@ -249,6 +254,8 @@ public class WxGoodsController extends ApiBaseAction {
         //商品详细信息
         List<ProductVo> productEntityList = productService.queryList(param);
         List<GoodsGalleryVo> gallery = goodsGalleryService.queryList(param);
+        List<GoodsCarousel> carousel = goodsCarouselService.list(new LambdaQueryWrapper<GoodsCarousel>()
+        .eq(GoodsCarousel::getGoodsId,id));
         Map ngaParam = new HashMap();
         ngaParam.put("fields", "nga.value, na.name");
         ngaParam.put("sidx", "nga.id");
@@ -311,6 +318,7 @@ public class WxGoodsController extends ApiBaseAction {
 
         footprintService.save(footprintEntity);
         resultObj.put("gallery", gallery);
+        resultObj.put("carousel",carousel);
         resultObj.put("attribute", attribute);
         resultObj.put("userHasCollect", userHasCollect);
 

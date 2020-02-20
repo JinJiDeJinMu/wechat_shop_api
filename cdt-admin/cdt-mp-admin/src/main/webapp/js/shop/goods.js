@@ -47,6 +47,7 @@ var vm = new Vue({
         showList: true,
         title: null,
         uploadList: [],
+        carouselList: [],
         imgName: '',
         visible: false,
         goods: {
@@ -549,6 +550,7 @@ var vm = new Vue({
             vm.showList = false;
             vm.title = "新增";
             vm.uploadList = [];
+            vm.carouselList = [];
             vm.goods = {
                 primaryPicUrl: '',
                 listPicUrl: '',
@@ -610,6 +612,7 @@ var vm = new Vue({
             vm.showList = false;
             vm.title = "修改";
             vm.uploadList = [];
+            vm.carouselList= [];
             vm.getInfo(id);
             vm.getBrands();
             vm.getMacro();
@@ -651,6 +654,15 @@ var vm = new Vue({
                 }
             });
         },
+        getGoodsCarouselList: function (id) { //获取商品详情页
+                    Ajax.request({
+                        url: "../goodsCarousel/list.json?goodsId=" + id,
+                        async: true,
+                        successCallback: function (r) {
+                            vm.carouselList = r.list;
+                        }
+                    });
+                },
         getAttributeCategories: function () {
             Ajax.request({
                 url: "../attributecategory/queryAll",
@@ -704,6 +716,7 @@ var vm = new Vue({
             var url = vm.goods.id == null ? "../goods/save" : "../goods/update";
             vm.goods.goodsDesc = $('#goodsDesc').editable('getHTML');
             vm.goods.goodsImgList = vm.uploadList;
+            vm.goods.carouselList = vm.carouselList;
             Ajax.request({
                 type: "POST",
                 url: url,
@@ -776,6 +789,31 @@ var vm = new Vue({
             }
             return check;
         },
+        handleViewCar(name) {
+                    this.imgName = name;
+                    this.visible = true;
+                },
+                handleRemoveCar(file) {
+                    // 从 upload 实例删除数据
+                    const fileList = this.carouselList;
+                    this.carouselList.splice(fileList.indexOf(file), 1);
+                },
+                handleSuccessCar(res, file) {
+                    // 因为上传过程为实例，这里模拟添加 url
+                    file.imgUrl = res.url;
+                    file.name = res.url;
+                    vm.carouselList.add(file);
+                },
+                handleBeforeUploadCar() {
+                    const check = this.carouselList.length < 5;
+                    if (!check) {
+                        this.$Notice.warning({
+                            title: '最多只能上传 5 张图片。'
+                        });
+                    }
+                    return check;
+                },
+
         handleSubmit: function (name) {
             handleSubmitValidate(this, name, function () {
                 vm.saveOrUpdate()
@@ -825,5 +863,6 @@ var vm = new Vue({
     },
     mounted() {
         this.uploadList = this.$refs.upload.fileList;
+        this.carouselList = this.$refs.uploadCar.fileList;
     }
 });
