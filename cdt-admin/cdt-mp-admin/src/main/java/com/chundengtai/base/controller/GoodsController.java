@@ -75,13 +75,7 @@ public class GoodsController extends BaseController {
         if (sysUserEntity.getCreateUserId().intValue() != ShopShow.ADMINISTRATOR.getCode()) {
             goods.setMerchantId(sysUserEntity.getMerchantId());
         }
-        int size = goods.getGoodsImgList().size();
-        if( size>0) {
-            GoodsGalleryEntity goodsGalleryEntity = goods.getGoodsImgList().get(0);
-            String imgUrl = goodsGalleryEntity.getImgUrl();
-            goods.setPrimaryPicUrl(imgUrl);
-            goods.setListPicUrl(imgUrl);
-        }
+        goods.setListPicUrl(goods.getPrimaryPicUrl());
         goods.setBrowse(1);
         goods.setMerchantId(-1L);
         goodsService.save(goods);
@@ -94,13 +88,7 @@ public class GoodsController extends BaseController {
     @RequestMapping("/update")
     @RequiresPermissions("goods:update")
     public R update(@RequestBody GoodsEntity goods) {
-        int size = goods.getGoodsImgList().size();
-        if( size>0) {
-            GoodsGalleryEntity goodsGalleryEntity = goods.getGoodsImgList().get(size-1);
-            String imgUrl = goodsGalleryEntity.getImgUrl();
-            goods.setPrimaryPicUrl(imgUrl);
-            goods.setListPicUrl(imgUrl);
-        }
+        goods.setListPicUrl(goods.getPrimaryPicUrl());
         goodsService.update(goods);
         return R.ok();
     }

@@ -97,11 +97,12 @@ var vm = new Vue({
                 message: '首页列表页图片不能为空',
                 trigger: 'blur'
             }],
+            */
             primaryPicUrl: [{
                 required: true,
                 message: '产品主图不能为空',
                 trigger: 'blur'
-            }]*/
+            }]
         },
         q: {
             name: ''
@@ -695,14 +696,10 @@ var vm = new Vue({
             /*if (vm.goods.listPicUrl == '') {
                 alert('商品列表图必须上传');
                 return false;
-            }
+            }*/
             if (vm.goods.primaryPicUrl == '') {
                 alert('商品主图必须上传');
                 return false;
-            }*/
-            if(vm.uploadList == ""){
-              alert('商品列表图必须上传');
-              return false;
             }
             var url = vm.goods.id == null ? "../goods/save" : "../goods/update";
             vm.goods.goodsDesc = $('#goodsDesc').editable('getHTML');

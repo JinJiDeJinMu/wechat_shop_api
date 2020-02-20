@@ -361,7 +361,7 @@
                         <Input-number :min="0" :step="1" v-model="goods.extraPrice" placeholder="邮费价格"
                                       style="width: 188px;"/>
                     </Form-item>
-                   <!-- <Row>
+                    <Row>
                         <i-col span="16">
                             <Form-item label="商品主图" prop="primaryPicUrl">
                                 <i-input v-model="goods.primaryPicUrl" placeholder="商品主图" readonly/>
@@ -383,8 +383,8 @@
                                 <i-button icon="eye" @click="eyeImagePicUrl">预览图片</i-button>
                             </Form-item>
                         </i-col>
-                    </Row>-->
-                   <!-- <Row>
+                    </Row>
+                  <!--  <Row>
                         <i-col span="16">
                             <Form-item label="商品列表图&#45;&#45;首页列表显示" prop="listPicUrl">
                                 <i-input v-model="goods.listPicUrl" placeholder="商品海报图"/>
@@ -407,39 +407,10 @@
                             </Form-item>
                         </i-col>
                     </Row>-->
-                    <Form-item label="商品列表图" >
-                    <template>
-                        <div class="upload-list" v-for="item in uploadList">
-                            <template v-if="item.status === 'finished'||item.imgUrl!=''">
-                                <img :src="item.imgUrl"/>
-                                <div class="upload-list-cover">
-                                    <Icon type="ios-eye-outline" @click.native="handleView(item.imgUrl)"></Icon>
-                                    <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
-                                </div>
-                            </template>
-                            <template v-else>
-                                <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-                            </template>
-                        </div>
-                        <Upload ref="upload" :show-upload-list="false" :default-file-list="uploadList"
-                                :on-success="handleSuccess"
-                                :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError"
-                                :on-exceeded-size="handleMaxSize"
-                                :before-upload="handleBeforeUpload" multiple type="drag" action="../sys/oss/upload"
-                                style="display: inline-block;width:58px;">
-                            <div style="width: 58px;height:58px;line-height: 58px;">
-                                <Icon type="camera" size="20"></Icon>
-                            </div>
-                        </Upload>
-                        <Modal title="查看图片" v-model="visible">
-                            <img :src="imgName" v-if="visible" style="width: 100%"/>
-                        </Modal>
-                    </template>
-                    </Form-item>
                 </i-form>
             </Tab-Pane>
             <Tab-Pane label="详细描述" name="name2">
-               <!-- <template>
+                <template>
                     <div class="upload-list" v-for="item in uploadList">
                         <template v-if="item.status === 'finished'||item.imgUrl!=''">
                             <img :src="item.imgUrl"/>
@@ -465,7 +436,7 @@
                     <Modal title="查看图片" v-model="visible">
                         <img :src="imgName" v-if="visible" style="width: 100%"/>
                     </Modal>
-                </template>-->
+                </template>
                 <div id="goodsDesc"></div>
             </Tab-Pane>
             <Tab-Pane label="其他信息" name="name3">
