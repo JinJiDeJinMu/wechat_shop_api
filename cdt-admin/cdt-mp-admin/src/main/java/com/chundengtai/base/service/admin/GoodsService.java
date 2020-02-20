@@ -1,6 +1,7 @@
 package com.chundengtai.base.service.admin;
 
 import com.chundengtai.base.entity.GoodsEntity;
+import io.swagger.models.auth.In;
 
 import java.util.List;
 import java.util.Map;
@@ -86,4 +87,16 @@ public interface GoodsService {
      * @return
      */
     void unSale(Integer id);
+
+    /**
+     * 新品
+     * @param id
+     */
+    void toNew(Integer id);
+
+    /**
+     * 取消新品
+     * @param id
+     */
+    void cancelNew(Integer id);
 }

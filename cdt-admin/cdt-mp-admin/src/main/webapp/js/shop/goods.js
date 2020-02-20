@@ -288,10 +288,10 @@ var vm = new Vue({
                         this.BatchUnsale(ids);
                         break;
                     case this.operates[2].value:
-                        this.updateNewStatus(1, ids);
+                        this.BatchTonew(ids);
                         break;
                     case this.operates[3].value:
-                        this.updateNewStatus(0, ids);
+                        this.BatchCancel(ids);
                         break;
                     case this.operates[4].value:
                         this.updateDeleteStatus(1, ids);
@@ -330,6 +330,34 @@ var vm = new Vue({
                                       }
                        });
                   },
+               //批量改成新品
+                       BatchTonew: function(ids){
+                                          Ajax.request({
+                                                   type: "POST",
+                                                   url: "../goods/tonew",
+                                                   params: JSON.stringify(ids),
+                                                   contentType: "application/json",
+                                                   type: 'POST',
+                                                   successCallback: function () {
+                                                       alert('修改新品成功')
+                                                           vm.reload();
+                                                   }
+                                    });
+                               },
+                //批量改成新品
+                                      BatchCancel: function(ids){
+                                                         Ajax.request({
+                                                                  type: "POST",
+                                                                  url: "../goods/cancelnew",
+                                                                  params: JSON.stringify(ids),
+                                                                  contentType: "application/json",
+                                                                  type: 'POST',
+                                                                  successCallback: function () {
+                                                                      alert('取消新品成功')
+                                                                          vm.reload();
+                                                                  }
+                                                   });
+                                              },
         handleSizeChange(val) {
             this.listQuery.page = 1;
             this.listQuery.limit = val;

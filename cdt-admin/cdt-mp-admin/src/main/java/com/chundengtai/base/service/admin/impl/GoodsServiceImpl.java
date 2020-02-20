@@ -214,4 +214,28 @@ public class GoodsServiceImpl implements GoodsService {
             goodsDao.update(goodsEntity);
         }
     }
+
+    @Override
+    public void toNew(Integer id) {
+        SysUserEntity user = ShiroUtils.getUserEntity();
+        GoodsEntity goodsEntity = queryObject(id);
+        if (1 != goodsEntity.getIsNew()) {
+            goodsEntity.setIsNew(1);
+            goodsEntity.setUpdateUserId(user.getUserId());
+            goodsEntity.setUpdateTime(new Date());
+            goodsDao.update(goodsEntity);
+        }
+    }
+
+    @Override
+    public void cancelNew(Integer id) {
+        SysUserEntity user = ShiroUtils.getUserEntity();
+        GoodsEntity goodsEntity = queryObject(id);
+        if (0 != goodsEntity.getIsNew()) {
+            goodsEntity.setIsNew(0);
+            goodsEntity.setUpdateUserId(user.getUserId());
+            goodsEntity.setUpdateTime(new Date());
+            goodsDao.update(goodsEntity);
+        }
+    }
 }

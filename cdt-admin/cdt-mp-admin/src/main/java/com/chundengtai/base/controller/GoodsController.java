@@ -80,6 +80,7 @@ public class GoodsController extends BaseController {
             GoodsGalleryEntity goodsGalleryEntity = goods.getGoodsImgList().get(0);
             String imgUrl = goodsGalleryEntity.getImgUrl();
             goods.setPrimaryPicUrl(imgUrl);
+            goods.setListPicUrl(imgUrl);
         }
         goods.setBrowse(1);
         goods.setMerchantId(-1L);
@@ -98,6 +99,7 @@ public class GoodsController extends BaseController {
             GoodsGalleryEntity goodsGalleryEntity = goods.getGoodsImgList().get(size-1);
             String imgUrl = goodsGalleryEntity.getImgUrl();
             goods.setPrimaryPicUrl(imgUrl);
+            goods.setListPicUrl(imgUrl);
         }
         goodsService.update(goods);
         return R.ok();
@@ -225,5 +227,32 @@ public class GoodsController extends BaseController {
     public R queryList() {
         List<School> list = schoolService.list();
         return R.ok().put("list", list);
+    }
+
+    /**
+     * 批量新品
+     */
+    @RequestMapping("/tonew")
+    public R tonew(@RequestBody Integer[] ids){
+        try {
+            for (int i = 0; i < ids.length; i++) {
+                goodsService.toNew(ids[i]);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return R.ok();
+    }
+
+    @RequestMapping("/cancelnew")
+    public R cancalnew(@RequestBody Integer[] ids){
+        try {
+            for (int i = 0; i < ids.length; i++) {
+                goodsService.cancelNew(ids[i]);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return R.ok();
     }
 }
