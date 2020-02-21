@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chundengtai.base.dao.CdtProdcutTraceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.chundengtai.base.bean.CdtProdcutTrace">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="main_image" property="mainImage"/>
+        <result column="figure_image" property="figureImage"/>
+        <result column="qrcode" property="qrcode"/>
+        <result column="mp_qrcode" property="mpQrcode"/>
+        <result column="origin_goods" property="originGoods"/>
+        <result column="height" property="height"/>
+        <result column="produce_date_code" property="produceDateCode"/>
+        <result column="expiration_date" property="expirationDate"/>
+        <result column="storage_condition" property="storageCondition"/>
+        <result column="platform_batch_number" property="platformBatchNumber"/>
+        <result column="product_brief" property="productBrief"/>
+        <result column="access_count" property="accessCount"/>
+        <result column="last_access_time" property="lastAccessTime"/>
+        <result column="production_enterprise_no" property="productionEnterpriseNo"/>
+        <result column="responsibility_name" property="responsibilityName"/>
+        <result column="responsibility_address" property="responsibilityAddress"/>
+        <result column="manufacturer_name" property="manufacturerName"/>
+        <result column="manufacturer_address" property="manufacturerAddress"/>
+        <result column="distributor_name" property="distributorName"/>
+        <result column="distributor_address" property="distributorAddress"/>
+        <result column="distributor_contact" property="distributorContact"/>
+        <result column="material_info" property="materialInfo"/>
+        <result column="material_country_origin" property="materialCountryOrigin"/>
+        <result column="revision" property="revision"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="product_desc" property="productDesc"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, main_image, figure_image, qrcode, mp_qrcode, origin_goods, height, produce_date_code, expiration_date, storage_condition, platform_batch_number, product_brief, access_count, last_access_time, production_enterprise_no, responsibility_name, responsibility_address, manufacturer_name, manufacturer_address, distributor_name, distributor_address, distributor_contact, material_info, material_country_origin, revision, created_by, created_time, updated_by, updated_time, product_desc
+    </sql>
+
+</mapper>
