@@ -1,5 +1,7 @@
 package com.chundengtai.base.entity;
 
+import com.chundengtai.base.bean.GoodsCarousel;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -106,6 +108,8 @@ public class GoodsEntity implements Serializable {
     List<GoodsAttributeEntity> attributeEntityList = new ArrayList<>();
 
     List<GoodsGalleryEntity> goodsImgList = new ArrayList<>();
+
+    List<GoodsCarousel> goodsCarouselList = new ArrayList<>();
     /**
      * 翻译用字段
      */
@@ -662,6 +666,14 @@ public class GoodsEntity implements Serializable {
 
     public void setAttributeEntityList(List<GoodsAttributeEntity> attributeEntityList) {
         this.attributeEntityList = attributeEntityList;
+    }
+
+    public void setGoodsCarouselList(List<GoodsCarousel> goodsCarouselList) {
+        this.goodsCarouselList = goodsCarouselList;
+    }
+
+    public List<GoodsCarousel> getGoodsCarouselList() {
+        return goodsCarouselList;
     }
 
     public Long getCreateUserId() {

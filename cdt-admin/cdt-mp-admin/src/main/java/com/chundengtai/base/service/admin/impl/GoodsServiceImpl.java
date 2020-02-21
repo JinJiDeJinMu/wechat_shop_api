@@ -1,10 +1,12 @@
 package com.chundengtai.base.service.admin.impl;
 
+import com.chundengtai.base.bean.GoodsCarousel;
 import com.chundengtai.base.dao.GoodsAttributeDao;
 import com.chundengtai.base.dao.GoodsDao;
 import com.chundengtai.base.dao.GoodsGalleryDao;
 import com.chundengtai.base.dao.ProductDao;
 import com.chundengtai.base.entity.*;
+import com.chundengtai.base.service.GoodsCarouselService;
 import com.chundengtai.base.service.KeygenService;
 import com.chundengtai.base.service.admin.GoodsService;
 import com.chundengtai.base.utils.RRException;
@@ -34,6 +36,9 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
     private KeygenService keygenService;
+
+    @Autowired
+    private GoodsCarouselService goodsCarouselService;
 
     @Override
     public GoodsEntity queryObject(Integer id) {
@@ -111,6 +116,14 @@ public class GoodsServiceImpl implements GoodsService {
                 goodsGalleryDao.save(galleryEntity);
             }
         }
+        //详情图
+        List<GoodsCarousel> goodsCarouselList = goods.getGoodsCarouselList();
+        if(null != goodsCarouselList && goodsCarouselList.size()>0){
+           goodsCarouselList.forEach(e ->{
+               e.setGoodsId(goods.getId());
+               goodsCarouselService.save(e);
+           });
+        }
 
         goods.setIsDelete(0);
         goods.setCreateUserDeptId(user.getDeptId());
@@ -151,6 +164,25 @@ public class GoodsServiceImpl implements GoodsService {
                 goodsGalleryDao.save(galleryEntity);
             }
         }
+        //详情图
+        List<GoodsCarousel> goodsCarouselList = goods.getGoodsCarouselList();
+        HashMap<String,Object> hashMap = new HashMap<>();
+        hashMap.put("goods_id",goods.getId());
+        goodsCarouselService.removeByMap(hashMap);
+        if(null != goodsCarouselList && goodsCarouselList.size()>0){
+            goodsCarouselList.forEach(e ->{
+                e.setGoodsId(goods.getId());
+                goodsCarouselService.save(e);
+            });
+        }
+
+        if(null != goodsCarouselList && goodsCarouselList.size()>0){
+            goodsCarouselList.forEach(e ->{
+                e.setGoodsId(goods.getId());
+                goodsCarouselService.save(e);
+            });
+        }
+
         return goodsDao.update(goods);
     }
 
