@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.chundengtai.base.dao.ApiPurchasePeopleDao">
+
+    <resultMap type="com.chundengtai.base.entity.PurchasePeopleEntity" id="PurchasePeopleMap">
+        <result property="id" column="id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="specificationsId" column="specifications_id"/>
+        <result property="avatar" column="avatar"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.chundengtai.base.entity.PurchasePeopleEntity">
+		select
+			`id`,
+    			`goods_id`,
+    			`user_id`,
+    			`specifications_id`
+		from nideshop_purchase_people
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultMap="PurchasePeopleMap">
+        select
+        p.id,
+        p.goods_id,
+        p.user_id,
+        p.specifications_id,
+        u.avatar
+        from nideshop_purchase_people p LEFT JOIN nideshop_user u ON p.user_id=u.id
+        WHERE 1=1
+        <if test="name != null and name != ''">
+            AND name LIKE concat('%',#{name},'%'),
+        </if>
+        <if test="goodsId != null">
+            AND goods_id = #{goodsId}
+        </if>
+        <choose>
+            <when test="sidx != null">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from nideshop_purchase_people
+        WHERE 1=1
+        <if test="name != null and name != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.chundengtai.base.entity.PurchasePeopleEntity">
+		insert into nideshop_purchase_people(
+        			`id`,
+                    			`goods_id`,
+                    			`user_id`,
+                    			`specifications_id`            )
+		values(
+        			#{id},
+                    			#{goodsId},
+                    			#{userId},
+                    			#{specificationsId}            )
+	</insert>
+
+    <update id="update" parameterType="com.chundengtai.base.entity.PurchasePeopleEntity">
+        update nideshop_purchase_people
+        <set>
+            <if test="goodsId != null">`goods_id` = #{goodsId
+                        },
+            </if>
+            <if test="userId != null">`user_id` = #{userId
+                        },
+            </if>
+            <if test="specificationsId != null">`specifications_id` = #{specificationsId
+                        }
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from nideshop_purchase_people where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from nideshop_purchase_people where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

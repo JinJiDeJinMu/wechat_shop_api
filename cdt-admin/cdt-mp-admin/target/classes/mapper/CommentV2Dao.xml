@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.chundengtai.base.dao.CommentV2Dao">
+
+    <resultMap type="com.chundengtai.base.entity.CommentV2Entity" id="CommentV2Map">
+        <result property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="goodId" column="good_id"/>
+        <result property="content" column="content"/>
+        <result property="commentTime" column="comment_time"/>
+        <result property="starLevel" column="star_level"/>
+        <result property="userId" column="user_id"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.chundengtai.base.entity.CommentV2Entity">
+		select
+			`id`,
+    			`order_no`,
+    			`good_id`,
+    			`content`,
+    			`comment_time`,
+    			`star_level`,
+    			`user_id`,
+    			`status`,
+    			`create_time`
+		from cdt_product_comment
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultType="com.chundengtai.base.entity.CommentV2Entity">
+        select
+        `id`,
+        `order_no`,
+        `good_id`,
+        `content`,
+        `comment_time`,
+        `star_level`,
+        `user_id`,
+        `status`,
+        `create_time`
+        from cdt_product_comment
+        WHERE 1=1
+        <if test="name != null and name != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+        <choose>
+            <when test="sidx != null and sidx != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from cdt_product_comment
+        WHERE 1=1
+        <if test="name != null and name != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.chundengtai.base.entity.CommentV2Entity">
+		insert into cdt_product_comment(
+        			`id`,
+                    			`order_no`,
+                    			`good_id`,
+                    			`content`,
+                    			`comment_time`,
+                    			`star_level`,
+                    			`user_id`,
+                    			`status`
+                    			            )
+		values(
+        			#{id},
+                    			#{orderNo},
+                    			#{goodId},
+                    			#{content},
+                    			#{commentTime},
+                    			#{starLevel},
+                    			#{userId},
+                    			#{status}
+                    			            )
+	</insert>
+
+    <update id="update" parameterType="com.chundengtai.base.entity.CommentV2Entity">
+        update cdt_product_comment
+        <set>
+            <if test="orderNo != null">`order_no` = #{orderNo},
+            </if>
+            <if test="goodId != null">`good_id` = #{goodId},
+            </if>
+            <if test="content != null">`content` = #{content},
+            </if>
+            <if test="commentTime != null">`comment_time` = #{commentTime},
+            </if>
+            <if test="starLevel != null">`star_level` = #{starLevel},
+            </if>
+            <if test="userId != null">`user_id` = #{userId},
+            </if>
+            <if test="status != null">`status` = #{status}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from cdt_product_comment where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from cdt_product_comment where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

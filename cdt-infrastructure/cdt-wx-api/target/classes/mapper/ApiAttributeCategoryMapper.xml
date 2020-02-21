@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.chundengtai.base.dao.ApiAttributeCategoryMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.chundengtai.base.entity.AttributeCategoryVo" id="attributeCategoryMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="enabled" column="enabled"/>
+        <result property="bannerUrl" column="banner_url"/>
+        <result property="showStyle" column="show_style"/>
+        <result property="sortOrder" column="sort_order"/>
+        <result property="showPosition" column="show_position"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.chundengtai.base.entity.AttributeCategoryVo">
+		select * from nideshop_attribute_category where id = #{value}
+	</select>
+
+    <select id="queryList" resultType="com.chundengtai.base.entity.AttributeCategoryVo">
+        select * from nideshop_attribute_category
+        where 1 = 1
+        <if test="showPosition != null">
+            AND show_position = #{showPosition}
+        </if>
+        <if test="enabled != null">
+            AND enabled = #{enabled}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+		select count(*) from nideshop_attribute_category 
+	</select>
+
+    <insert id="save" parameterType="com.chundengtai.base.entity.AttributeCategoryVo">
+		insert into nideshop_attribute_category
+		(
+			`name`,
+			`enabled`,
+			`banner_url`,
+			`sort_order`,
+			`show_position`,
+			`show_style`
+		)
+		values
+		(
+			#{name},
+			#{enabled},
+			#{bannerUrl},
+			#{sortOrder},
+			#{showPosition},
+			#{showStyle},
+		)
+	</insert>
+
+    <update id="update" parameterType="com.chundengtai.base.entity.AttributeCategoryVo">
+        update nideshop_attribute_category
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="enabled != null">`enabled` = #{enabled}</if>
+            <if test="bannerUrl != null">`banner_url` = #{bannerUrl}</if>
+            <if test="sortOrder != null">`sort_order` = #{sortOrder}</if>
+            <if test="showPosition != null">`show_position` = #{showPosition}</if>
+            <if test="showStyle != null">`show_style` = #{showStyle}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from nideshop_attribute_category where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from nideshop_attribute_category where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
