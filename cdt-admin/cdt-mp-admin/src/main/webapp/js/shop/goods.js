@@ -697,10 +697,10 @@ var vm = new Vue({
                 alert('商品列表图必须上传');
                 return false;
             }*/
-            if (vm.goods.primaryPicUrl == '') {
+            /*if (vm.goods.primaryPicUrl == '') {
                 alert('商品主图必须上传');
                 return false;
-            }
+            }*/
             var url = vm.goods.id == null ? "../goods/save" : "../goods/update";
             vm.goods.goodsDesc = $('#goodsDesc').editable('getHTML');
             vm.goods.goodsImgList = vm.uploadList;
