@@ -437,37 +437,11 @@
                         </i-col>
                     </Row>-->
                 </i-form>
-            </Tab-Pane>
-            <Tab-Pane label="详细描述" name="name2">
-                <template>
-                    <div class="upload-list" v-for="item in carouselList">
-                        <template v-if="item.status === 'finished'||item.imgUrl!=''">
-                            <img :src="item.imgUrl"/>
-                            <div class="upload-list-cover">
-                                <Icon type="ios-eye-outline" @click.native="handleViewCar(item.imgUrl)"></Icon>
-                                <Icon type="ios-trash-outline" @click.native="handleRemoveCar(item)"></Icon>
-                            </div>
-                        </template>
-                        <template v-else>
-                            <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-                        </template>
-                    </div>
-                    <Upload ref="uploadCar" :show-upload-list="false" :default-file-list="carouselList"
-                            :on-success="handleSuccessCar"
-                            :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError"
-                            :on-exceeded-size="handleMaxSize"
-                            :before-upload="handleBeforeUploadCar" multiple type="drag" action="../sys/oss/upload"
-                            style="display: inline-block;width:58px;">
-                        <div style="width: 58px;height:58px;line-height: 58px;">
-                            <Icon type="camera" size="20"></Icon>
-                        </div>
-                    </Upload>
-                    <Modal title="查看图片" v-model="visible">
-                        <img :src="imgName" v-if="visible" style="width: 100%"/>
-                    </Modal>
-                </template>
                 <div id="goodsDesc"></div>
             </Tab-Pane>
+           <!-- <Tab-Pane label="详细描述" name="name2">
+                <div id="goodsDesc"></div>
+            </Tab-Pane>-->
             <Tab-Pane label="其他信息" name="name3">
                 <i-form ref="formValidate" :model="goods" :rules="ruleValidate" :label-width="80">
                     <Form-item label="排序" prop="sortOrder">
