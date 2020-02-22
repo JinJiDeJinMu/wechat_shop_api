@@ -1,0 +1,90 @@
+package ${package.Controller};
+
+import com.chundengtai.base.bean.${entity};
+import com.chundengtai.base.result.Result;
+import com.chundengtai.base.service.${table.serviceName};
+import com.chundengtai.base.transfer.BaseForm;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.chundengtai.base.utils.R;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/${table.entityPath}")
+public class ${table.controllerName} {
+@Autowired
+public ${table.serviceName} ${table.entityPath}Service;
+
+/**
+ * 列表
+ */
+@PostMapping("/list.json")
+@RequiresPermissions("${entity.toLowerCase()}:list")
+public R list(@RequestBody BaseForm<${entity}> params){
+        QueryWrapper<${entity}> conditon=new QueryWrapper<>();
+        if(!StringUtils.isEmpty(params.getSortField())&&!StringUtils.isEmpty(params.getOrder())){
+        if(params.getOrder().equalsIgnoreCase("asc")){
+        conditon.orderByAsc(params.getSortField());
+        }
+        else{
+        conditon.orderByDesc(params.getSortField());
+        }
+        }
+    #foreach($field in ${table.fields})
+            //${field.propertyType}=====
+        #set($getprefix="get")
+        #if(!${field.propertyType.equals("Date")})
+                if(params.${getprefix}Data().${getprefix}${field.capitalName}()!=null){
+                conditon.eq("${field.name}",params.${getprefix}Data().${getprefix}${field.capitalName}());
+                }
+        #end
+    #end
+        PageHelper.startPage(params.getPageIndex(),params.getPageSize());
+        List<${entity}> collectList=${table.entityPath}Service.list(conditon);
+        PageInfo pageInfo=new PageInfo(collectList);
+        return R.ok(pageInfo);
+        }
+
+/**
+ * 信息
+ */
+@GetMapping("/getModel/{id}.json")
+@RequiresPermissions("${entity.toLowerCase()}:getModel")
+public R info(@PathVariable("id") Integer id){
+    ${entity} model= ${table.entityPath}Service.getById(id);
+        return R.ok(model);
+        }
+
+/**
+ * 保存
+ */
+@PostMapping("/saveModel.json")
+@RequiresPermissions("${entity.toLowerCase()}:saveModel")
+public R save(@RequestBody ${entity} paramModel){
+        boolean result= ${table.entityPath}Service.save(paramModel);
+        return R.ok(result);
+        }
+
+/**
+ * 修改
+ */
+@PostMapping("/updateModel.json")
+@RequiresPermissions("${entity.toLowerCase()}:updateModel")
+public R update(@RequestBody ${entity} paramModel){
+        boolean result= ${table.entityPath}Service.updateById(paramModel);
+        return R.ok(result);
+        }
+
+/**
+ * 删除
+ */
+@PostMapping("/deleteModel.json")
+@RequiresPermissions("${entity.toLowerCase()}:deleteModel")
+public R delete(@RequestBody Integer[]ids){
+        boolean result= ${table.entityPath}Service.removeByIds(Arrays.asList(ids));
+        return R.ok(result);
+        }
+        }

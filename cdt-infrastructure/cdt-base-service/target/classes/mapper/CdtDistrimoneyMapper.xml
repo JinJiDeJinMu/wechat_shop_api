@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chundengtai.base.dao.CdtDistrimoneyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.chundengtai.base.bean.CdtDistrimoney">
+        <id column="id" property="id" />
+        <result column="first_percent" property="firstPercent" />
+        <result column="second_percent" property="secondPercent" />
+        <result column="first_partner" property="firstPartner" />
+        <result column="first_person_condition" property="firstPersonCondition"/>
+        <result column="second_partner" property="secondPartner" />
+        <result column="second_person_condition" property="secondPersonCondition"/>
+        <result column="third_partner" property="thirdPartner" />
+        <result column="third_total_money" property="thirdTotalMoney"/>
+        <result column="revision" property="revision" />
+        <result column="status" property="status" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="token" property="token" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, first_percent, second_percent, first_partner, first_person_condition, second_partner, second_person_condition, third_partner, third_total_money, revision, status, created_by, created_time, updated_time, updated_by, token
+    </sql>
+
+</mapper>

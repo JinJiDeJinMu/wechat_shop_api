@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.chundengtai.base.dao.CdtAdminPaytransRecordDao">
+
+    <resultMap type="com.chundengtai.base.entity.CdtPaytransRecordEntity" id="cdtPaytransRecordMap">
+        <result property="id" column="id"/>
+        <result property="rid" column="rid"/>
+        <result property="name" column="name"/>
+        <result property="memo" column="memo"/>
+        <result property="creator" column="creator"/>
+        <result property="creatorName" column="creator_name"/>
+        <result property="createDate" column="create_date"/>
+        <result property="dataLevel" column="data_level"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="payOrderId" column="pay_order_id"/>
+        <result property="mchId" column="mch_id"/>
+        <result property="mchOrderNo" column="mch_order_no"/>
+        <result property="channelId" column="channel_id"/>
+        <result property="amount" column="amount"/>
+        <result property="tradePrice" column="trade_price"/>
+        <result property="payState" column="pay_state"/>
+        <result property="payType" column="pay_type"/>
+        <result property="appId" column="app_id"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="reqText" column="req_text"/>
+        <result property="resText" column="res_text"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.chundengtai.base.entity.CdtPaytransRecordEntity">
+		select
+			`id`,
+    			`rid`,
+    			`name`,
+    			`memo`,
+    			`creator`,
+    			`creator_name`,
+    			`create_date`,
+    			`data_level`,
+    			`order_no`,
+    			`pay_order_id`,
+    			`mch_id`,
+    			`mch_order_no`,
+    			`channel_id`,
+    			`amount`,
+    			`trade_price`,
+    			`pay_state`,
+    			`pay_type`,
+    			`app_id`,
+    			`update_date`,
+    			`req_text`,
+    			`res_text`    
+		from cdt_paytrans_record
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultType="com.chundengtai.base.entity.CdtPaytransRecordEntity">
+        select
+        `id`,
+        `rid`,
+        `name`,
+        `memo`,
+        `creator`,
+        `creator_name`,
+        `create_date`,
+        `data_level`,
+        `order_no`,
+        `pay_order_id`,
+        `mch_id`,
+        `mch_order_no`,
+        `channel_id`,
+        `amount`,
+        `trade_price`,
+        `pay_state`,
+        `pay_type`,
+        `app_id`,
+        `update_date`,
+        `req_text`,
+        `res_text`
+        from cdt_paytrans_record
+        WHERE 1=1
+        <if test="orderNo != null and orderNo != ''">
+            AND order_no = #{orderNo}
+        </if>
+        <if test="payState != null and payState != ''">
+            AND pay_state = #{payState}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="name != null and name != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+        <if test="createDate != null and createDate!= ''">
+            AND create_date >= #{createDate}
+        </if>
+        <if test="updateDate != null and updateDate!= ''">
+            AND create_date &lt;= #{updateDate}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from cdt_paytrans_record
+        WHERE 1=1
+        <if test="name != null and name != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.chundengtai.base.entity.CdtPaytransRecordEntity">
+		insert into cdt_paytrans_record(
+        			`id`,
+                    			`rid`,
+                    			`name`,
+                    			`memo`,
+                    			`creator`,
+                    			`creator_name`,
+                    			`create_date`,
+                    			`data_level`,
+                    			`order_no`,
+                    			`pay_order_id`,
+                    			`mch_id`,
+                    			`mch_order_no`,
+                    			`channel_id`,
+                    			`amount`,
+                    			`trade_price`,
+                    			`pay_state`,
+                    			`pay_type`,
+                    			`app_id`,
+                    			`update_date`,
+                    			`req_text`,
+                    			`res_text`            )
+		values(
+        			#{id},
+                    			#{rid},
+                    			#{name},
+                    			#{memo},
+                    			#{creator},
+                    			#{creatorName},
+                    			#{createDate},
+                    			#{dataLevel},
+                    			#{orderNo},
+                    			#{payOrderId},
+                    			#{mchId},
+                    			#{mchOrderNo},
+                    			#{channelId},
+                    			#{amount},
+                    			#{tradePrice},
+                    			#{payState},
+                    			#{payType},
+                    			#{appId},
+                    			#{updateDate},
+                    			#{reqText},
+                    			#{resText}            )
+	</insert>
+
+    <update id="update" parameterType="com.chundengtai.base.entity.CdtPaytransRecordEntity">
+        update cdt_paytrans_record
+        <set>
+            <if test="rid != null">`rid` = #{rid
+                        },
+            </if>
+            <if test="name != null">`name` = #{name
+                        },
+            </if>
+            <if test="memo != null">`memo` = #{memo
+                        },
+            </if>
+            <if test="creator != null">`creator` = #{creator
+                        },
+            </if>
+            <if test="creatorName != null">`creator_name` = #{creatorName
+                        },
+            </if>
+            <if test="createDate != null">`create_date` = #{createDate
+                        },
+            </if>
+            <if test="dataLevel != null">`data_level` = #{dataLevel
+                        },
+            </if>
+            <if test="orderNo != null">`order_no` = #{orderNo
+                        },
+            </if>
+            <if test="payOrderId != null">`pay_order_id` = #{payOrderId
+                        },
+            </if>
+            <if test="mchId != null">`mch_id` = #{mchId
+                        },
+            </if>
+            <if test="mchOrderNo != null">`mch_order_no` = #{mchOrderNo
+                        },
+            </if>
+            <if test="channelId != null">`channel_id` = #{channelId
+                        },
+            </if>
+            <if test="amount != null">`amount` = #{amount
+                        },
+            </if>
+            <if test="tradePrice != null">`trade_price` = #{tradePrice
+                        },
+            </if>
+            <if test="payState != null">`pay_state` = #{payState
+                        },
+            </if>
+            <if test="payType != null">`pay_type` = #{payType
+                        },
+            </if>
+            <if test="appId != null">`app_id` = #{appId
+                        },
+            </if>
+            <if test="updateDate != null">`update_date` = #{updateDate
+                        },
+            </if>
+            <if test="reqText != null">`req_text` = #{reqText
+                        },
+            </if>
+            <if test="resText != null">`res_text` = #{resText
+                        }
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from cdt_paytrans_record where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from cdt_paytrans_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
