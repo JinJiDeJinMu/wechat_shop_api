@@ -136,11 +136,7 @@ public class WxCommentV2Controller extends ApiBaseAction {
         commentReq.setUserId(userId);
         commentReq.setOrderNo(orderNo);
         commentReq.setGoodId(goodId);
-        if (imageList == null) {
-            commentReq.setStatus(0);
-        } else {
-            commentReq.setStatus(1);
-        }
+        commentReq.setStatus(0);
         commentReq.setContent(content);
         commentReq.setStarLevel(starLevel);
         cdtProductCommentService.save(commentReq);
