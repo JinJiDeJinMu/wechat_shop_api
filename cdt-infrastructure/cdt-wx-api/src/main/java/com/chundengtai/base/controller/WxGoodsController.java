@@ -180,11 +180,10 @@ public class WxGoodsController extends ApiBaseAction {
      * 商品详情页数据
      */
     @ApiOperation(value = " 商品详情页数据")
-    @IgnoreAuth
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "商品id", paramType = "path", required = true),
             @ApiImplicitParam(name = "referrer", value = "商品referrer", paramType = "path", required = false)})
     @GetMapping(value = "detail")
-    public Object detail(Integer id, Long referrer) {
+    public Object detail(@LoginUser UserVo loginUser, Integer id, Long referrer) {
 
         Map<String, Object> resultObj = new HashMap();
         Long userId = getUserId();
