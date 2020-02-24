@@ -117,7 +117,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
                 PageHelper.startPage(0, 6, false);
                 categoryGoods = goodsService.queryList(param);
                 categoryGoods.forEach(e ->{
-                    ProductVo productVo = apiProductService.queryObject(e.getProduct_id());
+                    ProductVo productVo = apiProductService.queryObject(e.getPrimary_product_id());
                     e.setSale_number(productVo.getSale_number());
                 });
 
@@ -156,7 +156,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             PageHelper.startPage(0, 300, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
             newGoods.forEach(e ->{
-                ProductVo productVo = apiProductService.queryObject(e.getProduct_id());
+                ProductVo productVo = apiProductService.queryObject(e.getPrimary_product_id());
                 e.setSale_number(productVo.getSale_number());
             });
             goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
