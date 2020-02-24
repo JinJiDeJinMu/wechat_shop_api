@@ -116,7 +116,9 @@ public class WxIndexV2Controller extends ApiBaseAction {
                 param.put("fields", "id as id, name as name, list_pic_url as list_pic_url,primary_pic_url,retail_price as retail_price,market_price as market_price");
                 PageHelper.startPage(0, 6, false);
                 categoryGoods = goodsService.queryList(param);
-                categoryGoods.forEach(e ->{
+                log.info("======"+categoryGoods);
+                categoryGoods.stream().forEach(e ->{
+                    log.info("e="+e);
                     ProductVo productVo = apiProductService.queryObject(e.getPrimary_product_id());
                     e.setSale_number(productVo.getSale_number());
                 });
@@ -155,7 +157,9 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price");
             PageHelper.startPage(0, 300, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
-            newGoods.forEach(e ->{
+            log.info("xin="+newGoods);
+            newGoods.stream().forEach(e ->{
+                log.info("e="+e);
                 ProductVo productVo = apiProductService.queryObject(e.getPrimary_product_id());
                 e.setSale_number(productVo.getSale_number());
             });
