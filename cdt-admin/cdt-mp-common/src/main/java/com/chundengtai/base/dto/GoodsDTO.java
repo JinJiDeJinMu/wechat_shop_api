@@ -49,8 +49,8 @@ public class GoodsDTO implements Serializable {
     private BigDecimal retail_price;
 
     //销售量
-//    @ApiModelProperty(value = "销售量")
-//    private Integer sell_volume;
+    @ApiModelProperty(value = "销售量")
+    private Integer sale_number;
 
     //推广描述
     @ApiModelProperty(value = "推广描述")

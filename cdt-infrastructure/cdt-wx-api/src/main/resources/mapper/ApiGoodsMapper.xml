@@ -12,6 +12,7 @@
         <result property="browse" column="browse"/>
         <result property="brand_id" column="brand_id"/>
         <result property="goods_number" column="goods_number"/>
+        <result property="sale_number" column="sale_number"/>
         <result property="keywords" column="keywords"/>
         <result property="goods_brief" column="goods_brief"/>
         <result property="goods_desc" column="goods_desc"/>

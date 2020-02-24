@@ -22,6 +22,8 @@ public class ProductVo implements Serializable {
     private String goods_sn;
     //商品库存
     private Integer goods_number;
+
+    private Integer sale_number;
     //零售价格
     private BigDecimal market_price;
     //时长价
@@ -129,5 +131,13 @@ public class ProductVo implements Serializable {
 
     public void setGroup_price(BigDecimal group_price) {
         this.group_price = group_price;
+    }
+
+    public void setSale_number(Integer sale_number) {
+        this.sale_number = sale_number;
+    }
+
+    public Integer getSale_number() {
+        return sale_number;
     }
 }

@@ -7,10 +7,12 @@ import com.chundengtai.base.dto.GoodsDTO;
 import com.chundengtai.base.entity.AdVo;
 import com.chundengtai.base.entity.AttributeCategoryVo;
 import com.chundengtai.base.entity.GoodsVo;
+import com.chundengtai.base.entity.ProductVo;
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.ApiAdService;
 import com.chundengtai.base.service.ApiCategoryService;
 import com.chundengtai.base.service.ApiGoodsService;
+import com.chundengtai.base.service.ApiProductService;
 import com.chundengtai.base.transfer.JsonTransfer;
 import com.chundengtai.base.util.ApiBaseAction;
 import com.chundengtai.base.util.BannerType;
@@ -62,6 +64,8 @@ public class WxIndexV2Controller extends ApiBaseAction {
     @Autowired
     private MapperFacade mapperFacade;
 
+    private ApiProductService apiProductService;
+
     /**
      * app首页
      */
@@ -112,6 +116,10 @@ public class WxIndexV2Controller extends ApiBaseAction {
                 param.put("fields", "id as id, name as name, list_pic_url as list_pic_url,primary_pic_url,retail_price as retail_price,market_price as market_price");
                 PageHelper.startPage(0, 6, false);
                 categoryGoods = goodsService.queryList(param);
+                categoryGoods.forEach(e ->{
+                    ProductVo productVo = apiProductService.queryObject(e.getProduct_id());
+                    e.setSale_number(productVo.getSale_number());
+                });
 
                 List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(categoryGoods, GoodsDTO.class);
                 Map<String, Object> newCategory = new HashMap<String, Object>();
@@ -147,6 +155,10 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price");
             PageHelper.startPage(0, 300, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
+            newGoods.forEach(e ->{
+                ProductVo productVo = apiProductService.queryObject(e.getProduct_id());
+                e.setSale_number(productVo.getSale_number());
+            });
             goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
             redisTemplate.opsForValue().set("indexNewGoods", goodsDTOS, 10, TimeUnit.MINUTES);
             log.info("indexNewGoods数据库读取数据");

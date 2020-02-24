@@ -144,6 +144,7 @@ public class ApiOrderService {
                         return resultObj;
                     } else {
                         productInfo.setGoods_number(productInfo.getGoods_number() - cartItem.getNumber());
+                        productInfo.setSale_number(productInfo.getSale_number() + cartItem.getNumber());
                         productService.update(productInfo);
                     }
                     // 运费统计
@@ -237,6 +238,7 @@ public class ApiOrderService {
                     return resultObj;
                 } else {
                     productInfo.setGoods_number(productInfo.getGoods_number() - goodsVo.getNumber());
+                    productInfo.setSale_number(productInfo.getSale_number() + goodsVo.getNumber());
                     productService.update(productInfo);
                 }
                 // 运费统计

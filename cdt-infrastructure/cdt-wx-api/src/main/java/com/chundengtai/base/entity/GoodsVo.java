@@ -37,6 +37,8 @@ public class GoodsVo implements Serializable {
     @ApiModelProperty(value = "商品序列号")
     private Integer goods_number;
 
+    private Integer sale_number;
+
     @ApiModelProperty(value = "关键字")
     private String keywords;
 
@@ -120,6 +122,14 @@ public class GoodsVo implements Serializable {
     private BigDecimal group_price;//团购价格(元)
 
     private String schoolName;
+
+    public void setSale_number(Integer sale_number) {
+        this.sale_number = sale_number;
+    }
+
+    public Integer getSale_number() {
+        return sale_number;
+    }
 
     public String getSchoolName() {
         return schoolName;

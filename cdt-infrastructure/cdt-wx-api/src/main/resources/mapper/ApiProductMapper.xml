@@ -10,6 +10,7 @@
         <result property="goods_specification_ids" column="goods_specification_ids"/>
         <result property="goods_sn" column="goods_sn"/>
         <result property="goods_number" column="goods_number"/>
+        <result property="sale_number" column="sale_number"/>
         <result property="retail_price" column="retail_price"/>
         <result property="market_price" column="market_price"/>
         <result property="goods_name" column="goods_name"/>
@@ -54,6 +55,6 @@
 	</select>
 
     <update id="update" parameterType="com.chundengtai.base.entity.ProductVo">
-        update nideshop_product set goods_number = #{goods_number} where id = #{id}
+        update nideshop_product set goods_number = #{goods_number},sale_number = #{sale_number} where id = #{id}
     </update>
 </mapper>
