@@ -126,6 +126,9 @@ public class ApiSearchController extends ApiBaseAction {
                                  @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
                                  @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize) {
         System.out.println("1111111");
+        if(keyword == null || "".equals(keyword)){
+            return Result.success(null);
+        }
         Map param = new HashMap();
         param.put("keyword", keyword);
         param.put("page", pageIndex);
