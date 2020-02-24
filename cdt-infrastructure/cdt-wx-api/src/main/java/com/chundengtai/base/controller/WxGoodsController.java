@@ -181,7 +181,7 @@ public class WxGoodsController extends ApiBaseAction {
      */
     @ApiOperation(value = " 商品详情页数据")
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "商品id", paramType = "path", required = true),
-            @ApiImplicitParam(name = "referrer", value = "商品referrer", paramType = "path", required = false)})
+    @ApiImplicitParam(name = "referrer", value = "商品referrer", paramType = "path", required = false)})
     @GetMapping(value = "detail")
     public Object detail(@LoginUser UserVo loginUser, Integer id, Long referrer) {
 
