@@ -64,6 +64,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
     @Autowired
     private MapperFacade mapperFacade;
 
+    @Autowired
     private ApiProductService apiProductService;
 
     /**
@@ -113,14 +114,17 @@ public class WxIndexV2Controller extends ApiBaseAction {
                 param.put("attribute_category", categoryItem.getId());
                 param.put("sidx", "sort_order");
                 param.put("order", "desc");
-                param.put("fields", "id as id, name as name, list_pic_url as list_pic_url,primary_pic_url,retail_price as retail_price,market_price as market_price");
+                param.put("fields", "id as id, name as name, list_pic_url as list_pic_url,primary_pic_url,retail_price as retail_price,market_price as market_price,primary_product_id as primary_product_id");
                 PageHelper.startPage(0, 6, false);
                 categoryGoods = goodsService.queryList(param);
                 log.info("======"+categoryGoods);
-                categoryGoods.stream().forEach(e ->{
-                    log.info("e="+e);
+                categoryGoods.forEach(e ->{
+                    log.info("e="+e.getPrimary_product_id());
+                    System.out.println(111);
                     ProductVo productVo = apiProductService.queryObject(e.getPrimary_product_id());
-                    e.setSale_number(productVo.getSale_number());
+                    System.out.println(productVo);
+                    if(productVo != null){e.setSale_number(productVo.getSale_number());}
+
                 });
 
                 List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(categoryGoods, GoodsDTO.class);
@@ -154,14 +158,15 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("is_on_sale", 1);
             param.put("sidx", "add_time");
             param.put("order", "desc");
-            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price");
+            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,primary_product_id");
             PageHelper.startPage(0, 300, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
             log.info("xin="+newGoods);
-            newGoods.stream().forEach(e ->{
-                log.info("e="+e);
+            newGoods.forEach(e ->{
+                log.info("e="+e.getPrimary_product_id());
                 ProductVo productVo = apiProductService.queryObject(e.getPrimary_product_id());
-                e.setSale_number(productVo.getSale_number());
+                System.out.println(productVo);
+                if(productVo != null){e.setSale_number(productVo.getSale_number());}
             });
             goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
             redisTemplate.opsForValue().set("indexNewGoods", goodsDTOS, 10, TimeUnit.MINUTES);

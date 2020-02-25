@@ -140,4 +140,23 @@ public class ProductVo implements Serializable {
     public Integer getSale_number() {
         return sale_number;
     }
+
+    @Override
+    public String toString() {
+        return "ProductVo{" +
+                "id=" + id +
+                ", goods_id=" + goods_id +
+                ", product_id=" + product_id +
+                ", goods_specification_ids='" + goods_specification_ids + '\'' +
+                ", goods_sn='" + goods_sn + '\'' +
+                ", goods_number=" + goods_number +
+                ", sale_number=" + sale_number +
+                ", market_price=" + market_price +
+                ", retail_price=" + retail_price +
+                ", goods_name='" + goods_name + '\'' +
+                ", list_pic_url='" + list_pic_url + '\'' +
+                ", merchant_id=" + merchant_id +
+                ", group_price=" + group_price +
+                '}';
+    }
 }

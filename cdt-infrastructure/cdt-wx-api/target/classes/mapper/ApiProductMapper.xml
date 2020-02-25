@@ -21,7 +21,7 @@
     </resultMap>
 
     <select id="queryObject" resultMap="productMap">
-		select a.*, b.name as goods_name, b.list_pic_url as list_pic_url
+		select a.*, b.name as goods_name, b.list_pic_url as list_pic_url,a.sale_number as sale_number
 		from nideshop_product a left join nideshop_goods b on a.goods_id = b.id
 		where a.id = #{value}
 	</select>
