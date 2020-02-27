@@ -41,7 +41,16 @@ let vm = new Vue({
     data: {
         showList: true,
         title: null,
-        product: {},
+        product: {
+            goodsId:'',
+            goodsSn:'',
+            goodsNumber:0,
+            retailPrice:0,
+            marketPrice:0,
+            groupPrice:0,
+            picUrl:'',
+            goodsSpecificationIds:[]
+        },
         ruleValidate: {
             name: [
                 {required: true, message: '名称不能为空', trigger: 'blur'}
@@ -93,7 +102,9 @@ let vm = new Vue({
         },
         changeGoods: function (opt) {
             let model = opt.value
+            console.log('model='+model.goodsSn);
             vm.goodsId = model.id;
+            console.log('type='+vm.type);
             if (vm.type == 'add') {
                 vm.product.goodsSn = model.goodsSn;
                 vm.product.goodsNumber = model.goodsNumber;
@@ -103,6 +114,7 @@ let vm = new Vue({
             }
             if (!vm.goodsId) return;
 
+            console.log(vm.product);
             Ajax.request({
                 url: "../specification/queryListByGoodsId?goodsId=" + vm.goodsId,
                 async: true,
@@ -115,19 +127,30 @@ let vm = new Vue({
             vm.isSecKill = model.isSecKill;
         },
         saveOrUpdate: function (event) {
-            if (vm.attribute.length > 2) {
+            /*if (vm.attribute.length > 2) {
                 alert('属性最多选择两项');
                 return false;
-            }
+            }*/
             let url = vm.product.id == null ? "../product/save" : "../product/update";
+            console.log(url);
             if (vm.attribute.length <= 1) {
                 vm.product.goodsSpecificationIds = vm.params[0].param + '_';
             } else if (vm.attribute.length <= 2) {
                 vm.product.goodsSpecificationIds = vm.params[0].param + '_' + vm.params[1].param;
             } else if (vm.attribute.length <= 3) {
                 vm.product.goodsSpecificationIds = vm.params[0].param + '_' + vm.params[1].param + '_' + vm.params[2].param;
-            } else {
+            }/*else if (vm.attribute.length <= 4) {
+                vm.product.goodsSpecificationIds = vm.params[0].param + '_' + vm.params[1].param + '_' + vm.params[2].param+ '_' + vm.params[3].param;
+            }else if (vm.attribute.length <= 5) {
+                vm.product.goodsSpecificationIds = vm.params[0].param + '_' + vm.params[1].param + '_' + vm.params[2].param+ '_' + vm.params[3].param+ '_' + vm.params[4].param;
+            }*/
+            else {
                 vm.product.goodsSpecificationIds = '';
+            }
+            if(vm.product.goodsSpecificationIds != '' || vm.product.goodsSpecificationIds !=null){
+                var array = vm.product.goodsSpecificationIds.split("_");
+                var result = array.sort(function(a, b){return a - b});
+                vm.product.goodsSpecificationIds =  result.join("_")
             }
             vm.product.goodsId = vm.goodsId;
             Ajax.request({
@@ -138,17 +161,6 @@ let vm = new Vue({
                 successCallback: function (r) {
                     alert('操作成功', function (index) {
                         vm.reload();
-                        // vm.product.goodsId=0;
-                        // vm.product.goodsSn = '';
-                        // vm.product.goodsNumber = 1;
-                        // vm.product.retailPrice = 1;
-                        // vm.product.marketPrice = 1;
-                        // vm.product.goodsSpecificationIds='';
-                        // vm.params=[
-                        //     { param : [] , ggArr:[]},
-                        //     { param : [] , ggArr:[]},
-                        //     { param : [] , ggArr:[]}
-                        // ]
                     });
                 }
             });

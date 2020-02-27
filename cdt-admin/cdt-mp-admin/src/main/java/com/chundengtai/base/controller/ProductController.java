@@ -58,9 +58,12 @@ public class ProductController extends BaseController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("product:save")
+    //@RequiresPermissions("product:save")
     public R save(@RequestBody ProductEntity product) {
+        System.out.println(product);
         product.setMerchant_id(ShiroUtils.getUserEntity().getMerchantId());
+        String ids = product.getGoodsSpecificationIds();
+
         productService.save(product);
 
         return R.ok();

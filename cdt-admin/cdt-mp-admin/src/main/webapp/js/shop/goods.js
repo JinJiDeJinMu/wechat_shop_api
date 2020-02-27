@@ -43,6 +43,7 @@ var setting = {
 var vm = new Vue({
     el: '#rrapp',
     data: {
+        files:[],
         merchants: [],
         showList: true,
         title: null,
@@ -763,17 +764,19 @@ var vm = new Vue({
         },
         handleSuccess(res, file) {
             // 因为上传过程为实例，这里模拟添加 url
+            console.log(res.url);
             file.imgUrl = res.url;
             file.name = res.url;
             vm.uploadList.add(file);
         },
-        handleBeforeUpload() {
+        handleBeforeUpload(file) {
             const check = this.uploadList.length < 5;
             if (!check) {
                 this.$Notice.warning({
                     title: '最多只能上传 5 张图片。'
                 });
             }
+            console.log("files"+file);
             return check;
         },
         handleSubmit: function (name) {
@@ -793,6 +796,7 @@ var vm = new Vue({
                 desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
             });
         },
+
         handleReset: function (name) {
             handleResetForm(this, name);
         },

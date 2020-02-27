@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.annotation.LoginUser;
 import com.chundengtai.base.bean.Order;
-import com.chundengtai.base.entity.CdtPaytransRecordEntity;
-import com.chundengtai.base.entity.OrderGoodsVo;
-import com.chundengtai.base.entity.OrderVo;
-import com.chundengtai.base.entity.UserVo;
+import com.chundengtai.base.entity.*;
 import com.chundengtai.base.facade.IdistributionFacade;
 import com.chundengtai.base.service.*;
 import com.chundengtai.base.util.ApiBaseAction;
@@ -29,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -68,6 +66,15 @@ public class WxOrderController extends ApiBaseAction {
 
     @Autowired
     private CdtPaytransRecordService paytransRecordService;
+
+    @Autowired
+    private ApiGoodsService apiGoodsService;
+
+    @Autowired
+    private ApiProductService apiProductService;
+
+    @Autowired
+    private ApiOrderGoodsService apiOrderGoodsService;
 
     /**
      * 获取订单列表(要验证)
@@ -251,6 +258,7 @@ public class WxOrderController extends ApiBaseAction {
      */
     @ApiOperation(value = "取消订单")
     @GetMapping("cancelOrder.do")
+    @Transactional
     public Object cancelOrder(@LoginUser UserVo loginUser, Integer orderId) {
         Order orderVo = cdtOrderService.getById(orderId);
         BigDecimal allPrice = BigDecimal.ZERO;
@@ -328,6 +336,7 @@ public class WxOrderController extends ApiBaseAction {
                 }
                 orderVo.setPayStatus(PayTypeEnum.REFUND.getCode());
                 logger.warn("=====退款回调成功=====" + JSON.toJSONString(wxResult));
+                updatGoodsNumber(orderVo);
                 boolean result = cdtOrderService.updateById(orderVo);
 
                 if (result) {
@@ -391,5 +400,18 @@ public class WxOrderController extends ApiBaseAction {
             e.printStackTrace();
         }
         return toResponsFail("操作失败,请联系客服");
+    }
+    //修改库存
+    public void updatGoodsNumber(Order order){
+        System.out.println("进来");
+        HashMap<String,Object> hashMap = new HashMap<>();
+        hashMap.put("order_id",order.getId());
+        List<OrderGoodsVo> orderGoodsVoList = apiOrderGoodsService.queryList(hashMap);
+        orderGoodsVoList.forEach(e ->{
+            ProductVo productVo = apiProductService.queryObject(e.getProduct_id());
+            productVo.setGoods_number(productVo.getGoods_number() + e.getNumber());
+            apiProductService.update(productVo);
+        });
+
     }
 }

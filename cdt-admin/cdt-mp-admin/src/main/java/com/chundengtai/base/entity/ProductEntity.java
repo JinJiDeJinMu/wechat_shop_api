@@ -161,4 +161,22 @@ public class ProductEntity implements Serializable {
     public void setMerchant_id(long merchant_id) {
         this.merchant_id = merchant_id;
     }
+
+    @Override
+    public String toString() {
+        return "ProductEntity{" +
+                "id=" + id +
+                ", goodsId=" + goodsId +
+                ", goodsSpecificationIds='" + goodsSpecificationIds + '\'' +
+                ", goodsSn='" + goodsSn + '\'' +
+                ", goodsNumber=" + goodsNumber +
+                ", retailPrice=" + retailPrice +
+                ", marketPrice=" + marketPrice +
+                ", merchant_id=" + merchant_id +
+                ", goodsName='" + goodsName + '\'' +
+                ", specificationValue='" + specificationValue + '\'' +
+                ", picUrl='" + picUrl + '\'' +
+                ", groupPrice=" + groupPrice +
+                '}';
+    }
 }

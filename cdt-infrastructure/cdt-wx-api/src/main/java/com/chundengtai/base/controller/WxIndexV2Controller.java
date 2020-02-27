@@ -28,10 +28,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -117,16 +115,8 @@ public class WxIndexV2Controller extends ApiBaseAction {
                 param.put("fields", "id as id, name as name, list_pic_url as list_pic_url,primary_pic_url,retail_price as retail_price,market_price as market_price,primary_product_id as primary_product_id");
                 PageHelper.startPage(0, 6, false);
                 categoryGoods = goodsService.queryList(param);
+                getsaleNumber(categoryGoods);
                 log.info("======"+categoryGoods);
-                categoryGoods.forEach(e ->{
-                    log.info("e="+e.getPrimary_product_id());
-                    System.out.println(111);
-                    ProductVo productVo = apiProductService.queryObject(e.getPrimary_product_id());
-                    System.out.println(productVo);
-                    if(productVo != null){e.setSale_number(productVo.getSale_number());}
-
-                });
-
                 List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(categoryGoods, GoodsDTO.class);
                 Map<String, Object> newCategory = new HashMap<String, Object>();
                 newCategory.put("id", categoryItem.getId());
@@ -159,15 +149,10 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("sidx", "add_time");
             param.put("order", "desc");
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,primary_product_id");
-            PageHelper.startPage(0, 300, false);
+            PageHelper.startPage(0, 40, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
+            getsaleNumber(newGoods);
             log.info("xin="+newGoods);
-            newGoods.forEach(e ->{
-                log.info("e="+e.getPrimary_product_id());
-                ProductVo productVo = apiProductService.queryObject(e.getPrimary_product_id());
-                System.out.println(productVo);
-                if(productVo != null){e.setSale_number(productVo.getSale_number());}
-            });
             goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
             redisTemplate.opsForValue().set("indexNewGoods", goodsDTOS, 10, TimeUnit.MINUTES);
             log.info("indexNewGoods数据库读取数据");
@@ -181,4 +166,16 @@ public class WxIndexV2Controller extends ApiBaseAction {
         ).collect(Collectors.toList());
     }
 
+    public void getsaleNumber(List<GoodsVo> goodsVoList){
+        goodsVoList.forEach(e ->{
+            HashMap<String,Object> hashMap = new HashMap<>();
+            hashMap.put("goods_id",e.getId());
+            List<ProductVo> productVoList = apiProductService.queryList(hashMap);
+            Integer saleNumer = productVoList.stream().map(ProductVo::getSale_number).reduce(Integer::sum).get();
+            e.setSale_number(saleNumer);
+            Optional<BigDecimal> result = productVoList.stream().map(ProductVo::getRetail_price).min(BigDecimal::compareTo);
+            List<ProductVo> collect = productVoList.stream().filter(item -> item.getRetail_price().compareTo(result.get()) == 0).collect(Collectors.toList());
+            e.setRetail_price(collect.get(0).getRetail_price());
+        });
+    }
 }

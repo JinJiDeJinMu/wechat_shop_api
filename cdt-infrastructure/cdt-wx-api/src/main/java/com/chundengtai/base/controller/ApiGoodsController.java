@@ -30,11 +30,10 @@ import java.awt.*;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.AttributedString;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Api(tags = "商品管理")
@@ -80,6 +79,8 @@ public class ApiGoodsController extends ApiBaseAction {
 
     @Autowired
     private CdtMerchantWxService cdtMerchantService;
+    @Autowired
+    private ApiProductService apiProductService;
 
     //上传文件集合   
     private List<File> file;
@@ -189,13 +190,6 @@ public class ApiGoodsController extends ApiBaseAction {
         goodsService.updateBrowse(info);
         Long mid = info.getMerchantId();
 
-//        if(mid>0){
-//            Map<String, Object> sysuser = this.mlsUserSer.getEntityMapper().getSysUserByMid(mid);
-//            if (sysuser != null) {
-//                info.setUser_brokerage_price(info.getRetail_price().multiply(new BigDecimal(sysuser.get("FX").toString())).multiply(new BigDecimal(info.getBrokerage_percent()).divide(new BigDecimal("10000"))).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-//            }
-//        }
-
         resultObj.put("info", info);
         //添加商家信息
         CdtMerchantEntity cdtMerchant = cdtMerchantService.queryObject(info.getMerchantId());
@@ -208,7 +202,6 @@ public class ApiGoodsController extends ApiBaseAction {
         specificationParam.put("fields", "gs.*, s.name");
         specificationParam.put("goods_id", id);
         specificationParam.put("specification", true);
-//      specificationParam.put("sidx", "s.sort_order");
         specificationParam.put("order", "asc");
         List<GoodsSpecificationVo> goodsSpecificationEntityList = goodsSpecificationService.queryList(specificationParam);
 
@@ -245,6 +238,13 @@ public class ApiGoodsController extends ApiBaseAction {
 
         //商品详细信息
         List<ProductVo> productEntityList = productService.queryList(param);
+        if(productEntityList.size() == 1){
+            info.setRetail_price(productEntityList.get(0).getRetail_price());
+        }else {
+            Optional<BigDecimal> result = productEntityList.stream().map(ProductVo::getRetail_price).min(BigDecimal::compareTo);
+            List<ProductVo> collect = productEntityList.stream().filter(e -> e.getRetail_price().compareTo(result.get()) == 0).collect(Collectors.toList());
+            info.setRetail_price(collect.get(0).getRetail_price());
+        }
         List<GoodsGalleryVo> gallery = goodsGalleryService.queryList(param);
         Map ngaParam = new HashMap();
         ngaParam.put("fields", "nga.value, na.name");
@@ -262,24 +262,6 @@ public class ApiGoodsController extends ApiBaseAction {
 
         param.put("value_id", id);
         param.put("type_id", 0);
-
-//        Integer commentCount = commentService.queryTotal(param);
-//        List<CommentVo> hotComment = commentService.queryList(param);
-//        Map commentInfo = new HashMap();
-//        if (null != hotComment && hotComment.size() > 0) {
-//            UserVo commentUser = userService.queryObject(hotComment.get(0).getUser_id());
-//            commentInfo.put("content", Base64.decode(hotComment.get(0).getContent()));
-//            commentInfo.put("add_time", DateUtils.timeToStr(hotComment.get(0).getAdd_time(), DateUtils.DATE_PATTERN));
-//            commentInfo.put("nickname", commentUser.getNickname());
-//            commentInfo.put("avatar", commentUser.getAvatar());
-//            Map paramPicture = new HashMap();
-//            paramPicture.put("comment_id", hotComment.get(0).getId());
-//            List<CommentPictureVo> commentPictureEntities = commentPictureService.queryList(paramPicture);
-//            commentInfo.put("pic_list", commentPictureEntities);
-//        }
-        //Map comment = new HashMap();
-//        comment.put("count", commentCount);
-//        comment.put("data", commentInfo);
 
         //当前用户是否收藏
         Map collectParam = new HashMap();
@@ -899,6 +881,33 @@ public class ApiGoodsController extends ApiBaseAction {
 
         return toResponsSuccess(goods);
     }
+    /**
+     *根据产品组合规则查询产品库存
+     * @param goodsId
+     * @param goods_spec
+     * @return
+     */
+    @RequestMapping("/productSpecification")
+    @IgnoreAuth
+    public Object getProductByGooids(@RequestParam Integer goodsId,@RequestParam String goods_spec){
+
+        if(goodsId == null || StringUtils.isNullOrEmpty(goods_spec)){
+            return toResponsFail("参数不合法");
+        }
+        String[] str = goods_spec.split("_");
+        List<String> list1 = Arrays.asList(str);
+        HashMap<String,Object> hashMap = new HashMap<>();
+        hashMap.put("goods_id",goodsId);
+        List<ProductVo> productVos = apiProductService.queryList(hashMap);
+        for (int i = 0; i < productVos.size(); i++) {
+            String specificatione_ids = productVos.get(i).getGoods_specification_ids();
+            List<String> list2 = Arrays.asList(specificatione_ids.split("_"));
+            if(list1.containsAll(list2)){
+                return toResponsSuccess( productVos.get(i));
+            }
+        }
+        return toResponsFail(null);
+    }
 
     public List<File> getFile() {
         return file;
@@ -925,4 +934,13 @@ public class ApiGoodsController extends ApiBaseAction {
     }
 
 
+    public static void main(String[] args) {
+        List<String> list1 = new ArrayList<>();
+        list1.add("1");
+        list1.add("3");
+        List<String> list2 = new ArrayList<>();
+        list2.add("3");
+        list2.add("1");
+        System.out.println(list1.containsAll(list2));
+    }
 }

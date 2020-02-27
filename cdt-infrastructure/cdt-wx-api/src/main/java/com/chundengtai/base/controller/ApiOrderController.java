@@ -60,11 +60,7 @@ public class ApiOrderController extends ApiBaseAction {
     @Autowired
     private CdtPaytransRecordService paytransRecordService;
 
-    @Autowired
-    private ApiGoodsService apiGoodsService;
 
-    @Autowired
-    private ApiProductService apiProductService;
 
     /**
      * 获取订单列表(要验证)
@@ -332,7 +328,6 @@ public class ApiOrderController extends ApiBaseAction {
                 }
                 orderVo.setPay_status(PayTypeEnum.REFUND.getCode());
                 logger.warn("=====退款回调成功=====" + JSON.toJSONString(wxResult));
-                updatGoodsNumber(orderVo);
                 orderService.update(orderVo);
 
                 try {
@@ -384,14 +379,5 @@ public class ApiOrderController extends ApiBaseAction {
         }
         return toResponsFail("提交失败");
     }
-    //修改库存
-    public void updatGoodsNumber(OrderVo orderVo){
-        GoodsVo goodsVo = apiGoodsService.queryObject(Integer.parseInt(orderVo.getGoods_id()));
-        goodsVo.setGoods_number(goodsVo.getGoods_number() + orderVo.getGoods_num());
-        apiGoodsService.update(goodsVo);
 
-        ProductVo productVo = apiProductService.queryObject(goodsVo.getProduct_id());
-        productVo.setGoods_number(productVo.getGoods_number() + orderVo.getGoods_num());
-        apiProductService.update(productVo);
-    }
 }

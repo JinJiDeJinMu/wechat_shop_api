@@ -32,10 +32,8 @@ import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.AttributedString;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Api(tags = "v2商品管理")
@@ -84,6 +82,7 @@ public class WxGoodsController extends ApiBaseAction {
     private MlsUserSer mlsUserSer;
     @Autowired
     private CdtMerchantWxService cdtMerchantService;
+
 
     //上传文件集合   
     private List<File> file;
