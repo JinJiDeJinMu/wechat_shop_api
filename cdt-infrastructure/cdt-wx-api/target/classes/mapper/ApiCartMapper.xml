@@ -206,10 +206,15 @@
         GROUP BY
             cart.merchant_id
     </select>
+
+
     <select id="queryCheckedByUserIdAndMerId" parameterType="java.util.Map" resultMap="cartMap">
         select * from nideshop_cart where user_id=#{user_id} and checked = 1 and merchant_id=#{merchantId}
     </select>
     <select id="queryMerchantName" parameterType="java.lang.Long" resultType="java.lang.String">
           select shop_name from cdt_merchant where id=#{merchantId} limit 1
+    </select>
+    <select id="queryCarts" parameterType="java.lang.Long" resultType="com.chundengtai.base.entity.CartVo">
+        select * from user_id=#{user_id} and checked = 1 GROUP BY cart.merchant_id
     </select>
 </mapper>

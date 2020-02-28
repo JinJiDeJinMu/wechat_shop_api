@@ -11,11 +11,13 @@ import com.chundengtai.base.util.ApiBaseAction;
 import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -464,6 +466,20 @@ public class ApiCartController extends ApiBaseAction {
 
             List<CartVo> cartVoList = cartService.queryCats(loginUser.getUserId());
 
+            BigDecimal goods_total = cartVoList.stream().map(CartVo::getRetail_price).reduce(BigDecimal.ZERO,BigDecimal::add);
+
+            //BigDecimal exter_money  = new BigDecimal(BigInteger.ZERO);
+            for (int i = 0; i < cartVoList.size(); i++) {
+                CartVo cartVo = cartVoList.get(i);
+                freightPrice = freightPrice.add(getPostageMoney(cartVo.getGoods_id(),cartVo.getNumber()));
+            }
+            MerCartVo merCartVo = new MerCartVo();
+            merCartVo.setActualPrice(goods_total.add(freightPrice));
+            merCartVo.setFreightPrice(freightPrice);
+            goodsTotalPrice = goodsTotalPrice.add(goods_total);
+            merCartVo.setOrderTotalPrice(goodsTotalPrice);
+            merCartVo.setMerchantId(cartVoList.get(0).getMerchant_id());
+            merCartVo.setCartVoList(cartVoList);
 
         } else { // 是直接购买的
             ProductVo productInfo = productService.queryObject(goodsVO.getProductId());
