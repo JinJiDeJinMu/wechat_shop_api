@@ -150,4 +150,7 @@ public class ApiCartService {
             return "未名严选";
         return shopName;
     }
+    public List<CartVo> queryCats(Long userId){
+        return cartDao.queryCarts(userId);
+    }
 }

@@ -51,6 +51,8 @@
         <result property="purchaseType" column="purchase_type"/>
         <result property="schoolName" column="school_name"/>
         <result property="mark" column="mark"/>
+        <result property="deliveryPlace" column="delivery_place"/>
+        <result property="expressType" column="express_type"/>
     </resultMap>
 
     <select id="queryObject" resultMap="goodsMap">
@@ -211,7 +213,9 @@
         `group_price`,
         `purchase_type`,
         `school_name`,
-        `mark`
+        `mark`,
+        `delivery_place`,
+        `express_type`
         )
         values
         (
@@ -261,7 +265,9 @@
         #{groupPrice},
         #{purchaseType},
         #{schoolName},
-        #{mark}
+        #{mark},
+        #{deliveryPlace},
+        #{expressType}
         )
     </insert>
 
@@ -314,6 +320,8 @@
             <if test="merchantId != null">`merchant_id` = #{merchantId},</if>
             <if test="schoolName != null">`school_name` = #{schoolName},</if>
             <if test="mark != null">`mark` = #{mark},</if>
+            <if test="deliveryPlace != null">`delivery_place` = #{deliveryPlace},</if>
+            <if test="expressType != null">`express_type` = #{expressType}</if>
         </set>
         where id = #{id}
     </update>

@@ -167,15 +167,13 @@ public class WxIndexV2Controller extends ApiBaseAction {
     }
 
     public void getsaleNumber(List<GoodsVo> goodsVoList){
-        goodsVoList.forEach(e ->{
+        goodsVoList.stream().forEach(e ->{
             HashMap<String,Object> hashMap = new HashMap<>();
             hashMap.put("goods_id",e.getId());
             List<ProductVo> productVoList = apiProductService.queryList(hashMap);
-            Integer saleNumer = productVoList.stream().map(ProductVo::getSale_number).reduce(Integer::sum).get();
-            e.setSale_number(saleNumer);
-            Optional<BigDecimal> result = productVoList.stream().map(ProductVo::getRetail_price).min(BigDecimal::compareTo);
-            List<ProductVo> collect = productVoList.stream().filter(item -> item.getRetail_price().compareTo(result.get()) == 0).collect(Collectors.toList());
-            e.setRetail_price(collect.get(0).getRetail_price());
-        });
+            Integer saleNumer = productVoList.stream().mapToInt(item ->item.getSale_number()).sum();
+            e.setSell_volume(saleNumer);
+
+    });
     }
 }

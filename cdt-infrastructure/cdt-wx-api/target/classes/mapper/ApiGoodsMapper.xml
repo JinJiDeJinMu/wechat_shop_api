@@ -12,7 +12,6 @@
         <result property="browse" column="browse"/>
         <result property="brand_id" column="brand_id"/>
         <result property="goods_number" column="goods_number"/>
-        <result property="sale_number" column="sale_number"/>
         <result property="keywords" column="keywords"/>
         <result property="goods_brief" column="goods_brief"/>
         <result property="goods_desc" column="goods_desc"/>
@@ -51,6 +50,8 @@
         <result property="group_price" column="group_price"/>
         <result property="purchaseType" column="purchase_type"/>
         <result property="schoolName" column="school_name"/>
+        <result property="deliveryPlace" column="delivery_place"/>
+        <result property="expressType" column="express_type"/>
     </resultMap>
 
     <select id="queryObject" resultMap="goodsMap">
@@ -157,12 +158,6 @@
     
 
     <select id="queryHotGoodsList" resultMap="goodsMap">
-      /*  select a.*,b.id as product_id
-        from nideshop_goods a
-        left join nideshop_product b on a.id = b.goods_id
-        left join nideshop_product c on a.id = c.goods_id and c.retail_price > b.retail_price and b.id != c.id
-        where 1 = 1 and b.id is not null and c.id is null and a.is_delete = 0 and a.is_on_sale = 1*/
-
         select a.*  from nideshop_goods a where 1 = 1 and a.is_delete = 0 and a.is_on_sale = 1
         <if test="is_new != null and is_new != ''">
             and a.is_new = #{is_new}

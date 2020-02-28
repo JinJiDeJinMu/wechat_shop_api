@@ -50,7 +50,7 @@ public class GoodsDTO implements Serializable {
 
     //销售量
     @ApiModelProperty(value = "销售量")
-    private Integer sale_number;
+    private Integer sell_volume;
 
     //推广描述
     @ApiModelProperty(value = "推广描述")

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chundengtai.base.dao.CdtPostageTemplateMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.chundengtai.base.bean.CdtPostageTemplate">
+        <id column="id" property="id" />
+        <result column="topic" property="topic" />
+        <result column="express_company" property="expressCompany" />
+        <result column="postage_type" property="postageType" />
+        <result column="charging_type" property="chargingType" />
+        <result column="address" property="address" />
+        <result column="first" property="first" />
+        <result column="money" property="money" />
+        <result column="second" property="second" />
+        <result column="renew_money" property="renewMoney" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="remark" property="remark" />
+        <result column="creater" property="creater" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, topic, express_company, postage_type, charging_type, address, first, money, second, renew_money, create_time, update_time, remark, creater
+    </sql>
+
+</mapper>

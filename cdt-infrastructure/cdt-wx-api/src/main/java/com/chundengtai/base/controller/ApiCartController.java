@@ -2,6 +2,7 @@ package com.chundengtai.base.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chundengtai.base.annotation.LoginUser;
+import com.chundengtai.base.bean.CdtPostageTemplate;
 import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.dao.ApiCouponMapper;
 import com.chundengtai.base.entity.*;
@@ -42,6 +43,9 @@ public class ApiCartController extends ApiBaseAction {
     private ApiCouponService apiCouponService;
     @Autowired
     private ApiCouponMapper apiCouponMapper;
+
+    @Autowired
+    private CdtPostageTemplateService cdtPostageTemplateService;
 
     /**
      * 获取购物车中的数据
@@ -156,11 +160,6 @@ public class ApiCartController extends ApiBaseAction {
         if (null == goodsInfo || goodsInfo.getIs_delete() == 1 || goodsInfo.getIs_on_sale() != 1) {
             return this.toResponsObject(400, "商品已下架", "");
         }
-
-//        boolean checkOnSale=goodsService.checkBuy(goodsId);
-//        if(checkOnSale){
-//            return this.toResponsObject(400, "商品已下架", "");
-//        }
 
         //取得规格的信息,判断规格库存
         ProductVo productInfo = productService.queryObject(productId);
@@ -433,10 +432,10 @@ public class ApiCartController extends ApiBaseAction {
 
         if (type.equals("cart")) {
             Map<String, Object> cartData = (Map<String, Object>) this.getCart(loginUser);
-            List<CartVo> cartVoList = new ArrayList<>();
+            /* List<CartVo> cartVoList = new ArrayList<>();
             //查询用户购物车信息
             List<MerCartVo> merCartVos = cartService.queryMerCartList(loginUser.getUserId());
-            for (MerCartVo merCartVo : merCartVos) {
+           for (MerCartVo merCartVo : merCartVos) {
                 if (merCartVo.getFreightPrice() != null) {
                     freightPrice = freightPrice.add(merCartVo.getFreightPrice());
                 }
@@ -459,7 +458,13 @@ public class ApiCartController extends ApiBaseAction {
 //                List<CouponVo> validCouponVos = apiCouponService.getValidUserCoupons(map);
 //                merCartVo.setUserCouponList(validCouponVos);
                 merCartVoList.add(merCartVo);
-            }
+            }*/
+
+            //新的邮费计算
+
+            List<CartVo> cartVoList = cartService.queryCats(loginUser.getUserId());
+
+
         } else { // 是直接购买的
             ProductVo productInfo = productService.queryObject(goodsVO.getProductId());
             GoodsVo goods = goodsService.queryObject(goodsVO.getGoodsId());
@@ -485,9 +490,11 @@ public class ApiCartController extends ApiBaseAction {
             checkedGoodsList.add(cartVo);
 
             //计算运费
-            if (goods.getExtra_price() != null) {
+            /*if (goods.getExtra_price() != null) {
                 freightPrice = freightPrice.add(goods.getExtra_price().multiply(new BigDecimal(goodsVO.getNumber())));
-            }
+            }*/
+
+            freightPrice = getPostageMoney(goodsVO.getGoodsId(),goodsVO.getNumber());
             MerCartVo merCartVo = new MerCartVo();
             merCartVo.setMerchantId(productInfo.getMerchant_id());
             String merchantName = cartService.queryMerchantName(merCartVo.getMerchantId());
@@ -548,5 +555,37 @@ public class ApiCartController extends ApiBaseAction {
             }
         }
         return toResponsSuccess(couponVos);
+    }
+
+    //计算邮费
+    public BigDecimal getPostageMoney(Integer goodsId,Integer number){
+
+        System.out.println("计算邮费");
+        GoodsVo goodsVo = goodsService.queryObject(goodsId);
+        if(goodsVo == null){
+            return null;
+        }
+        if(goodsVo.getExpressType() == 0){
+            return goodsVo.getExtra_price();
+        }
+
+        //获取模板信息
+        CdtPostageTemplate cdtPostageTemplate = cdtPostageTemplateService.getById(goodsVo.getExpressType());
+        if(cdtPostageTemplate == null){
+            return null;
+        }
+        BigDecimal money = cdtPostageTemplate.getMoney();
+        Integer first = cdtPostageTemplate.getFirst();
+        Integer second = cdtPostageTemplate.getSecond();
+        //如果小于首个数量
+        if(number <= first || second == 0){
+            return money;
+        }
+        //获取超出首个的邮费
+        Integer exter = number - first;
+        Integer count = exter%second == 0 ? (exter/second) : (exter/second)+1;
+        BigDecimal money_exter = new BigDecimal(count).multiply(cdtPostageTemplate.getRenewMoney());
+
+        return money.add(money_exter);
     }
 }

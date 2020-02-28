@@ -28,4 +28,7 @@ public interface ApiCartMapper extends BaseBizMapper<CartVo> {
     List<CartVo> queryCheckedByUserIdAndMerId(Map map);
 
     String queryMerchantName(Long merchantId);
+
+    List<CartVo> queryCarts(Long userId);
+
 }

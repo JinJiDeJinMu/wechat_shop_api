@@ -1,11 +1,13 @@
 package com.chundengtai.base.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chundengtai.base.bean.CdtPostageTemplate;
 import com.chundengtai.base.constant.CacheConstant;
 import com.chundengtai.base.dao.*;
 import com.chundengtai.base.entity.*;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 
 @Service
@@ -49,6 +52,9 @@ public class ApiOrderService {
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private KeygenService keygenService;
+
+    @Autowired
+    private CdtPostageTemplateService cdtPostageTemplateService;
 
     public OrderVo queryObject(Integer id) {
         return orderDao.queryObject(id);
@@ -158,6 +164,7 @@ public class ApiOrderService {
                         freightPrice = freightPrice
                                 .add(goods.getExtra_price().multiply(new BigDecimal(1)));
                     }
+                   // freightPrice = getPostageMoney(goodId,goodsVo.getNumber());
                     //计算反润金额(返利 + 返利比例 * 商品金额 * 商品数量)
                     brokerage_price = brokerage_price.add(new BigDecimal(goods.getBrokerage_percent())
                             .multiply(goods.getRetail_price()).multiply(new BigDecimal(cartItem.getNumber())));
@@ -244,10 +251,11 @@ public class ApiOrderService {
                 // 运费统计
                 Integer goodId = goodsVo.getGoodsId();
                 GoodsVo goods = goodsService.queryObject(goodId);
-                if (goods.getExtra_price() != null) {
+               /* if (goods.getExtra_price() != null) {
                     freightPrice = freightPrice
                             .add(goods.getExtra_price().multiply(new BigDecimal(1)));
-                }
+                }*/
+               freightPrice = getPostageMoney(goodId,goodsVo.getNumber());
                 //计算反润金额(返利 + 返利比例 * 商品金额 * 商品数量)
                 BigDecimal brokerage_price = goods.getRetail_price()
                         .multiply(new BigDecimal(goods.getBrokerage_percent() * goodsVo.getNumber())).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
@@ -519,16 +527,38 @@ public class ApiOrderService {
             newur.setRemarks("退回:" + ur.getRemarks());
             newur.setOrderId(orderId);
             userRecordSer.save(newur);
-
-//            MlsUserEntity2 mlsUserVo = new MlsUserEntity2();
-//            mlsUserVo.setMlsUserId(ur.getMlsUserId());
-//            mlsUserVo.setTodaySales(orderPrice);
-//            if (DateUtils.format(new Date()).equals(DateUtils.format(payTime))) {//如果支付是今天，则扣除今天的金额
-//                mlsUserVo.setGetProfit(ur.getPrice());
-//            } else {
-//                mlsUserVo.setGetProfit(0);
-//            }
-//            mlsUserSer.getEntityMapper().cancelMoney(mlsUserVo);
         }
     }
+
+    //计算邮费
+    public BigDecimal getPostageMoney(Integer goodsId,Integer number){
+
+        GoodsVo goodsVo = goodsService.queryObject(goodsId);
+        if(goodsVo == null){
+            return null;
+        }
+        if(goodsVo.getExpressType() == 0){
+            return goodsVo.getExtra_price();
+        }
+
+        //获取模板信息
+        CdtPostageTemplate cdtPostageTemplate = cdtPostageTemplateService.getById(goodsVo.getExpressType());
+        if(cdtPostageTemplate == null){
+            return null;
+        }
+        BigDecimal money = cdtPostageTemplate.getMoney();
+        Integer first = cdtPostageTemplate.getFirst();
+        Integer second = cdtPostageTemplate.getSecond();
+        //如果小于首个数量
+        if(number <= first || second == 0){
+            return money;
+        }
+        //获取超出首个的邮费
+        Integer exter = number - first;
+        Integer count = exter%second == 0 ? (exter/second) : (exter/second)+1;
+        BigDecimal money_exter = new BigDecimal(count).multiply(cdtPostageTemplate.getRenewMoney());
+
+        return money.add(money_exter);
+    }
+
 }

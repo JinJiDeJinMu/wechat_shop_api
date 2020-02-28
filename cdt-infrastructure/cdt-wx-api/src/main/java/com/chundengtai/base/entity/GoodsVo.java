@@ -37,8 +37,6 @@ public class GoodsVo implements Serializable {
     @ApiModelProperty(value = "商品序列号")
     private Integer goods_number;
 
-    private Integer sale_number;
-
     @ApiModelProperty(value = "关键字")
     private String keywords;
 
@@ -123,12 +121,32 @@ public class GoodsVo implements Serializable {
 
     private String schoolName;
 
-    public void setSale_number(Integer sale_number) {
-        this.sale_number = sale_number;
+    private String deliveryPlace;
+
+    private Integer expressType;
+
+    public Integer getPurchaseType() {
+        return purchaseType;
     }
 
-    public Integer getSale_number() {
-        return sale_number;
+    public void setPurchaseType(Integer purchaseType) {
+        this.purchaseType = purchaseType;
+    }
+
+    public String getDeliveryPlace() {
+        return deliveryPlace;
+    }
+
+    public void setDeliveryPlace(String deliveryPlace) {
+        this.deliveryPlace = deliveryPlace;
+    }
+
+    public Integer getExpressType() {
+        return expressType;
+    }
+
+    public void setExpressType(Integer expressType) {
+        this.expressType = expressType;
     }
 
     public String getSchoolName() {

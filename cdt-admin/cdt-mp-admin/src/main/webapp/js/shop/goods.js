@@ -43,7 +43,6 @@ var setting = {
 var vm = new Vue({
     el: '#rrapp',
     data: {
-        files:[],
         merchants: [],
         showList: true,
         title: null,
@@ -71,7 +70,8 @@ var vm = new Vue({
             purchaseType: 1,
             merchantId: '',
             schoolName: '',
-            mark: ''
+            mark: '',
+            deliveryPlace:''
         },
         ruleValidate: {
             goodsSn: [{
@@ -306,60 +306,60 @@ var vm = new Vue({
         },
         //批量上架
         BatchEnsale: function(ids){
-                    Ajax.request({
-                             type: "POST",
-                             url: "../goods/enSale",
-                             params: JSON.stringify(ids),
-                             contentType: "application/json",
-                             type: 'POST',
-                             successCallback: function () {
-                                 alert('上架成功')
-                                  vm.reload();
-                             }
-              });
-         },
-         //批量下架
-          BatchUnsale: function(ids){
-                             Ajax.request({
-                                      type: "POST",
-                                      url: "../goods/unSale",
-                                      params: JSON.stringify(ids),
-                                      contentType: "application/json",
-                                      type: 'POST',
-                                      successCallback: function () {
-                                          alert('下架成功')
-                                              vm.reload();
-                                      }
-                       });
-                  },
-               //批量改成新品
-                       BatchTonew: function(ids){
-                                          Ajax.request({
-                                                   type: "POST",
-                                                   url: "../goods/tonew",
-                                                   params: JSON.stringify(ids),
-                                                   contentType: "application/json",
-                                                   type: 'POST',
-                                                   successCallback: function () {
-                                                       alert('修改新品成功')
-                                                           vm.reload();
-                                                   }
-                                    });
-                               },
-                //批量改成新品
-                                      BatchCancel: function(ids){
-                                                         Ajax.request({
-                                                                  type: "POST",
-                                                                  url: "../goods/cancelnew",
-                                                                  params: JSON.stringify(ids),
-                                                                  contentType: "application/json",
-                                                                  type: 'POST',
-                                                                  successCallback: function () {
-                                                                      alert('取消新品成功')
-                                                                          vm.reload();
-                                                                  }
-                                                   });
-                                              },
+            Ajax.request({
+                type: "POST",
+                url: "../goods/enSale",
+                params: JSON.stringify(ids),
+                contentType: "application/json",
+                type: 'POST',
+                successCallback: function () {
+                    alert('上架成功')
+                    vm.reload();
+                }
+            });
+        },
+        //批量下架
+        BatchUnsale: function(ids){
+            Ajax.request({
+                type: "POST",
+                url: "../goods/unSale",
+                params: JSON.stringify(ids),
+                contentType: "application/json",
+                type: 'POST',
+                successCallback: function () {
+                    alert('下架成功')
+                    vm.reload();
+                }
+            });
+        },
+        //批量改成新品
+        BatchTonew: function(ids){
+            Ajax.request({
+                type: "POST",
+                url: "../goods/tonew",
+                params: JSON.stringify(ids),
+                contentType: "application/json",
+                type: 'POST',
+                successCallback: function () {
+                    alert('修改新品成功')
+                    vm.reload();
+                }
+            });
+        },
+        //批量改成新品
+        BatchCancel: function(ids){
+            Ajax.request({
+                type: "POST",
+                url: "../goods/cancelnew",
+                params: JSON.stringify(ids),
+                contentType: "application/json",
+                type: 'POST',
+                successCallback: function () {
+                    alert('取消新品成功')
+                    vm.reload();
+                }
+            });
+        },
         handleSizeChange(val) {
             this.listQuery.page = 1;
             this.listQuery.limit = val;
@@ -483,18 +483,18 @@ var vm = new Vue({
                 item = getSelectedRow("#jqGrid");
                 return;
             }
-                Ajax.request({
-                    type: "POST",
-                    url: "../goods/un",
-                    contentType: "application/json",
-                    params: JSON.stringify(item),
-                    successCallback: function (r) {
-                        alert('操作成功', function (index) {
-                            vm.reload();
-                            ;
-                        });
-                    }
-                });
+            Ajax.request({
+                type: "POST",
+                url: "../goods/un",
+                contentType: "application/json",
+                params: JSON.stringify(item),
+                successCallback: function (r) {
+                    alert('操作成功', function (index) {
+                        vm.reload();
+                        ;
+                    });
+                }
+            });
 
         },
         batDel: function () {
@@ -764,19 +764,17 @@ var vm = new Vue({
         },
         handleSuccess(res, file) {
             // 因为上传过程为实例，这里模拟添加 url
-            console.log(res.url);
             file.imgUrl = res.url;
             file.name = res.url;
             vm.uploadList.add(file);
         },
-        handleBeforeUpload(file) {
+        handleBeforeUpload() {
             const check = this.uploadList.length < 5;
             if (!check) {
                 this.$Notice.warning({
                     title: '最多只能上传 5 张图片。'
                 });
             }
-            console.log("files"+file);
             return check;
         },
         handleSubmit: function (name) {
@@ -796,7 +794,6 @@ var vm = new Vue({
                 desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
             });
         },
-
         handleReset: function (name) {
             handleResetForm(this, name);
         },

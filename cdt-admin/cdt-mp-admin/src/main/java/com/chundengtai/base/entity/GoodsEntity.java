@@ -82,6 +82,10 @@ public class GoodsEntity implements Serializable {
 
     private String schoolName;
 
+    private String deliveryPlace;
+
+    private Integer expressType;
+
     /**
      * 翻译字段
      */
@@ -226,6 +230,22 @@ public class GoodsEntity implements Serializable {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getDeliveryPlace() {
+        return deliveryPlace;
+    }
+
+    public void setDeliveryPlace(String deliveryPlace) {
+        this.deliveryPlace = deliveryPlace;
+    }
+
+    public Integer getExpressType() {
+        return expressType;
+    }
+
+    public void setExpressType(Integer expressType) {
+        this.expressType = expressType;
     }
 
     /**
@@ -767,6 +787,8 @@ public class GoodsEntity implements Serializable {
                 ", startTime=" + startTime +
                 ", purchaseType=" + purchaseType +
                 ", schoolName='" + schoolName + '\'' +
+                ", deliveryPlace='" + deliveryPlace + '\'' +
+                ", expressType=" + expressType +
                 ", merchantName='" + merchantName + '\'' +
                 ", createUserId=" + createUserId +
                 ", createUserDeptId=" + createUserDeptId +
@@ -782,6 +804,7 @@ public class GoodsEntity implements Serializable {
                 ", successTime=" + successTime +
                 ", successPeople=" + successPeople +
                 ", groupPrice=" + groupPrice +
+                ", mark='" + mark + '\'' +
                 '}';
     }
 }
