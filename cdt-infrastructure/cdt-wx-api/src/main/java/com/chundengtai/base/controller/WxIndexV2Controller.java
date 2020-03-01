@@ -167,6 +167,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
     }
 
     public void getsaleNumber(List<GoodsVo> goodsVoList){
+        if(goodsVoList !=null){
         goodsVoList.stream().forEach(e ->{
             HashMap<String,Object> hashMap = new HashMap<>();
             hashMap.put("goods_id",e.getId());
@@ -175,5 +176,5 @@ public class WxIndexV2Controller extends ApiBaseAction {
             e.setSell_volume(saleNumer);
 
     });
-    }
+    }}
 }
