@@ -115,7 +115,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
                 param.put("fields", "id as id, name as name, list_pic_url as list_pic_url,primary_pic_url,retail_price as retail_price,market_price as market_price,primary_product_id as primary_product_id");
                 PageHelper.startPage(0, 6, false);
                 categoryGoods = goodsService.queryList(param);
-                getsaleNumber(categoryGoods);
+                //getsaleNumber(categoryGoods);
                 log.info("======"+categoryGoods);
                 List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(categoryGoods, GoodsDTO.class);
                 Map<String, Object> newCategory = new HashMap<String, Object>();
@@ -151,7 +151,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,primary_product_id");
             PageHelper.startPage(0, 40, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
-            getsaleNumber(newGoods);
+            //getsaleNumber(newGoods);
             log.info("xin="+newGoods);
             goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
             redisTemplate.opsForValue().set("indexNewGoods", goodsDTOS, 10, TimeUnit.MINUTES);
