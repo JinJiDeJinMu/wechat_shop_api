@@ -434,7 +434,7 @@ public class ApiCartController extends ApiBaseAction {
 
         if (type.equals("cart")) {
             Map<String, Object> cartData = (Map<String, Object>) this.getCart(loginUser);
-            /* List<CartVo> cartVoList = new ArrayList<>();
+             List<CartVo> cartVoList = new ArrayList<>();
             //查询用户购物车信息
             List<MerCartVo> merCartVos = cartService.queryMerCartList(loginUser.getUserId());
            for (MerCartVo merCartVo : merCartVos) {
@@ -460,10 +460,10 @@ public class ApiCartController extends ApiBaseAction {
 //                List<CouponVo> validCouponVos = apiCouponService.getValidUserCoupons(map);
 //                merCartVo.setUserCouponList(validCouponVos);
                 merCartVoList.add(merCartVo);
-            }*/
+            }
 
             //新的邮费计算
-
+/*
             List<CartVo> cartVoList = cartService.queryCats(loginUser.getUserId());
 
             BigDecimal goods_total = cartVoList.stream().map(CartVo::getRetail_price).reduce(BigDecimal.ZERO,BigDecimal::add);
@@ -479,7 +479,7 @@ public class ApiCartController extends ApiBaseAction {
             goodsTotalPrice = goodsTotalPrice.add(goods_total);
             merCartVo.setOrderTotalPrice(goodsTotalPrice);
             merCartVo.setMerchantId(cartVoList.get(0).getMerchant_id());
-            merCartVo.setCartVoList(cartVoList);
+            merCartVo.setCartVoList(cartVoList);*/
 
         } else { // 是直接购买的
             ProductVo productInfo = productService.queryObject(goodsVO.getProductId());
@@ -506,11 +506,11 @@ public class ApiCartController extends ApiBaseAction {
             checkedGoodsList.add(cartVo);
 
             //计算运费
-            /*if (goods.getExtra_price() != null) {
+            if (goods.getExtra_price() != null) {
                 freightPrice = freightPrice.add(goods.getExtra_price().multiply(new BigDecimal(goodsVO.getNumber())));
-            }*/
+            }
 
-            freightPrice = getPostageMoney(goodsVO.getGoodsId(),goodsVO.getNumber());
+            //freightPrice = getPostageMoney(goodsVO.getGoodsId(),goodsVO.getNumber());
             MerCartVo merCartVo = new MerCartVo();
             merCartVo.setMerchantId(productInfo.getMerchant_id());
             String merchantName = cartService.queryMerchantName(merCartVo.getMerchantId());
@@ -582,7 +582,7 @@ public class ApiCartController extends ApiBaseAction {
             return null;
         }
         if(goodsVo.getExpressType() == 0){
-            return goodsVo.getExtra_price();
+            return goodsVo.getExtra_price().multiply(new BigDecimal(number));
         }
 
         //获取模板信息

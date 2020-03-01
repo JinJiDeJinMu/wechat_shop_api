@@ -251,11 +251,11 @@ public class ApiOrderService {
                 // 运费统计
                 Integer goodId = goodsVo.getGoodsId();
                 GoodsVo goods = goodsService.queryObject(goodId);
-               /* if (goods.getExtra_price() != null) {
+                if (goods.getExtra_price() != null) {
                     freightPrice = freightPrice
                             .add(goods.getExtra_price().multiply(new BigDecimal(1)));
-                }*/
-               freightPrice = getPostageMoney(goodId,goodsVo.getNumber());
+                }
+               //freightPrice = getPostageMoney(goodId,goodsVo.getNumber());
                 //计算反润金额(返利 + 返利比例 * 商品金额 * 商品数量)
                 BigDecimal brokerage_price = goods.getRetail_price()
                         .multiply(new BigDecimal(goods.getBrokerage_percent() * goodsVo.getNumber())).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
