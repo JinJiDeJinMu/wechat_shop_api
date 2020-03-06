@@ -7,29 +7,26 @@ import com.chundengtai.base.dto.GoodsDTO;
 import com.chundengtai.base.entity.AdVo;
 import com.chundengtai.base.entity.AttributeCategoryVo;
 import com.chundengtai.base.entity.GoodsVo;
-import com.chundengtai.base.entity.ProductVo;
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.ApiAdService;
-import com.chundengtai.base.service.ApiCategoryService;
 import com.chundengtai.base.service.ApiGoodsService;
-import com.chundengtai.base.service.ApiProductService;
 import com.chundengtai.base.transfer.JsonTransfer;
 import com.chundengtai.base.util.ApiBaseAction;
-import com.chundengtai.base.util.BannerType;
 import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -41,8 +38,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/apis/v2/index")
 @Slf4j
 public class WxIndexV2Controller extends ApiBaseAction {
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
 
     @Autowired
     private ApiAdService adService;
@@ -50,8 +45,6 @@ public class WxIndexV2Controller extends ApiBaseAction {
     @Autowired
     private ApiGoodsService goodsService;
 
-    @Autowired
-    private ApiCategoryService categoryService;
 
     @Autowired
     private ApiAttributeCategoryMapper attributeCategoryMapper;
@@ -62,8 +55,6 @@ public class WxIndexV2Controller extends ApiBaseAction {
     @Autowired
     private MapperFacade mapperFacade;
 
-    @Autowired
-    private ApiProductService apiProductService;
 
     /**
      * app首页
@@ -74,17 +65,14 @@ public class WxIndexV2Controller extends ApiBaseAction {
     public Result<Map<String, Object>> index() {
         Map<String, Object> resultObj = (Map<String, Object>) redisTemplate.opsForValue().get("indexV2");
         if (resultObj == null) {
-            resultObj = new HashMap<String, Object>();
-            Map<String, Object> param = new HashMap<String, Object>();
+            resultObj = new HashMap<>();
+            Map<String, Object> param = new HashMap<>();
             param.put("ad_position_id", 1);
             List<AdVo> banner = adService.queryList(param);
-            List<AdVo> hotProduct = getCollectByType(banner, BannerType.HOT.getCode());
-            List<AdVo> activity = getCollectByType(banner, BannerType.ACTIVITY.getCode());
-            resultObj.put("hotProduct", hotProduct);
-            resultObj.put("activity", activity);
+            resultObj.put("banner", banner);
 
             //分类
-            param = new HashMap<String, Object>();
+            param.clear();
             param.put("parent_id", 0);
             param.put("sidx", "sort_order");
             param.put("order", "desc");
@@ -95,7 +83,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             resultObj.put("categoryList", mapperFacade.mapAsList(categoryList, AttributeCategoryDTO.class));
 
             //分类下面模块的商品
-            param = new HashMap<String, Object>();
+            param.clear();
             param.put("parent_id", 0);
             param.put("sidx", "sort_order");
             param.put("order", "desc");
@@ -106,19 +94,15 @@ public class WxIndexV2Controller extends ApiBaseAction {
             //查找其他分类下面的商品
             List<Map<String, Object>> newCategoryList = new ArrayList<>();
             for (AttributeCategoryVo categoryItem : categoryGoodsList) {
-                List<GoodsVo> categoryGoods = new ArrayList<>();
-                param = null;
-                param = new HashMap<String, Object>();
+                param.clear();
                 param.put("attribute_category", categoryItem.getId());
                 param.put("sidx", "sort_order");
                 param.put("order", "desc");
-                param.put("fields", "id as id, name as name, list_pic_url as list_pic_url,primary_pic_url,retail_price as retail_price,market_price as market_price,primary_product_id as primary_product_id");
+                param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse");
                 PageHelper.startPage(0, 6, false);
-                categoryGoods = goodsService.queryList(param);
-                getsaleNumber(categoryGoods);
-                log.info("======"+categoryGoods);
+                List<GoodsVo> categoryGoods = goodsService.queryList(param);
                 List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(categoryGoods, GoodsDTO.class);
-                Map<String, Object> newCategory = new HashMap<String, Object>();
+                Map<String, Object> newCategory = new HashMap<>();
                 newCategory.put("id", categoryItem.getId());
                 newCategory.put("name", categoryItem.getName());
                 newCategory.put("showStyle", categoryItem.getShowStyle());
@@ -126,7 +110,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
                 newCategoryList.add(newCategory);
             }
             resultObj.put("productList", newCategoryList);
-            log.info("indexv2数据库读取数据");
+            log.info("首页数据查询完成");
             redisTemplate.opsForValue().set("indexV2", resultObj, 10, TimeUnit.MINUTES);
         }
         return Result.success(resultObj);
@@ -148,16 +132,42 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("is_on_sale", 1);
             param.put("sidx", "add_time");
             param.put("order", "desc");
-            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,primary_product_id");
+            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse");
             PageHelper.startPage(0, 40, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
-            getsaleNumber(newGoods);
-            log.info("xin="+newGoods);
             goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
             redisTemplate.opsForValue().set("indexNewGoods", goodsDTOS, 10, TimeUnit.MINUTES);
             log.info("indexNewGoods数据库读取数据");
         }
         return Result.success(goodsDTOS);
+    }
+
+    @RequestMapping("/getBanner.json")
+    @IgnoreAuth
+    public Result<Map<String, Object>> getBannerContent(Integer bannerId) {
+
+        AdVo adVo = adService.queryObject(bannerId);
+        if (adVo == null) {
+            return Result.failure();
+        }
+        HashMap<String, Object> hashMap = new HashMap<>();
+        if (adVo.getType() == 1) {
+            String goodsId = adVo.getGoodsId();
+            List<GoodsVo> goodsVos = new ArrayList<>();
+            if (goodsId.contains(",")) {
+                String[] str = goodsId.split(",");
+                for (String goodId : str) {
+                    GoodsVo goodsVo = goodsService.queryObject(Integer.parseInt(goodId));
+                    goodsVos.add(goodsVo);
+                }
+            } else {
+                GoodsVo goodsVo = goodsService.queryObject(Integer.parseInt(goodsId));
+                goodsVos.add(goodsVo);
+            }
+            hashMap.put("goods_show", goodsVos);
+        }
+        hashMap.put("content_show", adVo);
+        return Result.success(hashMap);
     }
 
     private List<AdVo> getCollectByType(List<AdVo> banner, Integer type) {
@@ -166,14 +176,4 @@ public class WxIndexV2Controller extends ApiBaseAction {
         ).collect(Collectors.toList());
     }
 
-    public void getsaleNumber(List<GoodsVo> goodsVoList){
-        goodsVoList.stream().forEach(e ->{
-            HashMap<String,Object> hashMap = new HashMap<>();
-            hashMap.put("goods_id",e.getId());
-            List<ProductVo> productVoList = apiProductService.queryList(hashMap);
-            Integer saleNumer = productVoList.stream().mapToInt(item ->item.getSale_number()).sum();
-            e.setSell_volume(saleNumer);
-
-    });
-    }
 }

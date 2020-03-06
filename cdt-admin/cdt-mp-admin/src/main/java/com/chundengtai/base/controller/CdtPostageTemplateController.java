@@ -2,13 +2,11 @@ package com.chundengtai.base.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.bean.CdtPostageTemplate;
-import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.CdtPostageTemplateService;
 import com.chundengtai.base.transfer.BaseForm;
+import com.chundengtai.base.utils.R;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.chundengtai.base.utils.R;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -127,4 +125,9 @@ public R delete(@RequestBody Integer[]ids){
         boolean result= cdtPostageTemplateService.removeByIds(Arrays.asList(ids));
         return R.ok(result);
         }
-        }
+
+    @GetMapping("/queryAll")
+    public R getAll() {
+        return R.ok(cdtPostageTemplateService.list());
+    }
+}

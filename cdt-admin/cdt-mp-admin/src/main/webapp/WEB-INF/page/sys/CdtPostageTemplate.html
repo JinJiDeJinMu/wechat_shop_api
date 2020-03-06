@@ -42,54 +42,17 @@
                                 <el-input style="width: 203px" v-model="baseForm.data.topic"
                                           placeholder="模板标题"></el-input>
                             </el-form-item>
-                                                    <el-form-item label="快递公司">
-                                <el-input style="width: 203px" v-model="baseForm.data.expressCompany"
-                                          placeholder="快递公司"></el-input>
-                            </el-form-item>
-                                                    <el-form-item label="邮费统计类型">
-                                <el-input style="width: 203px" v-model="baseForm.data.postageType"
-                                          placeholder="邮费统计类型"></el-input>
-                            </el-form-item>
-                                                    <el-form-item label="计费方式（0：按件，1：按重）">
-                                <el-input style="width: 203px" v-model="baseForm.data.chargingType"
-                                          placeholder="计费方式（0：按件，1：按重）"></el-input>
+                                                    <el-form-item label="计费方式">
+                                        <el-select v-model="baseForm.data.chargingType" placeholder="状态 0,1">
+                                            <el-option value="0" label="按件">按件</el-option>
+                                            <el-option value="1" label="按重">按重</el-option>
+                                        </el-select>
                             </el-form-item>
                                                     <el-form-item label="配送区域">
                                 <el-input style="width: 203px" v-model="baseForm.data.address"
                                           placeholder="配送区域"></el-input>
                             </el-form-item>
-                                                    <el-form-item label="首件">
-                                <el-input style="width: 203px" v-model="baseForm.data.first"
-                                          placeholder="首件"></el-input>
-                            </el-form-item>
-                                                    <el-form-item label="运费">
-                                <el-input style="width: 203px" v-model="baseForm.data.money"
-                                          placeholder="运费"></el-input>
-                            </el-form-item>
-                                                    <el-form-item label="续件">
-                                <el-input style="width: 203px" v-model="baseForm.data.second"
-                                          placeholder="续件"></el-input>
-                            </el-form-item>
-                                                    <el-form-item label="续费">
-                                <el-input style="width: 203px" v-model="baseForm.data.renewMoney"
-                                          placeholder="续费"></el-input>
-                            </el-form-item>
-                                                    <el-form-item label="创建时间">
-                                <el-input style="width: 203px" v-model="baseForm.data.createTime"
-                                          placeholder="创建时间"></el-input>
-                            </el-form-item>
-                                                    <el-form-item label="更新时间">
-                                <el-input style="width: 203px" v-model="baseForm.data.updateTime"
-                                          placeholder="更新时间"></el-input>
-                            </el-form-item>
-                                                    <el-form-item label="备注">
-                                <el-input style="width: 203px" v-model="baseForm.data.remark"
-                                          placeholder="备注"></el-input>
-                            </el-form-item>
-                                                    <el-form-item label="创建人">
-                                <el-input style="width: 203px" v-model="baseForm.data.creater"
-                                          placeholder="创建人"></el-input>
-                            </el-form-item>
+
                                                                                                                                                                                                                                                                                             </el-form>
                 </div>
             </el-card>
@@ -108,11 +71,8 @@
                                                                                 <el-table-column label="快递公司" width="100" align="center">
                             <template slot-scope="scope">{{scope.row.expressCompany}}</template>
                         </el-table-column>
-                                                                                <el-table-column label="邮费统计类型" width="100" align="center">
-                            <template slot-scope="scope">{{scope.row.postageType}}</template>
-                        </el-table-column>
-                                                                                <el-table-column label="计费方式（0：按件，1：按重）" width="100" align="center">
-                            <template slot-scope="scope">{{scope.row.chargingType}}</template>
+                                                                                <el-table-column label="计费方式" width="100" align="center">
+                            <template slot-scope="scope">{{scope.row.chargingType |getexpresstype}}</template>
                         </el-table-column>
                                                                                 <el-table-column label="配送区域" width="100" align="center">
                             <template slot-scope="scope">{{scope.row.address}}</template>
@@ -150,19 +110,16 @@
                              @click="handleShowVerifyDetail(scope.index, scope.row)">审核详情
                      </el-button>
                  </p>
-             </template>
-         </el-table-column> -->
+             </template>-->
+         </el-table-column>
                 <el-table-column label="操作" width="160" align="center">
                     <template slot-scope="scope">
                         <p>
-                            #if($shiro.hasPermission("CdtPostageTemplate:update"))
                             <el-button size="mini" @click="handleUpdateProduct(scope.$index, scope.row)">编辑
                             </el-button>
-                            #end
-                            #if($shiro.hasPermission("CdtPostageTemplate:update"))
+
                             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
                             </el-button>
-                            #end
                         </p>
                     </template>
                 </el-table-column>
@@ -210,17 +167,14 @@
                     <el-input style="width: 203px" v-model="baseForm.data.expressCompany"
                               placeholder="快递公司"></el-input>
                 </el-form-item>
-                            <el-form-item label="邮费统计类型" prop="postageType" :rules=" [
-            { required: true, message: '请输入邮费统计类型', trigger: 'blur' }
-          ]">
-                    <el-input style="width: 203px" v-model="baseForm.data.postageType"
-                              placeholder="邮费统计类型"></el-input>
-                </el-form-item>
-                            <el-form-item label="计费方式（0：按件，1：按重）" prop="chargingType" :rules=" [
+
+                            <el-form-item label="计费方式" prop="chargingType" :rules=" [
             { required: true, message: '请输入计费方式（0：按件，1：按重）', trigger: 'blur' }
           ]">
-                    <el-input style="width: 203px" v-model="baseForm.data.chargingType"
-                              placeholder="计费方式（0：按件，1：按重）"></el-input>
+                            <el-select v-model="baseForm.data.chargingType" placeholder="状态 0,1">
+                            <el-option value="0" label="按件">按件</el-option>
+                            <el-option value="1" label="按重">按重</el-option>
+                            </el-select>
                 </el-form-item>
                             <el-form-item label="配送区域" prop="address" :rules=" [
             { required: true, message: '请输入配送区域', trigger: 'blur' }

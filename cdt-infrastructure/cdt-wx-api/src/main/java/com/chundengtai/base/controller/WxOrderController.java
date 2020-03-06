@@ -137,7 +137,6 @@ public class WxOrderController extends ApiBaseAction {
      * 获取订单详情
      */
     @ApiOperation(value = "获取订单详情")
-    @IgnoreAuth
     @GetMapping("detail.json")
     public Object detail(Integer orderId) {
         Map resultObj = new HashMap();
@@ -213,7 +212,6 @@ public class WxOrderController extends ApiBaseAction {
     }
 
     @GetMapping("TestCancelOrder.do")
-    @IgnoreAuth
     public Object TestCancelOrder(Integer userId, Integer orderId) {
         Order orderVo = cdtOrderService.getById(orderId);
 
@@ -228,7 +226,6 @@ public class WxOrderController extends ApiBaseAction {
     }
 
     @GetMapping("TestCompleteOrder.do")
-    @IgnoreAuth
     public Object TestCompleteOrder(Integer userId, Integer orderId) {
         Order orderItem = cdtOrderService.getById(orderId);
         //distributionFacade.recordDistributeLog(orderItem.getUserId(), orderItem);

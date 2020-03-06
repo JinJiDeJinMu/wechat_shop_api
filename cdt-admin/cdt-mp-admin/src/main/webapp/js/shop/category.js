@@ -90,7 +90,7 @@ var vm = new Vue({
         add: function () {
             vm.showList = false;
             vm.title = "新增";
-            vm.category = {isShow: 1, type: 0, level: 'L1', bannerUrl: '', iconUrl: '', imgUrl: '', wapBannerUrl: ''};
+            vm.category = {isShow: 1, type: 0, level: 'L1', bannerUrl: '', iconUrl: '', imgUrl: '', wapBannerUrl: '',parentId:0};
             this.getParentCategory();
         },
         update: function (event) {
@@ -115,6 +115,14 @@ var vm = new Vue({
         },
         saveOrUpdate: function (event) {
             var url = vm.category.id == null ? "../category/save" : "../category/update";
+            console.log(vm.category.level);
+            console.log(vm.category.parentId);
+            if(vm.category.level == 'L2'){
+                if(vm.category.parentId == 0){
+                    alert('请选择父类节点');
+                    return false;
+                }
+            }
             Ajax.request({
                 type: "POST",
                 url: url,

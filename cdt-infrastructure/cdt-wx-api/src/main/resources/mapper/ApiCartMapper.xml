@@ -190,17 +190,16 @@
             merchant.shop_name as merchantName,
             sum(
                 cart.retail_price * cart.number
-            ) as orderTotalPrice,
-            sum(
-                goods.extra_price * cart.number
-            ) as freightPrice
+            ) as orderTotalPrice
         FROM
             nideshop_cart cart,
             nideshop_goods goods,
-           cdt_merchant merchant
+            cdt_merchant merchant,
+            nideshop_product product
         WHERE
             cart.goods_id = goods.id
          AND merchant.id=cart.merchant_id
+         AND cart.product_id = product.id
         AND cart.user_id = #{userId}
         AND cart.checked = 1
         GROUP BY
@@ -209,12 +208,14 @@
 
 
     <select id="queryCheckedByUserIdAndMerId" parameterType="java.util.Map" resultMap="cartMap">
-        select * from nideshop_cart where user_id=#{user_id} and checked = 1 and merchant_id=#{merchantId}
+        select cart.* from nideshop_cart cart, nideshop_product product
+              where cart.user_id=#{user_id} and cart.checked = 1 and cart.merchant_id=#{merchantId} and
+              cart.product_id= product.id
     </select>
     <select id="queryMerchantName" parameterType="java.lang.Long" resultType="java.lang.String">
           select shop_name from cdt_merchant where id=#{merchantId} limit 1
     </select>
     <select id="queryCarts" parameterType="java.lang.Long" resultType="com.chundengtai.base.entity.CartVo">
-        select * from user_id=#{user_id} and checked = 1 GROUP BY cart.merchant_id
+        select * from nideshop_cart where user_id=#{user_id} and checked = 1 GROUP BY merchant_id
     </select>
 </mapper>

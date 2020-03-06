@@ -72,7 +72,6 @@ public class WxCommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
     @GetMapping("list")
-    @IgnoreAuth
     public Result<Object> List(@RequestParam Integer goodId,
                                @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
                                @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize
@@ -115,7 +114,6 @@ public class WxCommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 500, message = "If internal server error."),
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
-    @IgnoreAuth
     @GetMapping("post")
     @ResponseBody
     public Result<Object> post(
@@ -168,7 +166,6 @@ public class WxCommentV2Controller extends ApiBaseAction {
     }
 
     @PostMapping("/up")
-    @IgnoreAuth
     public String upload(HttpServletRequest request, @RequestParam("files") MultipartFile files) {
         if (files == null) {
             throw new RRException("上传文件不能为空");
@@ -179,8 +176,6 @@ public class WxCommentV2Controller extends ApiBaseAction {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        System.out.println("====" + url);
         return url;
     }
 
@@ -197,9 +192,7 @@ public class WxCommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 503, message = "If service unavailable.")
     })
     @PostMapping("reply")
-    @IgnoreAuth
     public Result<Object> reply(
-//                                @LoginUser UserVo loginUser,
             Long userId,
             String userName,
             Integer replyUserId,
@@ -227,7 +220,6 @@ public class WxCommentV2Controller extends ApiBaseAction {
             @ApiResponse(code = 400, message = "If bad request.")
     })
     @RequestMapping("comment")
-    @IgnoreAuth
     public Result<Object> post(
 //                             @LoginUser UserVo loginUser,
             Long userId,
@@ -247,7 +239,6 @@ public class WxCommentV2Controller extends ApiBaseAction {
 
     @ApiOperation(value = "查询订单评论")
     @GetMapping("query")
-    @IgnoreAuth
     public Result<Object> querycomment(@LoginUser UserVo loginUser,Integer orderNo){
         if(loginUser == null){
             return Result.failure();
@@ -270,7 +261,6 @@ public class WxCommentV2Controller extends ApiBaseAction {
      */
     @ApiOperation(value = "评论数量")
     @RequestMapping("count")
-    @IgnoreAuth
     public Result<Object> count(Integer typeId, Integer valueId) {
         Map<String, Object> resultObj = new HashMap();
         Map param = new HashMap();
@@ -292,7 +282,6 @@ public class WxCommentV2Controller extends ApiBaseAction {
      * @return
      */
     @ApiOperation(value = "选择评论类型")
-    @IgnoreAuth
     @RequestMapping("list1")
     public Object list1(Integer typeId, Integer valueId, Integer showType,
                         @RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -335,26 +324,5 @@ public class WxCommentV2Controller extends ApiBaseAction {
         }
         return toResponsSuccess(pageUtil);*/
         return null;
-    }
-
-
-    public static void main(String[] args) {
-
-        String s = "[\"\\\"https:\\\\/\\\\/chundengtai.oss-cn-hangzhou.aliyuncs.com\\\\/goodscomment\\\\/\\\\/wmyanxuan\\\\/20200116\\\\/1912365274d0fd.jpg\\\"\",\"\\\"https:\\\\/\\\\/chundengtai.oss-cn-hangzhou.aliyuncs.com\\\\/goodscomment\\\\/\\\\/wmyanxuan\\\\/20200116\\\\/19124040747667.jpg\\\"\"]\n";
-
-
-        System.out.println(s);
-        List<String> list = JSONArray.parseArray(s, String.class);
-
-        System.out.println(list);
-
-
-        list.forEach(e -> {
-            System.out.println(e.replaceAll("\"", ""));
-            String ee = e.replaceAll("\"", "");
-            StringBuffer stringBuffer = new StringBuffer(ee);
-            System.out.println(StringEscapeUtils.unescapeJava(ee));
-        });
-
     }
 }

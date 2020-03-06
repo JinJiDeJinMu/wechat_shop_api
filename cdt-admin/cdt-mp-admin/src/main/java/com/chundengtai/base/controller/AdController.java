@@ -7,8 +7,10 @@ import com.chundengtai.base.utils.Query;
 import com.chundengtai.base.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +34,7 @@ public class AdController {
 
         PageUtils pageUtil = new PageUtils(adList, total, query.getLimit(), query.getPage());
 
+        System.out.println("page=="+pageUtil.getList());
         return R.ok().put("page", pageUtil);
     }
 
@@ -52,7 +55,8 @@ public class AdController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("ad:save")
-    public R save(@RequestBody AdEntity ad) {
+    public R save(AdEntity ad) {
+        System.out.println("-----------------"+ad);
         adService.save(ad);
 
         return R.ok();
@@ -63,7 +67,8 @@ public class AdController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("ad:update")
-    public R update(@RequestBody AdEntity ad) {
+    public R update(AdEntity ad) {
+        System.out.println("=========="+ad);
         adService.update(ad);
 
         return R.ok();

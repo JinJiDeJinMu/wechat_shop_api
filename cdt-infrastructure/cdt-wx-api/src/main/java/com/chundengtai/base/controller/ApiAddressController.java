@@ -1,7 +1,6 @@
 package com.chundengtai.base.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.annotation.LoginUser;
 import com.chundengtai.base.entity.AddressVo;
 import com.chundengtai.base.entity.UserVo;
@@ -80,7 +79,7 @@ public class ApiAddressController extends ApiBaseAction {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("user_id", loginUser.getUserId());
         List<AddressVo> addressEntities = addressService.queryList(param);
-        if (addressEntities.size() == 0) {//第一次添加设置为默认地址
+        if (addressEntities.size() == 0) {
             entity.setIs_default(1);
         }
         //设置默认地址
@@ -120,7 +119,6 @@ public class ApiAddressController extends ApiBaseAction {
     /**
      * 获取用户的收货地址
      */
-    @IgnoreAuth
     @ApiOperation(value = "获取用户的收货地址接口", response = Map.class)
     @GetMapping("addressUserlist")
     public Object addressUserlist(@LoginUser UserVo loginUser) {

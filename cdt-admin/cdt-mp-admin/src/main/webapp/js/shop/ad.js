@@ -3,7 +3,8 @@ $(function () {
         url: '../ad/list',
         colModel: [
             {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
-            {label: '商品id', name: 'goodsId', index: 'goods_id'},
+            {label: '广告名称', name: 'name', index: 'name', width: 80},
+            {label: '商品id', name: 'goodsId', index: 'goodsId'},
             {label: '广告位置', name: 'adPositionName', index: 'ad_Position_id', width: 80},
             {label: '形式', name: 'mediaType', index: 'media_type', width: 80},
             {
@@ -15,14 +16,13 @@ $(function () {
                     }
                 }
             },
-            {label: '广告名称', name: 'name', index: 'name', width: 80},
             {label: '链接', name: 'link', index: 'link', width: 80},
             {
                 label: '图片', name: 'imageUrl', index: 'image_url', width: 80, formatter: function (value) {
                     return transImg(value);
                 }
             },
-            {label: '内容', name: 'content', index: 'content', width: 80},
+          /*  {label: '内容', name: 'content', index: 'content', width: 80},*/
             {
                 label: '结束时间', name: 'endTime', index: 'end_time', width: 80, formatter: function (value) {
                     return transDate(value);
@@ -37,13 +37,31 @@ $(function () {
             }]
     });
 });
-
+$(function () {
+    $('#content').editable({
+        inlineMode: false,
+        alwaysBlank: true,
+        height: '500px', //高度
+        minHeight: '200px',
+        language: "zh_cn",
+        spellcheck: false,
+        plainPaste: true,
+        enableScript: false,
+        imageButtons: ["floatImageLeft", "floatImageNone", "floatImageRight", "linkImage", "replaceImage", "removeImage"],
+        allowedImageTypes: ["jpeg", "jpg", "png", "gif"],
+        imageUploadURL: '../sys/oss/upload',
+        imageUploadParams: {
+            id: "edit"
+        },
+        imagesLoadURL: '../sys/oss/queryAll'
+    })
+});
 var vm = new Vue({
     el: '#rrapp',
     data: {
         showList: true,
         title: null,
-        ad: {enabled: 1, imageUrl: '', mediaType: 0, type: 0},
+        ad: {enabled: 1, imageUrl: '', mediaType: 0, type: 0,endTime:'',goodsId:''},
         ruleValidate: {
             name: [
                 {required: true, message: '广告名称不能为空', trigger: 'blur'}
@@ -55,18 +73,34 @@ var vm = new Vue({
         q: {
             name: ''
         },
-        adPositions: []
+        adPositions: [],
+        type:0,
+        flag:false,
+        gi:false
     },
     methods: {
         query: function () {
             vm.reload();
         },
+        Checked: function(val){
+            if(val == 2){
+             vm.flag = true;
+             vm.gi =false;
+            }else if(val == 1){
+                vm.flag = false;
+                vm.gi = true;
+            }else{
+                vm.flag = false;
+                vm.gi = false;
+            }
+        },
         add: function () {
             vm.showList = false;
             vm.title = "新增";
-            vm.ad = {enabled: 1, imageUrl: '', mediaType: 0};
+            vm.ad = {enabled: 1, imageUrl: '', mediaType: 0,goodsId:''};
             vm.adPosition = [];
             this.getAdPositions();
+            $('#content').editable('setHTML', '');
         },
         update: function (event) {
             var id = getSelectedRow("#jqGrid");
@@ -81,12 +115,15 @@ var vm = new Vue({
         },
         saveOrUpdate: function (event) {
             var url = vm.ad.id == null ? "../ad/save" : "../ad/update";
-
+            vm.ad.content = $('#content').editable('getHTML');
+            vm.add.endTime = vm.add.endTime;
+            console.log(JSON.stringify(vm.ad));
+            console.log(vm.ad);
             Ajax.request({
                 type: "POST",
                 url: url,
-                contentType: "application/json",
-                params: JSON.stringify(vm.ad),
+                /*contentType: "application/json",*/
+                params: vm.ad,
                 successCallback: function () {
                     alert('操作成功', function (index) {
                         vm.reload();
@@ -99,7 +136,6 @@ var vm = new Vue({
             if (ids == null) {
                 return;
             }
-
             confirm('确定要删除选中的记录？', function () {
 
                 Ajax.request({
@@ -121,6 +157,13 @@ var vm = new Vue({
                 async: true,
                 successCallback: function (r) {
                     vm.ad = r.ad;
+                    vm.ad.endTime= r.ad.endTime;
+                    vm.ad.goodsId = r.ad.goodsId;
+                    if(r.ad.content !=null){
+                        vm.flag = true;
+                    }
+                    vm.ad.type= r.ad.type
+                    $('#content').editable('setHTML', r.ad.content);
                 }
             });
         },

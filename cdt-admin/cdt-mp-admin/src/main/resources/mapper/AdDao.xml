@@ -85,7 +85,8 @@
 			`image_url`,
 			`content`,
 			`end_time`,
-			`enabled`)
+			`enabled`
+			)
 		values(
 			#{adPositionId},
 			#{mediaType},
@@ -96,7 +97,8 @@
 			#{imageUrl},
 			#{content},
 			#{endTime},
-			#{enabled})
+			#{enabled}
+			)
 	</insert>
 
     <update id="update" parameterType="com.chundengtai.base.entity.AdEntity">

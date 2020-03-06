@@ -30,16 +30,21 @@ public class AdEntity implements Serializable {
     //状态
     private Integer enabled;
 
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
+
     //类型
     private Integer type;
 
     //商品id
-    private Integer goodsId;
+    private String goodsId;
     /**
      * 翻译字段用
      */
     //位置名称
     private String adPositionName;
+
 
     /**
      * 设置：主键
@@ -53,20 +58,6 @@ public class AdEntity implements Serializable {
      */
     public Integer getId() {
         return id;
-    }
-
-    /**
-     * 获取：商品id
-     */
-    public Integer getGoodsId() {
-        return goodsId;
-    }
-
-    /**
-     * 设置：商品id
-     */
-    public void setGoodsId(Integer goodsId) {
-        this.goodsId = goodsId;
     }
 
     /**
@@ -196,5 +187,23 @@ public class AdEntity implements Serializable {
 
     public void setAdPositionName(String adPositionName) {
         this.adPositionName = adPositionName;
+    }
+
+    @Override
+    public String toString() {
+        return "AdEntity{" +
+                "id=" + id +
+                ", adPositionId=" + adPositionId +
+                ", mediaType=" + mediaType +
+                ", name='" + name + '\'' +
+                ", link='" + link + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", content='" + content + '\'' +
+                ", endTime=" + endTime +
+                ", enabled=" + enabled +
+                ", type=" + type +
+                ", goodsId='" + goodsId + '\'' +
+                ", adPositionName='" + adPositionName + '\'' +
+                '}';
     }
 }

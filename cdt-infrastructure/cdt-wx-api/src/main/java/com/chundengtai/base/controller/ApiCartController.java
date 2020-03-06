@@ -8,6 +8,8 @@ import com.chundengtai.base.dao.ApiCouponMapper;
 import com.chundengtai.base.entity.*;
 import com.chundengtai.base.service.*;
 import com.chundengtai.base.util.ApiBaseAction;
+import com.chundengtai.base.weixinapi.GoodsTypeEnum;
+import com.chundengtai.base.weixinapi.OrderStatusEnum;
 import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -165,9 +167,9 @@ public class ApiCartController extends ApiBaseAction {
 
         //取得规格的信息,判断规格库存
         ProductVo productInfo = productService.queryObject(productId);
-        if (null == productInfo || productInfo.getGoods_number() < number) {
+        /*if (null == productInfo || productInfo.getGoods_number() < number) {
             return this.toResponsObject(400, "库存不足", "");
-        }
+        }*/
 
         //判断购物车中是否存在此规格商品
         Map cartParam = new HashMap();
@@ -215,10 +217,10 @@ public class ApiCartController extends ApiBaseAction {
             cartInfo.setMerchant_id(goodsInfo.getMerchantId());
             cartService.save(cartInfo);
         } else {
-            //如果已经存在购物车中，则数量增加
+            /*//如果已经存在购物车中，则数量增加
             if (productInfo.getGoods_number() < (number + cartInfo.getNumber())) {
                 return this.toResponsObject(400, "库存不足", "");
-            }
+            }*/
             cartInfo.setNumber(cartInfo.getNumber() + number);
             cartService.update(cartInfo);
         }
@@ -269,9 +271,9 @@ public class ApiCartController extends ApiBaseAction {
         Integer id = jsonParam.getInteger("id");
         //取得规格的信息,判断规格库存
         ProductVo productInfo = productService.queryObject(productId);
-        if (null == productInfo || productInfo.getGoods_number() < number) {
+       /* if (null == productInfo || productInfo.getGoods_number() < number) {
             return this.toResponsObject(400, "库存不足", "");
-        }
+        }*/
         //判断是否已经存在product_id购物车商品
         CartVo cartInfo = cartService.queryObject(id);
         //只是更新number
@@ -313,9 +315,9 @@ public class ApiCartController extends ApiBaseAction {
         } else {
             //合并购物车已有的product信息，删除已有的数据
             Integer newNumber = number + newcartInfo.getNumber();
-            if (null == productInfo || productInfo.getGoods_number() < newNumber) {
+           /* if (null == productInfo || productInfo.getGoods_number() < newNumber) {
                 return this.toResponsObject(400, "库存不足", "");
-            }
+            }*/
             cartService.delete(newcartInfo.getId());
             //添加规格名和值
             String[] goodsSepcifitionValue = null;
@@ -464,13 +466,14 @@ public class ApiCartController extends ApiBaseAction {
 
             //新的邮费计算
 
-            List<CartVo> cartVoList = cartService.queryCats(loginUser.getUserId());
+            /*List<CartVo> cartVoList = cartService.queryCats(loginUser.getUserId());
 
-            BigDecimal goods_total = cartVoList.stream().map(CartVo::getRetail_price).reduce(BigDecimal.ZERO,BigDecimal::add);
+            //BigDecimal goods_total = cartVoList.stream().map(CartVo::getRetail_price).reduce(BigDecimal.ZERO,BigDecimal::add);
 
-            //BigDecimal exter_money  = new BigDecimal(BigInteger.ZERO);
+            BigDecimal goods_total  = new BigDecimal(BigInteger.ZERO);
             for (int i = 0; i < cartVoList.size(); i++) {
                 CartVo cartVo = cartVoList.get(i);
+                goods_total = goods_total.add(cartVo.getRetail_price().multiply(new BigDecimal(cartVo.getNumber())));
                 freightPrice = freightPrice.add(getPostageMoney(cartVo.getGoods_id(),cartVo.getNumber()));
             }
             MerCartVo merCartVo = new MerCartVo();
@@ -480,14 +483,34 @@ public class ApiCartController extends ApiBaseAction {
             merCartVo.setOrderTotalPrice(goodsTotalPrice);
             merCartVo.setMerchantId(cartVoList.get(0).getMerchant_id());
             merCartVo.setCartVoList(cartVoList);
+*/
+            List<MerCartVo> merCartVos = cartService.queryMerCartList(loginUser.getUserId());
+            if(merCartVos !=null) {
+                for (MerCartVo merCartVo : merCartVos) {
+                    goodsTotalPrice = goodsTotalPrice.add(merCartVo.getOrderTotalPrice());
+                    Map map = new HashMap();
+                    map.put("user_id", loginUser.getUserId());
+                    map.put("merchantId", merCartVo.getMerchantId());
+                    List<CartVo> cartVoList = cartService.queryCheckedByUserIdAndMerId(map);
+                    for (CartVo carvo : cartVoList) {
 
+                        freightPrice = freightPrice.add(getPostageMoney(carvo.getGoods_id(), carvo.getNumber()));
+
+                    }
+                    merCartVo.setFreightPrice(freightPrice);
+                    merCartVo.setActualPrice(goodsTotalPrice.add(freightPrice));
+                    merCartVo.setCartVoList(cartVoList);
+                    merCartVoList.add(merCartVo);
+                }
+            }
         } else { // 是直接购买的
             ProductVo productInfo = productService.queryObject(goodsVO.getProductId());
             GoodsVo goods = goodsService.queryObject(goodsVO.getGoodsId());
             //计算订单的费用
             //商品总价
             if (goods.getIs_secKill() == 3) {
-                if ("2".equals(activityType)) {//团购购买
+                //团购购买
+                if ("2".equals(activityType)) {
                     productInfo.setRetail_price(productInfo.getGroup_price());
                 }
             }
@@ -527,7 +550,8 @@ public class ApiCartController extends ApiBaseAction {
         BigDecimal couponPrice = new BigDecimal(0.00);
         //订单的总价
         BigDecimal orderTotalPrice = goodsTotalPrice.add(freightPrice);
-        BigDecimal actualPrice = orderTotalPrice.subtract(couponPrice);  //减去其它支付的金额后，要实际支付的金额
+        //减去其它支付的金额后，要实际支付的金额
+        BigDecimal actualPrice = orderTotalPrice.subtract(couponPrice);
         if (goodsVO != null) {
             resultObj.put("skuName", goodsVO.getSkuName());
         }
@@ -562,7 +586,7 @@ public class ApiCartController extends ApiBaseAction {
                 }
             }
             // 计算订单的费用
-            BigDecimal goodsTotalPrice = (BigDecimal) ((HashMap) cartData.get("cartTotal")).get("checkedGoodsAmount");  //商品总价
+            BigDecimal goodsTotalPrice = (BigDecimal) ((HashMap) cartData.get("cartTotal")).get("checkedGoodsAmount");
             // 如果没有用户优惠券直接返回新用户优惠券
             for (CouponVo couponVo : couponVos) {
                 if (couponVo.getMin_amount().compareTo(goodsTotalPrice) <= 0) {
@@ -573,13 +597,21 @@ public class ApiCartController extends ApiBaseAction {
         return toResponsSuccess(couponVos);
     }
 
+    //购物车提交前检查库存
+
+    @RequestMapping("/checkedProduct")
+    public Object checkProduct(Integer productId){
+
+        ProductVo productVo = productService.queryObject(productId);
+        return productVo != null ?toResponsSuccess(productVo):toResponsFail(null);
+    }
     //计算邮费
     public BigDecimal getPostageMoney(Integer goodsId,Integer number){
 
         System.out.println("计算邮费");
         GoodsVo goodsVo = goodsService.queryObject(goodsId);
-        if(goodsVo == null){
-            return null;
+        if(goodsVo == null || GoodsTypeEnum.EXPRESS_GET.getCode().equals(goodsVo.getIs_secKill())){
+            return new BigDecimal(BigInteger.ZERO);
         }
         if(goodsVo.getExpressType() == 0){
             return goodsVo.getExtra_price();
@@ -588,7 +620,7 @@ public class ApiCartController extends ApiBaseAction {
         //获取模板信息
         CdtPostageTemplate cdtPostageTemplate = cdtPostageTemplateService.getById(goodsVo.getExpressType());
         if(cdtPostageTemplate == null){
-            return null;
+            return goodsVo.getExtra_price().multiply(new BigDecimal(number));
         }
         BigDecimal money = cdtPostageTemplate.getMoney();
         Integer first = cdtPostageTemplate.getFirst();

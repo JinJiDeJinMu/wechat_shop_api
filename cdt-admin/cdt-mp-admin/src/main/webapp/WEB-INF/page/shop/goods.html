@@ -278,29 +278,6 @@
                         </i-select>
                     </Form-item>
 
-                    <!--<Form-item label="活动开始时间" prop="startTime" v-if="goods.isSecKill==3||goods.isSecKill==2">-->
-                    <!--<Date-picker v-model="goods.startTime" placeholder="活动开始时间"></Date-picker>-->
-                    <!--</Form-item>-->
-
-                    <!--<Form-item label="活动结束时间" prop="endTime" v-if="goods.isSecKill==3||goods.isSecKill==2">-->
-                    <!--<Date-picker v-model="goods.endTime" placeholder="活动结束时间"></Date-picker>-->
-                    <!--</Form-item>-->
-
-                    <!--<Form-item label="成团时间(分钟)" prop="successTime" v-if="goods.isSecKill==3">-->
-                    <!--<Input-number :min="0" :step="1" v-model="goods.successTime" placeholder="成团时间 单位分钟"-->
-                    <!--style="width: 188px;"/>-->
-                    <!--</Form-item>-->
-
-                    <!--<Form-item label="成团时间人数" prop="successPeople" v-if="goods.isSecKill==3">-->
-                    <!--<Input-number :min="0" :step="1" v-model="goods.successPeople" placeholder="成团时间 单位分钟"-->
-                    <!--style="width: 188px;"/>-->
-                    <!--</Form-item>-->
-
-                    <!--<Form-item label="团购价" prop="groupPrice" v-if="goods.isSecKill==3">-->
-                    <!--<Input-number :min="0" :step="1" v-model="goods.groupPrice" placeholder="团购价"-->
-                    <!--style="width: 188px;"/>-->
-                    <!--</Form-item>-->
-
                     <Form-item label="属性类别" prop="attributeCategory" style="width: 268px;">
                         <i-select v-model="goods.attributeCategory" filterable label-in-value>
                             <i-option v-for="attributeCategory in attributeCategories" :value="attributeCategory.id"
@@ -309,45 +286,13 @@
                         </i-select>
                     </Form-item>
 
-                    <!--<Form-item label="学校名称" prop="schoolName" style="width: 268px;">
-                        <i-select v-model="goods.schoolName" filterable label-in-value>
-                            <i-option v-for="item in schools" :value="item.name"
-                                      :key="item.name">{{item.name}}
-                            </i-option>
-                        </i-select>
-                    </Form-item>
-                    <Form-item label="店铺" prop="merchantId" style="width: 268px;">
-                        <i-select v-model="goods.merchantId" filterable label-in-value>
-                            <i-option v-for="merchant in merchants" :value="merchant.id" :key="merchant.id">
-                                {{merchant.shopName}}
-                            </i-option>
-                        </i-select>
-                        &lt;!&ndash;</Form-item>&ndash;&gt;
-                    </Form-item>-->
-
-                    <!--<Form-item label="商品类别" prop="category" style="width: 268px;">-->
-                    <!--<i-select v-model="goods.category" filterable label-in-value>-->
-                    <!--<i-option v-for="category in categories" :value="category.id"-->
-                    <!--:key="category.id">{{category.name}}-->
-                    <!--</i-option>-->
-                    <!--</i-select>-->
-                    <!--</Form-item>-->
 
                     <Form-item label="商品库存" prop="goodsNumber">
                         <Input-number :min="0" :step="1" v-model="goods.goodsNumber" placeholder="商品库存"
                                       style="width: 188px;"/>
                     </Form-item>
 
-                    <!--<Form-item label="商品单位" prop="goodsUnit" style="width: 268px;">-->
-                    <!--<i-select v-model="goods.goodsUnit" filterable>-->
-                    <!--<i-option v-for="macro in macros" :value="macro.value" :key="macro.value">{{macro.name}}-->
-                    <!--</i-option>-->
-                    <!--</i-select>-->
-                    <!--</Form-item>-->
-                    <!--<Form-item label="单价" prop="unitPrice">-->
-                    <!--<Input-number :min="0" :step="1" v-model="goods.unitPrice" placeholder="单价"-->
-                    <!--style="width: 188px;"/>-->
-                    <!--</Form-item>-->
+
                     <Form-item label="零售价格" prop="retailPrice">
                         <Input-number :min="0" :step="1" v-model="goods.retailPrice" placeholder="零售价格"
                                       style="width: 188px;"/>
@@ -356,37 +301,25 @@
                         <Input-number :min="0" :step="1" v-model="goods.marketPrice" placeholder="市场价"
                                       style="width: 188px;"/>
                     </Form-item>
-                    <!--<Form-item label="分佣比例" prop="brokerage_percent">-->
-                    <!--<Input-number :min="0" :step="1" v-model="goods.brokerage_percent" placeholder="分佣比例"-->
-                    <!--style="width: 188px;"/>-->
-                    <!--</Form-item>-->
-                    <Form-item label="邮费价格" prop="extraPrice" v-if="goods.isSecKill!=6">
-                        <Input-number :min="0" :step="1" v-model="goods.extraPrice" placeholder="邮费价格"
-                                      style="width: 188px;"/>
+                    <Form-item>
+                        <label><input v-model="radioVal" type="radio" value="0">邮费固定</label>
+                        <label><input v-model="radioVal" type="radio" value="1">邮费模板</label>
                     </Form-item>
-                    <!-- <Row>
-                         <i-col span="16">
-                             <Form-item label="商品主图" prop="primaryPicUrl">
-                                 <i-input v-model="goods.primaryPicUrl" placeholder="商品主图" readonly/>
-                             </Form-item>
-                         </i-col>
-                         <i-col span="3">
-                             <Form-item :label-width="1">
-                                 <Upload style="width: 300px;" action="../sys/oss/upload" :format="['jpg','jpeg','png']"
-                                         max-size="2048"
-                                         :on-success="handleSuccessPicUrl" :on-format-error="handleFormatError"
-                                         :show-upload-list="false"
-                                         :on-exceeded-size="handleMaxSize">
-                                     <i-button icon="ios-cloud-upload-outline">上传图片</i-button>
-                                 </Upload>
-                             </Form-item>
-                         </i-col>
-                         <i-col span="3">
-                             <Form-item :label-width="1">
-                                 <i-button icon="eye" @click="eyeImagePicUrl">预览图片</i-button>
-                             </Form-item>
-                         </i-col>
-                     </Row>-->
+                    <Form-item label="邮费价格" prop="extraPrice" v-if="goods.isSecKill!=6">
+                        <div v-if="radioVal == 0">
+                            <Input-number :min="0" :step="1" v-model="goods.extraPrice" placeholder="邮费价格"
+                                          style="width: 188px;"/>
+                        </div>
+
+                        <div v-if="radioVal == 1">
+                            <i-select v-model="goods.expressType" filterable label-in-value>
+                                <i-option v-for="ex in postageTemplate" :value="ex.id"
+                                          :key="ex.id">{{ex.topic}}
+                                </i-option>
+                            </i-select>
+                        </div>
+                    </Form-item>
+
                     <Form-item label="商品主图">
                         <template>
                             <div class="upload-list" v-for="item in uploadList">

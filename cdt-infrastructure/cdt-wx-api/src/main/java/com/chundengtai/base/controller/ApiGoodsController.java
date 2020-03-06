@@ -49,17 +49,9 @@ public class ApiGoodsController extends ApiBaseAction {
     @Autowired
     private ApiGoodsGalleryService goodsGalleryService;
     @Autowired
-    private ApiGoodsIssueService goodsIssueService;
-    @Autowired
     private ApiAttributeService attributeService;
     @Autowired
     private ApiBrandService brandService;
-    @Autowired
-    private ApiCommentService commentService;
-    @Autowired
-    private ApiUserService userService;
-    @Autowired
-    private ApiCommentPictureService commentPictureService;
     @Autowired
     private ApiCollectService collectService;
     @Autowired
@@ -71,22 +63,14 @@ public class ApiGoodsController extends ApiBaseAction {
     @Autowired
     private ApiRelatedGoodsService relatedGoodsService;
     @Autowired
-    private ApiCouponService apiCouponService;
-    @Autowired
-    private ApiUserCouponService apiUserCouponService;
-    @Autowired
     private ApiCartService cartService;
-
-    @Autowired
-    private CdtMerchantWxService cdtMerchantService;
     @Autowired
     private ApiProductService apiProductService;
 
-    //上传文件集合   
     private List<File> file;
-    //上传文件名集合   
+
     private List<String> fileFileName;
-    //上传文件内容类型集合   
+
     private List<String> fileContentType;
 
     /**
@@ -177,7 +161,6 @@ public class ApiGoodsController extends ApiBaseAction {
      * 商品详情页数据
      */
     @ApiOperation(value = " 商品详情页数据")
-    @IgnoreAuth
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "商品id", paramType = "path", required = true),
             @ApiImplicitParam(name = "referrer", value = "商品referrer", paramType = "path", required = false)})
     @GetMapping(value = "detail")
@@ -191,9 +174,9 @@ public class ApiGoodsController extends ApiBaseAction {
         Long mid = info.getMerchantId();
 
         resultObj.put("info", info);
-        //添加商家信息
+       /* //添加商家信息
         CdtMerchantEntity cdtMerchant = cdtMerchantService.queryObject(info.getMerchantId());
-        resultObj.put("merchantInfo", cdtMerchant);
+        resultObj.put("merchantInfo", cdtMerchant);*/
 
         Map param = new HashMap();
         param.put("goods_id", id);
@@ -741,11 +724,6 @@ public class ApiGoodsController extends ApiBaseAction {
             String content = "http://muserqrcode.51shop.ink?id=" + goodId + "&userId=" + loginUser.getMlsUserId();
             BufferedImage qrcode = QRCodeUtil.createImage(content, null, false);
 
-//        	FileInputStream baseIn = new FileInputStream(baseFilePath);  
-//        	InputStream p1In = ImageUtils.getImage(p1);
-//        	InputStream p2In = ImageUtils.getImage(p1);
-//        	InputStream p3In = ImageUtils.getImage(p1);
-
             String newUrl = ImageUtils.coverImage(baseFilePath, p1, 34, 306, 645, 645, qrcodeUrl);
             ImageUtils.coverImage(newUrl, p2, 700, 306, 315, 315, qrcodeUrl);
             ImageUtils.coverImage(newUrl, p3, 700, 642, 315, 315, qrcodeUrl);
@@ -784,7 +762,6 @@ public class ApiGoodsController extends ApiBaseAction {
         //底图
         String baseFilePath = urlPath + "statics/base/base2.png";
 
-
         //获取商品主图和2张配图
         GoodsVo goods = goodsService.queryObject(goodId);
         String p1 = goods.getPrimary_pic_url();//主图
@@ -804,11 +781,6 @@ public class ApiGoodsController extends ApiBaseAction {
             //非调用小程序生产二维码
             String content = "http://muserqrcode.51shop.ink?id=" + goodId + "&userId=" + loginUser.getMlsUserId();
             BufferedImage qrcode = QRCodeUtil.createImage(content, null, false);
-
-//        	FileInputStream baseIn = new FileInputStream(baseFilePath);  
-//        	InputStream p1In = ImageUtils.getImage(p1);
-//        	InputStream p2In = ImageUtils.getImage(p1);
-//        	InputStream p3In = ImageUtils.getImage(p1);
 
             String newUrl = ImageUtils.coverImage(baseFilePath, p1, 50, 423, 645, 645, qrcodeUrl);
             ImageUtils.coverImage(newUrl, p2, 700, 423, 315, 315, qrcodeUrl);
@@ -840,8 +812,6 @@ public class ApiGoodsController extends ApiBaseAction {
     @ApiOperation(value = "上传商品图片")
     @RequestMapping("uploadImage")
     public String uploadImage(@RequestParam("file") MultipartFile file, String imageType) {
-        System.out.println("==========");
-
         if (file.isEmpty()) {
             throw new RRException("上传文件不能为空");
         }
@@ -853,9 +823,6 @@ public class ApiGoodsController extends ApiBaseAction {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        System.out.println(url);
-
         return url;
     }
 
@@ -865,18 +832,12 @@ public class ApiGoodsController extends ApiBaseAction {
     @ApiOperation(value = "app新增商品")
     @RequestMapping("appAdd")
     public Object appAdd(@RequestParam String goodsname, @RequestParam String imageUrl, @RequestParam String imageUrl2) {
-        System.out.println(goodsname);
-        System.out.println(imageUrl);
-        System.out.println(imageUrl2);
-
-        String a = request.getParameter("goodsname");
-
         GoodsVo goods = new GoodsVo();
         Integer id = goodsService.queryMaxId() + 1;
         goods.setId(id);
         goods.setName(goodsname);
-        goods.setPrimary_pic_url(imageUrl.toString());
-        goods.setList_pic_url(imageUrl2.toString());
+        goods.setPrimary_pic_url(imageUrl);
+        goods.setList_pic_url(imageUrl2);
         goodsService.save(goods);
 
         return toResponsSuccess(goods);
@@ -933,14 +894,4 @@ public class ApiGoodsController extends ApiBaseAction {
         this.fileContentType = fileContentType;
     }
 
-
-    public static void main(String[] args) {
-        List<String> list1 = new ArrayList<>();
-        list1.add("1");
-        list1.add("3");
-        List<String> list2 = new ArrayList<>();
-        list2.add("3");
-        list2.add("1");
-        System.out.println(list1.containsAll(list2));
-    }
 }

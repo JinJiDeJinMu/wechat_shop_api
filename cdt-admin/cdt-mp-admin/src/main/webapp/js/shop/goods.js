@@ -43,6 +43,7 @@ var setting = {
 var vm = new Vue({
     el: '#rrapp',
     data: {
+        radioVal: 0,
         merchants: [],
         showList: true,
         title: null,
@@ -71,7 +72,8 @@ var vm = new Vue({
             merchantId: '',
             schoolName: '',
             mark: '',
-            deliveryPlace:''
+            deliveryPlace: '',
+            expressType: 0
         },
         ruleValidate: {
             goodsSn: [{
@@ -113,6 +115,7 @@ var vm = new Vue({
         attributeCategories: [], //属性类别
         categories: [],
         schools: [],
+        postageTemplate: [],
 
         editSkuInfo: {
             dialogVisible: false,
@@ -240,7 +243,6 @@ var vm = new Vue({
             // 拼接
             return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
         },
-
         getList: function () {
             this.listLoading = false;
             Ajax.request({
@@ -534,6 +536,9 @@ var vm = new Vue({
                     vm.goods.isSecKill = r.goods.isSecKill + "";
                     $('#goodsDesc').editable('setHTML', vm.goods.goodsDesc);
                     vm.getCategory();
+                    if(r.goods.expressType !=0){
+                        vm.radioVal = 1;
+                    }
                 }
             });
         },
@@ -572,7 +577,9 @@ var vm = new Vue({
                 purchaseType: 1,
                 extraPrice: 0,
                 schoolName: '',
-                mark:''
+                mark: '',
+                expressType: 0,
+                deliveryPlace: ''
             };
             $('#goodsDesc').editable('setHTML', '');
             vm.getCategory();
@@ -584,6 +591,7 @@ var vm = new Vue({
             vm.getMacro();
             vm.getAttributeCategories();
             vm.getCategories();
+            vm.getexpressType();
 
         },
         checkSelected: function () {
@@ -616,6 +624,7 @@ var vm = new Vue({
             vm.getMacro();
             vm.getschools();
             vm.getAttributeCategories();
+            vm.getexpressType();
             vm.getCategories();
             vm.getGoodsGallery(id);
         },
@@ -662,6 +671,15 @@ var vm = new Vue({
                 }
             });
         },
+        getexpressType: function () {
+            Ajax.request({
+                url: "../cdtPostageTemplate/queryAll",
+                async: true,
+                successCallback: function (r) {
+                    vm.postageTemplate = r.data;
+                }
+            });
+        },
         getschools: function () {
             console.log("getschools1");
             Ajax.request({
@@ -705,6 +723,7 @@ var vm = new Vue({
             var url = vm.goods.id == null ? "../goods/save" : "../goods/update";
             vm.goods.goodsDesc = $('#goodsDesc').editable('getHTML');
             vm.goods.goodsImgList = vm.uploadList;
+            console.log(JSON.stringify(vm.goods));
             Ajax.request({
                 type: "POST",
                 url: url,
@@ -827,4 +846,5 @@ var vm = new Vue({
     mounted() {
         this.uploadList = this.$refs.upload.fileList;
     }
+
 });

@@ -7,7 +7,6 @@ import com.chundengtai.base.dao.*;
 import com.chundengtai.base.entity.*;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +28,6 @@ public class ApiOrderService {
     @Autowired
     private ApiCartMapper apiCartMapper;
     @Autowired
-    private ApiCouponMapper apiCouponMapper;
-    @Autowired
     private ApiOrderMapper apiOrderMapper;
     @Autowired
     private ApiOrderGoodsMapper apiOrderGoodsMapper;
@@ -40,10 +37,6 @@ public class ApiOrderService {
     private ApiGoodsService goodsService;
     @Autowired
     UserRecordSer userRecordSer;
-    @Autowired
-    private ApiUserCouponService userCouponService;
-    @Autowired
-    private MlsUserSer mlsUserSer;
     @Autowired
     private ApiGoodsSpecificationService goodsSpecificationService;
     @Autowired
@@ -143,6 +136,7 @@ public class ApiOrderService {
                     goodsTotalPrice = goodsTotalPrice
                             .add(cartItem.getRetail_price().multiply(new BigDecimal(cartItem.getNumber())));
                     ProductVo productInfo = productService.queryObject(cartItem.getProduct_id());
+                    System.out.println("库存===="+productInfo);
                     //判断库存
                     if (null == productInfo || productInfo.getGoods_number() < cartItem.getNumber()) {
                         resultObj.put("errno", 500);
@@ -156,15 +150,15 @@ public class ApiOrderService {
                     // 运费统计
                     Integer goodId = cartItem.getGoods_id();
                     GoodsVo goods = goodsService.queryObject(goodId);
-                    if (goods.getExtra_price() != null) {
+                   /* if (goods.getExtra_price() != null) {
                         //todo:运费修复
                         //freightPrice = freightPrice
                         //        .add(goods.getExtra_price().multiply(new BigDecimal(cartItem.getNumber())));
 
                         freightPrice = freightPrice
                                 .add(goods.getExtra_price().multiply(new BigDecimal(1)));
-                    }
-                   // freightPrice = getPostageMoney(goodId,goodsVo.getNumber());
+                    }*/
+                    freightPrice = freightPrice.add(getPostageMoney(goodId,cartItem.getNumber()));
                     //计算反润金额(返利 + 返利比例 * 商品金额 * 商品数量)
                     brokerage_price = brokerage_price.add(new BigDecimal(goods.getBrokerage_percent())
                             .multiply(goods.getRetail_price()).multiply(new BigDecimal(cartItem.getNumber())));
@@ -255,7 +249,7 @@ public class ApiOrderService {
                     freightPrice = freightPrice
                             .add(goods.getExtra_price().multiply(new BigDecimal(1)));
                 }*/
-               freightPrice = getPostageMoney(goodId,goodsVo.getNumber());
+                freightPrice = getPostageMoney(goodId,goodsVo.getNumber());
                 //计算反润金额(返利 + 返利比例 * 商品金额 * 商品数量)
                 BigDecimal brokerage_price = goods.getRetail_price()
                         .multiply(new BigDecimal(goods.getBrokerage_percent() * goodsVo.getNumber())).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
@@ -294,9 +288,8 @@ public class ApiOrderService {
                 orderGoodsVo.setRetail_price(productInfo.getRetail_price());
                 orderGoodsVo.setNumber(goodsVo.getNumber());
                 orderGoodsVo.setCoupon_id(couponId);
-                //保存规格信息
                 //保存商品规格等信息
-                orderGoodsVo.setGoods_specifition_ids(productInfo.getGoods_specification_ids());//规格属性id集合
+                orderGoodsVo.setGoods_specifition_ids(productInfo.getGoods_specification_ids());
                 //添加规格名和值
                 String[] goodsSepcifitionValue = null;
                 if (null != productInfo.getGoods_specification_ids() && productInfo.getGoods_specification_ids().length() > 0) {
@@ -534,8 +527,8 @@ public class ApiOrderService {
     public BigDecimal getPostageMoney(Integer goodsId,Integer number){
 
         GoodsVo goodsVo = goodsService.queryObject(goodsId);
-        if(goodsVo == null){
-            return null;
+        if(goodsVo == null || GoodsTypeEnum.EXPRESS_GET.getCode().equals(goodsVo.getIs_secKill())){
+            return new BigDecimal(BigInteger.ZERO);
         }
         if(goodsVo.getExpressType() == 0){
             return goodsVo.getExtra_price();
@@ -544,7 +537,7 @@ public class ApiOrderService {
         //获取模板信息
         CdtPostageTemplate cdtPostageTemplate = cdtPostageTemplateService.getById(goodsVo.getExpressType());
         if(cdtPostageTemplate == null){
-            return null;
+            return goodsVo.getExtra_price().multiply(new BigDecimal(number));
         }
         BigDecimal money = cdtPostageTemplate.getMoney();
         Integer first = cdtPostageTemplate.getFirst();

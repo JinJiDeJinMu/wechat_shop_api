@@ -83,6 +83,13 @@ let vue = new Vue({
             } else {
                 return '未支付';
             }
+        },
+        getexpresstype(value) {
+            if(value == 0){
+                return '按件';
+            }else if(value ==1){
+                return '按重';
+            }
         }
     },
     methods: {

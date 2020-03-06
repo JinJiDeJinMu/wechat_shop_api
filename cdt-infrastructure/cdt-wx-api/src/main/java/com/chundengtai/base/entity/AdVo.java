@@ -31,6 +31,16 @@ public class AdVo implements Serializable {
     //状态
     private Integer enabled;
 
+    private String goodsId;
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
+
     public Integer getId() {
         return id;
     }
