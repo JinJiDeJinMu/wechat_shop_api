@@ -32,7 +32,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.DecimalMin;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
@@ -52,15 +51,6 @@ public class ApiPayController extends ApiBaseAction {
 
     @Autowired
     private ApiOrderGoodsService orderGoodsService;
-
-    @Autowired
-    private SysConfigService sysConfigService;
-
-    @Autowired
-    private UserRecordSer userRecordSer;
-
-    @Autowired
-    private MlsUserSer mlsUserSer;
 
     @Autowired
     private ApiGoodsService apiGoodsService;
@@ -84,7 +74,7 @@ public class ApiPayController extends ApiBaseAction {
     private IdistributionFacade distributionFacade;
 
     @Autowired
-    private UserScoreService userScoreService;
+    private SmsService smsService;
 
     @Autowired
     private CdtUserScoreService cdtUserScoreService;
@@ -608,6 +598,10 @@ public class ApiPayController extends ApiBaseAction {
                 // 更改订单状态
                 // 业务处理
                 orderStatusLogic(out_trade_no, wxPayOrderNotifyResult);
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("name","zhs");
+                hashMap.put("code",out_trade_no);
+
             } catch (Exception ex) {
                 log.error("=====weixin===notify===error", ex);
                 return WxPayNotifyResponse.fail("失败");
@@ -649,6 +643,11 @@ public class ApiPayController extends ApiBaseAction {
                 payrecord.setPayState(PayTypeEnum.PAYED.getCode());
                 payrecord.setResText(result.getXmlString());
                 paytransRecordService.save(payrecord);
+                //支付成功，发送短信通知
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("name","为民严选");
+                hashMap.put("code",out_trade_no);
+                smsService.sendSms(orderItem.getMobile(),hashMap);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

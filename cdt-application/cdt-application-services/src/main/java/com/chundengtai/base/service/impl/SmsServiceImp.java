@@ -7,11 +7,15 @@ import com.chundengtai.base.bean.CdtSmsLog;
 import com.chundengtai.base.service.CdtSmsLogService;
 import com.chundengtai.base.service.SmsService;
 import com.chundengtai.base.utils.AliYunSmsUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
 
+@Service
+@Slf4j
 public class SmsServiceImp implements SmsService {
 
     @Autowired
@@ -20,6 +24,7 @@ public class SmsServiceImp implements SmsService {
     @Override
     public void sendSms(String PhoneNumbers, HashMap<String, Object> hashMap) {
         CommonResponse commonResponse = AliYunSmsUtils.send(PhoneNumbers, JSON.toJSONString(hashMap));
+        log.info("smsService respose:"+commonResponse);
         if(commonResponse != null){
             JSONObject result = JSONObject.parseObject(commonResponse.getData());
             String[] phones = PhoneNumbers.split(",");

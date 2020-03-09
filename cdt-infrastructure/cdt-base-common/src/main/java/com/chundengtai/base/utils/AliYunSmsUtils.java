@@ -67,8 +67,8 @@ public class AliYunSmsUtils {
 
     public static void main(String[] args) throws UnsupportedEncodingException {
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("name","zhs");
-        hashMap.put("code","123456");
+        hashMap.put("name","燕缘商城");
+        hashMap.put("code","1234567");
         String js = JSON.toJSONString(hashMap);
         CommonResponse response = AliYunSmsUtils.send("15669959631",js);
         JSONObject jsonObject = JSONObject.parseObject(response.getData());

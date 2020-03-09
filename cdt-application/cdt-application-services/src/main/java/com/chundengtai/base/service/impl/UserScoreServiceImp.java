@@ -80,29 +80,28 @@ public class UserScoreServiceImp implements UserScoreService {
 
     }
     /**
-     * 判断等级
+     * 判断会员等级
      *
      * @param totalScore
      */
     public Integer changeUserLevel(BigDecimal totalScore) {
         Integer score = totalScore.intValue();
-
-        if (score > 0 && score <= 10000) {
-            return 1;
-        } else if (score > 10000 && score <= 200000) {
+        if (score > 1000 && score <= 5000) {
             return 2;
-        } else if (score > 200000 && score <= 500000) {
+        } else if (score > 5000 && score <= 10000) {
             return 3;
-        } else if (score > 500000 && score <= 1000000) {
+        } else if (score > 10000 && score <= 50000) {
             return 4;
-        } else if (score > 1000000 && score <= 2000000) {
+        } else if (score > 50000 && score <= 100000) {
             return 5;
-        } else if (score > 2000000 && score <= 5000000) {
+        } else if (score > 100000 && score <= 500000) {
             return 6;
-        } else if (score > 5000000 && score < 10000000) {
+        } else if (score > 500000 && score < 1000000) {
             return 7;
-        } else {
+        } else if(score > 1000000) {
             return 8;
+        }else {
+            return 1;
         }
     }
 
