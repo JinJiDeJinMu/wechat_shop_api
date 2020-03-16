@@ -8,9 +8,11 @@ $(function () {
         spellcheck: false,
         plainPaste: true,
         enableScript: false,
+        toolbarButtons:['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
         imageButtons: ["floatImageLeft", "floatImageNone", "floatImageRight", "linkImage", "replaceImage", "removeImage"],
         allowedImageTypes: ["jpeg", "jpg", "png", "gif"],
         imageUploadURL: '../sys/oss/upload',
+        videoUploadURL:'../sys/oss/upload',
         imageUploadParams: {
             id: "edit"
         },
@@ -94,13 +96,6 @@ var vm = new Vue({
                     trigger: 'blur'
                 }
             ],
-
-            /*listPicUrl: [{
-                required: true,
-                message: '首页列表页图片不能为空',
-                trigger: 'blur'
-            }],
-            */
             primaryPicUrl: [{
                 required: true,
                 message: '产品主图不能为空',

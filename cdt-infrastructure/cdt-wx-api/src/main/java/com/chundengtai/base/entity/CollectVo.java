@@ -1,6 +1,7 @@
 package com.chundengtai.base.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -14,9 +15,9 @@ public class CollectVo implements Serializable {
     //用户Id
     private Long user_id;
     //产品Id
-    private Integer value_id;
+    private Integer good_id;
     //添加时间
-    private Long add_time;
+    private Date add_time;
     //是否是关注
     private Integer is_attention;
     //
@@ -43,20 +44,20 @@ public class CollectVo implements Serializable {
         this.user_id = user_id;
     }
 
-    public Integer getValue_id() {
-        return value_id;
+    public void setGood_id(Integer good_id) {
+        this.good_id = good_id;
     }
 
-    public void setValue_id(Integer value_id) {
-        this.value_id = value_id;
+    public Integer getGood_id() {
+        return good_id;
     }
 
-    public Long getAdd_time() {
-        return add_time;
-    }
-
-    public void setAdd_time(Long add_time) {
+    public void setAdd_time(Date add_time) {
         this.add_time = add_time;
+    }
+
+    public Date getAdd_time() {
+        return add_time;
     }
 
     public Integer getIs_attention() {

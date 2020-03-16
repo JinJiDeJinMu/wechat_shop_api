@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chundengtai.base.dao.CdtUserCouponMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.chundengtai.base.bean.CdtUserCoupon">
+        <id column="coupon_id" property="couponId" />
+        <result column="user_id" property="userId" />
+        <result column="user_time" property="userTime" />
+        <result column="number" property="number" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        coupon_id, user_id, user_time, number, status
+    </sql>
+
+    <select id="getUserCounponList" resultType="com.chundengtai.base.bean.dto.CdtUserCouponDao">
+        select
+    u.*,c.name couponName,c.type couponType,n.nickname nickName
+    from cdt_user_coupon u ,cdt_coupon c ,nideshop_user n
+    where u.user_id = n.id and u.coupon_id = c.id
+    </select>
+</mapper>

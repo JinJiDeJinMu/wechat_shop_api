@@ -1,8 +1,10 @@
 package com.chundengtai.base.controller;
 
+import com.chundengtai.base.bean.dto.CdtUserCouponDao;
 import com.chundengtai.base.constance.ShopShow;
 import com.chundengtai.base.entity.SysUserEntity;
 import com.chundengtai.base.entity.UserCouponEntity;
+import com.chundengtai.base.service.CdtUserCouponService;
 import com.chundengtai.base.service.admin.UserCouponService;
 import com.chundengtai.base.utils.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -15,8 +17,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("usercoupon")
 public class UserCouponController {
+
     @Autowired
-    private UserCouponService userCouponService;
+    private CdtUserCouponService cdtUserCouponService;
 
     /**
      * 查看列表
@@ -30,30 +33,31 @@ public class UserCouponController {
         if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
             query.put("merchantId", sysUserEntity.getMerchantId());
         }
-        List<UserCouponEntity> userCouponList = userCouponService.queryList(query);
-        int total = userCouponService.queryTotal(query);
-        for (UserCouponEntity user : userCouponList) {
-            user.setUserName(Base64.decode(user.getUserName()));
-        }
+        List<CdtUserCouponDao> userCouponList = cdtUserCouponService.getUserCounponList();
+        int total = (int)userCouponList.stream().count();
+
+        userCouponList.stream().forEach(e ->{
+            e.setNickName(Base64.decode(e.getNickName()));
+        });
         PageUtils pageUtil = new PageUtils(userCouponList, total, query.getLimit(), query.getPage());
 
         return R.ok().put("page", pageUtil);
     }
 
-    /**
+   /* *//**
      * 查看信息
-     */
+     *//*
     @RequestMapping("/info/{id}")
     @RequiresPermissions("usercoupon:info")
     public R info(@PathVariable("id") Integer id) {
-        UserCouponEntity userCoupon = userCouponService.queryObject(id);
+        CdtUserCouponDao userCoupon = cdtUserCouponService.getById(id);
 
         return R.ok().put("userCoupon", userCoupon);
     }
 
-    /**
+    *//**
      * 保存
-     */
+     *//*
     @RequestMapping("/save")
     @RequiresPermissions("usercoupon:save")
     public R save(@RequestBody UserCouponEntity userCoupon) {
@@ -64,9 +68,9 @@ public class UserCouponController {
         return R.ok();
     }
 
-    /**
+    *//**
      * 修改
-     */
+     *//*
     @RequestMapping("/update")
     @RequiresPermissions("usercoupon:update")
     public R update(@RequestBody UserCouponEntity userCoupon) {
@@ -75,9 +79,9 @@ public class UserCouponController {
         return R.ok();
     }
 
-    /**
+    *//**
      * 删除
-     */
+     *//*
     @RequestMapping("/delete")
     @RequiresPermissions("usercoupon:delete")
     public R delete(@RequestBody Integer[] ids) {
@@ -86,14 +90,14 @@ public class UserCouponController {
         return R.ok();
     }
 
-    /**
+    *//**
      * 查看所有列表
-     */
+     *//*
     @RequestMapping("/queryAll")
     public R queryAll(@RequestParam Map<String, Object> params) {
 
-        List<UserCouponEntity> list = userCouponService.queryList(params);
+        List<CdtUserCouponDao> list = cdtUserCouponService.list();
 
         return R.ok().put("list", list);
-    }
+    }*/
 }

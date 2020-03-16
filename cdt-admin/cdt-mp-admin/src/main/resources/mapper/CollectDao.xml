@@ -8,7 +8,7 @@
         <result property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="userName" column="user_name"/>
-        <result property="valueId" column="value_id"/>
+        <result property="goodId" column="good_Id"/>
         <result property="valueName" column="value_name"/>
         <result property="addTime" column="add_time"/>
         <result property="isAttention" column="is_attention"/>
@@ -23,7 +23,7 @@
         select a.* , b.username as user_name,c.name as value_name
         from nideshop_collect a
         left join nideshop_user b on a.user_id = b.id
-        left join nideshop_goods c on a.value_id = c.id
+        left join nideshop_goods c on a.good_id = c.id
         <if test="name != null and name != ''">
             WHERE (b.username LIKE concat('%',#{name},'%') OR c.name LIKE concat('%',#{name},'%'))
         </if>
@@ -49,7 +49,7 @@
 		insert into nideshop_collect
 		(
 			`user_id`, 
-			`value_id`, 
+			`good_id`,
 			`add_time`, 
 			`is_attention`, 
 			`type_id`
@@ -57,7 +57,7 @@
 		values
 		(
 			#{userId}, 
-			#{valueId}, 
+			#{goodId},
 			#{addTime}, 
 			#{isAttention}, 
 			#{typeId}
@@ -68,7 +68,7 @@
         update nideshop_collect
         <set>
             <if test="userId != null">`user_id` = #{userId},</if>
-            <if test="valueId != null">`value_id` = #{valueId},</if>
+            <if test="goodId != null">`value_id` = #{goodId},</if>
             <if test="addTime != null">`add_time` = #{addTime},</if>
             <if test="isAttention != null">`is_attention` = #{isAttention},</if>
             <if test="typeId != null">`type_id` = #{typeId}</if>

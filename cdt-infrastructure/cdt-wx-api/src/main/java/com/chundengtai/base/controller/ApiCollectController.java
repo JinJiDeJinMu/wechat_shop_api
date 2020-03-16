@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,16 +57,16 @@ public class ApiCollectController extends ApiBaseAction {
         Map param = new HashMap();
         param.put("user_id", loginUser.getUserId());
         param.put("type_id", typeId);
-        param.put("value_id", valueId);
+        param.put("good_id", valueId);
         List<CollectVo> collectEntities = collectService.queryList(param);
         //
         Integer collectRes = null;
         String handleType = "add";
         if (null == collectEntities || collectEntities.size() < 1) {
             CollectVo collectEntity = new CollectVo();
-            collectEntity.setAdd_time(System.currentTimeMillis() / 1000);
+            collectEntity.setAdd_time(new Date());
             collectEntity.setType_id(typeId);
-            collectEntity.setValue_id(valueId);
+            collectEntity.setGood_id(valueId);
             collectEntity.setIs_attention(0);
             collectEntity.setUser_id(loginUser.getUserId());
             //添加收藏

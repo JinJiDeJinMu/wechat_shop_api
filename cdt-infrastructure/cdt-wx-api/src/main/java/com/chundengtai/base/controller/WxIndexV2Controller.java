@@ -98,7 +98,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
                 param.put("attribute_category", categoryItem.getId());
                 param.put("sidx", "sort_order");
                 param.put("order", "desc");
-                param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse");
+                param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
                 PageHelper.startPage(0, 6, false);
                 List<GoodsVo> categoryGoods = goodsService.queryList(param);
                 List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(categoryGoods, GoodsDTO.class);
@@ -132,7 +132,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("is_on_sale", 1);
             param.put("sidx", "add_time");
             param.put("order", "desc");
-            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse");
+            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
             PageHelper.startPage(0, 40, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
             goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
@@ -154,14 +154,9 @@ public class WxIndexV2Controller extends ApiBaseAction {
         if (adVo.getType() == 1) {
             String goodsId = adVo.getGoodsId();
             List<GoodsVo> goodsVos = new ArrayList<>();
-            if (goodsId.contains(",")) {
-                String[] str = goodsId.split(",");
-                for (String goodId : str) {
-                    GoodsVo goodsVo = goodsService.queryObject(Integer.parseInt(goodId));
-                    goodsVos.add(goodsVo);
-                }
-            } else {
-                GoodsVo goodsVo = goodsService.queryObject(Integer.parseInt(goodsId));
+            String[] good = goodsId.split(",");
+            for (int i = 0; i < good.length; i++) {
+                GoodsVo goodsVo = goodsService.queryObject(Integer.parseInt(good[i]));
                 goodsVos.add(goodsVo);
             }
             hashMap.put("goods_show", goodsVos);
@@ -176,4 +171,11 @@ public class WxIndexV2Controller extends ApiBaseAction {
         ).collect(Collectors.toList());
     }
 
+    public static void main(String[] args) {
+        String ss ="zhs";
+        String[] a = ss.split(",");
+        for (int i = 0; i < a.length; i++) {
+            System.out.println(a[i]);
+        }
+    }
 }

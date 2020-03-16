@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chundengtai.base.dao.CdtCouponMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.chundengtai.base.bean.CdtCoupon">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="type" property="type" />
+        <result column="use_type" property="useType" />
+        <result column="per_limit" property="perLimit" />
+        <result column="time_type" property="timeType" />
+        <result column="start_date" property="startDate" />
+        <result column="end_date" property="endDate" />
+        <result column="days" property="days" />
+        <result column="total_count" property="totalCount" />
+        <result column="use_count" property="useCount" />
+        <result column="receive_count" property="receiveCount" />
+        <result column="member_level" property="memberLevel" />
+        <result column="full_money" property="fullMoney" />
+        <result column="reduce_money" property="reduceMoney" />
+        <result column="discount" property="discount" />
+        <result column="offset_money" property="offsetMoney" />
+        <result column="merchant_id" property="merchantId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, type, use_type, per_limit, time_type, start_date, end_date, days, total_count, use_count, receive_count, member_level, full_money, reduce_money, discount, offset_money, merchant_id
+    </sql>
+
+</mapper>

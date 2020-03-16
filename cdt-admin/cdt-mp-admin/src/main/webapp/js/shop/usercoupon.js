@@ -1,27 +1,42 @@
 $(function () {
-    let userId = getQueryString("userId");
     let url = '../usercoupon/list';
-    if (userId) {
-        url += '?userId=' + userId;
-    }
     $("#jqGrid").Grid({
         url: url,
         colModel: [
-            {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
-            {label: '会员', name: 'userName', index: 'user_id', width: 80},
-            {label: '优惠券', name: 'couponName', index: 'coupon_id', width: 80},
-            {label: '优惠券序号', name: 'couponNumber', index: 'coupon_number', width: 80},
+            {label: '优惠券id', name: 'couponId', index: 'coupon_id',width:80},
+            {label: '会员', name: 'nickName', index: 'nickname', width: 80},
+            {label: '优惠券', name: 'couponName', index: 'coupon_name', width: 80},
+            {label: '数量', name: 'number', index: 'number', width: 80},
             {
-                label: '下发时间', name: 'addTime', index: 'add_time', width: 80, formatter: function (value) {
+                label: '类型', name: 'couponType', index: 'coupon_type', width: 40, formatter: function (value) {
+                    if (value == 0) {
+                        return '满减卷';
+                    } else if (value == 1) {
+                        return '折扣卷';
+                    } else if (value == 2) {
+                        return '现金抵用卷';
+                    }
+                    return '';
+                }
+            },
+            {
+                label: '领取时间', name: 'userTime', index: 'userTime', width: 80, formatter: function (value) {
                     return transDate(value);
                 }
             },
             {
-                label: '使用时间', name: 'usedTime', index: 'used_time', width: 80, formatter: function (value) {
-                    return transDate(value);
+                label: '状态', name: 'status', index: 'status', width: 40, formatter: function (value) {
+                    if (value == 0) {
+                        return '正常';
+                    } else if (value == 1) {
+                        return '已用';
+                    } else if (value == 3) {
+                        return '过期';
+                    }
+                    return '';
                 }
-            },
-            {label: '订单Id', name: 'orderId', index: 'order_id', width: 80}]
+            }
+           ]
     });
 });
 

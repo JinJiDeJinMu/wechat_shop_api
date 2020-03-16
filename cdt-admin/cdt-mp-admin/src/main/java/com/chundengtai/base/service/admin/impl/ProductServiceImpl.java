@@ -88,7 +88,8 @@ public class ProductServiceImpl implements ProductService {
                 String goodsSpecificationId[] = goodsSpecificationIdArr[0].split(",");
                 for (int i = 0; i < goodsSpecificationId.length; i++) {
                     String string = goodsSpecificationId[i];
-                    product.setGoodsSpecificationIds(string);
+                    String regEx="[\n`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。， 、？]";
+                    product.setGoodsSpecificationIds(string.replaceAll(regEx,""));
                     ProductEntity entity = new ProductEntity();
                     BeanUtils.copyProperties(product, entity);
                     result += productDao.save(entity);
@@ -96,6 +97,7 @@ public class ProductServiceImpl implements ProductService {
             }
 
         } else {
+            System.out.println("规格没有，");
             if (product.getGoodsSpecificationIds().equals("_")) {
                 product.setGoodsSpecificationIds("");
             }
@@ -149,5 +151,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public int deleteBatch(Integer[] ids) {
         return productDao.deleteBatch(ids);
+    }
+
+    public static void main(String[] args) {
+        String regEx="[\n`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。， 、？]";
+
+        String str = "[123]";
+        System.out.println(str.replaceAll(regEx,""));
     }
 }

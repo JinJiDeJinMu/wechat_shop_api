@@ -3,85 +3,73 @@ $(function () {
         url: '../coupon/list',
         colModel: [
             {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
-            {label: '优惠券名称', name: 'name', index: 'name', width: 60},
+            {label: '优惠券名称', name: 'name', index: 'name', width: 120},
+            {label: '金额', name: 'typeMoney', index: 'type_money', width: 80},
             {
-                label: '类型', name: 'type', index: 'type', width: 40, formatter: function (value) {
+                label: '发放方式', name: 'sendType', index: 'send_type', width: 80, formatter: function (value) {
                     if (value == 0) {
-                        return '满减卷';
+                        return '按订单发放';
                     } else if (value == 1) {
-                        return '折扣卷';
+                        return '按用户发放';
                     } else if (value == 2) {
-                        return '现金抵用卷';
+                        return '商品转发送券';
+                    } else if (value == 3) {
+                        return '按商品发放';
+                    } else if (value == 4) {
+                        return '新用户注册';
+                    } else if (value == 5) {
+                        return '线下发放';
+                    } else if (value == 7) {
+                        return '包邮优惠';
+                    } else if (value == 8) {
+                        return '店铺满减';
                     }
-                    return '';
+                    return '-';
                 }
             },
+            {label: '最小金额', name: 'minAmount', index: 'min_amount', width: 80},
+            {label: '最大金额', name: 'maxAmount', index: 'max_amount', width: 80},
             {
-                label: '适用范围', name: 'useType', index: 'use_type', width: 40, formatter: function (value) {
-                    if (value == 0) {
-                        return '全场通用';
-                    } else if (value == 1) {
-                        return '指定分类';
-                    } else if (value == 2) {
-                        return '指定商品';
-                    }
-                    return '';
-                }
-            },
-            {label: '限领个数', name: 'perLimit', index: 'per_limit', width: 40},
-            {label: '领取类型', name: 'memberLevel', index: 'member_level', width: 40,
+                label: '发放开始时间',
+                name: 'sendStartDate',
+                index: 'send_start_date',
+                width: 120,
                 formatter: function (value) {
-                    if (value == 0) {
-                        return '无限制';
-                    } else if (value == 1) {
-                        return '会员';
-                    } else{
-                        return '其他';
-                    }
-                    return '';
+                    return transDate(value);
                 }
             },
-            {label: '满多少', name: 'fullMoney', index: 'full_money', width: 40},
-            {label: '减多少', name: 'reduceMoney', index: 'reduce_money', width: 40},
-            {label: '折扣', name: 'discount', index: 'discount', width: 40},
-            {label: '抵现金', name: 'offsetMoney', index: 'offset_money', width: 40},
-            {label: '时间类型', name: 'timeType', index: 'time_type', width: 40,
+            {
+                label: '发放结束时间', name: 'sendEndDate', index: 'send_end_date', width: 120, formatter: function (value) {
+                    return transDate(value);
+                }
+            },
+            {
+                label: '使用开始时间',
+                name: 'useStartDate',
+                index: 'use_start_date',
+                width: 120,
                 formatter: function (value) {
-                    if (value == 0) {
-                        return '起始时间';
-                    } else if (value == 1) {
-                        return '天数';
+                    return transDate(value);
+                }
+            },
+            {
+                label: '使用结束时间', name: 'useEndDate', index: 'use_end_date', width: 120, formatter: function (value) {
+                    return transDate(value);
+                }
+            },
+            {label: '最小商品金额', name: 'minGoodsAmount', index: 'min_goods_amount', width: 80},
+            {label: '发放数量', name: 'totalCount', index: 'totalCount', width: 80},
+            {
+                label: '操作', width: 70, sortable: false, formatter: function (value, col, row) {
+                    if (row.sendType == 1 || row.sendType == 3) {
+                        return '<button class="ivu-btn ivu-btn-primary ivu-btn-circle ivu-btn-small" onclick="vm.publish(' + row.id + ',' + row.sendType + ')"><i class="ivu-icon ivu-icon-android-send"></i>发放</button>';
                     }
                     return '';
                 }
-            },
-            {
-                label: '开始时间', name: 'startDate', index: 'start_date', width: 70, formatter: function (value) {return transDate(value);}
-            },
-            {
-                label: '结束时间', name: 'endDate', index: 'end_date', width: 70, formatter: function (value) {return transDate(value);
-                }
-            },
-            {label: '几天有效', name: 'days', index: 'days', width: 40},
-            {label: '发放数量', name: 'totalCount', index: 'total_count', width: 40}
-
-          ]
+            }]
     });
 });
-var ztree;
-var setting = {
-    data: {
-        simpleData: {
-            enable: true,
-            idKey: "id",
-            pIdKey: "parentId",
-            rootPId: -1
-        },
-        key: {
-            url: "nourl"
-        }
-    }
-};
+
 var vm = new Vue({
     el: '#rrapp',
     data: {
@@ -98,13 +86,12 @@ var vm = new Vue({
         q: {
             name: ''
         },
-        goods: '',
+        goods: [],
+        goodss: [],
         user: [],
         users: [],
         selectData: {},
-        sendSms: '',//是否发送短信
-        goodcaes:[],
-        categoryId:''
+        sendSms: ''//是否发送短信
     },
     methods: {
         query: function () {
@@ -115,8 +102,7 @@ var vm = new Vue({
             vm.showCard = true;
             vm.showGoods = false;
             vm.title = "新增";
-            vm.getCategory();
-
+            vm.coupon = {sendType: 0};
         },
         update: function (event) {
             var id = getSelectedRow("#jqGrid");
@@ -129,23 +115,17 @@ var vm = new Vue({
             vm.title = "修改";
 
             vm.getInfo(id)
-            vm.getCategory();
         },
         saveOrUpdate: function (event) {
             var url = vm.coupon.id == null ? "../coupon/save" : "../coupon/update";
-            if(vm.coupon.timeType == 0){
-                if (vm.coupon.startDate >= vm.coupon.endDate) {
-                    alert("发放开始时间不能大于等于发放结束时间")
-                    return false;
-                }
-                if (vm.coupon.startDate >= vm.coupon.endDate) {
-                    alert("使用开始时间不能大于等于使用结束时间")
-                    return false;
-                }
+            if (vm.coupon.sendStartDate >= vm.coupon.sendEndDate) {
+                alert("发放开始时间不能大于等于发放结束时间")
+                return false;
             }
-            vm.coupon.goods=vm.goods;
-            vm.coupon.categoryId = vm.categoryId;
-            console.log(vm.coupon);
+            if (vm.coupon.useStartDate >= vm.coupon.useEndDate) {
+                alert("使用开始时间不能大于等于使用结束时间")
+                return false;
+            }
             Ajax.request({
                 type: "POST",
                 url: url,
@@ -197,32 +177,6 @@ var vm = new Vue({
                 page: page
             }).trigger("reloadGrid");
             vm.handleReset('formValidate');
-        },
-        getCategory: function () {
-            //加载分类树
-            Ajax.request({
-                url: "../category/getCategorySelect",
-                async: true,
-                successCallback: function (r) {
-                    vm.goodcaes = r.list;
-                }
-            });
-        },
-        categoryTree: function () {
-            openWindow({
-                title: "选择类型",
-                area: ['300px', '450px'],
-                content: jQuery("#categoryLayer"),
-                btn: ['确定', '取消'],
-                btn1: function (index) {
-                    var node = ztree.getSelectedNodes();
-                    //选择上级菜单
-                    vm.goodcaes.categoryId = node[0].id;
-                    vm.goodcaes.categoryName = node[0].name;
-
-                    layer.close(index);
-                }
-            });
         },
         handleSubmit: function (name) {
             handleSubmitValidate(this, name, function () {

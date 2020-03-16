@@ -12,6 +12,8 @@ public class CouponGoodsEntity implements Serializable {
     //商品id
     private Integer goodsId;
 
+    private Integer categoryId;
+
     /**
      * 设置：主键
      */
@@ -52,5 +54,13 @@ public class CouponGoodsEntity implements Serializable {
      */
     public Integer getGoodsId() {
         return goodsId;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 }

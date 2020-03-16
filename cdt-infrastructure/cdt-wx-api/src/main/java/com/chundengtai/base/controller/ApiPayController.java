@@ -645,7 +645,7 @@ public class ApiPayController extends ApiBaseAction {
                 paytransRecordService.save(payrecord);
                 //支付成功，发送短信通知
                 HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("name","为民严选");
+                hashMap.put("name","未名严选");
                 hashMap.put("code",out_trade_no);
                 smsService.sendSms(orderItem.getMobile(),hashMap);
             }

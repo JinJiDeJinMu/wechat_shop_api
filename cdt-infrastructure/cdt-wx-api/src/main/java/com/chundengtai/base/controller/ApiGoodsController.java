@@ -171,10 +171,8 @@ public class ApiGoodsController extends ApiBaseAction {
         GoodsVo info = goodsService.queryObject(id);
         if (info == null) return Result.failure("数据不存在!");
         goodsService.updateBrowse(info);
-        Long mid = info.getMerchantId();
-
-        resultObj.put("info", info);
-       /* //添加商家信息
+        /*Long mid = info.getMerchantId();
+        //添加商家信息
         CdtMerchantEntity cdtMerchant = cdtMerchantService.queryObject(info.getMerchantId());
         resultObj.put("merchantInfo", cdtMerchant);*/
 
@@ -228,6 +226,10 @@ public class ApiGoodsController extends ApiBaseAction {
             List<ProductVo> collect = productEntityList.stream().filter(e -> e.getRetail_price().compareTo(result.get()) == 0).collect(Collectors.toList());
             info.setRetail_price(collect.get(0).getRetail_price());
         }
+        Integer number = productEntityList.stream().mapToInt(ProductVo::getGoods_number).sum();
+        info.setGoods_number(number);
+        resultObj.put("info", info);
+
         List<GoodsGalleryVo> gallery = goodsGalleryService.queryList(param);
         Map ngaParam = new HashMap();
         ngaParam.put("fields", "nga.value, na.name");

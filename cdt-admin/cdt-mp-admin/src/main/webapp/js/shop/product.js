@@ -132,12 +132,11 @@ let vm = new Vue({
                 return false;
             }*/
             let url = vm.product.id == null ? "../product/save" : "../product/update";
-            console.log(url);
             if (vm.attribute.length <= 1) {
-                vm.product.goodsSpecificationIds = vm.params[0].param + '_';
-            } else if (vm.attribute.length <= 2) {
+                vm.product.goodsSpecificationIds = vm.params[0].param;
+            } else if (vm.attribute.length = 2) {
                 vm.product.goodsSpecificationIds = vm.params[0].param + '_' + vm.params[1].param;
-            } else if (vm.attribute.length <= 3) {
+            } else if (vm.attribute.length = 3) {
                 vm.product.goodsSpecificationIds = vm.params[0].param + '_' + vm.params[1].param + '_' + vm.params[2].param;
             }/*else if (vm.attribute.length <= 4) {
                 vm.product.goodsSpecificationIds = vm.params[0].param + '_' + vm.params[1].param + '_' + vm.params[2].param+ '_' + vm.params[3].param;
@@ -147,10 +146,13 @@ let vm = new Vue({
             else {
                 vm.product.goodsSpecificationIds = '';
             }
-            if(vm.product.goodsSpecificationIds != '' || vm.product.goodsSpecificationIds !=null){
-                var array = vm.product.goodsSpecificationIds.split("_");
-                var result = array.sort(function(a, b){return a - b});
-                vm.product.goodsSpecificationIds =  result.join("_")
+            console.log('++++'+vm.product.goodsSpecificationIds);
+            if(vm.attribute.length >= 2){
+                if(vm.product.goodsSpecificationIds != '' || vm.product.goodsSpecificationIds !=null){
+                    var array = vm.product.goodsSpecificationIds.split("_");
+                    var result = array.sort(function(a, b){return a - b});
+                    vm.product.goodsSpecificationIds =  result.join("_")
+                }
             }
             vm.product.goodsId = vm.goodsId;
             Ajax.request({

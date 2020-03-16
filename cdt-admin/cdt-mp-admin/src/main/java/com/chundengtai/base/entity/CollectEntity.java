@@ -4,6 +4,7 @@ import com.chundengtai.base.utils.JsonTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class CollectEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -14,10 +15,10 @@ public class CollectEntity implements Serializable {
     private Long userId;
     private String userName;
     //产品Id
-    private Integer valueId;
+    private Integer goodId;
     private String valueName;
     //添加时间
-    private Long addTime;
+    private Date addTime;
     //是否提醒
     private Integer isAttention;
     //
@@ -51,33 +52,20 @@ public class CollectEntity implements Serializable {
         return userId;
     }
 
-    /**
-     * 设置：产品Id
-     */
-    public void setValueId(Integer valueId) {
-        this.valueId = valueId;
+    public Integer getGoodId() {
+        return goodId;
     }
 
-    /**
-     * 获取：产品Id
-     */
-    public Integer getValueId() {
-        return valueId;
+    public void setGoodId(Integer goodId) {
+        this.goodId = goodId;
     }
 
-    /**
-     * 设置：添加时间
-     */
-    public void setAddTime(Long addTime) {
-        this.addTime = addTime;
-    }
-
-    /**
-     * 获取：添加时间
-     */
-    @JsonSerialize(using = JsonTimeSerializer.class)
-    public Long getAddTime() {
+    public Date getAddTime() {
         return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
     }
 
     /**
