@@ -1,5 +1,7 @@
 package com.chundengtai.base.entity;
 
+import com.chundengtai.base.bean.dto.GoodsDto;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -46,6 +48,16 @@ public class CategoryVo implements Serializable {
     private Boolean checked;
 
     private List<CategoryVo> subCategoryList;
+
+    private List<GoodsDto> goodsDtoList;
+
+    public List<GoodsDto> getGoodsDtoList() {
+        return goodsDtoList;
+    }
+
+    public void setGoodsDtoList(List<GoodsDto> goodsDtoList) {
+        this.goodsDtoList = goodsDtoList;
+    }
 
     public Integer getShowPosition() {
         return showPosition;

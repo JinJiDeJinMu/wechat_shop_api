@@ -45,7 +45,6 @@ public class WxIndexV2Controller extends ApiBaseAction {
     @Autowired
     private ApiGoodsService goodsService;
 
-
     @Autowired
     private ApiAttributeCategoryMapper attributeCategoryMapper;
 
@@ -110,8 +109,8 @@ public class WxIndexV2Controller extends ApiBaseAction {
                 newCategoryList.add(newCategory);
             }
             resultObj.put("productList", newCategoryList);
-            log.info("首页数据查询完成");
-            redisTemplate.opsForValue().set("indexV2", resultObj, 10, TimeUnit.MINUTES);
+            log.info("首页数据查询完成,indexV2="+resultObj);
+            redisTemplate.opsForValue().set("indexV2", resultObj, 5, TimeUnit.MINUTES);
         }
         return Result.success(resultObj);
     }

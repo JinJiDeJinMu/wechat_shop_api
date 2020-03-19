@@ -5,10 +5,10 @@ $(function () {
         colModel: [
             {label: '优惠券id', name: 'couponId', index: 'coupon_id',width:80},
             {label: '会员', name: 'nickName', index: 'nickname', width: 80},
-            {label: '优惠券', name: 'couponName', index: 'coupon_name', width: 80},
+            {label: '优惠券', name: 'name', index: 'name', width: 80},
             {label: '数量', name: 'number', index: 'number', width: 80},
             {
-                label: '类型', name: 'couponType', index: 'coupon_type', width: 40, formatter: function (value) {
+                label: '类型', name: 'type', index: 'type', width: 40, formatter: function (value) {
                     if (value == 0) {
                         return '满减卷';
                     } else if (value == 1) {
@@ -30,7 +30,7 @@ $(function () {
                         return '正常';
                     } else if (value == 1) {
                         return '已用';
-                    } else if (value == 3) {
+                    } else if (value == 2) {
                         return '过期';
                     }
                     return '';

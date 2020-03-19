@@ -71,8 +71,6 @@ public class ApiSearchController extends ApiBaseAction {
         param.put("fields", "distinct keyword");
         param.put("page", 1);
         param.put("limit", 10);
-//        param.put("sidx", "id");
-//        param.put("order", "asc");
         List<SearchHistoryVo> historyVoList = searchHistoryService.queryList(param);
         String[] historyKeywordList = new String[historyVoList.size()];
         if (null != historyVoList) {
@@ -120,12 +118,10 @@ public class ApiSearchController extends ApiBaseAction {
      */
     @ApiOperation(value = "搜索商品")
     @ApiImplicitParams({@ApiImplicitParam(name = "keyword", value = "关键字", paramType = "path", required = true)})
-    @IgnoreAuth
     @GetMapping("search")
-    public Result<Object> search(@LoginUser UserVo loginUser, @RequestParam("keyword") String keyword,
+    public Result<Object> search(@RequestParam("keyword") String keyword,
                                  @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
                                  @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize) {
-        System.out.println("1111111");
         if(keyword == null || "".equals(keyword)){
             return Result.success(null);
         }

@@ -16,10 +16,20 @@
         coupon_id, user_id, user_time, number, status
     </sql>
 
-    <select id="getUserCounponList" resultType="com.chundengtai.base.bean.dto.CdtUserCouponDao">
+    <select id="getUserCounponList" resultType="com.chundengtai.base.bean.dto.CdtUserCouponDao" parameterType="map">
         select
-    u.*,c.name couponName,c.type couponType,n.nickname nickName
+    u.*,c.*,n.nickname nickName
     from cdt_user_coupon u ,cdt_coupon c ,nideshop_user n
     where u.user_id = n.id and u.coupon_id = c.id
+        <if test="userId != null and userId != ''">
+            and u.user_id=#{userId}
+        </if>
+        <if test="merchantId != null and merchantId != ''">
+            and c.merchant_id=#{merchantId}
+        </if>
     </select>
+    
+    <update id="updateStatus" parameterType="com.chundengtai.base.bean.CdtUserCoupon">
+        update cdt_user_coupon set status = #{status} where user_id = #{userId} and coupon_id = #{couponId}
+    </update>
 </mapper>

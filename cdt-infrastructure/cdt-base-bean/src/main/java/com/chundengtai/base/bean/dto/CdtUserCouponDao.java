@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -22,7 +23,7 @@ public class CdtUserCouponDao implements Serializable {
 
     private static final long serialVersionUID=1L;
 
-      private Integer couponId;
+    private Integer couponId;
 
     private Integer userId;
 
@@ -34,9 +35,53 @@ public class CdtUserCouponDao implements Serializable {
 
     private String nickName;
 
-    private String couponName;
+    private Integer id;
 
-    private Integer couponType;
+    private String name;
+
+    private Integer type;
+
+
+    private Integer useType;
+
+
+    private Integer perLimit;
+
+
+    private Integer timeType;
+
+    private Date startDate;
+
+    private Date endDate;
+
+    private Integer days;
+
+    private Integer totalCount;
+
+
+    private Integer useCount;
+
+
+    private Integer receiveCount;
+
+
+    private Integer memberLevel;
+
+
+    private BigDecimal fullMoney;
+
+
+    private BigDecimal reduceMoney;
+
+
+    private BigDecimal discount;
+
+
+    private BigDecimal offsetMoney;
+
+
+    private Integer merchantId;
+
 
 
 

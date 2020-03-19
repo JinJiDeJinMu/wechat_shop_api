@@ -22,7 +22,7 @@ public class Generator {
     public final static String SYS_AHURTOR = "Royal";
 
     public static void main(String[] args) {
-        String[] tableNames = new String[]{"cdt_postage_template"};
+        String[] tableNames = new String[]{"cdt_user_coupon"};
         String[] modules = new String[]{"service", "web"};//项目模块名，需自定义
         for (String module : modules) {
             moduleGenerator(module, tableNames);

@@ -50,16 +50,16 @@
                 </Radio-group>
             </Form-item>
             <Form-item label="满多少" prop="fullMoney" v-if="coupon.type ==0">
-                <Input-number :min="0" v-model="coupon.fullMoney" placeholder="满多少" style="width: 188px;" />
+                <i-input  v-model="coupon.fullMoney" placeholder="满多少" style="width: 188px;" />
             </Form-item>
             <Form-item label="减多少" prop="reduceMoney" v-if="coupon.type ==0">
-                <Input-number :min="0" v-model="coupon.reduceMoney" placeholder="减多少" style="width: 188px;"/>
+                <i-input v-model="coupon.reduceMoney" placeholder="减多少" style="width: 188px;"/>
             </Form-item>
             <Form-item label="折扣" prop="discount" v-if="coupon.type ==1">
                 <i-input  v-model="coupon.discount" placeholder="折扣" style="width: 188px;"/>
             </Form-item>
             <Form-item label="抵现金" prop="offsetMoney" v-if="coupon.type ==2">
-                <Input-number :min="0" v-model="coupon.offsetMoney" placeholder="抵多少" style="width: 188px;"/>
+                <i-input  v-model="coupon.offsetMoney" placeholder="抵多少" style="width: 188px;"/>
             </Form-item>
             <Form-item label="适用范围" prop="useType">
                 <Radio-group v-model="coupon.useType">
@@ -94,9 +94,9 @@
                     </Radio>
                 </Radio-group>
             </Form-item>
-            <Form-item label="每人限领个数" prop="perLimit">
+           <!-- <Form-item label="每人限领个数" prop="perLimit">
                 <i-input  v-model="coupon.perLimit" placeholder="限领个数" style="width: 188px;"/>
-            </Form-item>
+            </Form-item>-->
 
             <Form-item label="时间类型" prop="timeType">
                 <Radio-group v-model="coupon.timeType">

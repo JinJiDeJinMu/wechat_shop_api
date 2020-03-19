@@ -32,8 +32,9 @@ public class UserCouponController {
         Query query = new Query(params);
         if (ShiroUtils.getUserEntity().getMerchantId() != ShopShow.ADMINISTRATOR.getCode()) {
             query.put("merchantId", sysUserEntity.getMerchantId());
+            params.put("merchantId", sysUserEntity.getMerchantId());
         }
-        List<CdtUserCouponDao> userCouponList = cdtUserCouponService.getUserCounponList();
+        List<CdtUserCouponDao> userCouponList = cdtUserCouponService.getUserCounponList(params);
         int total = (int)userCouponList.stream().count();
 
         userCouponList.stream().forEach(e ->{

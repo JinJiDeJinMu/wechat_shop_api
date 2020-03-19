@@ -589,7 +589,7 @@ public class ApiGoodsController extends ApiBaseAction {
             paramRelated.put("fields", "id, name, list_pic_url,primary_pic_url,retail_price");
             relatedGoods = goodsService.queryList(paramRelated);
         }
-        relatedGoods = relatedGoods.stream().limit(20).collect(Collectors.toList());
+        relatedGoods = relatedGoods.stream().limit(10).collect(Collectors.toList());
         resultObj.put("goodsList", relatedGoods);
         return toResponsSuccess(resultObj);
     }

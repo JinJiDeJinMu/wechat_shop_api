@@ -96,6 +96,21 @@ var vm = new Vue({
                     trigger: 'blur'
                 }
             ],
+            deliveryPlace: [{
+                required: true,
+                message: '发货地不能为空',
+                trigger: 'blur'
+            }],
+            categoryName: [{
+                required: true,
+                message: '商品类型不能为空',
+                trigger: 'blur'
+            }],
+            attributeCategory: [{
+                required: true,
+                message: '属性类别不能为空',
+                trigger: 'blur'
+            }],
             primaryPicUrl: [{
                 required: true,
                 message: '产品主图不能为空',

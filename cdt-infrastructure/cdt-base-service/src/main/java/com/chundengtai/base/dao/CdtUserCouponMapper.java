@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.chundengtai.base.bean.dto.CdtUserCouponDao;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -16,5 +17,8 @@ import java.util.List;
  */
 public interface CdtUserCouponMapper extends BaseMapper<CdtUserCoupon> {
 
-    List<CdtUserCouponDao> getUserCounponList();
+    List<CdtUserCouponDao> getUserCounponList(Map<String,Object> params);
+
+    void updateStatus(CdtUserCoupon cdtUserCoupon);
+
 }

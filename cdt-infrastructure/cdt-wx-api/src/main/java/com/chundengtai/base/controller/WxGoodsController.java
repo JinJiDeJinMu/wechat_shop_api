@@ -1,6 +1,5 @@
 package com.chundengtai.base.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chundengtai.base.annotation.APPLoginUser;
 import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.annotation.LoginUser;
