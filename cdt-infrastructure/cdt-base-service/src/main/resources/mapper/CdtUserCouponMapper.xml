@@ -24,6 +24,9 @@
         <if test="userId != null and userId != ''">
             and u.user_id=#{userId}
         </if>
+        <if test="couponId != null and couponId != ''">
+            and u.coupon_id=#{couponId}
+        </if>
         <if test="merchantId != null and merchantId != ''">
             and c.merchant_id=#{merchantId}
         </if>

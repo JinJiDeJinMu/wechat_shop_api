@@ -1,8 +1,6 @@
 package com.chundengtai.base.controller;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.annotation.LoginUser;
 import com.chundengtai.base.bean.CdtCoupon;
@@ -30,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -73,11 +72,10 @@ public class WxCouponController extends ApiBaseAction {
      */
     @ApiOperation(value = "获取用户优惠券列表")
     @GetMapping("/userCouponList.json")
-    @IgnoreAuth
-    public Result getUserCouponList(/*@LoginUser UserVo loginUser*/){
+    public Result getUserCouponList(@LoginUser UserVo loginUser){
 
         Map<String,Object> params = new HashMap<>(4);
-        params.put("userId",135);
+        params.put("userId",loginUser.getUserId());
         List<CdtUserCouponDao> cdtUserCouponDaoList = userCouponService.getUserCounponList(params);
         cdtUserCouponDaoList.forEach(e->{
             checkUserCouponStatus(e);
@@ -139,7 +137,6 @@ public class WxCouponController extends ApiBaseAction {
      */
     @ApiOperation(value = "查询店铺指定商品可以领取的优惠券")
     @GetMapping("/getGoodCoupon.json")
-    @IgnoreAuth
     public Result getGoodCoupon(Integer merchantId){
 
         //查询可领店铺优惠券
@@ -167,10 +164,9 @@ public class WxCouponController extends ApiBaseAction {
      */
     @ApiOperation(value = "查询用户满足条件的优惠券")
     @GetMapping("ucoupon.json")
-    @IgnoreAuth
-   public Result getUserCoupon(/*@LoginUser UserVo userVo*/){
+   public Result getUserCoupon(@LoginUser UserVo userVo){
 
-       BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(CacheConstant.SHOP_GOODS_CACHE + 135);
+       BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(CacheConstant.SHOP_GOODS_CACHE + userVo.getUserId());
        ProductVo productVo = apiProductService.queryObject(goodsVo.getProductId());
        if(productVo == null){
            return Result.failure("产品不存在");
@@ -200,6 +196,36 @@ public class WxCouponController extends ApiBaseAction {
        }
 
        return Result.success(userCouponDaoList);
+   }
+
+    /**
+     * 根据用户选择的优惠券计算出优惠的金额
+     * @param userVo
+     * @param couponId
+     * @return
+     */
+    @ApiOperation(value = "根据用户选择的优惠券计算出优惠的金额")
+    @GetMapping("/getCouponMoney")
+   public Result getCouponMoney(@LoginUser UserVo userVo,Integer couponId){
+        if(couponId == null){
+            return Result.failure("优惠券ID为空");
+        }
+        Map<String, Object> hashmap = new HashMap<>(4);
+        hashmap.put("userId", userVo.getUserId());
+        hashmap.put("couponId", couponId);
+        List<CdtUserCouponDao> cdtUserCouponDaoList = userCouponService.getUserCounponList(hashmap);
+        if(cdtUserCouponDaoList == null || cdtUserCouponDaoList.size()>=2){
+            return Result.failure("用户优惠券不存在");
+        }
+        CdtUserCouponDao cdtUserCouponDao = cdtUserCouponDaoList.get(0);
+        //再一次检查优惠券是否可以用状态
+        checkUserCouponStatus(cdtUserCouponDao);
+        if(cdtUserCouponDao.getStatus() != 0){
+            return Result.failure("用户优惠券已失效");
+        }
+        BigDecimal money = checkMoney(userVo,cdtUserCouponDao);
+        return Result.success(money);
+
    }
     /**
      * 判断用户优惠券是否失效状态
@@ -294,5 +320,24 @@ public class WxCouponController extends ApiBaseAction {
     public Boolean getMoney(Integer type,BigDecimal money,BigDecimal fullMoney){
 
         return type == 0?money.compareTo(fullMoney) == 1:true;
+    }
+
+    public BigDecimal checkMoney(UserVo userVo, CdtUserCouponDao cdtUserCouponDao){
+
+        //查询用户购买产品的价格
+        BuyGoodsVo goodsVo = (BuyGoodsVo) redisTemplate.opsForValue().get(CacheConstant.SHOP_GOODS_CACHE + userVo.getUserId());
+        ProductVo productVo = apiProductService.queryObject(goodsVo.getProductId());
+        BigDecimal money = productVo.getRetail_price();
+
+        BigDecimal result = new BigDecimal(BigInteger.ZERO);
+        Integer type = cdtUserCouponDao.getType();
+        if(type == 0){
+            result = money.subtract(cdtUserCouponDao.getReduceMoney()).intValue()>0?money.subtract(cdtUserCouponDao.getReduceMoney()):money;
+        }else if(type == 1){
+            result = money.multiply(cdtUserCouponDao.getDiscount());
+        }else if(type == 2){
+            result = money.subtract(cdtUserCouponDao.getOffsetMoney()).intValue()>0?money.subtract(cdtUserCouponDao.getOffsetMoney()):money;
+        }
+        return result;
     }
 }
