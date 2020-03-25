@@ -37,12 +37,12 @@
                         <i-option value="402">完成</i-option>
                     </i-select>
                 </i-col>
-                <!--<i-col span="4">
-                    <date-picker v-model="q.addTime" type="datetime" placeholder="开始时间"></date-picker>
+                <i-col span="4">
+                    <el-date-picker v-model="q.addTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="开始时间"></el-date-picker>
                 </i-col>
                 <i-col span="4">
-                    <date-picker v-model="q.endTime" type="datetime" placeholder="结束时间"></date-picker>
-                </i-col>-->
+                    <el-date-picker v-model="q.endTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="结束时间"></el-date-picker>
+                </i-col>
 
                 <i-button @click="query">查询</i-button>
                 <i-button @click="review">提现</i-button>

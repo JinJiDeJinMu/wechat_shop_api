@@ -55,19 +55,19 @@ public class WxCatalogController extends ApiBaseAction {
     @GetMapping(value = "/index.json")
     public Object index(@RequestParam(value = "page", defaultValue = "1") Integer page,
                         @RequestParam(value = "size", defaultValue = "10") Integer size) {
-        Map<String, Object> resultObj = (Map<String, Object>) redisTemplate.opsForValue().get("categoryData");
-        if(resultObj == null) {
-            resultObj = new HashMap();
+       // Map<String, Object> resultObj = (Map<String, Object>) redisTemplate.opsForValue().get("categoryData");
+       // if(resultObj == null) {
+        Map<String, Object> resultObj = new HashMap();
             Map params = new HashMap();
             params.put("page", page);
             params.put("limit", size);
             params.put("sidx", "sort_order");
             params.put("order", "asc");
+            params.put("parent_id",0);
             //查询分类数据
-            List<CategoryVo> categoryVoList = categoryService.queryList(params);
-            List<CategoryVo> data = categoryVoList.stream().filter(e -> e.getParent_id() == 0)
-                    .collect(Collectors.toList());
-            List<CategoryVo> categoryGoods = categoryVoList.stream().filter(e -> e.getParent_id() > 0)
+            List<CategoryVo> data = categoryService.queryList(params);
+
+           /* List<CategoryVo> categoryGoods = categoryVoList.stream().filter(e -> e.getParent_id() > 0)
                     .collect(Collectors.toList());
 
             categoryGoods.forEach(e -> {
@@ -77,13 +77,25 @@ public class WxCatalogController extends ApiBaseAction {
 
                 List<GoodsDto> goodsDTOList = mapperFacade.mapAsList(goods, GoodsDto.class);
                 e.setGoodsDtoList(goodsDTOList);
-            });
+            });*/
+            CategoryVo currentCategory = null;
+            if (null == currentCategory && null != data && data.size() != 0) {
+                currentCategory = data.get(0);
+            } else {
+                currentCategory = new CategoryVo();
+            }
+           System.out.println("========"+data.get(0));
 
+            //获取子分类数据
+            if (null != currentCategory && null != currentCategory.getId()) {
+                params.put("parent_id", currentCategory.getId());
+                currentCategory.setSubCategoryList(categoryService.queryList(params));
+            }
             resultObj.put("categoryList", data);
-            resultObj.put("categoryGoods", categoryGoods);
+            resultObj.put("currentCategory", currentCategory);
             log.info("分类数据查询完成,categoryData="+resultObj);
-            redisTemplate.opsForValue().set("categoryData", resultObj, 5, TimeUnit.MINUTES);
-        }
+            /*redisTemplate.opsForValue().set("categoryData", resultObj, 5, TimeUnit.MINUTES);*/
+        //}
         return toResponsSuccess(resultObj);
     }
 
@@ -94,7 +106,7 @@ public class WxCatalogController extends ApiBaseAction {
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "id", paramType = "query", required = true)})
     @GetMapping(value = "/current.json")
     public Object current(Integer id) {
-        Map<String, Object> resultObj = new HashMap();
+       /* Map<String, Object> resultObj = new HashMap();
         Map params = new HashMap();
         params.put("parent_id", id);
         List<CategoryVo> categoryVoList = categoryService.queryList(params);
@@ -109,6 +121,20 @@ public class WxCatalogController extends ApiBaseAction {
         });
 
         resultObj.put("categoryGoods", categoryVoList);
+        return toResponsSuccess(resultObj);*/
+        Map<String, Object> resultObj = new HashMap();
+        Map params = new HashMap();
+        params.put("parent_id", 0);
+        CategoryVo currentCategory = null;
+        if (null != id) {
+            currentCategory = categoryService.queryObject(id);
+        }
+        //获取子分类数据
+        if (null != currentCategory && null != currentCategory.getId()) {
+            params.put("parent_id", currentCategory.getId());
+            currentCategory.setSubCategoryList(categoryService.queryList(params));
+        }
+        resultObj.put("currentCategory", currentCategory);
         return toResponsSuccess(resultObj);
     }
 }

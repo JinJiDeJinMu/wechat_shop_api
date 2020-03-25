@@ -97,6 +97,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
                 param.put("attribute_category", categoryItem.getId());
                 param.put("sidx", "sort_order");
                 param.put("order", "desc");
+                param.put("limit",4);
                 param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
                 PageHelper.startPage(0, 6, false);
                 List<GoodsVo> categoryGoods = goodsService.queryList(param);
@@ -131,8 +132,9 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("is_on_sale", 1);
             param.put("sidx", "add_time");
             param.put("order", "desc");
+            param.put("limit",4);
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
-            PageHelper.startPage(0, 40, false);
+            PageHelper.startPage(0, 4, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
             goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
             redisTemplate.opsForValue().set("indexNewGoods", goodsDTOS, 10, TimeUnit.MINUTES);

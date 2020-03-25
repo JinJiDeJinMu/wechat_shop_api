@@ -56,19 +56,10 @@ public class WxOrderController extends ApiBaseAction {
     private ApiOrderGoodsService orderGoodsService;
 
     @Autowired
-    private UserRecordSer userRecordSer;
-
-    @Autowired
-    private ApiUserCouponService userCouponService;
-
-    @Autowired
     private KeygenService kengenService;
 
     @Autowired
     private CdtPaytransRecordService paytransRecordService;
-
-    @Autowired
-    private ApiGoodsService apiGoodsService;
 
     @Autowired
     private ApiProductService apiProductService;
