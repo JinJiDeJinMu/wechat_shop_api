@@ -37,10 +37,6 @@ public class ApiCollectController extends ApiBaseAction {
         param.put("user_id", loginUser.getUserId());
         param.put("type_id", typeId);
         List<CollectVo> collectEntities = collectService.queryList(param);
-
-//        Query query = new Query(param);
-//        int total = collectService.queryTotal(query);
-//        ApiPageUtils pageUtil = new ApiPageUtils(collectEntities, total, query.getLimit(), query.getPage());
         return toResponsSuccess(collectEntities);
     }
 

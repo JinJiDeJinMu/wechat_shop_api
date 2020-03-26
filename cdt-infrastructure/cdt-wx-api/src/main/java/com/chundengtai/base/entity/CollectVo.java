@@ -25,8 +25,17 @@ public class CollectVo implements Serializable {
     //
     private String name;
     private String list_pic_url;
+    private String primary_pic_url;
     private String goods_brief;
     private String retail_price;
+
+    public String getPrimary_pic_url() {
+        return primary_pic_url;
+    }
+
+    public void setPrimary_pic_url(String primary_pic_url) {
+        this.primary_pic_url = primary_pic_url;
+    }
 
     public Integer getId() {
         return id;

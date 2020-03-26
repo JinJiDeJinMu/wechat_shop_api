@@ -396,7 +396,7 @@ public class WxGoodsController extends ApiBaseAction {
 
         //查询列表数据
         params.put("attribute_category", categoryId);
-        params.put("fields", "id, name, list_pic_url,primary_pic_url,market_price,retail_price, goods_brief,is_service");
+        params.put("fields", "id, name, list_pic_url,primary_pic_url,market_price,retail_price, goods_brief,is_service,add_time,browse");
         //Query query = new Query(params);
         PageHelper.startPage(page, size);
         List<GoodsVo> goodsList = goodsService.queryList(params);
