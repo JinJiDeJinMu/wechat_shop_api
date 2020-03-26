@@ -79,6 +79,9 @@ public class ApiPayController extends ApiBaseAction {
     @Autowired
     private CdtUserScoreService cdtUserScoreService;
 
+    @Autowired
+    private ApiOrderGoodsService apiOrderGoodsService;
+
     /**
      * 获取支付的请求参数
      */
@@ -112,7 +115,7 @@ public class ApiPayController extends ApiBaseAction {
         }
         //查询用户积分
         Integer fee = orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue();
-        CdtUserScore cdtUserScore = cdtUserScoreService.getById(orderInfo.getUser_id());
+        /*CdtUserScore cdtUserScore = cdtUserScoreService.getById(orderInfo.getUser_id());
         if(cdtUserScore != null){
           Integer score = (cdtUserScore.getScore().intValue())*100;
           if(score < fee){
@@ -129,7 +132,7 @@ public class ApiPayController extends ApiBaseAction {
               log.info("积分足够"+s);
               return toResponsObject(200, "订单积分抵扣下单成功", orderInfo);
           }
-        }
+        }*/
 
         WxPayUnifiedOrderRequest payRequest = WxPayUnifiedOrderRequest.newBuilder()
                 .body("未名严选校园电商-支付").detail(detail)
@@ -689,6 +692,16 @@ public class ApiPayController extends ApiBaseAction {
 
     private void orderSetPayedStatus(Order orderItem) {
         orderItem.setPayStatus(PayTypeEnum.PAYED.getCode());
+
+        if(orderItem.getGoodsType() == null) {
+            Map<String, Object> hashmap = new HashMap<>();
+            hashmap.put("order_id", orderItem.getId());
+            List<OrderGoodsVo> orderGoodsVoList = apiOrderGoodsService.queryList(hashmap);
+            OrderGoodsVo orderGoodsVo = orderGoodsVoList.get(0);
+            Integer goodsId = orderGoodsVo.getGoods_id();
+            GoodsVo goodsVo = apiGoodsService.queryObject(goodsId);
+            orderItem.setGoodsType(goodsVo.getIs_secKill());
+        }
         if (orderItem.getGoodsType().equals(GoodsTypeEnum.WRITEOFF_ORDER.getCode())
         ) {
             orderItem.setOrderStatus(OrderStatusEnum.NOT_USED.getCode());
