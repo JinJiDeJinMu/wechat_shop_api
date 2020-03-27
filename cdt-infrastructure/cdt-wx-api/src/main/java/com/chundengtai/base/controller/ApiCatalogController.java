@@ -1,29 +1,42 @@
 package com.chundengtai.base.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.annotation.IgnoreAuth;
+import com.chundengtai.base.bean.Goods;
+import com.chundengtai.base.bean.dto.GoodsDto;
 import com.chundengtai.base.entity.CategoryVo;
 import com.chundengtai.base.service.ApiCategoryService;
+import com.chundengtai.base.service.GoodsService;
 import com.chundengtai.base.util.ApiBaseAction;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Api(tags = "栏目")
 @RestController
-@RequestMapping("/api/catalog")
+@RequestMapping("/api/v2/catalog")
 public class ApiCatalogController extends ApiBaseAction {
     @Autowired
     private ApiCategoryService categoryService;
+
+    @Autowired
+    private GoodsService goodsService;
+
+    @Autowired
+    private MapperFacade mapperFacade;
 
     /**
      * 获取分类栏目数据
@@ -39,32 +52,30 @@ public class ApiCatalogController extends ApiBaseAction {
                         @RequestParam(value = "size", defaultValue = "10") Integer size) {
         Map<String, Object> resultObj = new HashMap();
         Map params = new HashMap();
-        params.put("page", page);
-        params.put("limit", size);
         params.put("sidx", "sort_order");
         params.put("order", "asc");
-        params.put("parent_id", 0);
-        //查询列表数据
+        params.put("parent_id",0);
+        //查询分类数据
         List<CategoryVo> data = categoryService.queryList(params);
-        //
-        CategoryVo currentCategory = null;
-        if (null != id) {
-            currentCategory = categoryService.queryObject(id);
-        }
-        if (null == currentCategory && null != data && data.size() != 0) {
-            currentCategory = data.get(0);
-        } else {
-            currentCategory = new CategoryVo();
-        }
 
-        //获取子分类数据
-        if (null != currentCategory && null != currentCategory.getId()) {
-            params.put("parent_id", currentCategory.getId());
-            currentCategory.setSubCategoryList(categoryService.queryList(params));
-        }
+        CategoryVo categoryVo = new CategoryVo();
+        categoryVo.setId(0);
+        categoryVo.setName("全部商品");
+        data.add(0,categoryVo);
 
-        resultObj.put("categoryList", data);
-        resultObj.put("currentCategory", currentCategory);
+        params.clear();
+        params.put("sidx", "sort_order");
+        params.put("order", "asc");
+
+        List<CategoryVo> categoryGoods = data;
+        categoryGoods.stream().forEach(e ->{
+            params.put("parent_id",e.getId());
+            List<CategoryVo> categoryVos = categoryService.queryList(params);
+            e.setSubCategoryList(categoryVos);
+        });
+
+        resultObj.put("goods", categoryGoods);
+
         return toResponsSuccess(resultObj);
     }
 
@@ -78,17 +89,20 @@ public class ApiCatalogController extends ApiBaseAction {
     public Object current(Integer id) {
         Map<String, Object> resultObj = new HashMap();
         Map params = new HashMap();
-        params.put("parent_id", 0);
+        params.put("parent_id", id);
         CategoryVo currentCategory = null;
         if (null != id) {
             currentCategory = categoryService.queryObject(id);
         }
+
         //获取子分类数据
         if (null != currentCategory && null != currentCategory.getId()) {
-            params.put("parent_id", currentCategory.getId());
-            currentCategory.setSubCategoryList(categoryService.queryList(params));
+            List<CategoryVo> categoryVoList = categoryService.queryList(params);
+            currentCategory.setSubCategoryList(categoryVoList);
         }
-        resultObj.put("currentCategory", currentCategory);
+        List<CategoryVo> categoryVoList = new ArrayList<>();
+        categoryVoList.add(currentCategory);
+        resultObj.put("currentCategory", categoryVoList);
         return toResponsSuccess(resultObj);
     }
 }

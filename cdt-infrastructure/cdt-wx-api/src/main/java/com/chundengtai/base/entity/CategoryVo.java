@@ -202,4 +202,29 @@ public class CategoryVo implements Serializable {
     public void setSubCategoryList(List<CategoryVo> subCategoryList) {
         this.subCategoryList = subCategoryList;
     }
+
+    @Override
+    public String toString() {
+        return "CategoryVo{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", keywords='" + keywords + '\'' +
+                ", showPosition=" + showPosition +
+                ", front_desc='" + front_desc + '\'' +
+                ", parent_id=" + parent_id +
+                ", sort_order=" + sort_order +
+                ", show_index=" + show_index +
+                ", is_show=" + is_show +
+                ", banner_url='" + banner_url + '\'' +
+                ", icon_url='" + icon_url + '\'' +
+                ", img_url='" + img_url + '\'' +
+                ", wap_banner_url='" + wap_banner_url + '\'' +
+                ", level='" + level + '\'' +
+                ", type=" + type +
+                ", front_name='" + front_name + '\'' +
+                ", checked=" + checked +
+                ", subCategoryList=" + subCategoryList +
+                ", goodsDtoList=" + goodsDtoList +
+                '}';
+    }
 }

@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+
 
 @Api(tags = "v2栏目")
 @RestController
@@ -55,47 +55,32 @@ public class WxCatalogController extends ApiBaseAction {
     @GetMapping(value = "/index.json")
     public Object index(@RequestParam(value = "page", defaultValue = "1") Integer page,
                         @RequestParam(value = "size", defaultValue = "10") Integer size) {
-       // Map<String, Object> resultObj = (Map<String, Object>) redisTemplate.opsForValue().get("categoryData");
-       // if(resultObj == null) {
         Map<String, Object> resultObj = new HashMap();
-            Map params = new HashMap();
-            params.put("page", page);
-            params.put("limit", size);
-            params.put("sidx", "sort_order");
-            params.put("order", "asc");
-            params.put("parent_id",0);
-            //查询分类数据
-            List<CategoryVo> data = categoryService.queryList(params);
+        Map params = new HashMap();
+        params.put("sidx", "sort_order");
+        params.put("order", "asc");
+        params.put("parent_id",0);
+        //查询分类数据
+        List<CategoryVo> data = categoryService.queryList(params);
 
-           /* List<CategoryVo> categoryGoods = categoryVoList.stream().filter(e -> e.getParent_id() > 0)
-                    .collect(Collectors.toList());
+        CategoryVo categoryVo = new CategoryVo();
+        categoryVo.setId(0);
+        categoryVo.setName("全部商品");
+        data.add(0,categoryVo);
 
-            categoryGoods.forEach(e -> {
-                List<Goods> goods = goodsService.list(new QueryWrapper<Goods>().lambda()
-                        .eq(Goods::getCategoryId, e.getId())
-                );
+        params.clear();
+        params.put("sidx", "sort_order");
+        params.put("order", "asc");
 
-                List<GoodsDto> goodsDTOList = mapperFacade.mapAsList(goods, GoodsDto.class);
-                e.setGoodsDtoList(goodsDTOList);
-            });*/
-            CategoryVo currentCategory = null;
-            if (null == currentCategory && null != data && data.size() != 0) {
-                currentCategory = data.get(0);
-            } else {
-                currentCategory = new CategoryVo();
-            }
-           System.out.println("========"+data.get(0));
+        List<CategoryVo> categoryGoods = data;
+        categoryGoods.stream().forEach(e ->{
+            params.put("parent_id",e.getId());
+            List<CategoryVo> categoryVos = categoryService.queryList(params);
+            e.setSubCategoryList(categoryVos);
+        });
 
-            //获取子分类数据
-            if (null != currentCategory && null != currentCategory.getId()) {
-                params.put("parent_id", currentCategory.getId());
-                currentCategory.setSubCategoryList(categoryService.queryList(params));
-            }
-            resultObj.put("categoryList", data);
-            resultObj.put("currentCategory", currentCategory);
-            log.info("分类数据查询完成,categoryData="+resultObj);
-            /*redisTemplate.opsForValue().set("categoryData", resultObj, 5, TimeUnit.MINUTES);*/
-        //}
+        resultObj.put("goods", categoryGoods);
+
         return toResponsSuccess(resultObj);
     }
 
@@ -106,35 +91,22 @@ public class WxCatalogController extends ApiBaseAction {
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "id", paramType = "query", required = true)})
     @GetMapping(value = "/current.json")
     public Object current(Integer id) {
-       /* Map<String, Object> resultObj = new HashMap();
-        Map params = new HashMap();
-        params.put("parent_id", id);
-        List<CategoryVo> categoryVoList = categoryService.queryList(params);
-
-        categoryVoList.stream().forEach(e->{
-            List<Goods> goods = goodsService.list(new QueryWrapper<Goods>().lambda()
-                    .eq(Goods::getCategoryId, e.getId())
-            );
-
-            List<GoodsDto> goodsDTOList = mapperFacade.mapAsList(goods, GoodsDto.class);
-            e.setGoodsDtoList(goodsDTOList);
-        });
-
-        resultObj.put("categoryGoods", categoryVoList);
-        return toResponsSuccess(resultObj);*/
         Map<String, Object> resultObj = new HashMap();
         Map params = new HashMap();
-        params.put("parent_id", 0);
+        params.put("parent_id", id);
         CategoryVo currentCategory = null;
         if (null != id) {
             currentCategory = categoryService.queryObject(id);
         }
+
         //获取子分类数据
         if (null != currentCategory && null != currentCategory.getId()) {
-            params.put("parent_id", currentCategory.getId());
-            currentCategory.setSubCategoryList(categoryService.queryList(params));
+            List<CategoryVo> categoryVoList = categoryService.queryList(params);
+            currentCategory.setSubCategoryList(categoryVoList);
         }
-        resultObj.put("currentCategory", currentCategory);
+        List<CategoryVo> categoryVoList = new ArrayList<>();
+        categoryVoList.add(currentCategory);
+        resultObj.put("currentCategory", categoryVoList);
         return toResponsSuccess(resultObj);
     }
 }
