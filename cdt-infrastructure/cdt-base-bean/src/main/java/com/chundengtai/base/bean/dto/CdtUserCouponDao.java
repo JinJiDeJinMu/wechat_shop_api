@@ -29,6 +29,8 @@ public class CdtUserCouponDao implements Serializable {
 
     private Date userTime;
 
+    private Date endTime;
+
     private Integer number;
 
     private Integer status;
@@ -81,6 +83,8 @@ public class CdtUserCouponDao implements Serializable {
 
 
     private Integer merchantId;
+
+    private String imgUrl;
 
 
 

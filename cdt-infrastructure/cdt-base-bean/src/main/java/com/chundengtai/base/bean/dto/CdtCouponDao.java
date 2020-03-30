@@ -58,6 +58,8 @@ public class CdtCouponDao implements Serializable {
 
     private Integer days;
 
+    private String imgUrl;
+
       /**
      * 发放总数量
      */

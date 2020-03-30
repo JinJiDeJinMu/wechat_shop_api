@@ -22,11 +22,12 @@
         <result column="discount" property="discount" />
         <result column="offset_money" property="offsetMoney" />
         <result column="merchant_id" property="merchantId" />
+        <result column="img_url" property="imgUrl" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, type, use_type, per_limit, time_type, start_date, end_date, days, total_count, use_count, receive_count, member_level, full_money, reduce_money, discount, offset_money, merchant_id
+        id, name, type, use_type,img_url, per_limit, time_type, start_date, end_date, days, total_count, use_count, receive_count, member_level, full_money, reduce_money, discount, offset_money, merchant_id
     </sql>
 
 </mapper>

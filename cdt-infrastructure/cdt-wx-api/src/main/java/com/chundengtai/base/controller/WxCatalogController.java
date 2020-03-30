@@ -63,11 +63,6 @@ public class WxCatalogController extends ApiBaseAction {
         //查询分类数据
         List<CategoryVo> data = categoryService.queryList(params);
 
-        CategoryVo categoryVo = new CategoryVo();
-        categoryVo.setId(0);
-        categoryVo.setName("全部商品");
-        data.add(0,categoryVo);
-
         params.clear();
         params.put("sidx", "sort_order");
         params.put("order", "asc");
@@ -78,6 +73,11 @@ public class WxCatalogController extends ApiBaseAction {
             List<CategoryVo> categoryVos = categoryService.queryList(params);
             e.setSubCategoryList(categoryVos);
         });
+
+        CategoryVo categoryVo = new CategoryVo();
+        categoryVo.setId(0);
+        categoryVo.setName("全部商品");
+        data.add(0,categoryVo);
 
         resultObj.put("goods", categoryGoods);
 

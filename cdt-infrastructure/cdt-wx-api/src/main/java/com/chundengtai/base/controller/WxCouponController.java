@@ -22,10 +22,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -72,10 +69,12 @@ public class WxCouponController extends ApiBaseAction {
      */
     @ApiOperation(value = "获取用户优惠券列表")
     @GetMapping("/userCouponList.json")
-    public Result getUserCouponList(@LoginUser UserVo loginUser){
+    public Result getUserCouponList(@LoginUser UserVo loginUser, @RequestParam(value = "status", defaultValue = "1") Integer status){
 
         Map<String,Object> params = new HashMap<>(4);
         params.put("userId",loginUser.getUserId());
+        params.put("status",status);
+        System.out.println("param===="+params);
         List<CdtUserCouponDao> cdtUserCouponDaoList = userCouponService.getUserCounponList(params);
         cdtUserCouponDaoList.forEach(e->{
             checkUserCouponStatus(e);
@@ -123,7 +122,15 @@ public class WxCouponController extends ApiBaseAction {
         userCoupon.setCouponId(couponId);
         userCoupon.setUserId(userVo.getUserId().intValue());
         userCoupon.setNumber(1);
-        userCoupon.setUserTime(new Date());
+        Date now = new Date();
+        userCoupon.setUserTime(now);
+
+        if(cdtCoupon.getTimeType() == 1){
+            Calendar time = Calendar.getInstance();
+            time.setTime(now);
+            time.set(Calendar.DATE, time.get(Calendar.DATE) + cdtCoupon.getDays());
+            userCoupon.setEndTime(time.getTime());
+        }
         //事务更新领取和减少优惠券数量
         userCouponService.doUserCoupon(userCoupon,cdtCoupon);
 
@@ -250,10 +257,8 @@ public class WxCouponController extends ApiBaseAction {
 
                 }
             }else if(timeType == 1){
-                Calendar time = Calendar.getInstance();
-                time.setTime(userTime);
-                time.set(Calendar.DATE, time.get(Calendar.DATE) + cdtUserCouponDao.getDays());
-                if(time.getTime().before(now)){
+                Date endTime = cdtUserCouponDao.getEndTime();
+                if(endTime.before(now)){
                     CdtUserCoupon cdtUserCoupon = new CdtUserCoupon();
                     cdtUserCoupon.setUserId(cdtUserCouponDao.getUserId());
                     cdtUserCoupon.setCouponId(cdtUserCouponDao.getCouponId());

@@ -7,13 +7,14 @@
         <id column="coupon_id" property="couponId" />
         <result column="user_id" property="userId" />
         <result column="user_time" property="userTime" />
+        <result column="end_time" property="endTime" />
         <result column="number" property="number" />
         <result column="status" property="status" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        coupon_id, user_id, user_time, number, status
+        coupon_id, user_id, user_time,end_time, number, status
     </sql>
 
     <select id="getUserCounponList" resultType="com.chundengtai.base.bean.dto.CdtUserCouponDao" parameterType="map">
@@ -24,12 +25,16 @@
         <if test="userId != null and userId != ''">
             and u.user_id=#{userId}
         </if>
+        <if test="status != null ">
+            and u.status=#{status}
+        </if>
         <if test="couponId != null and couponId != ''">
             and u.coupon_id=#{couponId}
         </if>
         <if test="merchantId != null and merchantId != ''">
             and c.merchant_id=#{merchantId}
         </if>
+        order by u.coupon_id desc
     </select>
     
     <update id="updateStatus" parameterType="com.chundengtai.base.bean.CdtUserCoupon">

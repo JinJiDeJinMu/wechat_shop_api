@@ -32,6 +32,8 @@ public class CdtUserCoupon implements Serializable {
 
     private Date userTime;
 
+    private Date endTime;
+
     private Integer number;
 
     private Integer status;

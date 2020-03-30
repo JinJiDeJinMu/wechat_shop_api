@@ -55,6 +55,8 @@ public class CdtCoupon implements Serializable {
 
     private Integer days;
 
+    private String imgUrl;
+
       /**
      * 发放总数量
      */
