@@ -97,7 +97,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
                 param.put("attribute_category", categoryItem.getId());
                 param.put("sidx", "sort_order");
                 param.put("order", "desc");
-                param.put("limit",4);
+                param.put("limit",6);
                 param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
                 PageHelper.startPage(0, 6, false);
                 List<GoodsVo> categoryGoods = goodsService.queryList(param);
@@ -122,9 +122,10 @@ public class WxIndexV2Controller extends ApiBaseAction {
     @ApiOperation(value = "首页新品")
     @IgnoreAuth
     @GetMapping(value = "indexNewGoods.json")
-    public Result<List<GoodsDTO>> indexGoods(String referrerId) {
-        List<GoodsDTO> goodsDTOS = (List<GoodsDTO>) redisTemplate.opsForValue().get("indexNewGoods");
-        if (goodsDTOS == null) {
+    public Result<Map<String, Object>> indexGoods(String referrerId) {
+        Map<String, Object> resultObj  = (Map<String, Object>) redisTemplate.opsForValue().get("indexNewGoods");
+        if (resultObj == null) {
+            resultObj = new HashMap<>();
             //最新商品
             HashMap param = new HashMap<String, Object>();
             param.put("is_new", 1);
@@ -132,16 +133,31 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("is_on_sale", 1);
             param.put("sidx", "add_time");
             param.put("order", "desc");
-            param.put("limit",4);
+            param.put("limit",6);
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
-            PageHelper.startPage(0, 4, false);
+            PageHelper.startPage(0, 6, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
-            goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
-            redisTemplate.opsForValue().set("indexNewGoods", goodsDTOS, 10, TimeUnit.MINUTES);
-            log.info("indexNewGoods数据库读取数据");
+            List<GoodsDTO> goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
+
+            resultObj.put("newGoods",goodsDTOS);
+            param.clear();
+            param.put("is_hot", 1);
+            param.put("is_new", 0);
+            param.put("is_delete", 0);
+            param.put("is_on_sale", 1);
+            param.put("sidx", "add_time");
+            param.put("order", "desc");
+            param.put("limit",2);
+            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
+            PageHelper.startPage(0, 2, false);
+            List<GoodsVo> hotGoods = goodsService.queryList(param);
+            List<GoodsDTO> hotgoodsDTOS = mapperFacade.mapAsList(hotGoods, GoodsDTO.class);
+            resultObj.put("hotGoods",hotgoodsDTOS);
+            redisTemplate.opsForValue().set("indexNewGoods",resultObj,5, TimeUnit.MINUTES);
         }
-        return Result.success(goodsDTOS);
+        return Result.success(resultObj);
     }
+
 
     @RequestMapping("/getBanner.json")
     @IgnoreAuth

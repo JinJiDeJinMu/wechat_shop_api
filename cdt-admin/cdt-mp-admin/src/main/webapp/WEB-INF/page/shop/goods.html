@@ -59,6 +59,18 @@
                 </i-col>
                 <i-button @click="query">查询</i-button>
             </div>
+            <div class="search-group">标签批量操作
+                #if($shiro.hasPermission("goods:update")&&$shiro.hasPermission("goods:delete"))
+                <el-select size="small" v-model="operateType" placeholder="批量操作">
+                    <el-option v-for="item in operates" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+                #end
+                <el-button style="margin-left: 20px" class="search-button" @click="handleBatchOperate()" type="primary"
+                           size="small">
+                    确定
+                </el-button>
+            </div>
             <div class="buttons-group">
                 #if($shiro.hasPermission("goods:save"))
                 <i-button type="info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</i-button>
@@ -153,19 +165,19 @@
                 <el-table-column label="标签" width="140" align="center">
                     <template slot-scope="scope">
                         <p>上架：
-                            <el-switch @change="handlePublishStatusChange(scope.$index, scope.row)" :active-value="1"
+                            <el-switch  :active-value="1"
                                        :inactive-value="0"
                                        v-model="scope.row.isOnSale">
                             </el-switch>
                         </p>
                         <p>新品：
-                            <el-switch @change="handleNewStatusChange(scope.$index, scope.row)" :active-value="1"
+                            <el-switch  :active-value="1"
                                        :inactive-value="0"
                                        v-model="scope.row.isNew">
                             </el-switch>
                         </p>
                         <p>热销：
-                            <el-switch @change="handleRecommendStatusChange(scope.$index, scope.row)" :active-value="1"
+                            <el-switch  :active-value="1"
                                        :inactive-value="0"
                                        v-model="scope.row.isHot">
                             </el-switch>
@@ -209,18 +221,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div class="batch-operate-container">
-            #if($shiro.hasPermission("goods:update")&&$shiro.hasPermission("goods:delete"))
-            <el-select size="small" v-model="operateType" placeholder="批量操作">
-                <el-option v-for="item in operates" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-            </el-select>
-            #end
-            <el-button style="margin-left: 20px" class="search-button" @click="handleBatchOperate()" type="primary"
-                       size="small">
-                确定
-            </el-button>
-        </div>
+
         <div class="pagination-container">
             <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
                            layout="total, sizes,prev, pager, next,jumper"

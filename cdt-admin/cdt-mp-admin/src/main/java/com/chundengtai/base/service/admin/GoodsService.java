@@ -89,6 +89,22 @@ public interface GoodsService {
     void unSale(Integer id);
 
     /**
+     * 热门
+     *
+     * @param id
+     * @return
+     */
+    void enHot(Integer id);
+
+    /**
+     * 取消热门
+     *
+     * @param id
+     * @return
+     */
+    void unHot(Integer id);
+
+    /**
      * 新品
      * @param id
      */

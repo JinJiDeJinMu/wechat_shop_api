@@ -153,6 +153,14 @@ var vm = new Vue({
                 value: "newOff"
             },
             {
+                label: "设为热销",
+                value: "enHot"
+            },
+            {
+                label: "取消热销",
+                value: "unHot"
+            },
+            {
                 label: "移入回收站",
                 value: "recycle"
             }
@@ -308,6 +316,12 @@ var vm = new Vue({
                         this.BatchCancel(ids);
                         break;
                     case this.operates[4].value:
+                        this.BatchToHot( ids);
+                        break;
+                    case this.operates[5].value:
+                        this.BatchCancelHot(ids);
+                        break;
+                    case this.operates[6].value:
                         this.updateDeleteStatus(1, ids);
                         break;
                     default:
@@ -372,6 +386,34 @@ var vm = new Vue({
                 }
             });
         },
+
+        BatchToHot: function(ids){
+            Ajax.request({
+                type: "POST",
+                url: "../goods/enhot",
+                params: JSON.stringify(ids),
+                contentType: "application/json",
+                type: 'POST',
+                successCallback: function () {
+                    alert('设置热销成功')
+                    vm.reload();
+                }
+            });
+        },
+
+        BatchCancelHot: function(ids){
+            Ajax.request({
+                type: "POST",
+                url: "../goods/unhot",
+                params: JSON.stringify(ids),
+                contentType: "application/json",
+                type: 'POST',
+                successCallback: function () {
+                    alert('取消热销成功')
+                    vm.reload();
+                }
+            });
+        },
         handleSizeChange(val) {
             this.listQuery.page = 1;
             this.listQuery.limit = val;
@@ -406,7 +448,15 @@ var vm = new Vue({
         handleNewStatusChange(index, row) {
             let ids = [];
             ids.push(row.id);
-            this.updateNewStatus(row.newStatus, ids);
+            this.updateNewStatus(row.isNew, ids);
+        },
+        handleRecommendStatusChange(index, row) {
+            console.log('index='+index);
+            let ids = [];
+            ids.push(row.id);
+            console.log('======='+row);
+            console.log('======='+row.isHot);
+            this.updateHotStatus(row.isHot, ids);
         },
         handleSelectionChange: function (val) {
             vm.multipleSelection = val;
@@ -441,6 +491,15 @@ var vm = new Vue({
                 ids.forEach(this.unSale)
             }
         },
+        updateHotStatus: function (status, ids) {
+            console.log(status)
+            console.log(ids)
+            if (status == 1) {
+                ids.forEach(this.enHot)
+            } else {
+                ids.forEach(this.unHot)
+            }
+        },
         handleUpdateProduct(index, row) {
             this.updateFun(row.id);
         },
@@ -450,6 +509,43 @@ var vm = new Vue({
             params.append('deleteStatus', deleteStatus);
             this.del(ids);
         },
+        enHot: function (item, index) {
+            if (item == null) {
+                item = getSelectedRow("#jqGrid");
+                return;
+            }
+            Ajax.request({
+                type: "POST",
+                url: "../goods/enhot",
+                params: JSON.stringify(item),
+                contentType: "application/json",
+                type: 'POST',
+                successCallback: function () {
+                    alert('提交成功', function (index) {
+                        vm.reload();
+                    });
+                }
+            });
+        },
+        unHot: function (item, index) {
+            if (item == null) {
+                item = getSelectedRow("#jqGrid");
+                return;
+            }
+            Ajax.request({
+                type: "POST",
+                url: "../goods/unhot",
+                params: JSON.stringify(item),
+                contentType: "application/json",
+                type: 'POST',
+                successCallback: function () {
+                    alert('提交成功', function (index) {
+                        vm.reload();
+                    });
+                }
+            });
+        },
+
         enSale: function (item, index) {
             if (item == null) {
                 item = getSelectedRow("#jqGrid");

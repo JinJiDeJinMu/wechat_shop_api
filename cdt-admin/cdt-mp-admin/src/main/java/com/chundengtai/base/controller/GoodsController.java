@@ -216,6 +216,30 @@ public class GoodsController extends BaseController {
         return R.ok();
     }
 
+    @RequestMapping("/enhot")
+    public R enhot(@RequestBody Integer[] ids){
+        try {
+            for (int i = 0; i < ids.length; i++) {
+                goodsService.enHot(ids[i]);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return R.ok();
+    }
+
+    @RequestMapping("/unhot")
+    public R unhot(@RequestBody Integer[] ids){
+        try {
+            for (int i = 0; i < ids.length; i++) {
+                goodsService.unHot(ids[i]);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return R.ok();
+    }
+
     /**
      * 查询所有学校信息
      *
