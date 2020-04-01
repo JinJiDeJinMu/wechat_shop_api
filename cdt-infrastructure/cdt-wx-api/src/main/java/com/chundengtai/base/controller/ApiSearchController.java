@@ -119,7 +119,8 @@ public class ApiSearchController extends ApiBaseAction {
     @ApiOperation(value = "搜索商品")
     @ApiImplicitParams({@ApiImplicitParam(name = "keyword", value = "关键字", paramType = "path", required = true)})
     @GetMapping("search")
-    public Result<Object> search(@RequestParam("keyword") String keyword,
+    public Result<Object> search(@LoginUser UserVo userVo,
+                                 @RequestParam("keyword") String keyword,
                                  @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
                                  @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize) {
         if(keyword == null || "".equals(keyword)){
@@ -135,6 +136,23 @@ public class ApiSearchController extends ApiBaseAction {
         List<GoodsVo> goodsVoList = apiGoodsService.queryList(query);
         int total = apiGoodsService.queryTotal(query);
         ApiPageUtils pageUtil = new ApiPageUtils(goodsVoList, total, query.getLimit(), query.getPage());
+        //记录历史
+        SearchHistoryVo searchHistoryVo = new SearchHistoryVo();
+        searchHistoryVo.setAdd_time(System.currentTimeMillis());
+        searchHistoryVo.setKeyword(keyword);
+        searchHistoryVo.setUser_id(userVo.getUserId().toString());
+        if(goodsVoList.size()>0){
+            searchHistoryVo.setStatus(1);
+            StringBuffer goods= new StringBuffer();
+            goodsVoList.forEach(e ->{
+                goods.append(e.getId());
+                goods.append(",");
+            });
+            searchHistoryVo.setGoods(goods.toString());
+        }else {
+            searchHistoryVo.setStatus(0);
+        }
+        searchHistoryService.save(searchHistoryVo);
         return Result.success(pageUtil);
     }
 

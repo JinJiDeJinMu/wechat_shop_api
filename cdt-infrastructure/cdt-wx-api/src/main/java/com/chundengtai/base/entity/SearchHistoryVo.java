@@ -20,6 +20,26 @@ public class SearchHistoryVo implements Serializable {
     //会员Id
     private String user_id;
 
+    private Integer status;
+
+    private String goods;
+
+    public String getGoods() {
+        return goods;
+    }
+
+    public void setGoods(String goods) {
+        this.goods = goods;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public Integer getId() {
         return id;
     }

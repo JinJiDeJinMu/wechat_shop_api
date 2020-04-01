@@ -103,6 +103,9 @@
         <if test="attribute_category != null and attribute_category != ''">
             and attribute_category = #{attribute_category}
         </if>
+        <if test="category_id != null and category_id != ''">
+            and category_id = #{category_id}
+        </if>
         <if test="keyword != null">
             and keywords like concat('%',#{keyword},'%') or name like concat('%',#{keyword},'%')
         </if>

@@ -1,20 +1,21 @@
 package com.chundengtai.base.controller;
 
 import com.chundengtai.base.annotation.IgnoreAuth;
+import com.chundengtai.base.annotation.LoginUser;
 import com.chundengtai.base.dao.ApiAttributeCategoryMapper;
 import com.chundengtai.base.dto.AttributeCategoryDTO;
 import com.chundengtai.base.dto.GoodsDTO;
-import com.chundengtai.base.entity.AdVo;
-import com.chundengtai.base.entity.AttributeCategoryVo;
-import com.chundengtai.base.entity.GoodsVo;
+import com.chundengtai.base.entity.*;
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.ApiAdService;
 import com.chundengtai.base.service.ApiGoodsService;
+import com.chundengtai.base.service.ApiSearchHistoryService;
 import com.chundengtai.base.transfer.JsonTransfer;
 import com.chundengtai.base.util.ApiBaseAction;
 import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -54,12 +53,14 @@ public class WxIndexV2Controller extends ApiBaseAction {
     @Autowired
     private MapperFacade mapperFacade;
 
+    @Autowired
+    private ApiSearchHistoryService searchHistoryService;
+
 
     /**
      * app首页
      */
     @ApiOperation(value = "首页包含轮播图、分类、分类下的商品、最新商品")
-    @IgnoreAuth
     @GetMapping(value = "index.json")
     public Result<Map<String, Object>> index() {
         Map<String, Object> resultObj = (Map<String, Object>) redisTemplate.opsForValue().get("indexV2");
@@ -120,7 +121,6 @@ public class WxIndexV2Controller extends ApiBaseAction {
      * app首页
      */
     @ApiOperation(value = "首页新品")
-    @IgnoreAuth
     @GetMapping(value = "indexNewGoods.json")
     public Result<Map<String, Object>> indexGoods(String referrerId) {
         Map<String, Object> resultObj  = (Map<String, Object>) redisTemplate.opsForValue().get("indexNewGoods");
@@ -158,6 +158,59 @@ public class WxIndexV2Controller extends ApiBaseAction {
         return Result.success(resultObj);
     }
 
+    /**
+     * 首页推荐
+     * @param userVo
+     * @return
+     */
+    @ApiOperation(value = "首页推荐")
+    @GetMapping("/indexRelatedGoods.json")
+    public Result<List<GoodsDTO>> relatedGoods(@LoginUser UserVo userVo){
+
+        Map<String, Object> params= new HashMap<>();
+        params.put("user_id",userVo.getUserId());
+        params.put("sidx","id");
+        params.put("order","desc");
+        params.put("limit",10);
+        params.put("status",1);
+        List<SearchHistoryVo> searchHistoryVoList = searchHistoryService.queryList(params);
+        List<Integer> goodIds= new ArrayList<>();
+        List<Integer> goodList= new ArrayList<>();
+
+        List<GoodsVo> goodsVos = new ArrayList<>();
+        List<GoodsDTO> tuijian = new ArrayList<>();
+        if(searchHistoryVoList == null){
+            HashMap param = new HashMap<String, Object>();
+            param.put("is_new", 1);
+            param.put("is_delete", 0);
+            param.put("is_on_sale", 1);
+            param.put("sidx", "add_time");
+            param.put("order", "desc");
+            param.put("limit",6);
+            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
+            PageHelper.startPage(1, 6, false);
+            List<GoodsVo> newGoods = goodsService.queryList(param);
+            tuijian = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
+
+        }else{
+            searchHistoryVoList.forEach(e->{
+                change(goodIds,e.getGoods());
+            });
+
+            //随机6个
+            if(goodIds.size() >=6){
+                goodList = randomSub(goodIds,6);
+            }
+            goodList.forEach(e->{
+                    GoodsVo goodsVo = goodsService.queryObject(e);
+                    goodsVos.add(goodsVo);
+            });
+
+            tuijian = mapperFacade.mapAsList(goodsVos, GoodsDTO.class);
+        }
+
+        return Result.success(tuijian);
+    }
 
     @RequestMapping("/getBanner.json")
     @IgnoreAuth
@@ -188,11 +241,32 @@ public class WxIndexV2Controller extends ApiBaseAction {
         ).collect(Collectors.toList());
     }
 
-    public static void main(String[] args) {
-        String ss ="zhs";
-        String[] a = ss.split(",");
-        for (int i = 0; i < a.length; i++) {
-            System.out.println(a[i]);
+    private void change(List<Integer> list,String goodIds){
+        String[] str = goodIds.split(",");
+        for (int i = 0; i < str.length; i++) {
+            if(!list.contains(Integer.parseInt(str[i]))){
+                list.add(Integer.parseInt(str[i]));
+            }
         }
+    }
+    public static <T> List randomSub(List<T> tl, int n) {
+        int count = tl.size()>n?n:tl.size();
+        Random r = ThreadLocalRandom.current();
+        //避免修改原列表
+        List<T> temp = new ArrayList<>(tl);
+        //记录返回列表
+        List<T> list = new ArrayList<>(count);
+        for (int i=0;i<count;i++) {
+            int t=r.nextInt(temp.size());
+            list.add(temp.get(t));
+            temp.remove(t);
+        }
+        return list;
+    }
+    public static void main(String[] args) {
+
+        Random random = new Random();
+        random.nextInt(4);
+        System.out.println(random.nextInt(4));
     }
 }

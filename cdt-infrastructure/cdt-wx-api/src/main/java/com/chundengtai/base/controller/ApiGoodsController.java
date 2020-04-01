@@ -358,6 +358,7 @@ public class ApiGoodsController extends ApiBaseAction {
     @GetMapping(value = "list")
     public Object list(@LoginUser UserVo loginUser,
                        Integer categoryId,
+                       Integer attriId,
                        Integer brandId,
                        String keyword,
                        Integer isNew,
@@ -367,12 +368,6 @@ public class ApiGoodsController extends ApiBaseAction {
         Map params = new HashMap();
         params.put("is_delete", 0);
         params.put("is_on_sale", 1);
-        //params.put("brand_id", brandId);
-        //params.put("keyword", keyword);
-        //params.put("is_new", isNew);
-        //params.put("is_hot", isHot);
-        //params.put("page", page);
-        // params.put("limit", size);
         params.put("order", sort);
         params.put("sidx", order);
         //
@@ -383,6 +378,11 @@ public class ApiGoodsController extends ApiBaseAction {
             params.put("sidx", "id");
             params.put("order", "desc");
         }
+
+        params.put("category_id", categoryId);
+       /* if(null != attriId && attriId>0){
+            params.put("attribute_category", attriId);
+        }*/
         //添加到搜索历史
         if (!StringUtils.isNullOrEmpty(keyword)) {
             SearchHistoryVo searchHistoryVo = new SearchHistoryVo();
@@ -401,59 +401,12 @@ public class ApiGoodsController extends ApiBaseAction {
         rootCategory.setChecked(false);
         filterCategory.add(rootCategory);
 
-//        if (null != categoryEntityList && categoryEntityList.size() > 0) {
-//            List<Integer> categoryIds = new ArrayList();
-//            for (GoodsVo goodsVo : categoryEntityList) {
-//                categoryIds.add(goodsVo.getCategory_id());
-//            }
-//            //查找二级分类的parent_id
-//            Map categoryParam = new HashMap();
-//            categoryParam.put("ids", categoryIds);
-//            categoryParam.put("fields", "parent_id");
-//            List<CategoryVo> parentCategoryList = categoryService.queryList(categoryParam);
-//            List<Integer> parentIds = new ArrayList();
-//            for (CategoryVo categoryEntity : parentCategoryList) {
-//                parentIds.add(categoryEntity.getParent_id());
-//            }
-//            //一级分类
-//            categoryParam = new HashMap();
-//            categoryParam.put("fields", "id,name");
-//            categoryParam.put("order", "asc");
-//            categoryParam.put("sidx", "sort_order");
-//            categoryParam.put("ids", parentIds);
-//            List<CategoryVo> parentCategory = categoryService.queryList(categoryParam);
-//            if (null != parentCategory) {
-//                filterCategory.addAll(parentCategory);
-//            }
-//        }
-//        //加入分类条件
-//        if (null != categoryId && categoryId > 0) {
-//            List<Integer> categoryIds = new ArrayList();
-//            Map categoryParam = new HashMap();
-//            categoryParam.put("parent_id", categoryId);
-//            categoryParam.put("fields", "id");
-//            List<CategoryVo> childIds = categoryService.queryList(categoryParam);
-//            for (CategoryVo categoryEntity : childIds) {
-//                categoryIds.add(categoryEntity.getId());
-//            }
-//            categoryIds.add(categoryId);
-//            params.put("categoryIds", categoryIds);
-//        }
         //查询列表数据
-        params.put("attribute_category", categoryId);
         params.put("fields", "id, name, list_pic_url,primary_pic_url,market_price,retail_price, goods_brief,is_service,add_time,browse");
         //Query query = new Query(params);
         PageHelper.startPage(page, size);
         List<GoodsVo> goodsList = goodsService.queryList(params);
         ApiPageUtils goodsData = new ApiPageUtils(new PageInfo(goodsList));
-        //搜索到的商品
-//        for (CategoryVo categoryEntity : filterCategory) {
-//            if (null != categoryId && categoryEntity.getId() == 0 || categoryEntity.getId() == categoryId) {
-//                categoryEntity.setChecked(true);
-//            } else {
-//                categoryEntity.setChecked(false);
-//            }
-//        }
         goodsData.setFilterCategory(filterCategory);
         goodsData.setGoodsList(goodsList);
         return toResponsSuccess(goodsData);
@@ -560,7 +513,6 @@ public class ApiGoodsController extends ApiBaseAction {
      * 　　商品详情页的大家都在看的商品
      */
     @ApiOperation(value = "商品详情页")
-    @IgnoreAuth
     @GetMapping(value = "related")
     public Object related(Integer id) {
         Map<String, Object> resultObj = new HashMap();
@@ -593,6 +545,7 @@ public class ApiGoodsController extends ApiBaseAction {
         resultObj.put("goodsList", relatedGoods);
         return toResponsSuccess(resultObj);
     }
+
 
     /**
      * 　　在售的商品总数
