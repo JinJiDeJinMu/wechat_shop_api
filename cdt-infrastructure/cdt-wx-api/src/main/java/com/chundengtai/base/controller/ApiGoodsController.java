@@ -3,6 +3,7 @@ package com.chundengtai.base.controller;
 import com.chundengtai.base.annotation.APPLoginUser;
 import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.annotation.LoginUser;
+import com.chundengtai.base.dto.GoodsDTO;
 import com.chundengtai.base.entity.*;
 import com.chundengtai.base.oss.OSSFactory;
 import com.chundengtai.base.result.Result;
@@ -34,6 +35,7 @@ import java.math.BigDecimal;
 import java.text.AttributedString;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Api(tags = "商品管理")
@@ -413,6 +415,29 @@ public class ApiGoodsController extends ApiBaseAction {
         goodsData.setFilterCategory(filterCategory);
         goodsData.setGoodsList(goodsList);
         return toResponsSuccess(goodsData);
+    }
+
+    //查询新品列表
+    @ApiOperation(value = "首页新品")
+    @GetMapping(value = "NewGoods")
+    public Result<Map<String, Object>> indexGoods(String referrerId) {
+
+            Map<String, Object> resultObj = new HashMap<>();
+            //最新商品
+            HashMap param = new HashMap<String, Object>();
+            param.put("is_new", 1);
+            param.put("is_delete", 0);
+            param.put("is_on_sale", 1);
+            param.put("sidx", "add_time");
+            param.put("order", "desc");
+            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
+
+            param.put("offset",0);
+            param.put("limit",40);
+            List<GoodsVo> newGoods = goodsService.queryList(param);
+
+            resultObj.put("goodsList",newGoods);
+            return Result.success(resultObj);
     }
 
     /**
