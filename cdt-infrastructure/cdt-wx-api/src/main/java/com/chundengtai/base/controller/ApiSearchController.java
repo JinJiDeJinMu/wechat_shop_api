@@ -20,9 +20,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * API登录授权
@@ -138,7 +136,7 @@ public class ApiSearchController extends ApiBaseAction {
         ApiPageUtils pageUtil = new ApiPageUtils(goodsVoList, total, query.getLimit(), query.getPage());
         //记录历史
         SearchHistoryVo searchHistoryVo = new SearchHistoryVo();
-        searchHistoryVo.setAdd_time(System.currentTimeMillis());
+        searchHistoryVo.setAdd_time(System.currentTimeMillis()/1000);
         searchHistoryVo.setKeyword(keyword);
         searchHistoryVo.setUser_id(userVo.getUserId().toString());
         if(goodsVoList.size()>0){
@@ -163,5 +161,33 @@ public class ApiSearchController extends ApiBaseAction {
     public Object clearhistory(@LoginUser UserVo loginUser) {
         searchHistoryService.deleteByUserId(loginUser.getUserId());
         return toResponsSuccess("");
+    }
+
+    @GetMapping("gethistory")
+    public Object gethistory(@LoginUser UserVo loginUser) {
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.set(Calendar.DATE,calendar.get(Calendar.DATE) - 7);
+        Date time = calendar.getTime();
+        Map<String, Object> params= new HashMap<>();
+        params.put("add_time",(time.getTime())/1000);
+        params.put("user_id",loginUser.getUserId());
+        params.put("sidx","id");
+        params.put("order","desc");
+        params.put("offset",0);
+        params.put("limit",10);
+        List<SearchHistoryVo> searchHistoryVoList = searchHistoryService.queryList(params);
+        return toResponsSuccess(searchHistoryVoList);
+    }
+
+    public static void main(String[] args) {
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.set(Calendar.DATE,calendar.get(Calendar.DATE) - 7);
+        Date time = calendar.getTime();
+        System.out.println(time.getTime()/1000);
+        System.out.println(System.currentTimeMillis()/1000 >time.getTime()/1000);
     }
 }
