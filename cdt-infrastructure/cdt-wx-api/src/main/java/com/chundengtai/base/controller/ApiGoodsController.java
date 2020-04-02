@@ -379,10 +379,13 @@ public class ApiGoodsController extends ApiBaseAction {
             params.put("order", "desc");
         }
 
-        params.put("category_id", categoryId);
-       /* if(null != attriId && attriId>0){
+        if(null !=categoryId && categoryId>0){
+            params.put("category_id", categoryId);
+        }
+
+        if(null != attriId && attriId>0){
             params.put("attribute_category", attriId);
-        }*/
+        }
         //添加到搜索历史
         if (!StringUtils.isNullOrEmpty(keyword)) {
             SearchHistoryVo searchHistoryVo = new SearchHistoryVo();

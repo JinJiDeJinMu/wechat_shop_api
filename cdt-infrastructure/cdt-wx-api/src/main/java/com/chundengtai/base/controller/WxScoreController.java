@@ -1,11 +1,14 @@
 package com.chundengtai.base.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chundengtai.base.annotation.LoginUser;
 import com.chundengtai.base.bean.CdtScoreFlow;
+import com.chundengtai.base.bean.CdtUscore;
 import com.chundengtai.base.bean.CdtUserScore;
 import com.chundengtai.base.entity.UserVo;
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.CdtScoreFlowService;
+import com.chundengtai.base.service.CdtUscoreService;
 import com.chundengtai.base.service.CdtUserScoreService;
 import com.chundengtai.base.util.ApiBaseAction;
 import com.chundengtai.base.util.CommonUtil;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Description 购买积分
@@ -37,6 +41,9 @@ public class WxScoreController extends ApiBaseAction {
     @Autowired
     private CdtUserScoreService cdtUserScoreService;
 
+    @Autowired
+    private CdtUscoreService cdtUscoreService;
+
     @GetMapping("buyscore.do")
     public Result buyScore(@LoginUser UserVo loginUser, String money, String score) {
         CdtScoreFlow cdtScoreFlow = new CdtScoreFlow();
@@ -52,7 +59,7 @@ public class WxScoreController extends ApiBaseAction {
         if (result) {
             return Result.success(cdtScoreFlow);
         }
-        return Result.failure("积分充值订单创建失败");
+        return Result.failure("充值订单创建失败");
     }
 
     @GetMapping("myScore.json")
@@ -60,6 +67,19 @@ public class WxScoreController extends ApiBaseAction {
 
         CdtUserScore cdtUserScore = cdtUserScoreService.getById(loginUser.getUserId());
         return Result.success(cdtUserScore);
+    }
+
+    /**
+     * 积分流水
+     * @param loginUser
+     * @return
+     */
+    @GetMapping("uScore.json")
+    public Result uScore(@LoginUser UserVo loginUser) {
+
+        List<CdtUscore> uscoreList = cdtUscoreService.list(new LambdaQueryWrapper<CdtUscore>()
+                .eq(CdtUscore::getUserId,loginUser.getUserId()));
+        return Result.success(uscoreList);
     }
 
 }

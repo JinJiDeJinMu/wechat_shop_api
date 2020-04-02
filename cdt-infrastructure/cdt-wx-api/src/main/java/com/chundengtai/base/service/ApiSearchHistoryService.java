@@ -34,7 +34,6 @@ public class ApiSearchHistoryService {
         searchHistoryDao.save(region);
     }
 
-
     public void update(SearchHistoryVo region) {
         searchHistoryDao.update(region);
     }

@@ -53,5 +53,7 @@ public class CdtUserScore implements Serializable {
      */
     private String token;
 
+    private Integer number;
+
 
 }
