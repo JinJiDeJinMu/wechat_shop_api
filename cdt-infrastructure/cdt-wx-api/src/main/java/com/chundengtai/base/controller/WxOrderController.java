@@ -3,6 +3,8 @@ package com.chundengtai.base.controller;
 import com.alibaba.fastjson.JSON;
 import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.annotation.LoginUser;
+import com.chundengtai.base.bean.CdtUscore;
+import com.chundengtai.base.bean.CdtUserScore;
 import com.chundengtai.base.bean.Order;
 import com.chundengtai.base.entity.*;
 import com.chundengtai.base.facade.IdistributionFacade;
@@ -25,6 +27,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -66,6 +69,12 @@ public class WxOrderController extends ApiBaseAction {
 
     @Autowired
     private ApiOrderGoodsService apiOrderGoodsService;
+
+    @Autowired
+    private CdtUscoreService cdtUscoreService;
+
+    @Autowired
+    private CdtUserScoreService userScoreService;
 
     /**
      * 获取订单列表(要验证)
@@ -366,6 +375,7 @@ public class WxOrderController extends ApiBaseAction {
      */
     @ApiOperation(value = "确认收货")
     @GetMapping("confirmOrder.do")
+    @Transactional
     public Object confirmOrder(@LoginUser UserVo loginUser, Integer orderId) {
         try {
             Order orderVo = cdtOrderService.getById(orderId);
@@ -378,7 +388,31 @@ public class WxOrderController extends ApiBaseAction {
                 orderVo.setConfirmTime(new Date());
                 boolean result = cdtOrderService.updateById(orderVo);
                 if (result) {
+
                     distributionFacade.notifyOrderStatus(loginUser.getUserId().intValue(), orderVo, GoodsTypeEnum.getEnumByKey(orderVo.getGoodsType()));
+                }
+                //获取积分流水
+                CdtUscore cdtUscore = new CdtUscore();
+                cdtUscore.setCreateTime(new Date());
+                cdtUscore.setOrderId(orderVo.getId());
+                cdtUscore.setStatus(0);
+                cdtUscore.setType(1);
+                cdtUscore.setScore((orderVo.getActualPrice().multiply(new BigDecimal(100))).intValue());
+                cdtUscore.setUserId(orderVo.getUserId());
+                cdtUscoreService.save(cdtUscore);
+
+                //更改用户积分
+
+                CdtUserScore userScore = userScoreService.getById(orderVo.getUserId());
+                if(userScore == null){
+                    userScore = new CdtUserScore();
+                    userScore.setId(orderVo.getUserId().longValue());
+                    userScore.setCreateTime(new Date());
+                    userScore.setNumber((orderVo.getActualPrice().multiply(new BigDecimal(100)).intValue()));
+                    userScoreService.save(userScore);
+                }else{
+                    userScore.setNumber(userScore.getNumber() + (orderVo.getActualPrice().multiply(new BigDecimal(100)).intValue()));
+                    userScoreService.updateById(userScore);
                 }
                 return toResponsSuccess("确认收货成功");
             } else {

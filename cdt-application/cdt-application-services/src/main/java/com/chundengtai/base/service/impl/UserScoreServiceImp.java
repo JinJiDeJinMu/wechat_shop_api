@@ -79,6 +79,7 @@ public class UserScoreServiceImp implements UserScoreService {
         }
 
     }
+
     /**
      * 判断会员等级
      *

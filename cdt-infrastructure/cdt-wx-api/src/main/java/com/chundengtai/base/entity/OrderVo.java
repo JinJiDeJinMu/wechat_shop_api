@@ -509,6 +509,9 @@ public class OrderVo implements Serializable {
 //            handleOption.put("delete", true);
             handleOption.put("buy", true);
         }
+        if (order_status.equals(OrderStatusEnum.REFUND_ORDER.getCode())) {
+            handleOption.put("buy", true);
+        }
 
         //如果订单没有被取消，且没有支付，则可支付，可取消
         if (order_status.equals(OrderStatusEnum.WAIT_PAY.getCode())) {
