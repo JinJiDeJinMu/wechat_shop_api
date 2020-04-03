@@ -146,6 +146,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("is_delete", 0);
             param.put("is_on_sale", 1);
             param.put("sidx", "add_time");
+
             param.put("order", "desc");
             param.put("limit",2);
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
