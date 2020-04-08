@@ -13,6 +13,8 @@ import com.chundengtai.base.service.ApiSearchHistoryService;
 import com.chundengtai.base.util.ApiBaseAction;
 import com.chundengtai.base.util.ApiPageUtils;
 import com.chundengtai.base.utils.Query;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * API登录授权
@@ -126,32 +129,33 @@ public class ApiSearchController extends ApiBaseAction {
         }
         Map param = new HashMap();
         param.put("keyword", keyword);
-        param.put("page", pageIndex);
-        param.put("limit", pagesize);
         param.put("order", "desc");
         param.put("sidx", "id");
-        Query query = new Query(param);
-        List<GoodsVo> goodsVoList = apiGoodsService.queryList(query);
-        int total = apiGoodsService.queryTotal(query);
-        ApiPageUtils pageUtil = new ApiPageUtils(goodsVoList, total, query.getLimit(), query.getPage());
-        //记录历史
-        SearchHistoryVo searchHistoryVo = new SearchHistoryVo();
-        searchHistoryVo.setAdd_time(System.currentTimeMillis()/1000);
-        searchHistoryVo.setKeyword(keyword);
-        searchHistoryVo.setUser_id(userVo.getUserId().toString());
-        if(goodsVoList.size()>0){
-            searchHistoryVo.setStatus(1);
-            StringBuffer goods= new StringBuffer();
-            goodsVoList.forEach(e ->{
-                goods.append(e.getId());
-                goods.append(",");
-            });
-            searchHistoryVo.setGoods(goods.toString());
-        }else {
-            searchHistoryVo.setStatus(0);
+        //Query query = new Query(param);
+        System.out.println("----"+param);
+        PageHelper.startPage(pageIndex,pagesize);
+        List<GoodsVo> goodsVoList = apiGoodsService.queryList(param);
+        PageInfo<GoodsVo> pageInfo = new PageInfo<>(goodsVoList);
+        if(pageIndex <=1) {
+            //记录历史
+            SearchHistoryVo searchHistoryVo = new SearchHistoryVo();
+            searchHistoryVo.setAdd_time(System.currentTimeMillis() / 1000);
+            searchHistoryVo.setKeyword(keyword);
+            searchHistoryVo.setUser_id(userVo.getUserId().toString());
+            if (goodsVoList.size() > 0) {
+                searchHistoryVo.setStatus(1);
+                StringBuffer goods = new StringBuffer();
+                goodsVoList.forEach(e -> {
+                    goods.append(e.getId());
+                    goods.append(",");
+                });
+                searchHistoryVo.setGoods(goods.toString());
+            } else {
+                searchHistoryVo.setStatus(0);
+            }
+            searchHistoryService.save(searchHistoryVo);
         }
-        searchHistoryService.save(searchHistoryVo);
-        return Result.success(pageUtil);
+        return Result.success(pageInfo);
     }
 
     /**
@@ -178,7 +182,8 @@ public class ApiSearchController extends ApiBaseAction {
         params.put("offset",0);
         params.put("limit",10);
         List<SearchHistoryVo> searchHistoryVoList = searchHistoryService.queryList(params);
-        return toResponsSuccess(searchHistoryVoList);
+        List<String> keys = searchHistoryVoList.stream().map(e->e.getKeyword()).distinct().collect(Collectors.toList());
+        return toResponsSuccess(keys);
     }
 
     public static void main(String[] args) {

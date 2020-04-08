@@ -11,6 +11,7 @@ import com.chundengtai.base.facade.IdistributionFacade;
 import com.chundengtai.base.service.*;
 import com.chundengtai.base.util.ApiBaseAction;
 import com.chundengtai.base.utils.CharUtil;
+import com.chundengtai.base.utils.PageUtils;
 import com.chundengtai.base.utils.Query;
 import com.chundengtai.base.weixinapi.GoodsTypeEnum;
 import com.chundengtai.base.weixinapi.OrderStatusEnum;
@@ -20,6 +21,7 @@ import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -81,25 +83,29 @@ public class WxOrderController extends ApiBaseAction {
      */
     @ApiOperation(value = "获取订单列表")
     @RequestMapping("list.json")
-    public Object list(@LoginUser UserVo loginUser, Integer order_status,
+    @IgnoreAuth
+    public Object list(/*@LoginUser UserVo loginUser,*/ Integer order_status,
                        Integer merchantId,
                        @RequestParam(value = "page", defaultValue = "1") Integer page,
                        @RequestParam(value = "size", defaultValue = "10") Integer size) {
         Map params = new HashMap();
-        params.put("user_id", loginUser.getUserId());
+        params.put("user_id", 135);
         if (merchantId != null && !merchantId.equals(0)) {
             params.put("merchantId", merchantId);
         }
-        params.put("page", page);
-        params.put("limit", size);
+       /* params.put("offset", page-1);
+        params.put("limit", size);*/
         params.put("sidx", "id");
         params.put("order", "desc");
         params.put("order_status", order_status);
         //查询列表数据
-        Query query = new Query(params);
+        //Query query = new Query(params);
+        System.out.println("-----"+params);
         PageHelper.startPage(page, size);
-        List<OrderVo> orderEntityList = orderService.queryPageList(query);
+        List<OrderVo> orderEntityList = orderService.queryPageList(params);
         PageInfo pageInfo = new PageInfo(orderEntityList);
+        //PageUtils pageUtils = new PageUtils(orderEntityList,orderEntityList.size(),size,page-size);
+        System.out.println("======"+orderEntityList);
         return toResponsSuccess(pageInfo);
     }
 
@@ -125,8 +131,9 @@ public class WxOrderController extends ApiBaseAction {
             params.put("order_status", order_status);
             //查询列表数据
             Query query = new Query(params);
+            System.out.println("-----"+params);
             PageHelper.startPage(page, size);
-            List<OrderVo> orderEntityList = orderService.queryPageList(query);
+            List<OrderVo> orderEntityList = orderService.queryPageList(params);
             PageInfo pageInfo = new PageInfo(orderEntityList);
             return toResponsSuccess(pageInfo);
         }
