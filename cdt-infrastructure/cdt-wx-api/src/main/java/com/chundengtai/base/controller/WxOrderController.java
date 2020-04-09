@@ -84,12 +84,12 @@ public class WxOrderController extends ApiBaseAction {
     @ApiOperation(value = "获取订单列表")
     @RequestMapping("list.json")
     @IgnoreAuth
-    public Object list(/*@LoginUser UserVo loginUser,*/ Integer order_status,
+    public Object list(@LoginUser UserVo loginUser, Integer order_status,
                        Integer merchantId,
                        @RequestParam(value = "page", defaultValue = "1") Integer page,
                        @RequestParam(value = "size", defaultValue = "10") Integer size) {
         Map params = new HashMap();
-        params.put("user_id", 135);
+        params.put("user_id", loginUser.getUserId());
         if (merchantId != null && !merchantId.equals(0)) {
             params.put("merchantId", merchantId);
         }
