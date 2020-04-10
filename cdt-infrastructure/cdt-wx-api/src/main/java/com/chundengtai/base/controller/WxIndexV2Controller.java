@@ -121,7 +121,6 @@ public class WxIndexV2Controller extends ApiBaseAction {
      */
     @ApiOperation(value = "首页新品")
     @GetMapping(value = "indexNewGoods.json")
-    @IgnoreAuth
     public Result<Map<String, Object>> indexGoods(String referrerId) {
         Map<String, Object> resultObj  = (Map<String, Object>) redisTemplate.opsForValue().get("indexNewGoods");
         if (resultObj == null) {
