@@ -68,7 +68,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             resultObj = new HashMap<>();
             Map<String, Object> param = new HashMap<>();
             List<AdVo> banner = adService.queryList(param);
-            resultObj.put("banner", banner);
+            resultObj.put("banner", null);
 
             //分类
             param.clear();
