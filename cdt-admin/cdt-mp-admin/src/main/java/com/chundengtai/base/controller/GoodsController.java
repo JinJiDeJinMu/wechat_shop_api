@@ -76,11 +76,11 @@ public class GoodsController extends BaseController {
             goods.setMerchantId(sysUserEntity.getMerchantId());
         }
         List<GoodsGalleryEntity> goodsGalleryEntities = goods.getGoodsImgList();
-        if(goodsGalleryEntities != null){
+       /* if(goodsGalleryEntities != null){
             String imgUrl = goodsGalleryEntities.get(0).getImgUrl();
             goods.setPrimaryPicUrl(imgUrl);
             goods.setListPicUrl(imgUrl);
-        }
+        }*/
         goods.setBrowse(1);
         goods.setMerchantId(-1L);
         goodsService.save(goods);
@@ -94,11 +94,11 @@ public class GoodsController extends BaseController {
     @RequiresPermissions("goods:update")
     public R update(@RequestBody GoodsEntity goods) {
         List<GoodsGalleryEntity> goodsGalleryEntities = goods.getGoodsImgList();
-        if(goodsGalleryEntities != null){
+       /* if(goodsGalleryEntities != null){
             String imgUrl = goodsGalleryEntities.get(0).getImgUrl();
             goods.setPrimaryPicUrl(imgUrl);
             goods.setListPicUrl(imgUrl);
-        }
+        }*/
         goodsService.update(goods);
         return R.ok();
     }

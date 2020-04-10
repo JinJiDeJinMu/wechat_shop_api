@@ -4,7 +4,6 @@ $(function () {
         colModel: [
             {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
             {label: '广告名称', name: 'name', index: 'name', width: 80},
-            {label: '商品id', name: 'goodsId', index: 'goodsId'},
             {label: '广告位置', name: 'adPositionName', index: 'ad_Position_id', width: 80},
             {label: '形式', name: 'mediaType', index: 'media_type', width: 80},
             {
@@ -69,6 +68,7 @@ var vm = new Vue({
             imageUrl: [
                 {required: true, message: '图片不能为空', trigger: 'blur'}
             ]
+
         },
         q: {
             name: ''
@@ -82,7 +82,7 @@ var vm = new Vue({
         query: function () {
             vm.reload();
         },
-        Checked: function(val){
+       /* Checked: function(val){
             if(val == 2){
              vm.flag = true;
              vm.gi =false;
@@ -93,11 +93,11 @@ var vm = new Vue({
                 vm.flag = false;
                 vm.gi = false;
             }
-        },
+        },*/
         add: function () {
             vm.showList = false;
             vm.title = "新增";
-            vm.ad = {enabled: 1, imageUrl: '', mediaType: 0,goodsId:''};
+            vm.ad = {enabled: 1, imageUrl: '', mediaType: 0,goodsId:'',endTime:''};
             vm.adPosition = [];
             this.getAdPositions();
             $('#content').editable('setHTML', '');
@@ -116,7 +116,12 @@ var vm = new Vue({
         saveOrUpdate: function (event) {
             var url = vm.ad.id == null ? "../ad/save" : "../ad/update";
             vm.ad.content = $('#content').editable('getHTML');
-            vm.add.endTime = vm.add.endTime;
+            vm.ad.endTime = vm.ad.endTime;
+            if(vm.ad.endTime ==null || vm.ad.endTime == ""){
+                alert("时间不能为空");
+                return false;
+            }
+            vm.ad = vm.ad;
             console.log(JSON.stringify(vm.ad));
             console.log(vm.ad);
             Ajax.request({
@@ -158,10 +163,10 @@ var vm = new Vue({
                 successCallback: function (r) {
                     vm.ad = r.ad;
                     vm.ad.endTime= r.ad.endTime;
-                    vm.ad.goodsId = r.ad.goodsId;
+                   /* vm.ad.goodsId = r.ad.goodsId;
                     if(r.ad.content !=null){
                         vm.flag = true;
-                    }
+                    }*/
                     vm.ad.type= r.ad.type
                     $('#content').editable('setHTML', r.ad.content);
                 }

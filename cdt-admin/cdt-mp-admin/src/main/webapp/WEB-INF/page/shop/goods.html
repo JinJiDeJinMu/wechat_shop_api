@@ -321,7 +321,31 @@
                         </div>
                     </Form-item>
 
-                    <Form-item label="商品主图">
+                          <Row>
+                          <i-col span="16">
+                              <Form-item label="商品主图" prop="primaryPicUrl">
+                                  <i-input v-model="goods.primaryPicUrl" placeholder="商品海报图"/>
+                              </Form-item>
+                          </i-col>
+                          <i-col span="3">
+                              <Form-item :label-width="1">
+                                  <Upload style="width: 300px;" action="../sys/oss/upload" :format="['jpg','jpeg','png']"
+                                          max-size="2048"
+                                          :on-success="handleSuccessPicUrl" :on-format-error="handleFormatError"
+                                          :show-upload-list="false"
+                                          :on-exceeded-size="handleMaxSize">
+                                      <i-button icon="ios-cloud-upload-outline">上传图片</i-button>
+                                  </Upload>
+                              </Form-item>
+                          </i-col>
+                          <i-col span="3">
+                              <Form-item :label-width="1">
+                                  <i-button icon="eye" @click="eyeImagePicUrl">预览图片</i-button>
+                              </Form-item>
+                          </i-col>
+                      </Row>
+
+                    <Form-item label="商品列表图">
                         <template>
                             <div class="upload-list" v-for="item in uploadList">
                                 <template v-if="item.status === 'finished'||item.imgUrl!=''">
@@ -350,29 +374,7 @@
                             </Modal>
                         </template>
                     </Form-item>
-                    <!--  <Row>
-                          <i-col span="16">
-                              <Form-item label="商品列表图&#45;&#45;首页列表显示" prop="listPicUrl">
-                                  <i-input v-model="goods.listPicUrl" placeholder="商品海报图"/>
-                              </Form-item>
-                          </i-col>
-                          <i-col span="3">
-                              <Form-item :label-width="1">
-                                  <Upload style="width: 300px;" action="../sys/oss/upload" :format="['jpg','jpeg','png']"
-                                          max-size="2048"
-                                          :on-success="handleSuccessListPicUrl" :on-format-error="handleFormatError"
-                                          :show-upload-list="false"
-                                          :on-exceeded-size="handleMaxSize">
-                                      <i-button icon="ios-cloud-upload-outline">上传图片</i-button>
-                                  </Upload>
-                              </Form-item>
-                          </i-col>
-                          <i-col span="3">
-                              <Form-item :label-width="1">
-                                  <i-button icon="eye" @click="eyeImageListPicUrl">预览图片</i-button>
-                              </Form-item>
-                          </i-col>
-                      </Row>-->
+
                     <Form-item label="商品详情介绍">
                     </Form-item>
                     <div id="goodsDesc"></div>

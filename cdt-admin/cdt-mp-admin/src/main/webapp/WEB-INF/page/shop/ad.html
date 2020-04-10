@@ -18,9 +18,9 @@
                 #if($shiro.hasPermission("ad:save"))
                 <i-button type="info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</i-button>
                 #end
-               <!-- #if($shiro.hasPermission("ad:update"))
+                #if($shiro.hasPermission("ad:update"))
                 <i-button type="warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</i-button>
-                #end-->
+                #end
                 #if($shiro.hasPermission("ad:delete"))
                 <i-button type="error" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</i-button>
                 #end
@@ -57,7 +57,7 @@
                 </Radio-group>
             </Form-item>
             <Form-item label="类型" prop="type">
-                <el-radio-group v-model="ad.type" @change="Checked">
+                <el-radio-group v-model="ad.type" >
                     <el-radio label="0">
                         <span>活动宣传</span>
                     </el-radio>
@@ -72,13 +72,13 @@
             <Form-item label="广告名称" prop="name">
                 <i-input v-model="ad.name" placeholder="广告名称"/>
             </Form-item>
-            <Form-item label="商品Id" prop="goodsId" v-if="gi">
+            <!--<Form-item label="商品Id" prop="goodsId" v-if="gi">
                 <i-input v-model="ad.goodsId" placeholder="商品Id,多个,隔开"/>
-            </Form-item>
+            </Form-item>-->
             <Form-item label="链接" prop="link">
                 <i-input v-model="ad.link" placeholder="链接"/>
             </Form-item>
-            <Row>
+           <Row>
                 <i-col span="16">
                     <Form-item label="图片" prop="imageUrl">
                         <i-input v-model="ad.imageUrl" placeholder="图片" readonly/>
@@ -101,11 +101,12 @@
                     </Form-item>
                 </i-col>
             </Row>
-            <Form-item label="图文详情" prop="content" v-show="flag">
+          <!--  <Form-item label="图文详情" prop="content" v-show="flag">
                 <div id="content"></div>
-            </Form-item>
+            </Form-item>-->
             <Form-item label="结束时间" prop="endTime">
-                <Date-picker v-model="ad.endTime" placeholder="结束时间"></Date-picker>
+              <!--  <Date-picker v-model="ad.endTime" placeholder="结束时间"></Date-picker>-->
+                <el-date-picker v-model="ad.endTime" format="yyyy-MM-dd HH:mm" type="datetime" placeholder="开始时间"></el-date-picker>
             </Form-item>
             <Form-item label="状态" prop="enabled">
                 <Radio-group v-model="ad.enabled">

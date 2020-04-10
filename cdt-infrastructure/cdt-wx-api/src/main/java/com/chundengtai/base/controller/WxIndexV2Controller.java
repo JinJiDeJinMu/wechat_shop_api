@@ -67,7 +67,6 @@ public class WxIndexV2Controller extends ApiBaseAction {
         if (resultObj == null) {
             resultObj = new HashMap<>();
             Map<String, Object> param = new HashMap<>();
-            param.put("ad_position_id", 1);
             List<AdVo> banner = adService.queryList(param);
             resultObj.put("banner", banner);
 
@@ -88,7 +87,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("sidx", "sort_order");
             param.put("order", "desc");
             param.put("showPosition", 1);
-            PageHelper.startPage(0, 5, false);
+            PageHelper.startPage(0, 8, false);
             List<AttributeCategoryVo> categoryGoodsList = attributeCategoryMapper.queryList(param);
 
             //查找其他分类下面的商品
@@ -100,7 +99,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
                 param.put("order", "desc");
                 param.put("limit",6);
                 param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
-                PageHelper.startPage(0, 6, false);
+                PageHelper.startPage(0, 8, false);
                 List<GoodsVo> categoryGoods = goodsService.queryList(param);
                 List<GoodsDTO> goodsDTOS = JsonTransfer.convertList(categoryGoods, GoodsDTO.class);
                 Map<String, Object> newCategory = new HashMap<>();
