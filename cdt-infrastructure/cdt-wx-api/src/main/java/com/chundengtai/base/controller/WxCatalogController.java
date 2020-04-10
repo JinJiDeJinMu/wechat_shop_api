@@ -53,6 +53,7 @@ public class WxCatalogController extends ApiBaseAction {
             @ApiImplicitParam(name = "page", value = "page", paramType = "query", required = false),
             @ApiImplicitParam(name = "size", value = "size", paramType = "query", required = false)})
     @GetMapping(value = "/index.json")
+    @IgnoreAuth
     public Object index(@RequestParam(value = "page", defaultValue = "1") Integer page,
                         @RequestParam(value = "size", defaultValue = "10") Integer size) {
         Map<String, Object> resultObj = new HashMap();
@@ -90,6 +91,7 @@ public class WxCatalogController extends ApiBaseAction {
     @ApiOperation(value = "分类目录当前分类数据接口")
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "id", paramType = "query", required = true)})
     @GetMapping(value = "/current.json")
+    @IgnoreAuth
     public Object current(Integer id) {
         Map<String, Object> resultObj = new HashMap();
         Map params = new HashMap();
