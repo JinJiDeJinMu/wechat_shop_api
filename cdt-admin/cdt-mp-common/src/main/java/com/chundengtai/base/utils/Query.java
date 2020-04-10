@@ -44,7 +44,7 @@ public class Query extends LinkedHashMap<String, Object> {
         this.limit = Integer.parseInt(params.get("limit").toString());
         this.pageNum = this.page;
         this.pageSize = this.pageNum;
-        this.put("offset", (page - 1) * limit);
+        this.put("offset", (page - 1)*limit);
         this.put("page", page);
         this.put("limit", limit);
 
