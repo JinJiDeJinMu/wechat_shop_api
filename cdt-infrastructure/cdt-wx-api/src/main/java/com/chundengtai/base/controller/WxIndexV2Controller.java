@@ -68,7 +68,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             resultObj = new HashMap<>();
             Map<String, Object> param = new HashMap<>();
             List<AdVo> banner = adService.queryList(param);
-            resultObj.put("banner", null);
+            resultObj.put("banner", banner);
 
             //分类
             param.clear();
@@ -79,8 +79,8 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("enabled", 1);
             PageHelper.startPage(0, 10, false);
             List<AttributeCategoryVo> categoryList = attributeCategoryMapper.queryList(param);
-            resultObj.put("categoryList", mapperFacade.mapAsList(categoryList, AttributeCategoryDTO.class));
-
+            //resultObj.put("categoryList", mapperFacade.mapAsList(categoryList, AttributeCategoryDTO.class));
+            resultObj.put("categoryList", null);
             //分类下面模块的商品
             param.clear();
             param.put("parent_id", 0);
