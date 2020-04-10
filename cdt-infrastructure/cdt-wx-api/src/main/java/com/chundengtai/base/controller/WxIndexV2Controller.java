@@ -80,8 +80,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("enabled", 1);
             PageHelper.startPage(0, 10, false);
             List<AttributeCategoryVo> categoryList = attributeCategoryMapper.queryList(param);
-            //resultObj.put("categoryList", mapperFacade.mapAsList(categoryList, AttributeCategoryDTO.class));
-            resultObj.put("categoryList", null);
+            resultObj.put("categoryList", mapperFacade.mapAsList(categoryList, AttributeCategoryDTO.class));
             //分类下面模块的商品
             param.clear();
             param.put("parent_id", 0);
@@ -167,7 +166,6 @@ public class WxIndexV2Controller extends ApiBaseAction {
      */
     @ApiOperation(value = "首页推荐")
     @GetMapping("/indexRelatedGoods.json")
-    @IgnoreAuth
     public Result<List<GoodsDTO>> relatedGoods(@LoginUser UserVo userVo){
 
         Map<String, Object> params= new HashMap<>();
