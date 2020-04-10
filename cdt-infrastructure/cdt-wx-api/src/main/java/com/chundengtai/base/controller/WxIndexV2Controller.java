@@ -62,6 +62,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
      */
     @ApiOperation(value = "首页包含轮播图、分类、分类下的商品、最新商品")
     @GetMapping(value = "index.json")
+    @IgnoreAuth
     public Result<Map<String, Object>> index() {
         Map<String, Object> resultObj = (Map<String, Object>) redisTemplate.opsForValue().get("indexV2");
         if (resultObj == null) {
@@ -121,6 +122,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
      */
     @ApiOperation(value = "首页新品")
     @GetMapping(value = "indexNewGoods.json")
+    @IgnoreAuth
     public Result<Map<String, Object>> indexGoods(String referrerId) {
         Map<String, Object> resultObj  = (Map<String, Object>) redisTemplate.opsForValue().get("indexNewGoods");
         if (resultObj == null) {
@@ -165,6 +167,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
      */
     @ApiOperation(value = "首页推荐")
     @GetMapping("/indexRelatedGoods.json")
+    @IgnoreAuth
     public Result<List<GoodsDTO>> relatedGoods(@LoginUser UserVo userVo){
 
         Map<String, Object> params= new HashMap<>();
