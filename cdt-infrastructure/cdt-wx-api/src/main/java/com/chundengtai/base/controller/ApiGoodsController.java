@@ -421,7 +421,8 @@ public class ApiGoodsController extends ApiBaseAction {
     //查询新品列表
     @ApiOperation(value = "首页新品")
     @GetMapping(value = "NewGoods")
-    public Result<Map<String, Object>> indexGoods(String referrerId) {
+    public Result<Object> indexGoods(@RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
+                                                   @RequestParam(value = "pagesize", defaultValue = "10") Integer pagesize) {
 
             Map<String, Object> resultObj = new HashMap<>();
             //最新商品
@@ -433,12 +434,10 @@ public class ApiGoodsController extends ApiBaseAction {
             param.put("order", "desc");
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
 
-            param.put("offset",0);
-            param.put("limit",40);
+            PageHelper.startPage(pageIndex,pagesize);
             List<GoodsVo> newGoods = goodsService.queryList(param);
-
-            resultObj.put("goodsList",newGoods);
-            return Result.success(resultObj);
+            PageInfo<GoodsVo> pageInfo = new PageInfo<>(newGoods);
+            return Result.success(pageInfo);
     }
 
     /**
