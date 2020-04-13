@@ -666,7 +666,7 @@ var vm = new Vue({
                 listPicUrl: '',
                 categoryId: '',
                 isOnSale: 1,
-                isNew: 1,
+                isNew: 0,
                 isAppExclusive: 0,
                 brokerage_percent: 0,
                 isLimited: 0,

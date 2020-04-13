@@ -80,8 +80,8 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("enabled", 1);
             PageHelper.startPage(0, 10, false);
             List<AttributeCategoryVo> categoryList = attributeCategoryMapper.queryList(param);
-            resultObj.put("categoryList", mapperFacade.mapAsList(categoryList, AttributeCategoryDTO.class));
-            //resultObj.put("categoryList", null);
+            //resultObj.put("categoryList", mapperFacade.mapAsList(categoryList, AttributeCategoryDTO.class));
+            resultObj.put("categoryList", null);
             //分类下面模块的商品
             param.clear();
             param.put("parent_id", 0);
@@ -134,9 +134,9 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("is_on_sale", 1);
             param.put("sidx", "add_time");
             param.put("order", "desc");
-            param.put("limit",10);
+            param.put("limit",8);
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
-            PageHelper.startPage(1, 10, false);
+            PageHelper.startPage(1, 8, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
             List<GoodsDTO> goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
 
