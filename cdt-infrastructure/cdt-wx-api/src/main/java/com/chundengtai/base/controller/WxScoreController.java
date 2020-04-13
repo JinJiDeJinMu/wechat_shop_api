@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description 购买积分
@@ -66,7 +68,10 @@ public class WxScoreController extends ApiBaseAction {
     public Result myScore(@LoginUser UserVo loginUser) {
 
         CdtUserScore cdtUserScore = cdtUserScoreService.getById(loginUser.getUserId());
-        return Result.success(cdtUserScore);
+        Map<String,Object> hashmap = new HashMap<>();
+        hashmap.put("falg",false);
+        hashmap.put("cdtUserScore",cdtUserScore);
+        return Result.success(hashmap);
     }
 
     /**
