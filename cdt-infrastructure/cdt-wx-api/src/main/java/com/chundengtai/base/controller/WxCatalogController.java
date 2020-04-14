@@ -21,10 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Api(tags = "v2栏目")
@@ -68,17 +66,21 @@ public class WxCatalogController extends ApiBaseAction {
         params.put("sidx", "sort_order");
         params.put("order", "asc");
 
-        List<CategoryVo> categoryGoods = data;
-        categoryGoods.stream().forEach(e ->{
+
+        data.stream().forEach(e ->{
             params.put("parent_id",e.getId());
             List<CategoryVo> categoryVos = categoryService.queryList(params);
             e.setSubCategoryList(categoryVos);
         });
 
+        List<CategoryVo> categoryGoods = data.stream().filter(e->e.getSubCategoryList().size()>0).collect(Collectors.toList());
+
+        System.out.println("====="+categoryGoods);
+
         CategoryVo categoryVo = new CategoryVo();
         categoryVo.setId(0);
         categoryVo.setName("全部商品");
-        data.add(0,categoryVo);
+        categoryGoods.add(0,categoryVo);
 
         resultObj.put("goods", categoryGoods);
 

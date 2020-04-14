@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Api(tags = "栏目")
@@ -74,6 +71,16 @@ public class ApiCatalogController extends ApiBaseAction {
             e.setSubCategoryList(categoryVos);
         });
 
+        System.out.println("------------"+categoryGoods);
+        Iterator<CategoryVo> tt = categoryGoods.iterator();
+        while (tt.hasNext()){
+            if(!tt.next().getName().equals("全部商品")){
+                if(tt.next().getSubCategoryList() == null || tt.next().getSubCategoryList().size()<=0){
+                    tt.remove();
+                }
+            }
+        }
+        System.out.println("====="+categoryGoods);
         resultObj.put("goods", categoryGoods);
 
         return toResponsSuccess(resultObj);
