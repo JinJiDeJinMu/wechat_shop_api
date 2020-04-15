@@ -135,7 +135,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("sidx", "add_time");
             param.put("order", "desc");
             param.put("limit",10);
-            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
+            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief,goods_number");
             PageHelper.startPage(1, 10, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
             newGoods= newGoods.stream().filter(e->e.getGoods_number() >0).collect(Collectors.toList());
@@ -151,7 +151,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
 
             param.put("order", "desc");
             param.put("limit",2);
-            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
+            param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief,goods_number");
             PageHelper.startPage(0, 2, false);
             List<GoodsVo> hotGoods = goodsService.queryList(param);
             hotGoods= hotGoods.stream().filter(e->e.getGoods_number() >0).collect(Collectors.toList());
