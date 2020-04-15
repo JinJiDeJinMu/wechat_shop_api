@@ -89,7 +89,7 @@ var vm = new Vue({
         showCard: false,
         showGoods: false,
         title: null,
-        coupon: {sendType: 0},
+        coupon: {sendType: 0,imgUrl:""},
         ruleValidate: {
             name: [
                 {required: true, message: '优惠券名称不能为空', trigger: 'blur'}
@@ -297,6 +297,51 @@ var vm = new Vue({
                     vm.goodss = r.list;
                 }
             });
+        },
+        handleSuccess(res, file) {
+            // 因为上传过程为实例，这里模拟添加 url
+            file.imgUrl = res.url;
+            file.name = res.url;
+            vm.uploadList.add(file);
+        },
+        handleBeforeUpload() {
+            const check = this.uploadList.length < 5;
+            if (!check) {
+                this.$Notice.warning({
+                    title: '最多只能上传 5 张图片。'
+                });
+            }
+            return check;
+        },
+        handleSubmit: function (name) {
+            handleSubmitValidate(this, name, function () {
+                vm.saveOrUpdate()
+            });
+        },
+        handleFormatError: function (file) {
+            this.$Notice.warning({
+                title: '文件格式不正确',
+                desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
+            });
+        },
+        handleMaxSize: function (file) {
+            this.$Notice.warning({
+                title: '超出文件大小限制',
+                desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
+            });
+        },
+        handleReset: function (name) {
+            handleResetForm(this, name);
+        },
+        handleSuccessPicUrl: function (res, file) {
+            vm.coupon.imgUrl = file.response.url;
+        },
+        eyeImagePicUrl: function () {
+            var url = vm.coupon.imgUrl;
+            eyeImage(url);
+        },
+        eyeImage: function (e) {
+            eyeImage($(e.target).attr('src'));
         }
     }
 });

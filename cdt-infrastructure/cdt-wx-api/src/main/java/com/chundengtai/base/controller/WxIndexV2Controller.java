@@ -134,10 +134,11 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("is_on_sale", 1);
             param.put("sidx", "add_time");
             param.put("order", "desc");
-            param.put("limit",8);
+            param.put("limit",10);
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
-            PageHelper.startPage(1, 8, false);
+            PageHelper.startPage(1, 10, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
+            newGoods= newGoods.stream().filter(e->e.getGoods_number() >0).collect(Collectors.toList());
             List<GoodsDTO> goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
 
             resultObj.put("newGoods",goodsDTOS);
@@ -153,6 +154,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief");
             PageHelper.startPage(0, 2, false);
             List<GoodsVo> hotGoods = goodsService.queryList(param);
+            hotGoods= hotGoods.stream().filter(e->e.getGoods_number() >0).collect(Collectors.toList());
             List<GoodsDTO> hotgoodsDTOS = mapperFacade.mapAsList(hotGoods, GoodsDTO.class);
             resultObj.put("hotGoods",hotgoodsDTOS);
             redisTemplate.opsForValue().set("indexNewGoods",resultObj,5, TimeUnit.MINUTES);
@@ -162,14 +164,15 @@ public class WxIndexV2Controller extends ApiBaseAction {
 
     /**
      * 首页推荐
-     * @param userVo
+     * @param
      * @return
      */
     @ApiOperation(value = "首页推荐")
     @GetMapping("/indexRelatedGoods.json")
-    public Result<List<GoodsDTO>> relatedGoods(@LoginUser UserVo userVo){
+    @IgnoreAuth
+    public Result<List<GoodsDTO>> relatedGoods(/*@LoginUser UserVo userVo*/){
 
-        Map<String, Object> params= new HashMap<>();
+       /* Map<String, Object> params= new HashMap<>();
         params.put("user_id",userVo.getUserId());
         params.put("sidx","id");
         params.put("order","desc");
@@ -210,7 +213,8 @@ public class WxIndexV2Controller extends ApiBaseAction {
             tuijian = mapperFacade.mapAsList(goodsVos, GoodsDTO.class);
         }
 
-        return Result.success(tuijian);
+        return Result.success(tuijian);*/
+       return Result.success(null);
     }
 
     @RequestMapping("/getBanner.json")

@@ -142,7 +142,13 @@ var vm = new Vue({
                 return;
             }
             $.each(id, function (idx, item) {
+                if(item.id ==0){
+                    alert("不能删除该列");
+                    console.log("===");
+                    return ;
+                }
                 ids[idx] = item.id;
+
             });
 
             confirm('确定要删除选中的记录？', function () {

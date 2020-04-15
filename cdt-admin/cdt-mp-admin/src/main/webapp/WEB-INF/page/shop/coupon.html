@@ -122,6 +122,31 @@
             <Form-item label="发放数量" prop="totalCount">
                 <Input-number :min="0" v-model="coupon.totalCount" placeholder="发放数量" style="width: 188px;"/>
             </Form-item>
+
+            <Row>
+                <i-col span="16">
+                    <Form-item label="优惠券图片" prop="imgUrl">
+                        <i-input v-model="coupon.imgUrl" placeholder="商品海报图"/>
+                    </Form-item>
+                </i-col>
+                <i-col span="3">
+                    <Form-item :label-width="1">
+                        <Upload style="width: 300px;" action="../sys/oss/upload" :format="['jpg','jpeg','png']"
+                                max-size="2048"
+                                :on-success="handleSuccessPicUrl" :on-format-error="handleFormatError"
+                                :show-upload-list="false"
+                                :on-exceeded-size="handleMaxSize">
+                            <i-button icon="ios-cloud-upload-outline">上传图片</i-button>
+                        </Upload>
+                    </Form-item>
+                </i-col>
+                <i-col span="3">
+                    <Form-item :label-width="1">
+                        <i-button icon="eye" @click="eyeImagePicUrl">预览图片</i-button>
+                    </Form-item>
+                </i-col>
+            </Row>
+
             <Form-item>
                 <i-button type="primary" @click="handleSubmit('formValidate')">提交</i-button>
                 <i-button type="warning" @click="reload" style="margin-left: 8px"/>

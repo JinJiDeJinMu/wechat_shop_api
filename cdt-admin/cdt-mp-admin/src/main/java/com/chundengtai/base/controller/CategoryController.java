@@ -10,9 +10,11 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("category")
@@ -76,6 +78,9 @@ public class CategoryController {
     @RequestMapping("/delete")
     @RequiresPermissions("category:delete")
     public R delete(@RequestBody Integer[] ids) {
+        if(Arrays.asList(ids).contains(0)){
+            return R.error("不能删除");
+        }
         categoryService.deleteBatch(ids);
 
         return R.ok();
@@ -121,8 +126,8 @@ public class CategoryController {
     @RequestMapping("/getCategorySelect")
     public R getCategorySelect() {
         Map<String, Object> map = new HashMap<>();
-
         List<CategoryEntity> list = categoryService.queryList(map);
+        list = list.stream().filter(e->e.getParentId() ==0).collect(Collectors.toList());
         return R.ok().put("list", list);
     }
 }

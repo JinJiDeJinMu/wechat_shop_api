@@ -21,12 +21,15 @@ import io.swagger.annotations.ApiOperation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -62,6 +65,7 @@ public class WxCouponController extends ApiBaseAction {
     @Autowired
     private CdtUserCouponMapper cdtUserCouponMapper;
 
+
     /**
      * 获取用户优惠券列表
      * @param
@@ -90,10 +94,24 @@ public class WxCouponController extends ApiBaseAction {
      */
     @ApiOperation(value = "获取商家店铺优惠券列表")
     @GetMapping("/merchantCouponList.json")
+    @IgnoreAuth
     public Result getMerchantCouponList(Integer merchantId){
 
-        List<CdtCoupon> cdtCouponList = couponService.list(new LambdaQueryWrapper<CdtCoupon>()
-                .eq(CdtCoupon::getMerchantId,merchantId));
+        List<CdtCoupon> cdtCouponList = (List<CdtCoupon>) redisTemplate.opsForValue().get("CouponList_"+merchantId);
+        if(cdtCouponList == null || cdtCouponList.size() ==0) {
+            try {
+                if (redisTemplate.opsForValue().setIfAbsent("coupon_" + merchantId,merchantId)) {
+                    redisTemplate.expire("coupon_" + merchantId,2000,TimeUnit.MILLISECONDS);
+                    cdtCouponList = couponService.list(new LambdaQueryWrapper<CdtCoupon>()
+                            .eq(CdtCoupon::getMerchantId, merchantId));
+                    redisTemplate.opsForValue().set("CouponList_" + merchantId, cdtCouponList, 5, TimeUnit.MINUTES);
+
+                }
+            }finally {
+                redisTemplate.delete("coupon_" + merchantId);
+            }
+
+        }
         return Result.success(cdtCouponList);
     }
 
@@ -184,7 +202,7 @@ public class WxCouponController extends ApiBaseAction {
        }
 
        Map<String, Object> hashmap = new HashMap<>(4);
-       hashmap.put("userId",135);
+       hashmap.put("userId",userVo.getUserId());
        hashmap.put("merchantId",goods.getMerchantId());
 
        List<CdtUserCouponDao> userCouponDaoList = userCouponService.getUserCounponList(hashmap);
@@ -344,5 +362,35 @@ public class WxCouponController extends ApiBaseAction {
             result = money.subtract(cdtUserCouponDao.getOffsetMoney()).intValue()>0?money.subtract(cdtUserCouponDao.getOffsetMoney()):money;
         }
         return result;
+    }
+
+    public boolean lock(String key){
+        String lock = key;
+        // 利用lambda表达式
+        return (Boolean) redisTemplate.execute((RedisCallback) connection -> {
+
+            long expireAt = System.currentTimeMillis() + 1000 + 1;
+            Boolean acquire = connection.setNX(lock.getBytes(), String.valueOf(expireAt).getBytes());
+
+
+            if (acquire) {
+                return true;
+            } else {
+
+                byte[] value = connection.get(lock.getBytes());
+
+                if (Objects.nonNull(value) && value.length > 0) {
+
+                    long expireTime = Long.parseLong(new String(value));
+                    // 如果锁已经过期
+                    if (expireTime < System.currentTimeMillis()) {
+                        // 重新加锁，防止死锁
+                        byte[] oldValue = connection.getSet(lock.getBytes(), String.valueOf(System.currentTimeMillis() + 1000 + 1).getBytes());
+                        return Long.parseLong(new String(oldValue)) < System.currentTimeMillis();
+                    }
+                }
+            }
+            return false;
+        });
     }
 }
