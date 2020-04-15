@@ -78,11 +78,6 @@ var vm = new Vue({
             expressType: 0
         },
         ruleValidate: {
-            goodsSn: [{
-                required: true,
-                message: '序列号不能为空',
-                trigger: 'blur'
-            }],
             name: [
                 {
                     required: true,
@@ -109,11 +104,6 @@ var vm = new Vue({
             categoryId: [{
                 required: true,
                 message: '分类不能为空',
-                trigger: 'blur'
-            }],
-            attributeCategory: [{
-                required: true,
-                message: '属性类别不能为空',
                 trigger: 'blur'
             }],
             primaryPicUrl: [{
@@ -828,10 +818,7 @@ var vm = new Vue({
                 alert('分类不能为空');
                 return false;
             }
-            if(vm.goods.attributeCategory =="" ){
-                alert('属性不能为空');
-                return false;
-            }
+
             if (vm.goods.primaryPicUrl == '') {
                 alert('商品主图必须上传');
                 return false;
