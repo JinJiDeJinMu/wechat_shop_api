@@ -72,6 +72,7 @@ public class WxCatalogController extends ApiBaseAction {
         data.stream().forEach(e ->{
             params.put("parent_id",e.getId());
             List<CategoryVo> categoryVos = categoryService.queryList(params);
+            e.setSubCategoryList(categoryVos);
             //查询二级分类没有商品的过滤掉
 
             /*for (int i = 0; i < categoryVos.size(); i++) {
