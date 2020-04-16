@@ -143,7 +143,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             PageHelper.startPage(1, 10, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
 
-            //newGoods= newGoods.stream().filter(e->e.getGoods_number() >0).collect(Collectors.toList());
+            newGoods= newGoods.stream().filter(e->e.getGoods_number() >0).collect(Collectors.toList());
             List<GoodsDTO> goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
 
             resultObj.put("newGoods",goodsDTOS);
@@ -159,7 +159,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief,goods_number");
             PageHelper.startPage(0, 2, false);
             List<GoodsVo> hotGoods = goodsService.queryList(param);
-            //hotGoods= hotGoods.stream().filter(e->e.getGoods_number() >0).collect(Collectors.toList());
+            hotGoods= hotGoods.stream().filter(e->e.getGoods_number() >0).collect(Collectors.toList());
             List<GoodsDTO> hotgoodsDTOS = mapperFacade.mapAsList(hotGoods, GoodsDTO.class);
             resultObj.put("hotGoods",hotgoodsDTOS);
             redisTemplate.opsForValue().set("indexNewGoods",resultObj,5, TimeUnit.MINUTES);
