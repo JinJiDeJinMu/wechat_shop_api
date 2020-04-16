@@ -10,16 +10,16 @@
         <Row :gutter="16">
             <div class="search-group">
                 <i-col span="4">
-                    <i-input v-model="q.goodsName" @on-enter="query" placeholder="商品名称"/>
+                    <i-input v-model="q.goodsId" @on-enter="query" placeholder="商品ID"/>
                 </i-col>
                 <i-button @click="query">查询</i-button>
             </div>
             <div class="buttons-group">
                 <i-button type="info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</i-button>
 
-                <!--#if($shiro.hasPermission("product:update"))-->
-                <!--<i-button type="warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</i-button>-->
-                <!--#end-->
+                #if($shiro.hasPermission("product:update"))
+                <i-button type="warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</i-button>
+                #end
                 #if($shiro.hasPermission("product:delete"))
                 <i-button type="error" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</i-button>
                 #end
@@ -34,7 +34,8 @@
         <i-form ref="formValidate" :model="product" :rules="ruleValidate" :label-width="80">
             <Form-item label="商品" prop="goodsId">
                 <i-select v-model="product.goodsId" filterable @on-change="changeGoods" label-in-value>
-                    <i-option v-for="goods in goodss" :value="goods" :key="goods.id">{{goods.name}}</i-option>
+                    <i-option  v-if="product.id == null" v-for="goods in goodss" :value="goods" :key="goods.id">{{goods.id}}</i-option>
+                    <i-option v-if="product.id != null"  :key="product.goodsId" :value="product.goodsId"></i-option>
                 </i-select>
             </Form-item>
             <Form-item label="商品规格" prop="goodsSpecificationIds" v-if="goodsId>0">
@@ -52,9 +53,9 @@
                     </i-option>
                 </i-select>
             </Form-item>
-            <Form-item label="商品序列号" prop="goodsSn">
-                <i-input v-model="product.goodsSn" placeholder="商品序列号"/>
-            </Form-item>
+            <!--<Form-item label="商品序列号" prop="goodsId">
+                <i-input v-model="product.goodsId" placeholder="商品序列号"/>
+            </Form-item>-->
             <Form-item label="商品库存" prop="goodsNumber">
                 <Input-number :min="0" :step="1" v-model="product.goodsNumber" placeholder="商品库存"
                               style="width: 188px;"/>
@@ -67,10 +68,10 @@
                 <Input-number :min="0" :step="1" v-model="product.marketPrice" placeholder="市场价格"
                               style="width: 188px;"/>
             </Form-item>
-            <Form-item label="团购价格(元)" prop="groupPrice" v-if="isSecKill==3">
+            <!--<Form-item label="团购价格(元)" prop="groupPrice" v-if="isSecKill==3">
                 <Input-number :min="0" :step="1" v-model="product.groupPrice" placeholder="团购价格(元)"
                               style="width: 188px;"/>
-            </Form-item>
+            </Form-item>-->
             <Row>
                 <i-col span="16">
                     <Form-item label="规格图" prop="picUrl">

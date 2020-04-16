@@ -27,7 +27,7 @@ $(function () {
                     return transImg(value);
                 }
             },
-            {label: '商品序列号', name: 'goodsSn', index: 'goods_sn', width: 80},
+            {label: '商品Id', name: 'goodsId', index: 'goods_Id', width: 60},
             {label: '商品库存', name: 'goodsNumber', index: 'goods_number', width: 80},
             {label: '零售价格(元)', name: 'retailPrice', index: 'retail_price', width: 80},
             {label: '市场价格(元)', name: 'marketPrice', index: 'market_price', width: 80},
@@ -57,13 +57,14 @@ let vm = new Vue({
             ],
             goodsSn: [
                 {required: true, message: '序列号不能为空', trigger: 'blur'}
-            ],
+            ]/*,
             picUrl: [
                 {required: true, message: '规格图片不能为空', trigger: 'blur'}
-            ]
+            ]*/
         },
         q: {
-            goodsName: ''
+            goodsName: '',
+            goodsId:''
         },
         goodss: [],
         attribute: [],
@@ -199,7 +200,7 @@ let vm = new Vue({
                 successCallback: function (r) {
                     vm.getGoodss();
                     vm.product = r.product;
-                    vm.goodsId = r.product.goodsId;
+                    vm.product.goodsId = r.product.goodsId;
                     if (vm.product.goodsSpecificationIds.indexOf('_') > 0) {
                         let goodsSpecificationIds = vm.product.goodsSpecificationIds.split("_");
                         goodsSpecificationIds.forEach((goodsSpecificationId, index) => {
@@ -235,7 +236,7 @@ let vm = new Vue({
             vm.showList = true;
             let page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
-                postData: {'goodsName': vm.q.goodsName},
+                postData: {'goodsId': vm.q.goodsId},
                 page: page
             }).trigger("reloadGrid");
             vm.handleReset('formValidate');
