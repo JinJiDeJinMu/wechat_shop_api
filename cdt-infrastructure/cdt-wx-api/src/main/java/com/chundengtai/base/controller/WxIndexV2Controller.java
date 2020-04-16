@@ -9,6 +9,7 @@ import com.chundengtai.base.entity.*;
 import com.chundengtai.base.result.Result;
 import com.chundengtai.base.service.ApiAdService;
 import com.chundengtai.base.service.ApiGoodsService;
+import com.chundengtai.base.service.ApiProductService;
 import com.chundengtai.base.service.ApiSearchHistoryService;
 import com.chundengtai.base.transfer.JsonTransfer;
 import com.chundengtai.base.util.ApiBaseAction;
@@ -55,6 +56,9 @@ public class WxIndexV2Controller extends ApiBaseAction {
 
     @Autowired
     private ApiSearchHistoryService searchHistoryService;
+
+    @Autowired
+    private ApiProductService apiProductService;
 
 
     /**
@@ -138,6 +142,7 @@ public class WxIndexV2Controller extends ApiBaseAction {
             param.put("fields", "id, name,list_pic_url,primary_pic_url,retail_price,market_price,browse,goods_brief,goods_number");
             PageHelper.startPage(1, 10, false);
             List<GoodsVo> newGoods = goodsService.queryList(param);
+
             newGoods= newGoods.stream().filter(e->e.getGoods_number() >0).collect(Collectors.toList());
             List<GoodsDTO> goodsDTOS = mapperFacade.mapAsList(newGoods, GoodsDTO.class);
 

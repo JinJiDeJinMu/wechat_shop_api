@@ -94,12 +94,12 @@ public class CategoryController {
 
         List<CategoryEntity> list = categoryService.queryList(params);
         //添加顶级菜单
-        CategoryEntity root = new CategoryEntity();
+       /* CategoryEntity root = new CategoryEntity();
         root.setId(0);
         root.setName("一级分类");
         root.setParentId(-1);
         root.setOpen(true);
-        list.add(0, root);
+        list.add(0, root);*/
         return R.ok().put("list", list);
     }
 
