@@ -116,8 +116,8 @@
             <if test="goodsSn != null">`goods_sn` = #{goodsSn},</if>
             <if test="goodsNumber != null">`goods_number` = #{goodsNumber},</if>
             <if test="retailPrice != null">`retail_price` = #{retailPrice},</if>
-            <if test="marketPrice != null">`market_price` = #{marketPrice}</if>
-            <if test="groupPrice != null">`group_price` = #{groupPrice}</if>
+            <if test="marketPrice != null">`market_price` = #{marketPrice},</if>
+            <if test="groupPrice != null">`group_price` = #{groupPrice},</if>
             <if test="picUrl != null">`pic_url` = #{picUrl}</if>
         </set>
         where id = #{id}
