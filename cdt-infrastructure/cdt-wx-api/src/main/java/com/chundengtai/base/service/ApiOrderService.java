@@ -146,6 +146,12 @@ public class ApiOrderService {
                         productInfo.setGoods_number(productInfo.getGoods_number() - cartItem.getNumber());
                         productInfo.setSale_number(productInfo.getSale_number() + cartItem.getNumber());
                         productService.update(productInfo);
+                        if(productInfo.getGoods_number() ==0){
+                            GoodsVo goodsVo = goodsService.queryObject(productInfo.getGoods_id());
+                            goodsVo.setGoods_number(0);
+                            goodsVo.setIs_on_sale(0);
+                            goodsService.update(goodsVo);
+                        }
                     }
                     // 运费统计
                     Integer goodId = cartItem.getGoods_id();

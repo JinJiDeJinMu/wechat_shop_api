@@ -1,10 +1,12 @@
 package com.chundengtai.base.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chundengtai.base.annotation.IgnoreAuth;
 import com.chundengtai.base.bean.Goods;
 import com.chundengtai.base.bean.dto.GoodsDto;
 import com.chundengtai.base.entity.CategoryVo;
+import com.chundengtai.base.entity.GoodsVo;
 import com.chundengtai.base.service.ApiCategoryService;
 import com.chundengtai.base.service.GoodsService;
 import com.chundengtai.base.util.ApiBaseAction;
@@ -70,7 +72,17 @@ public class WxCatalogController extends ApiBaseAction {
         data.stream().forEach(e ->{
             params.put("parent_id",e.getId());
             List<CategoryVo> categoryVos = categoryService.queryList(params);
-            e.setSubCategoryList(categoryVos);
+            //查询二级分类没有商品的过滤掉
+
+            for (int i = 0; i < categoryVos.size(); i++) {
+                List<Goods> goodsList = goodsService.list(new LambdaQueryWrapper<Goods>()
+                        .eq(Goods::getCategoryId,categoryVos.get(i).getId()));
+                if(goodsList.size()>0){
+                    e.setSubCategoryList(categoryVos);
+                }
+
+            }
+
         });
 
         List<CategoryVo> categoryGoods = data.stream().filter(e->e.getSubCategoryList().size()>0).collect(Collectors.toList());
@@ -106,6 +118,8 @@ public class WxCatalogController extends ApiBaseAction {
         //获取子分类数据
         if (null != currentCategory && null != currentCategory.getId()) {
             List<CategoryVo> categoryVoList = categoryService.queryList(params);
+
+
             currentCategory.setSubCategoryList(categoryVoList);
         }
         List<CategoryVo> categoryVoList = new ArrayList<>();
