@@ -74,14 +74,14 @@ public class WxCatalogController extends ApiBaseAction {
             List<CategoryVo> categoryVos = categoryService.queryList(params);
             //查询二级分类没有商品的过滤掉
 
-            for (int i = 0; i < categoryVos.size(); i++) {
+            /*for (int i = 0; i < categoryVos.size(); i++) {
                 List<Goods> goodsList = goodsService.list(new LambdaQueryWrapper<Goods>()
                         .eq(Goods::getCategoryId,categoryVos.get(i).getId()));
                 if(goodsList.size()>0){
                     e.setSubCategoryList(categoryVos);
                 }
 
-            }
+            }*/
 
         });
 
