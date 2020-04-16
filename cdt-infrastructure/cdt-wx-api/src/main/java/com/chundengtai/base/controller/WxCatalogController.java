@@ -85,6 +85,8 @@ public class WxCatalogController extends ApiBaseAction {
 
         });
 
+        log.info("data======"+data);
+
         List<CategoryVo> categoryGoods = data.stream().filter(e->e.getSubCategoryList().size()>0).collect(Collectors.toList());
 
         System.out.println("====="+categoryGoods);
