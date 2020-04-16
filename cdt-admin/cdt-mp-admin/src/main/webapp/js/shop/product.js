@@ -30,8 +30,8 @@ $(function () {
             {label: '商品Id', name: 'goodsId', index: 'goods_Id', width: 60},
             {label: '商品库存', name: 'goodsNumber', index: 'goods_number', width: 80},
             {label: '零售价格(元)', name: 'retailPrice', index: 'retail_price', width: 80},
-            {label: '市场价格(元)', name: 'marketPrice', index: 'market_price', width: 80},
-            {label: '团购价格(元)', name: 'groupPrice', index: 'group_price', width: 80}
+            {label: '市场价格(元)', name: 'marketPrice', index: 'market_price', width: 80}/*,
+            {label: '团购价格(元)', name: 'groupPrice', index: 'group_price', width: 80}*/
         ]
     });
 });
