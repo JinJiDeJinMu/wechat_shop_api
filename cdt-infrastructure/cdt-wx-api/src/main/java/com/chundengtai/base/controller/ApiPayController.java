@@ -115,7 +115,9 @@ public class ApiPayController extends ApiBaseAction {
         }
         //查询用户积分
         Integer fee = orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue();
-        /*CdtUserScore cdtUserScore = cdtUserScoreService.getById(orderInfo.getUser_id());
+
+        //这些是会员扣钱相关代码
+     /*CdtUserScore cdtUserScore = cdtUserScoreService.getById(orderInfo.getUser_id());
         if(cdtUserScore != null){
           Integer score = (cdtUserScore.getScore().intValue())*100;
           if(score < fee){

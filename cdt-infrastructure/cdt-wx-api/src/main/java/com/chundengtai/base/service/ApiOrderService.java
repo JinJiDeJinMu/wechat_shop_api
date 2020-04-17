@@ -247,7 +247,14 @@ public class ApiOrderService {
                     productInfo.setGoods_number(productInfo.getGoods_number() - goodsVo.getNumber());
                     productInfo.setSale_number(productInfo.getSale_number() + goodsVo.getNumber());
                     productService.update(productInfo);
-                    if(productInfo.getGoods_number() ==0){
+                    //判断库存为零时自动下架该商品
+
+                    HashMap<String,Object> hashMap = new HashMap<>();
+                    hashMap.put("goods_id",productInfo.getGoods_id());
+                    List<ProductVo> productVos = productService.queryList(hashMap);
+
+                    Integer sum = productVos.stream().mapToInt(ProductVo::getGoods_number).sum();
+                    if(sum ==0){
                         GoodsVo goodsVo1 = goodsService.queryObject(productInfo.getGoods_id());
                         goodsVo1.setGoods_number(0);
                         goodsVo1.setIs_on_sale(0);

@@ -4,6 +4,9 @@ $(function () {
         colModel: [
             {label: 'id', name: 'id', index: 'id', key: true, hidden: true},
             {label: '优惠券名称', name: 'name', index: 'name', width: 60},
+            {label: '图片', name:'imgUrl' ,index: 'imgUrl',width:50,formatter: function (value) {
+                    return transImg(value);
+                }},
             {
                 label: '类型', name: 'type', index: 'type', width: 40, formatter: function (value) {
                     if (value == 0) {
