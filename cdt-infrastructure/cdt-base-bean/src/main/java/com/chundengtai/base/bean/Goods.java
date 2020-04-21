@@ -7,10 +7,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.data.elasticsearch.annotations.Document;
+
 
 import java.io.Serializable;
-import java.lang.annotation.Documented;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -26,7 +25,6 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("nideshop_goods")
-@Document(indexName = "cdt", type = "goods")
 public class Goods implements Serializable {
 
     private static final long serialVersionUID = 1L;
