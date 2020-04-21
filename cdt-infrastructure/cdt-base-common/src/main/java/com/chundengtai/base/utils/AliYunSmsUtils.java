@@ -19,12 +19,12 @@ import java.util.HashMap;
  */
 public class AliYunSmsUtils {
 
-   private static final String ACCESSKEYID = "LTAI4FrLCXaNQZ6Zfkng8LCJ";
+   private static final String ACCESSKEYID = "";
 
-   private static final String ACCESSSECRET = "7V0iGW8WDncrx2z3PYjdpQU6cttlYN";
+   private static final String ACCESSSECRET = "";
 
    public static CommonResponse send(String PhoneNumbers,String TemplateParam){
-       return sendMessage(PhoneNumbers,"未名严选","SMS_183150732",TemplateParam);
+       return sendMessage(PhoneNumbers,"有机屋","SMS_183150732",TemplateParam);
    }
 
     /**

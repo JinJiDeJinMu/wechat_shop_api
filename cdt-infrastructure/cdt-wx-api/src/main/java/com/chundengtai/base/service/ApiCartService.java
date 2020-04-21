@@ -147,7 +147,7 @@ public class ApiCartService {
     public String queryMerchantName(Long merchantId) {
         String shopName = cartDao.queryMerchantName(merchantId);
         if (StringUtils.isEmpty(shopName))
-            return "未名严选";
+            return "有机屋";
         return shopName;
     }
     public List<CartVo> queryCats(Long userId){

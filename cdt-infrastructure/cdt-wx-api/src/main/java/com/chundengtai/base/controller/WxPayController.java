@@ -102,7 +102,7 @@ public class WxPayController extends ApiBaseAction {
         orderGoodsParam.put("order_id", orderId);
         List<OrderGoodsVo> orderGoods = orderGoodsService.queryList(orderGoodsParam);
 
-        String detail = "未名严选商城-";
+        String detail = "有机屋商城-";
         if (null != orderGoods) {
             for (OrderGoodsVo goodsVo : orderGoods) {
                 String goodsSpecifitionNameValue = goodsVo.getGoods_specifition_name_value();
@@ -115,7 +115,7 @@ public class WxPayController extends ApiBaseAction {
             }
         }
         WxPayUnifiedOrderRequest payRequest = WxPayUnifiedOrderRequest.newBuilder()
-                .body("未名严选校园电商-支付").detail(detail)
+                .body("有机屋校园电商-支付").detail(detail)
                 .totalFee(orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue())
                 .spbillCreateIp(getClientIp())
                 .notifyUrl(ResourceUtil.getConfigByName("wx.notifyUrl"))
@@ -214,7 +214,7 @@ public class WxPayController extends ApiBaseAction {
             return toResponsObject(400, "积分购买订单已支付，请不要重复操作", "");
         }
             WxPayUnifiedOrderRequest payRequest = WxPayUnifiedOrderRequest.newBuilder()
-                    .body("未名严选校园电商-支付").detail(String.valueOf(cdtScoreFlow.getMoney()) + "积分")
+                    .body("有机屋校园电商-支付").detail(String.valueOf(cdtScoreFlow.getMoney()) + "积分")
                     .totalFee(cdtScoreFlow.getMoney().multiply(new BigDecimal(100)).intValue())
                     .spbillCreateIp(getClientIp())
                     .notifyUrl(ResourceUtil.getConfigByName("wx.scorenotifyUrl"))

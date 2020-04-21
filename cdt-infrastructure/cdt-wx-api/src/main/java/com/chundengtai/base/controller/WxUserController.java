@@ -31,7 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Api(value = "未名严选", tags = "未名严选")
+@Api(value = "有机屋", tags = "有机屋")
 @RestController
 @RequestMapping("/apis/v2/auth")
 @Slf4j

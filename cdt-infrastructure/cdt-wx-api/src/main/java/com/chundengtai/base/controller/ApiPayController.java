@@ -101,7 +101,7 @@ public class ApiPayController extends ApiBaseAction {
         orderGoodsParam.put("order_id", orderId);
         List<OrderGoodsVo> orderGoods = orderGoodsService.queryList(orderGoodsParam);
 
-        String detail = "未名严选商城-";
+        String detail = "有机屋商城-";
         if (null != orderGoods) {
             for (OrderGoodsVo goodsVo : orderGoods) {
                 String goodsSpecifitionNameValue = goodsVo.getGoods_specifition_name_value();
@@ -137,7 +137,7 @@ public class ApiPayController extends ApiBaseAction {
         }*/
 
         WxPayUnifiedOrderRequest payRequest = WxPayUnifiedOrderRequest.newBuilder()
-                .body("未名严选校园电商-支付").detail(detail)
+                .body("有机屋电商-支付").detail(detail)
                 .totalFee(fee)
                 .spbillCreateIp(getClientIp())
                 .notifyUrl(ResourceUtil.getConfigByName("wx.notifyUrl"))
@@ -603,10 +603,6 @@ public class ApiPayController extends ApiBaseAction {
                 // 更改订单状态
                 // 业务处理
                 orderStatusLogic(out_trade_no, wxPayOrderNotifyResult);
-                HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("name","zhs");
-                hashMap.put("code",out_trade_no);
-
             } catch (Exception ex) {
                 log.error("=====weixin===notify===error", ex);
                 return WxPayNotifyResponse.fail("失败");
@@ -649,10 +645,10 @@ public class ApiPayController extends ApiBaseAction {
                 payrecord.setResText(result.getXmlString());
                 paytransRecordService.save(payrecord);
                 //支付成功，发送短信通知
-                HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("name","未名严选");
+              /*  HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("name","有机屋");
                 hashMap.put("code",out_trade_no);
-                smsService.sendSms(orderItem.getMobile(),hashMap);
+                smsService.sendSms(orderItem.getMobile(),hashMap);*/
             }
         } catch (Exception ex) {
             ex.printStackTrace();

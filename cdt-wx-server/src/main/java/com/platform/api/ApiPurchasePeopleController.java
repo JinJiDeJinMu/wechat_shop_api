@@ -20,7 +20,7 @@ import java.util.Map;
  * @author lipengjun
  * @date 2019-11-25 09:39:01
  */
-@Api(value = "未名严选详情购买用户", tags = "购买人群列表")
+@Api(value = "有机屋详情购买用户", tags = "购买人群列表")
 @RestController
 @RequestMapping("/api/v2/purchasePeople")
 public class ApiPurchasePeopleController {
