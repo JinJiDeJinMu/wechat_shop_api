@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
@@ -56,24 +57,26 @@ public class WxCatalogController extends ApiBaseAction {
     @IgnoreAuth
     public Object index(@RequestParam(value = "page", defaultValue = "1") Integer page,
                         @RequestParam(value = "size", defaultValue = "10") Integer size) {
-        Map<String, Object> resultObj = new HashMap();
-        Map params = new HashMap();
-        params.put("sidx", "sort_order");
-        params.put("order", "asc");
-        params.put("parent_id",0);
-        //查询分类数据
-        List<CategoryVo> data = categoryService.queryList(params);
+        Map<String, Object> resultObj = (Map<String, Object>) redisTemplate.opsForValue().get("category");
+        if (resultObj == null) {
+            resultObj = new HashMap();
+            Map params = new HashMap();
+            params.put("sidx", "sort_order");
+            params.put("order", "asc");
+            params.put("parent_id", 0);
+            //查询分类数据
+            List<CategoryVo> data = categoryService.queryList(params);
 
-        params.clear();
-        params.put("sidx", "sort_order");
-        params.put("order", "asc");
+            params.clear();
+            params.put("sidx", "sort_order");
+            params.put("order", "asc");
 
 
-        data.stream().forEach(e ->{
-            params.put("parent_id",e.getId());
-            List<CategoryVo> categoryVos = categoryService.queryList(params);
-            e.setSubCategoryList(categoryVos);
-            //查询二级分类没有商品的过滤掉
+            data.stream().forEach(e -> {
+                params.put("parent_id", e.getId());
+                List<CategoryVo> categoryVos = categoryService.queryList(params);
+                e.setSubCategoryList(categoryVos);
+                //查询二级分类没有商品的过滤掉
 
             /*for (int i = 0; i < categoryVos.size(); i++) {
                 List<Goods> goodsList = goodsService.list(new LambdaQueryWrapper<Goods>()
@@ -84,20 +87,22 @@ public class WxCatalogController extends ApiBaseAction {
 
             }*/
 
-        });
+            });
 
-        log.info("data======"+data);
+            log.info("data======" + data);
 
-        List<CategoryVo> categoryGoods  = data.stream().filter(e->e.getSubCategoryList()!=null).collect(Collectors.toList());
+            List<CategoryVo> categoryGoods = data.stream().filter(e -> e.getSubCategoryList() != null).collect(Collectors.toList());
 
-        System.out.println("====="+categoryGoods);
+            System.out.println("=====" + categoryGoods);
 
-        CategoryVo categoryVo = new CategoryVo();
-        categoryVo.setId(0);
-        categoryVo.setName("全部商品");
-        categoryGoods.add(0,categoryVo);
+            CategoryVo categoryVo = new CategoryVo();
+            categoryVo.setId(0);
+            categoryVo.setName("全部商品");
+            categoryGoods.add(0, categoryVo);
 
-        resultObj.put("goods", categoryGoods);
+            resultObj.put("goods", categoryGoods);
+            redisTemplate.opsForValue().set("category", resultObj, 10, TimeUnit.MINUTES);
+        }
 
         return toResponsSuccess(resultObj);
     }
