@@ -89,13 +89,16 @@ public class WxCatalogController extends ApiBaseAction {
 
             });
 
-            List<CategoryVo> categoryGoods = data.stream().filter(e -> e.getSubCategoryList() != null).collect(Collectors.toList());
-
+            //List<CategoryVo> categoryGoods = data.stream().filter(e -> e.getSubCategoryList() != null).collect(Collectors.toList());
+            List<CategoryVo> categoryGoods = new ArrayList<>();
             CategoryVo categoryVo = new CategoryVo();
             categoryVo.setId(0);
             categoryVo.setName("全部商品");
             categoryGoods.add(0, categoryVo);
-
+            CategoryVo cc = categoryService.queryObject(1036094);
+            List<CategoryVo> ccc = new ArrayList<>();
+            ccc.add(cc);
+            categoryVo.setSubCategoryList(ccc);
             resultObj.put("goods", categoryGoods);
             redisTemplate.opsForValue().set("category", resultObj, 10, TimeUnit.MINUTES);
         }
