@@ -69,7 +69,7 @@ public class WxScoreController extends ApiBaseAction {
 
         CdtUserScore cdtUserScore = cdtUserScoreService.getById(loginUser.getUserId());
         Map<String,Object> hashmap = new HashMap<>();
-        hashmap.put("flag",true);
+        hashmap.put("flag",false);
         hashmap.put("cdtUserScore",cdtUserScore);
         return Result.success(hashmap);
     }
