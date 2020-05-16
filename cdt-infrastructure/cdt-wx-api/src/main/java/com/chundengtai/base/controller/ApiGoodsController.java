@@ -387,7 +387,7 @@ public class ApiGoodsController extends ApiBaseAction {
 
         if(null != attriId && attriId>0){
             params.put("attribute_category", attriId);
-        }
+    }
         System.out.println("======="+params);
         //添加到搜索历史
         if (!StringUtils.isNullOrEmpty(keyword)) {
